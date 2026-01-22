@@ -15,8 +15,8 @@ interface Route {
 }
 
 export const routes: Route[] = [
-  { path: "/main", Component: TamagotchiUISketch },
-  { path: "/", Component: IndexPage },
+  { path: "/", Component: TamagotchiUISketch },
+  { path: "/index", Component: IndexPage },
   { path: "/init-data", Component: InitDataPage, title: "Init Data" },
   { path: "/theme-params", Component: ThemeParamsPage, title: "Theme Params" },
   {
