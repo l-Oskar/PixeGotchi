@@ -6,7 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/pixegotchi/",
+  base: "/PixeGotchi/",
   css: {
     preprocessorOptions: {
       scss: {

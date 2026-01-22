@@ -17,10 +17,19 @@ import {
   Wallet,
   Coins,
 } from "lucide-react";
+import type {
+  Tamagotchi,
+  PageType,
+  Cooldowns,
+  HomePageProps,
+  NavigatePageProps,
+  CompactStatProps,
+  ActionButtonProps,
+} from "./homepageTypes";
 
-const TamagotchiUISketch = () => {
-  const [currentPage, setCurrentPage] = useState("home");
-  const [activeTamagotchi, setActiveTamagotchi] = useState({
+const TamagotchiUISketch: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<PageType>("home");
+  const [activeTamagotchi, setActiveTamagotchi] = useState<Tamagotchi>({
     name: "Pyro",
     level: 15,
     element: "fire",
@@ -34,8 +43,14 @@ const TamagotchiUISketch = () => {
     nextLevelExp: 1000,
   });
 
-  const pages = {
-    home: <HomePage tama={activeTamagotchi} onNavigate={setCurrentPage} />,
+  const pages: Record<PageType, React.ReactNode> = {
+    home: (
+      <HomePage
+        tama={activeTamagotchi}
+        onNavigate={setCurrentPage}
+        setActiveTamagotchi={setActiveTamagotchi}
+      />
+    ),
     inventory: <InventoryPage onNavigate={setCurrentPage} />,
     games: <GamesPage onNavigate={setCurrentPage} />,
     marketplace: <MarketplacePage onNavigate={setCurrentPage} />,
@@ -75,11 +90,11 @@ const TamagotchiUISketch = () => {
       <nav className="fixed bottom-0 left-0 right-0 bg-black/40 backdrop-blur-xl border-t border-white/10">
         <div className="max-w-md mx-auto px-4 py-3 flex justify-around">
           {[
-            { id: "home", icon: Heart, label: "Home" },
-            { id: "inventory", icon: ShoppingBag, label: "Bag" },
-            { id: "games", icon: Gamepad2, label: "Games" },
-            { id: "marketplace", icon: Coins, label: "Market" },
-            { id: "vault", icon: Archive, label: "Vault" },
+            { id: "home" as PageType, icon: Heart, label: "Home" },
+            { id: "inventory" as PageType, icon: ShoppingBag, label: "Bag" },
+            { id: "games" as PageType, icon: Gamepad2, label: "Games" },
+            { id: "marketplace" as PageType, icon: Coins, label: "Market" },
+            { id: "vault" as PageType, icon: Archive, label: "Vault" },
           ].map((item) => (
             <button
               key={item.id}
@@ -100,7 +115,11 @@ const TamagotchiUISketch = () => {
 };
 
 // HomePage Component
-const HomePage = ({ tama, onNavigate }) => {
+const HomePage: React.FC<HomePageProps> = ({
+  tama,
+  onNavigate,
+  setActiveTamagotchi,
+}) => {
   const [cooldowns, setCooldowns] = useState({
     feed: false,
     play: false,
@@ -109,7 +128,7 @@ const HomePage = ({ tama, onNavigate }) => {
     heal: false,
   });
 
-  const handleAction = (action) => {
+  const handleAction = (action: keyof Cooldowns) => {
     setCooldowns((prev) => ({ ...prev, [action]: true }));
     setTimeout(() => {
       setCooldowns((prev) => ({ ...prev, [action]: false }));
@@ -126,7 +145,9 @@ const HomePage = ({ tama, onNavigate }) => {
               {tama.name}
               <span className="text-lg">🔥</span>
             </h2>
-            <button className="text-white/60 hover:text-white">
+            <button
+              onClick={() => setActiveTamagotchi(tama)}
+              className="text-white/60 hover:text-white">
               <Menu size={20} />
             </button>
           </div>
@@ -279,7 +300,7 @@ const HomePage = ({ tama, onNavigate }) => {
 };
 
 // InventoryPage Component
-const InventoryPage = ({ onNavigate }) => {
+const InventoryPage: React.FC<NavigatePageProps> = () => {
   const items = [
     { id: 1, name: "Apple", type: "food", quantity: 15, icon: "🍎" },
     { id: 2, name: "Health Potion", type: "medicine", quantity: 3, icon: "💊" },
@@ -311,7 +332,7 @@ const InventoryPage = ({ onNavigate }) => {
 };
 
 // GamesPage Component
-const GamesPage = ({ onNavigate }) => {
+const GamesPage: React.FC<NavigatePageProps> = () => {
   const games = [
     {
       id: 1,
@@ -366,7 +387,7 @@ const GamesPage = ({ onNavigate }) => {
 };
 
 // MarketplacePage Component
-const MarketplacePage = ({ onNavigate }) => {
+const MarketplacePage: React.FC<NavigatePageProps> = () => {
   const listings = [
     {
       id: 1,
@@ -426,7 +447,7 @@ const MarketplacePage = ({ onNavigate }) => {
 };
 
 // VaultPage Component
-const VaultPage = ({ onNavigate }) => {
+const VaultPage: React.FC<NavigatePageProps> = () => {
   const vaultItems = [
     { id: 1, name: "Aqua", level: 10, element: "water", icon: "🐟" },
     { id: 2, name: "Terra", level: 20, element: "earth", icon: "🦖" },
@@ -473,7 +494,12 @@ const VaultPage = ({ onNavigate }) => {
 };
 
 // Helper Components
-const CompactStat = ({ icon: Icon, value, bgColor, strokeColor }) => {
+const CompactStat: React.FC<CompactStatProps> = ({
+  icon: Icon,
+  value,
+  bgColor,
+  strokeColor,
+}) => {
   const circumference = 2 * Math.PI * 16; // radius = 16
   const strokeDashoffset = circumference - (value / 100) * circumference;
 
@@ -516,31 +542,13 @@ const CompactStat = ({ icon: Icon, value, bgColor, strokeColor }) => {
   );
 };
 
-const StatBar = ({ icon: Icon, label, value, color }) => (
-  <div>
-    <div className="flex justify-between text-xs mb-1">
-      <div className="flex items-center gap-1.5">
-        <Icon size={14} className={color} />
-        <span className="text-white/80">{label}</span>
-      </div>
-      <span className="text-white/60">{value}%</span>
-    </div>
-    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-      <div
-        className={`h-full bg-gradient-to-r ${
-          value > 70
-            ? "from-green-500 to-emerald-500"
-            : value > 40
-              ? "from-yellow-500 to-orange-500"
-              : "from-red-500 to-pink-500"
-        } rounded-full transition-all duration-500`}
-        style={{ width: `${value}%` }}
-      />
-    </div>
-  </div>
-);
-
-const ActionButton = ({ icon: Icon, label, onClick, disabled, gradient }) => (
+const ActionButton: React.FC<ActionButtonProps> = ({
+  icon: Icon,
+  label,
+  onClick,
+  disabled,
+  gradient,
+}) => (
   <button
     onClick={onClick}
     disabled={disabled}
