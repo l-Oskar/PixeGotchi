@@ -1,0 +1,76 @@
+import { PageType } from "../MainPage/mainPageTypes";
+
+export interface MarketplacePageProps {
+  onNavigate?: (page: PageType) => void;
+}
+
+export interface MarketplaceListing {
+  id: number;
+  item: string;
+  price: number;
+  currency: "PGC" | "TON";
+  seller: string;
+  icon: string;
+}
+
+// MarketplacePage
+const MarketplacePage: React.FC<MarketplacePageProps> = () => {
+  const listings: MarketplaceListing[] = [
+    {
+      id: 1,
+      item: "Fire Egg",
+      price: 500,
+      currency: "PGC",
+      seller: "User#123",
+      icon: "🥚",
+    },
+    {
+      id: 2,
+      item: "Legendary Chest",
+      price: 2,
+      currency: "TON",
+      seller: "User#456",
+      icon: "📦",
+    },
+    {
+      id: 3,
+      item: "Health Pack x10",
+      price: 150,
+      currency: "PGC",
+      seller: "User#789",
+      icon: "💊",
+    },
+  ];
+
+  return (
+    <div className="p-4 space-y-4">
+      <h1 className="text-2xl font-bold">Marketplace</h1>
+
+      <div className="space-y-3">
+        {listings.map((listing) => (
+          <div
+            key={listing.id}
+            className="bg-white/5 rounded-2xl p-4 border border-white/10">
+            <div className="flex items-center gap-4">
+              <div className="text-4xl">{listing.icon}</div>
+              <div className="flex-1">
+                <h3 className="font-semibold">{listing.item}</h3>
+                <div className="text-xs text-white/60">by {listing.seller}</div>
+              </div>
+              <div className="text-right">
+                <div className="font-bold text-yellow-400">
+                  {listing.price} {listing.currency}
+                </div>
+                <button className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
+                  Buy
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default MarketplacePage;

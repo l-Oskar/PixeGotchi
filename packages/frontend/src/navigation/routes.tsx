@@ -5,7 +5,7 @@ import { InitDataPage } from "@/pages/InitDataPage.tsx";
 import { LaunchParamsPage } from "@/pages/LaunchParamsPage.tsx";
 import { ThemeParamsPage } from "@/pages/ThemeParamsPage.tsx";
 import { TONConnectPage } from "@/pages/TONConnectPage/TONConnectPage";
-import TamagotchiUISketch from "@/pages/HomePage/HomePage";
+import TamagotchiUISketch from "@/pages/MainPage/MainPage";
 
 interface Route {
   path: string;
