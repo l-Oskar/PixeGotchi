@@ -1,0 +1,24 @@
+{
+  "name": "tamagotchi-dapp",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "contracts:deploy": "npm run deploy --workspace=packages/contracts",
+    "backend:dev": "npm run dev --workspace=packages/backend",
+    "frontend:dev": "npm run dev --workspace=packages/frontend"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "overrides": {
+    "esbuild": "0.25.12"
+  }
+}

@@ -1,0 +1,238 @@
+// packages/backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum PixegotchiStatus {
+  egg
+  active
+  vault
+  dead
+}
+
+enum ElementType {
+  fire
+  water
+  earth
+  air
+  light
+  dark
+}
+
+enum RarityType {
+  common
+  uncommon
+  rare
+  epic
+  legendary
+}
+
+enum ItemType {
+  food
+  medicine
+  chest
+  rename
+  special
+}
+
+enum ListingType {
+  egg
+  item
+  chest
+}
+
+enum CurrencyType {
+  pgc
+  ton
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+model User {
+  id            Int      @id @default(autoincrement())
+  telegramId    BigInt   @unique @map("telegram_id")
+  walletAddress String?  @map("wallet_address") @db.VarChar(48)
+  username      String?  @db.VarChar(255)
+  pgcBalance    Decimal  @default(0) @map("pgc_balance") @db.Decimal(20, 8)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  pixegotchis Pixegotchi[]
+  inventory   Inventory[]
+  vault       Vault[]
+  listings    MarketplaceListing[] @relation("SellerListings")
+  purchases   MarketplaceListing[] @relation("BuyerPurchases")
+
+  @@index([telegramId])
+  @@index([walletAddress])
+  @@map("users")
+}
+
+model Pixegotchi {
+  id                Int               @id @default(autoincrement())
+  userId            Int               @map("user_id")
+  nftAddress        String?           @map("nft_address") @db.VarChar(48)
+  genomeHash        String            @map("genome_hash") @db.VarChar(66)
+  name              String            @default("Unnamed") @db.VarChar(50)
+  status            PixegotchiStatus  @default(egg)
+  element           ElementType?
+  rarity            RarityType?
+  level             Int               @default(1)
+  experience        Int               @default(0)
+  lives             Int               @default(2)
+
+  // Stats (0-100)
+  health            Int               @default(100)
+  hunger            Int               @default(50)
+  energy            Int               @default(100)
+  happiness         Int               @default(50)
+  cleanliness       Int               @default(100)
+
+  // Genome-based characteristics
+  hungerRate        Decimal           @default(1.0) @map("hunger_rate") @db.Decimal(3, 2)
+  energyRate        Decimal           @default(1.0) @map("energy_rate") @db.Decimal(3, 2)
+  diseaseResistance Decimal           @default(1.0) @map("disease_resistance") @db.Decimal(3, 2)
+
+  // Action timestamps
+  lastFedAt         DateTime?         @map("last_fed_at")
+  lastPlayedAt      DateTime?         @map("last_played_at")
+  lastSleptAt       DateTime?         @map("last_slept_at")
+  lastCleanedAt     DateTime?         @map("last_cleaned_at")
+  lastHealedAt      DateTime?         @map("last_healed_at")
+  lastUpdateAt      DateTime          @default(now()) @map("last_update_at")
+  hatchedAt         DateTime?         @map("hatched_at")
+  createdAt         DateTime          @default(now()) @map("created_at")
+
+  // Relations
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vault             Vault[]
+  gameSessions      GameSession[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("pixegotchis")
+}
+
+model Inventory {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  itemId    String   @map("item_id") @db.VarChar(50)
+  itemType  ItemType @map("item_type")
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
+  @@index([userId])
+  @@map("inventory")
+}
+
+model Vault {
+  id            Int        @id @default(autoincrement())
+  userId        Int        @map("user_id")
+  pixegotchiId  Int        @map("pixegotchi_id")
+  finalLevel    Int        @map("final_level")
+  storedAt      DateTime   @default(now()) @map("stored_at")
+
+  // Relations
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pixegotchi    Pixegotchi @relation(fields: [pixegotchiId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pixegotchiId])
+  @@index([userId])
+  @@map("vault")
+}
+
+model MarketplaceListing {
+  id          Int          @id @default(autoincrement())
+  sellerId    Int          @map("seller_id")
+  buyerId     Int?         @map("buyer_id")
+  listingType ListingType  @map("listing_type")
+  itemId      String?      @map("item_id") @db.VarChar(50)
+  nftAddress  String?      @map("nft_address") @db.VarChar(48)
+  price       Decimal      @db.Decimal(20, 8)
+  currency    CurrencyType
+  quantity    Int          @default(1)
+  isActive    Boolean      @default(true) @map("is_active")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  soldAt      DateTime?    @map("sold_at")
+
+  // Relations
+  seller      User         @relation("SellerListings", fields: [sellerId], references: [id], onDelete: Cascade)
+  buyer       User?        @relation("BuyerPurchases", fields: [buyerId], references: [id])
+
+  @@index([isActive, listingType])
+  @@index([sellerId])
+  @@map("marketplace_listings")
+}
+
+model GameSession {
+  id            Int        @id @default(autoincrement())
+  userId        Int        @map("user_id")
+  pixegotchiId  Int        @map("pixegotchi_id")
+  gameId        String     @map("game_id") @db.VarChar(50)
+  score         Int        @default(0)
+  duration      Int        @default(0) // seconds
+  tmcEarned     Decimal    @default(0) @map("tmc_earned") @db.Decimal(20, 8)
+  chestDropped  Boolean    @default(false) @map("chest_dropped")
+  completed     Boolean    @default(false)
+  createdAt     DateTime   @default(now()) @map("created_at")
+  completedAt   DateTime?  @map("completed_at")
+
+  // Relations
+  pixegotchi    Pixegotchi @relation(fields: [pixegotchiId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([pixegotchiId])
+  @@index([createdAt])
+  @@map("game_sessions")
+}
+
+model Quest {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(100)
+  description String   @db.Text
+  requirement String   @db.Text // JSON string with requirements
+  reward      String   @db.Text // JSON string with rewards
+  isActive    Boolean  @default(true) @map("is_active")
+  startDate   DateTime @default(now()) @map("start_date")
+  endDate     DateTime? @map("end_date")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  userQuests  UserQuest[]
+
+  @@map("quests")
+}
+
+model UserQuest {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  questId     Int      @map("quest_id")
+  progress    Int      @default(0)
+  isCompleted Boolean  @default(false) @map("is_completed")
+  completedAt DateTime? @map("completed_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  quest       Quest    @relation(fields: [questId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questId])
+  @@index([userId])
+  @@map("user_quests")
+}

@@ -24,8 +24,7 @@ function ErrorBoundaryError({ error }: { error: unknown }) {
 export function Root() {
   return (
     <ErrorBoundary fallback={ErrorBoundaryError}>
-      <TonConnectUIProvider manifestUrl="https://github.com/l-Oskar/PixeGotchi/tonconnect-manifest.json">
-        {/*<TonConnectUIProvider manifestUrl={publicUrl("tonconnect-manifest.json")}>*/}
+      <TonConnectUIProvider manifestUrl={publicUrl("tonconnect-manifest.json")}>
         <App />
       </TonConnectUIProvider>
     </ErrorBoundary>
