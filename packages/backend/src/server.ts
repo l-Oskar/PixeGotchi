@@ -1,17 +1,22 @@
-import Fastify from "fastify";
+import { buildApp } from "./app";
+import { config } from "@/config/env";
 
-const fastify = Fastify({
-  logger: true,
-});
+async function start() {
+  try {
+    const app = await buildApp();
 
-fastify.get("/", function (request, reply) {
-  reply.send({ hello: "World" });
-});
+    await app.listen({
+      port: config.port,
+      host: "0.0.0.0",
+    });
 
-fastify.listen({ port: 3000 }, function (err, address) {
-  if (err) {
-    fastify.log.error(err);
+    app.log.info(`🚀 Server running on http://localhost:${config.port}`);
+    app.log.info(`📊 Prisma Studio: npx prisma studio`);
+    app.log.info(`🔥 Environment: ${config.nodeEnv}`);
+  } catch (err) {
+    console.error(err);
     process.exit(1);
   }
-  console.log(`Server is listening ${address}`);
-});
+}
+
+start();

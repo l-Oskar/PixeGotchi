@@ -1,7 +1,7 @@
-import { prisma } from "../../database/prisma";
-import { Prisma } from "@prisma/client";
+import { prisma } from "@/database/prisma";
+import { bigintToString } from "@/utils/convert";
 
-export class UserService {
+export class UsersService {
   async findByTelegramId(telegramId: number) {
     return await prisma.user.findUnique({
       where: {
@@ -25,7 +25,7 @@ export class UserService {
     return await this.create({ telegramId, username });
   }
 
-  async updatePGCValance(userId: number, amount: number) {
+  async updatePGCBalance(userId: number, amount: number) {
     return await prisma.user.update({
       where: { id: userId },
       data: {
@@ -37,7 +37,7 @@ export class UserService {
   }
 
   async getProfile(userId: number) {
-    return await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -55,5 +55,7 @@ export class UserService {
         },
       },
     });
+
+    return user ? bigintToString(user) : null;
   }
 }

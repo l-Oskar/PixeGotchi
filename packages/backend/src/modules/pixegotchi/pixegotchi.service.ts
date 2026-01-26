@@ -1,4 +1,4 @@
-import { prisma } from "../../database/prisma";
+import { prisma } from "@/database/prisma";
 import { PixegotchiStatus, Prisma } from "@prisma/client";
 
 export class PixegotchiService {
