@@ -4,6 +4,10 @@ import { App } from "@/components/App.tsx";
 import { ErrorBoundary } from "@/components/ErrorBoundary.tsx";
 import { publicUrl } from "@/helpers/publicUrl.ts";
 
+const MODE = import.meta.env.MODE_ENV || "production";
+const MANIFEST_URL = import.meta.env.VITE_TON_MANIFEST_URL;
+const VERSION = "V2";
+
 function ErrorBoundaryError({ error }: { error: unknown }) {
   return (
     <div>
@@ -24,7 +28,12 @@ function ErrorBoundaryError({ error }: { error: unknown }) {
 export function Root() {
   return (
     <ErrorBoundary fallback={ErrorBoundaryError}>
-      <TonConnectUIProvider manifestUrl={publicUrl("tonconnect-manifest.json")}>
+      <TonConnectUIProvider
+        manifestUrl={
+          MODE === "development"
+            ? `${MANIFEST_URL}${VERSION}.json`
+            : publicUrl(`tonconnect-manifest-${VERSION}.json`)
+        }>
         <App />
       </TonConnectUIProvider>
     </ErrorBoundary>

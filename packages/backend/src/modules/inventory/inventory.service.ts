@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { ItemType } from "@prisma/client";
+import { ItemType } from "../../../generated/prisma/enums";
 
 export class Inventory {
   async getUserById(userId: number) {
@@ -40,7 +40,20 @@ export class Inventory {
     });
   }
 
-  async useItem(userId: number, itemId: string, quantity: number = 1) {
+  async useItem(
+    userId: number,
+    pixegotchiId: number,
+    itemId: string,
+    quantity: number = 1,
+  ) {
+    const pixegotchi = await prisma.pixegotchi.findUnique({
+      where: {
+        id: pixegotchiId,
+      },
+    });
+
+    //Implement UseItem
+
     const item = await prisma.inventory.findUnique({
       where: {
         userId_itemId: { userId, itemId },

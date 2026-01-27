@@ -12,7 +12,6 @@ export class UsersController {
       return reply.code(404).send({ error: "User not found" });
     }
 
-    console.log(profile);
     return reply.send(profile);
   }
 

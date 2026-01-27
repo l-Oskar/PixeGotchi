@@ -39,8 +39,12 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   await app.register(cors, {
-    origin: true,
-    credentials: true,
+    origin: [
+      "http://localhost",
+      "https://l-oskar.github.io",
+      /\.trycloudflare\.com$/,
+    ],
+    credentials: false,
   });
 
   await app.register(jwt, {
