@@ -1,5 +1,4 @@
 import { prisma } from "@/database/prisma";
-import { bigintToString } from "@/utils/convert";
 
 export class UsersService {
   async findByTelegramId(telegramId: number) {
@@ -56,6 +55,6 @@ export class UsersService {
       },
     });
 
-    return user ? bigintToString(user) : null;
+    return { ...user, telegramId: user?.telegramId.toString() };
   }
 }

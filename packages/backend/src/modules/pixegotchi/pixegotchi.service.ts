@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { PixegotchiStatus, Prisma } from "@prisma/client";
+import { PixegotchiStatus } from "../../../generated/prisma/enums";
 
 export class PixegotchiService {
   // Get all user's tamagotchis
