@@ -40,20 +40,7 @@ export class Inventory {
     });
   }
 
-  async useItem(
-    userId: number,
-    pixegotchiId: number,
-    itemId: string,
-    quantity: number = 1,
-  ) {
-    const pixegotchi = await prisma.pixegotchi.findUnique({
-      where: {
-        id: pixegotchiId,
-      },
-    });
-
-    //Implement UseItem
-
+  async consumeItem(userId: number, itemId: string, quantity: number = 1) {
     const item = await prisma.inventory.findUnique({
       where: {
         userId_itemId: { userId, itemId },
@@ -65,16 +52,23 @@ export class Inventory {
     }
 
     if (item.quantity === quantity) {
-      return await prisma.inventory.delete({
+      await prisma.inventory.delete({
         where: { id: item.id },
       });
+    } else {
+      await prisma.inventory.update({
+        where: { id: item.id },
+        data: {
+          quantity: { decrement: quantity },
+        },
+      });
     }
+    return item;
+  }
 
-    return await prisma.inventory.update({
-      where: { id: item.id },
-      data: {
-        quantity: { decrement: quantity },
-      },
+  async getItemDetail(itemId: string) {
+    return await prisma.item.findUnique({
+      where: { itemId },
     });
   }
 }

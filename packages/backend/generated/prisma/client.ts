@@ -55,6 +55,16 @@ export type Pixegotchi = Prisma.PixegotchiModel
  */
 export type Inventory = Prisma.InventoryModel
 /**
+ * Model Item
+ * 
+ */
+export type Item = Prisma.ItemModel
+/**
+ * Model ItemUsageHistory
+ * 
+ */
+export type ItemUsageHistory = Prisma.ItemUsageHistoryModel
+/**
  * Model Vault
  * 
  */

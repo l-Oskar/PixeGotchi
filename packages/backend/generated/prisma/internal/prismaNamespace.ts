@@ -387,6 +387,8 @@ export const ModelName = {
   User: 'User',
   Pixegotchi: 'Pixegotchi',
   Inventory: 'Inventory',
+  Item: 'Item',
+  ItemUsageHistory: 'ItemUsageHistory',
   Vault: 'Vault',
   MarketplaceListing: 'MarketplaceListing',
   GameSession: 'GameSession',
@@ -407,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "pixegotchi" | "inventory" | "vault" | "marketplaceListing" | "gameSession" | "quest" | "userQuest"
+    modelProps: "user" | "pixegotchi" | "inventory" | "item" | "itemUsageHistory" | "vault" | "marketplaceListing" | "gameSession" | "quest" | "userQuest"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -630,6 +632,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.InventoryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.InventoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    Item: {
+      payload: Prisma.$ItemPayload<ExtArgs>
+      fields: Prisma.ItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>
+        }
+        findFirst: {
+          args: Prisma.ItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>
+        }
+        findMany: {
+          args: Prisma.ItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>[]
+        }
+        create: {
+          args: Prisma.ItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>
+        }
+        createMany: {
+          args: Prisma.ItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>[]
+        }
+        delete: {
+          args: Prisma.ItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>
+        }
+        update: {
+          args: Prisma.ItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.ItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.ItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemPayload>
+        }
+        aggregate: {
+          args: Prisma.ItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateItem>
+        }
+        groupBy: {
+          args: Prisma.ItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    ItemUsageHistory: {
+      payload: Prisma.$ItemUsageHistoryPayload<ExtArgs>
+      fields: Prisma.ItemUsageHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ItemUsageHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ItemUsageHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.ItemUsageHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ItemUsageHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.ItemUsageHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.ItemUsageHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.ItemUsageHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ItemUsageHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.ItemUsageHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>
+        }
+        update: {
+          args: Prisma.ItemUsageHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.ItemUsageHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ItemUsageHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ItemUsageHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.ItemUsageHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItemUsageHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.ItemUsageHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateItemUsageHistory>
+        }
+        groupBy: {
+          args: Prisma.ItemUsageHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItemUsageHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ItemUsageHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItemUsageHistoryCountAggregateOutputType> | number
         }
       }
     }
@@ -1100,6 +1250,39 @@ export const InventoryScalarFieldEnum = {
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
 
 
+export const ItemScalarFieldEnum = {
+  id: 'id',
+  itemId: 'itemId',
+  name: 'name',
+  description: 'description',
+  itemType: 'itemType',
+  rarity: 'rarity',
+  effects: 'effects',
+  cooldownMinutes: 'cooldownMinutes',
+  maxPerDay: 'maxPerDay',
+  minLevel: 'minLevel',
+  iconUrl: 'iconUrl',
+  isStackable: 'isStackable',
+  maxStack: 'maxStack',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ItemScalarFieldEnum = (typeof ItemScalarFieldEnum)[keyof typeof ItemScalarFieldEnum]
+
+
+export const ItemUsageHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  pixegotchiId: 'pixegotchiId',
+  itemId: 'itemId',
+  quantity: 'quantity',
+  usedAt: 'usedAt'
+} as const
+
+export type ItemUsageHistoryScalarFieldEnum = (typeof ItemUsageHistoryScalarFieldEnum)[keyof typeof ItemUsageHistoryScalarFieldEnum]
+
+
 export const VaultScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1182,6 +1365,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -1196,6 +1386,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1331,6 +1530,27 @@ export type ListEnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'ListingType'
  */
 export type EnumListingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingType'>
@@ -1355,13 +1575,6 @@ export type EnumCurrencyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'CurrencyType[]'
  */
 export type ListEnumCurrencyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CurrencyType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1476,6 +1689,8 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   pixegotchi?: Prisma.PixegotchiOmit
   inventory?: Prisma.InventoryOmit
+  item?: Prisma.ItemOmit
+  itemUsageHistory?: Prisma.ItemUsageHistoryOmit
   vault?: Prisma.VaultOmit
   marketplaceListing?: Prisma.MarketplaceListingOmit
   gameSession?: Prisma.GameSessionOmit

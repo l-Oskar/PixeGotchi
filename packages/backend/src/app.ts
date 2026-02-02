@@ -39,11 +39,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   await app.register(cors, {
-    origin: [
-      "http://localhost",
-      "https://l-oskar.github.io",
-      /\.trycloudflare\.com$/,
-    ],
+    origin: true,
     credentials: false,
   });
 
@@ -81,7 +77,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   // await app.register(marketplaceRoutes, { prefix: "/api/marketplace" });
   // await app.register(vaultRoutes, { prefix: "/api/vault" });
 
-  app.setErrorHandler((error, request, reply) => {
+  app.setErrorHandler((error: any, request, reply) => {
     app.log.error(error);
 
     if (error.name === "PrismaClientKnownRequestError") {

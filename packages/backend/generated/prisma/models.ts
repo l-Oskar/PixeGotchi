@@ -11,6 +11,8 @@
 export type * from './models/User'
 export type * from './models/Pixegotchi'
 export type * from './models/Inventory'
+export type * from './models/Item'
+export type * from './models/ItemUsageHistory'
 export type * from './models/Vault'
 export type * from './models/MarketplaceListing'
 export type * from './models/GameSession'

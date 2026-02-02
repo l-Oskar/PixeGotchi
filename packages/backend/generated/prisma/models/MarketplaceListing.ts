@@ -630,18 +630,6 @@ export type EnumCurrencyTypeFieldUpdateOperationsInput = {
   set?: $Enums.CurrencyType
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type MarketplaceListingCreateWithoutSellerInput = {
   listingType: $Enums.ListingType
   itemId?: string | null

@@ -53,8 +53,11 @@ export class PixegotchiService {
 
   //Hatching
   async hatchEgg(id: number, userId: number, name?: string) {
+    const active = await this.findActive(userId);
+    if (active) throw new Error("You have active pixegotchi");
+
     return await prisma.pixegotchi.update({
-      where: { id },
+      where: { id, userId },
       data: {
         status: "active",
         name: name || "Unnamed",
@@ -64,7 +67,7 @@ export class PixegotchiService {
   }
 
   //Actions
-  async feed(id: number, userId: number) {
+  async feed(id: number, userId: number, itemId: string) {
     const pixegotchi = await this.findById(id, userId);
     if (!pixegotchi) throw new Error("Pixegotchi now found");
 

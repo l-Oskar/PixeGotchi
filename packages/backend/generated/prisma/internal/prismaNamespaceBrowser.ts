@@ -54,6 +54,8 @@ export const ModelName = {
   User: 'User',
   Pixegotchi: 'Pixegotchi',
   Inventory: 'Inventory',
+  Item: 'Item',
+  ItemUsageHistory: 'ItemUsageHistory',
   Vault: 'Vault',
   MarketplaceListing: 'MarketplaceListing',
   GameSession: 'GameSession',
@@ -133,6 +135,39 @@ export const InventoryScalarFieldEnum = {
 } as const
 
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
+
+
+export const ItemScalarFieldEnum = {
+  id: 'id',
+  itemId: 'itemId',
+  name: 'name',
+  description: 'description',
+  itemType: 'itemType',
+  rarity: 'rarity',
+  effects: 'effects',
+  cooldownMinutes: 'cooldownMinutes',
+  maxPerDay: 'maxPerDay',
+  minLevel: 'minLevel',
+  iconUrl: 'iconUrl',
+  isStackable: 'isStackable',
+  maxStack: 'maxStack',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ItemScalarFieldEnum = (typeof ItemScalarFieldEnum)[keyof typeof ItemScalarFieldEnum]
+
+
+export const ItemUsageHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  pixegotchiId: 'pixegotchiId',
+  itemId: 'itemId',
+  quantity: 'quantity',
+  usedAt: 'usedAt'
+} as const
+
+export type ItemUsageHistoryScalarFieldEnum = (typeof ItemUsageHistoryScalarFieldEnum)[keyof typeof ItemUsageHistoryScalarFieldEnum]
 
 
 export const VaultScalarFieldEnum = {
@@ -217,6 +252,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -231,4 +273,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

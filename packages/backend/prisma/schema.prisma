@@ -40,9 +40,23 @@ enum RarityType {
 enum ItemType {
   food
   medicine
+  toy
+  cleaning
   chest
   rename
   special
+  boost
+}
+
+enum ItemEffect {
+  restore_hunger
+  restore_health
+  restore_energy
+  restore_happiness
+  restore_cleanliness
+  boost_experience
+  prevent_disease
+  revive
 }
 
 enum ListingType {
@@ -140,6 +154,51 @@ model Inventory {
   @@unique([userId, itemId])
   @@index([userId])
   @@map("inventory")
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  itemId      String   @unique @map("item_id") @db.VarChar(50)
+  name        String   @db.VarChar(100)
+  description String?  @db.Text
+  itemType    ItemType @map("item_type")
+  rarity      RarityType @default(common) 
+
+  effects     Json
+
+  cooldownMinutes Int? @map("cooldown_minutes")
+  maxPerDay       Int? @map("max_per_day")
+
+  minLevel        Int? @default(1) @map("min_level")
+
+  iconUrl     String?  @map("icon_url") @db.VarChar(255)
+  isStackable Boolean  @default(true) @map("is_stackable")
+  maxStack    Int?     @default(99) @map("max_stack")
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  usageHistory ItemUsageHistory[]
+
+  @@index([itemType])
+  @@index([rarity])
+  @@map("items")
+}
+
+model ItemUsageHistory {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  pixegotchiId Int      @map("pixegotchi_id")
+  itemId       String   @map("item_id") @db.VarChar(50)
+  quantity     Int      @default(1)
+  usedAt       DateTime @default(now()) @map("used_at")
+
+  item         Item     @relation(fields: [itemId], references: [itemId], onDelete: Cascade)
+
+  @@index([userId, pixegotchiId])
+  @@index([itemId])
+  @@index([usedAt])
+  @@map("item_usage_history")
 }
 
 model Vault {

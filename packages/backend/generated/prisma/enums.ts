@@ -45,12 +45,29 @@ export type RarityType = (typeof RarityType)[keyof typeof RarityType]
 export const ItemType = {
   food: 'food',
   medicine: 'medicine',
+  toy: 'toy',
+  cleaning: 'cleaning',
   chest: 'chest',
   rename: 'rename',
-  special: 'special'
+  special: 'special',
+  boost: 'boost'
 } as const
 
 export type ItemType = (typeof ItemType)[keyof typeof ItemType]
+
+
+export const ItemEffect = {
+  restore_hunger: 'restore_hunger',
+  restore_health: 'restore_health',
+  restore_energy: 'restore_energy',
+  restore_happiness: 'restore_happiness',
+  restore_cleanliness: 'restore_cleanliness',
+  boost_experience: 'boost_experience',
+  prevent_disease: 'prevent_disease',
+  revive: 'revive'
+} as const
+
+export type ItemEffect = (typeof ItemEffect)[keyof typeof ItemEffect]
 
 
 export const ListingType = {
