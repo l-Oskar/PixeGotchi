@@ -6,6 +6,13 @@ export type ElementType =
   | "water"
   | "earth"
   | "air"
+  | "electric"
+  | "ice"
+  | "grass"
+  | "metal"
+  | "ghost"
+  | "poison"
+  | "psychic"
   | "light"
   | "dark"
   | "rainbow";

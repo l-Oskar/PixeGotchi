@@ -1,7 +1,13 @@
 import { prisma } from "@/database/prisma";
 import { PixegotchiStatus } from "../../../generated/prisma/enums";
+import { Inventory } from "../inventory/inventory.service";
+import { ItemEffectHandler } from "../inventory/item-effect-handler.service";
+import { ItemEffects } from "@/types/item-effects";
+import { Item, Pixegotchi } from "generated/prisma/client";
 
 export class PixegotchiService {
+  constructor(private inventory: Inventory) {}
+
   // Get all user's tamagotchis
   async findByUserId(userId: number) {
     return await prisma.pixegotchi.findMany({
@@ -64,6 +70,157 @@ export class PixegotchiService {
         hatchedAt: new Date(),
       },
     });
+  }
+
+  async useItem(
+    userId: number,
+    pixegotchiId: number,
+    itemId: string,
+    quantity: number = 1,
+  ) {
+    const pixegotchi = await this.findById(pixegotchiId, userId);
+    if (!pixegotchi) throw new Error("Pixegotchi not found");
+    if (pixegotchi.status !== "active")
+      throw new Error("This pixegitchi is not active");
+
+    const itemDetails = await this.inventory.getItemDetail(itemId);
+    if (!itemDetails) throw new Error("Item not found");
+
+    await this.validateItemUsage(pixegotchi, itemDetails, quantity);
+
+    // Використовуємо транзакцію
+    return await prisma.$transaction(async (tx) => {
+      // 1. Забираємо предмет з інвентаря
+      await this.inventory.consumeItem(userId, itemId, quantity);
+
+      // 2. Застосовуємо ефекти
+      const effects = itemDetails.effects as ItemEffects;
+      const updates = ItemEffectHandler.applyEffects(
+        pixegotchi,
+        effects,
+        quantity,
+      );
+
+      // 3. Оновлюємо timestamps
+      this.updateActionTimestamp(updates, itemDetails.itemType);
+
+      // 4. Зберігаємо зміни
+      const updatedPixegotchi = await tx.pixegotchi.update({
+        where: { id: pixegotchi.id },
+        data: updates,
+      });
+
+      // 5. Записуємо історію використання
+      if (itemDetails.cooldownMinutes || itemDetails.maxPerDay) {
+        await tx.itemUsageHistory.create({
+          data: {
+            userId,
+            pixegotchiId,
+            itemId,
+            quantity,
+          },
+        });
+      }
+
+      return updatedPixegotchi;
+    });
+  }
+
+  private async validateItemUsage(
+    pixegotchi: Pixegotchi,
+    item: Item,
+    quantity: number,
+  ) {
+    // Перевірка рівня
+    if (item.minLevel && pixegotchi.level < item.minLevel) {
+      throw new Error(
+        `Pixegotchi must be level ${item.minLevel} to use this item`,
+      );
+    }
+
+    // Перевірка кулдауну
+    if (item.cooldownMinutes) {
+      await this.checkCooldown(
+        pixegotchi.userId,
+        pixegotchi.id,
+        item.itemId,
+        item.cooldownMinutes,
+      );
+    }
+
+    // Перевірка ліміту на день
+    if (item.maxPerDay) {
+      await this.checkDailyLimit(
+        pixegotchi.userId,
+        pixegotchi.id,
+        item.itemId,
+        item.maxPerDay,
+      );
+    }
+  }
+
+  private async checkCooldown(
+    userId: number,
+    pixegotchiId: number,
+    itemId: string,
+    cooldownMinutes: number,
+  ) {
+    const lastUsage = await prisma.itemUsageHistory.findFirst({
+      where: { userId, pixegotchiId, itemId },
+      orderBy: { usedAt: "desc" },
+    });
+
+    if (lastUsage) {
+      const minutesSinceUse =
+        (Date.now() - lastUsage.usedAt.getTime()) / (1000 * 60);
+
+      if (minutesSinceUse < cooldownMinutes) {
+        const remaining = Math.ceil(cooldownMinutes - minutesSinceUse);
+        throw new Error(
+          `Item is on cooldown. Available in ${remaining} minutes`,
+        );
+      }
+    }
+  }
+
+  private async checkDailyLimit(
+    userId: number,
+    pixegotchiId: number,
+    itemId: string,
+    maxPerDay: number,
+  ) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const usageToday = await prisma.itemUsageHistory.aggregate({
+      where: {
+        userId,
+        pixegotchiId,
+        itemId,
+        usedAt: { gte: today },
+      },
+      _sum: { quantity: true },
+    });
+
+    const usedToday = usageToday._sum.quantity || 0;
+
+    if (usedToday >= maxPerDay) {
+      throw new Error(`Daily limit reached for this item (${maxPerDay}/day)`);
+    }
+  }
+
+  private updateActionTimestamp(updates: any, itemType: string) {
+    const timestampMap: Record<string, string> = {
+      food: "lastFedAt",
+      medicine: "lastHealedAt",
+      cleaning: "lastCleanedAt",
+      toy: "lastPlayedAt",
+    };
+
+    const field = timestampMap[itemType];
+    if (field) {
+      updates[field] = new Date();
+    }
   }
 
   //Actions

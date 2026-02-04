@@ -25,8 +25,16 @@ enum ElementType {
   water
   earth
   air
+  electric
+  ice
+  grass
+  metal
+  ghost
+  poison
+  psychic
   light
   dark
+  rainbow
 }
 
 enum RarityType {
@@ -46,17 +54,6 @@ enum ItemType {
   rename
   special
   boost
-}
-
-enum ItemEffect {
-  restore_hunger
-  restore_health
-  restore_energy
-  restore_happiness
-  restore_cleanliness
-  boost_experience
-  prevent_disease
-  revive
 }
 
 enum ListingType {
