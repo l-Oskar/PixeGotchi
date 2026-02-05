@@ -41,6 +41,7 @@ enum RarityType {
   common
   uncommon
   rare
+  mythic
   epic
   legendary
 }
@@ -116,6 +117,9 @@ model Pixegotchi {
   hungerRate        Decimal           @default(1.0) @map("hunger_rate") @db.Decimal(3, 2)
   energyRate        Decimal           @default(1.0) @map("energy_rate") @db.Decimal(3, 2)
   diseaseResistance Decimal           @default(1.0) @map("disease_resistance") @db.Decimal(3, 2)
+  happinesRate      Decimal           @default(1.0) @map("happines_rate") @db.Decimal(3, 2)
+  cleanlinessRate   Decimal           @default(1.0) @map("cleanliness_rate") @db.Decimal(3, 2)
+  lifeRecoveryRate  Decimal           @default(1.0) @map("life_recovery_rate") @db.Decimal(3, 2)
 
   // Action timestamps
   lastFedAt         DateTime?         @map("last_fed_at")

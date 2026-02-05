@@ -40,6 +40,9 @@ export type PixegotchiAvgAggregateOutputType = {
   hungerRate: runtime.Decimal | null
   energyRate: runtime.Decimal | null
   diseaseResistance: runtime.Decimal | null
+  happinesRate: runtime.Decimal | null
+  cleanlinessRate: runtime.Decimal | null
+  lifeRecoveryRate: runtime.Decimal | null
 }
 
 export type PixegotchiSumAggregateOutputType = {
@@ -56,6 +59,9 @@ export type PixegotchiSumAggregateOutputType = {
   hungerRate: runtime.Decimal | null
   energyRate: runtime.Decimal | null
   diseaseResistance: runtime.Decimal | null
+  happinesRate: runtime.Decimal | null
+  cleanlinessRate: runtime.Decimal | null
+  lifeRecoveryRate: runtime.Decimal | null
 }
 
 export type PixegotchiMinAggregateOutputType = {
@@ -78,6 +84,9 @@ export type PixegotchiMinAggregateOutputType = {
   hungerRate: runtime.Decimal | null
   energyRate: runtime.Decimal | null
   diseaseResistance: runtime.Decimal | null
+  happinesRate: runtime.Decimal | null
+  cleanlinessRate: runtime.Decimal | null
+  lifeRecoveryRate: runtime.Decimal | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
   lastSleptAt: Date | null
@@ -108,6 +117,9 @@ export type PixegotchiMaxAggregateOutputType = {
   hungerRate: runtime.Decimal | null
   energyRate: runtime.Decimal | null
   diseaseResistance: runtime.Decimal | null
+  happinesRate: runtime.Decimal | null
+  cleanlinessRate: runtime.Decimal | null
+  lifeRecoveryRate: runtime.Decimal | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
   lastSleptAt: Date | null
@@ -138,6 +150,9 @@ export type PixegotchiCountAggregateOutputType = {
   hungerRate: number
   energyRate: number
   diseaseResistance: number
+  happinesRate: number
+  cleanlinessRate: number
+  lifeRecoveryRate: number
   lastFedAt: number
   lastPlayedAt: number
   lastSleptAt: number
@@ -164,6 +179,9 @@ export type PixegotchiAvgAggregateInputType = {
   hungerRate?: true
   energyRate?: true
   diseaseResistance?: true
+  happinesRate?: true
+  cleanlinessRate?: true
+  lifeRecoveryRate?: true
 }
 
 export type PixegotchiSumAggregateInputType = {
@@ -180,6 +198,9 @@ export type PixegotchiSumAggregateInputType = {
   hungerRate?: true
   energyRate?: true
   diseaseResistance?: true
+  happinesRate?: true
+  cleanlinessRate?: true
+  lifeRecoveryRate?: true
 }
 
 export type PixegotchiMinAggregateInputType = {
@@ -202,6 +223,9 @@ export type PixegotchiMinAggregateInputType = {
   hungerRate?: true
   energyRate?: true
   diseaseResistance?: true
+  happinesRate?: true
+  cleanlinessRate?: true
+  lifeRecoveryRate?: true
   lastFedAt?: true
   lastPlayedAt?: true
   lastSleptAt?: true
@@ -232,6 +256,9 @@ export type PixegotchiMaxAggregateInputType = {
   hungerRate?: true
   energyRate?: true
   diseaseResistance?: true
+  happinesRate?: true
+  cleanlinessRate?: true
+  lifeRecoveryRate?: true
   lastFedAt?: true
   lastPlayedAt?: true
   lastSleptAt?: true
@@ -262,6 +289,9 @@ export type PixegotchiCountAggregateInputType = {
   hungerRate?: true
   energyRate?: true
   diseaseResistance?: true
+  happinesRate?: true
+  cleanlinessRate?: true
+  lifeRecoveryRate?: true
   lastFedAt?: true
   lastPlayedAt?: true
   lastSleptAt?: true
@@ -379,6 +409,9 @@ export type PixegotchiGroupByOutputType = {
   hungerRate: runtime.Decimal
   energyRate: runtime.Decimal
   diseaseResistance: runtime.Decimal
+  happinesRate: runtime.Decimal
+  cleanlinessRate: runtime.Decimal
+  lifeRecoveryRate: runtime.Decimal
   lastFedAt: Date | null
   lastPlayedAt: Date | null
   lastSleptAt: Date | null
@@ -432,6 +465,9 @@ export type PixegotchiWhereInput = {
   hungerRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastSleptAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -465,6 +501,9 @@ export type PixegotchiOrderByWithRelationInput = {
   hungerRate?: Prisma.SortOrder
   energyRate?: Prisma.SortOrder
   diseaseResistance?: Prisma.SortOrder
+  happinesRate?: Prisma.SortOrder
+  cleanlinessRate?: Prisma.SortOrder
+  lifeRecoveryRate?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSleptAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -501,6 +540,9 @@ export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
   hungerRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastSleptAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -534,6 +576,9 @@ export type PixegotchiOrderByWithAggregationInput = {
   hungerRate?: Prisma.SortOrder
   energyRate?: Prisma.SortOrder
   diseaseResistance?: Prisma.SortOrder
+  happinesRate?: Prisma.SortOrder
+  cleanlinessRate?: Prisma.SortOrder
+  lifeRecoveryRate?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSleptAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -572,6 +617,9 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   hungerRate?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastSleptAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
@@ -600,6 +648,9 @@ export type PixegotchiCreateInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -633,6 +684,9 @@ export type PixegotchiUncheckedCreateInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -663,6 +717,9 @@ export type PixegotchiUpdateInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696,6 +753,9 @@ export type PixegotchiUncheckedUpdateInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -728,6 +788,9 @@ export type PixegotchiCreateManyInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -756,6 +819,9 @@ export type PixegotchiUpdateManyMutationInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -786,6 +852,9 @@ export type PixegotchiUncheckedUpdateManyInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -826,6 +895,9 @@ export type PixegotchiCountOrderByAggregateInput = {
   hungerRate?: Prisma.SortOrder
   energyRate?: Prisma.SortOrder
   diseaseResistance?: Prisma.SortOrder
+  happinesRate?: Prisma.SortOrder
+  cleanlinessRate?: Prisma.SortOrder
+  lifeRecoveryRate?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrder
   lastSleptAt?: Prisma.SortOrder
@@ -850,6 +922,9 @@ export type PixegotchiAvgOrderByAggregateInput = {
   hungerRate?: Prisma.SortOrder
   energyRate?: Prisma.SortOrder
   diseaseResistance?: Prisma.SortOrder
+  happinesRate?: Prisma.SortOrder
+  cleanlinessRate?: Prisma.SortOrder
+  lifeRecoveryRate?: Prisma.SortOrder
 }
 
 export type PixegotchiMaxOrderByAggregateInput = {
@@ -872,6 +947,9 @@ export type PixegotchiMaxOrderByAggregateInput = {
   hungerRate?: Prisma.SortOrder
   energyRate?: Prisma.SortOrder
   diseaseResistance?: Prisma.SortOrder
+  happinesRate?: Prisma.SortOrder
+  cleanlinessRate?: Prisma.SortOrder
+  lifeRecoveryRate?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrder
   lastSleptAt?: Prisma.SortOrder
@@ -902,6 +980,9 @@ export type PixegotchiMinOrderByAggregateInput = {
   hungerRate?: Prisma.SortOrder
   energyRate?: Prisma.SortOrder
   diseaseResistance?: Prisma.SortOrder
+  happinesRate?: Prisma.SortOrder
+  cleanlinessRate?: Prisma.SortOrder
+  lifeRecoveryRate?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrder
   lastSleptAt?: Prisma.SortOrder
@@ -926,6 +1007,9 @@ export type PixegotchiSumOrderByAggregateInput = {
   hungerRate?: Prisma.SortOrder
   energyRate?: Prisma.SortOrder
   diseaseResistance?: Prisma.SortOrder
+  happinesRate?: Prisma.SortOrder
+  cleanlinessRate?: Prisma.SortOrder
+  lifeRecoveryRate?: Prisma.SortOrder
 }
 
 export type PixegotchiScalarRelationFilter = {
@@ -1041,6 +1125,9 @@ export type PixegotchiCreateWithoutUserInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -1072,6 +1159,9 @@ export type PixegotchiUncheckedCreateWithoutUserInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -1133,6 +1223,9 @@ export type PixegotchiScalarWhereInput = {
   hungerRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastSleptAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -1161,6 +1254,9 @@ export type PixegotchiCreateWithoutVaultInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -1193,6 +1289,9 @@ export type PixegotchiUncheckedCreateWithoutVaultInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -1238,6 +1337,9 @@ export type PixegotchiUpdateWithoutVaultInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1270,6 +1372,9 @@ export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1299,6 +1404,9 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -1331,6 +1439,9 @@ export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -1376,6 +1487,9 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1408,6 +1522,9 @@ export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1438,6 +1555,9 @@ export type PixegotchiCreateManyUserInput = {
   hungerRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
   lastSleptAt?: Date | string | null
@@ -1466,6 +1586,9 @@ export type PixegotchiUpdateWithoutUserInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1497,6 +1620,9 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1528,6 +1654,9 @@ export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   hungerRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   energyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   diseaseResistance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happinesRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanlinessRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lifeRecoveryRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1598,6 +1727,9 @@ export type PixegotchiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   hungerRate?: boolean
   energyRate?: boolean
   diseaseResistance?: boolean
+  happinesRate?: boolean
+  cleanlinessRate?: boolean
+  lifeRecoveryRate?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
   lastSleptAt?: boolean
@@ -1632,6 +1764,9 @@ export type PixegotchiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   hungerRate?: boolean
   energyRate?: boolean
   diseaseResistance?: boolean
+  happinesRate?: boolean
+  cleanlinessRate?: boolean
+  lifeRecoveryRate?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
   lastSleptAt?: boolean
@@ -1663,6 +1798,9 @@ export type PixegotchiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   hungerRate?: boolean
   energyRate?: boolean
   diseaseResistance?: boolean
+  happinesRate?: boolean
+  cleanlinessRate?: boolean
+  lifeRecoveryRate?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
   lastSleptAt?: boolean
@@ -1694,6 +1832,9 @@ export type PixegotchiSelectScalar = {
   hungerRate?: boolean
   energyRate?: boolean
   diseaseResistance?: boolean
+  happinesRate?: boolean
+  cleanlinessRate?: boolean
+  lifeRecoveryRate?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
   lastSleptAt?: boolean
@@ -1704,7 +1845,7 @@ export type PixegotchiSelectScalar = {
   createdAt?: boolean
 }
 
-export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "nftAddress" | "genomeHash" | "name" | "status" | "element" | "rarity" | "level" | "experience" | "lives" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "hungerRate" | "energyRate" | "diseaseResistance" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt" | "createdAt", ExtArgs["result"]["pixegotchi"]>
+export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "nftAddress" | "genomeHash" | "name" | "status" | "element" | "rarity" | "level" | "experience" | "lives" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "hungerRate" | "energyRate" | "diseaseResistance" | "happinesRate" | "cleanlinessRate" | "lifeRecoveryRate" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt" | "createdAt", ExtArgs["result"]["pixegotchi"]>
 export type PixegotchiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vault?: boolean | Prisma.Pixegotchi$vaultArgs<ExtArgs>
@@ -1745,6 +1886,9 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     hungerRate: runtime.Decimal
     energyRate: runtime.Decimal
     diseaseResistance: runtime.Decimal
+    happinesRate: runtime.Decimal
+    cleanlinessRate: runtime.Decimal
+    lifeRecoveryRate: runtime.Decimal
     lastFedAt: Date | null
     lastPlayedAt: Date | null
     lastSleptAt: Date | null
@@ -2198,6 +2342,9 @@ export interface PixegotchiFieldRefs {
   readonly hungerRate: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
   readonly energyRate: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
   readonly diseaseResistance: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
+  readonly happinesRate: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
+  readonly cleanlinessRate: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
+  readonly lifeRecoveryRate: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
   readonly lastFedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastPlayedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastSleptAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>

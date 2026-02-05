@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# env
+.env
+.env.*
+
+# builds
+generated/prisma/
+dist/
+build/
+.next/
+.cache/
+
+# OS
+.DS_Store
+

@@ -24,8 +24,16 @@ export const ElementType = {
   water: 'water',
   earth: 'earth',
   air: 'air',
+  electric: 'electric',
+  ice: 'ice',
+  grass: 'grass',
+  metal: 'metal',
+  ghost: 'ghost',
+  poison: 'poison',
+  psychic: 'psychic',
   light: 'light',
-  dark: 'dark'
+  dark: 'dark',
+  rainbow: 'rainbow'
 } as const
 
 export type ElementType = (typeof ElementType)[keyof typeof ElementType]
@@ -35,6 +43,7 @@ export const RarityType = {
   common: 'common',
   uncommon: 'uncommon',
   rare: 'rare',
+  mythic: 'mythic',
   epic: 'epic',
   legendary: 'legendary'
 } as const
@@ -54,20 +63,6 @@ export const ItemType = {
 } as const
 
 export type ItemType = (typeof ItemType)[keyof typeof ItemType]
-
-
-export const ItemEffect = {
-  restore_hunger: 'restore_hunger',
-  restore_health: 'restore_health',
-  restore_energy: 'restore_energy',
-  restore_happiness: 'restore_happiness',
-  restore_cleanliness: 'restore_cleanliness',
-  boost_experience: 'boost_experience',
-  prevent_disease: 'prevent_disease',
-  revive: 'revive'
-} as const
-
-export type ItemEffect = (typeof ItemEffect)[keyof typeof ItemEffect]
 
 
 export const ListingType = {
