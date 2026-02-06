@@ -4,9 +4,23 @@ import { Inventory } from "../inventory/inventory.service";
 import { ItemEffectHandler } from "../inventory/item-effect-handler.service";
 import { ItemEffects } from "@/types/item-effects";
 import { Item, Pixegotchi } from "generated/prisma/client";
+import { GenomeGenerator } from "../../utils/genome-generator";
+
+interface PixegotchiCreate {
+  name?: string;
+  userId: number;
+  genomeHash: string;
+  element: string;
+  rarity: string;
+  gender: string;
+  traits: string[];
+  hungerRate: number;
+  energyRate: number;
+  diseaseResistance: number;
+}
 
 export class PixegotchiService {
-  constructor(private inventory: Inventory) {}
+  private inventory = new Inventory();
 
   // Get all user's tamagotchis
   async findByUserId(userId: number) {
@@ -25,6 +39,11 @@ export class PixegotchiService {
 
   // Get by ID with ownership check
   async findById(id: number, userId: number) {
+    console.log("=== findById DEBUG ===");
+    console.log("Called with id:", id, "userId:", userId);
+    if (!id || isNaN(id)) {
+      throw new Error("Invalid pixegotchi ID");
+    }
     return await prisma.pixegotchi.findFirst({
       where: {
         id,
@@ -33,26 +52,38 @@ export class PixegotchiService {
     });
   }
 
-  //Create new pixegotchi from egg
-  async create(data: {
-    userId: number;
-    genomeHash: string;
-    element: string;
-    rarity: string;
-    hungerRate: number;
-    energyRate: number;
-    diseaseResistance: number;
-  }) {
+  async createEgg(userId: number) {
     return await prisma.pixegotchi.create({
       data: {
+        name: "Egg",
+        userId,
+        genomeHash: "Egg_hash",
+        element: "earth",
+        rarity: "common",
+        gender: "male",
+        traits: [],
+        hungerRate: 0,
+        energyRate: 0,
+        diseaseResistance: 0,
+      },
+    });
+  }
+
+  //Create new pixegotchi from egg
+  async create(data: PixegotchiCreate) {
+    return await prisma.pixegotchi.create({
+      data: {
+        name: data.name,
         userId: data.userId,
         genomeHash: data.genomeHash,
         element: data.element as any,
         rarity: data.rarity as any,
+        gender: data.gender as any,
+        traits: data.traits,
         hungerRate: data.hungerRate,
         energyRate: data.energyRate,
         diseaseResistance: data.diseaseResistance,
-        status: "egg",
+        status: "active",
       },
     });
   }
@@ -62,69 +93,95 @@ export class PixegotchiService {
     const active = await this.findActive(userId);
     if (active) throw new Error("You have active pixegotchi");
 
-    return await prisma.pixegotchi.update({
-      where: { id, userId },
-      data: {
-        status: "active",
-        name: name || "Unnamed",
-        hatchedAt: new Date(),
+    const egg = await this.findById(id, userId);
+    if (!egg || egg.status !== "egg") throw new Error("You don't have egg");
+
+    const hatchedEgg = GenomeGenerator.generate();
+    const newPixegothi = await this.create({
+      name,
+      userId: userId,
+      genomeHash: hatchedEgg.genome_hash,
+      element: hatchedEgg.element,
+      rarity: hatchedEgg.rarity,
+      gender: hatchedEgg.gender,
+      traits: hatchedEgg.traits,
+      hungerRate: 1,
+      energyRate: 1,
+      diseaseResistance: 1,
+    });
+
+    await prisma.pixegotchi.delete({
+      where: {
+        userId,
+        id,
       },
     });
+
+    return newPixegothi;
+
+    // return await prisma.pixegotchi.update({
+    //   where: { id, userId },
+    //   data: {
+    //     status: "active",
+    //     name: name || "Unnamed",
+    //     hatchedAt: new Date(),
+    //   },
+    // });
   }
 
-  async useItem(
-    userId: number,
-    pixegotchiId: number,
-    itemId: string,
-    quantity: number = 1,
-  ) {
-    const pixegotchi = await this.findById(pixegotchiId, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi not found");
-    if (pixegotchi.status !== "active")
-      throw new Error("This pixegitchi is not active");
+  // async useItem(
+  //   userId: number,
+  //   pixegotchiId: number,
+  //   itemId: string,
+  //   quantity: number = 1,
+  // ) {
+  //   const pixegotchi = await this.findById(pixegotchiId, userId);
+  //   if (!pixegotchi) throw new Error("Pixegotchi not found");
+  //   if (pixegotchi.status !== "active")
+  //     throw new Error("This pixegitchi is not active");
 
-    const itemDetails = await this.inventory.getItemDetail(itemId);
-    if (!itemDetails) throw new Error("Item not found");
+  //   const itemDetails = await this.inventory.getItemDetail(itemId);
+  //   if (!itemDetails) throw new Error(`Item ${itemId} not found`);
 
-    await this.validateItemUsage(pixegotchi, itemDetails, quantity);
+  //   await this.validateItemUsage(pixegotchi, itemDetails, quantity);
 
-    // Використовуємо транзакцію
-    return await prisma.$transaction(async (tx) => {
-      // 1. Забираємо предмет з інвентаря
-      await this.inventory.consumeItem(userId, itemId, quantity);
+  //   // Використовуємо транзакцію
+  //   return await prisma.$transaction(async (tx) => {
+  //     // 1. Забираємо предмет з інвентаря
+  //     await this.inventory.consumeItem(userId, itemId, quantity);
 
-      // 2. Застосовуємо ефекти
-      const effects = itemDetails.effects as ItemEffects;
-      const updates = ItemEffectHandler.applyEffects(
-        pixegotchi,
-        effects,
-        quantity,
-      );
+  //     // 2. Застосовуємо ефекти
+  //     const effects = itemDetails.effects as ItemEffects;
+  //     const updates = ItemEffectHandler.applyEffects(
+  //       pixegotchi,
+  //       effects,
+  //       quantity,
+  //     );
 
-      // 3. Оновлюємо timestamps
-      this.updateActionTimestamp(updates, itemDetails.itemType);
+  //     // 3. Оновлюємо timestamps
+  //     this.updateActionTimestamp(updates, itemDetails.itemType);
 
-      // 4. Зберігаємо зміни
-      const updatedPixegotchi = await tx.pixegotchi.update({
-        where: { id: pixegotchi.id },
-        data: updates,
-      });
+  //     // 4. Зберігаємо зміни
+  //     const updatedPixegotchi = await tx.pixegotchi.update({
+  //       where: { id: pixegotchi.id },
+  //       data: updates,
+  //     });
 
-      // 5. Записуємо історію використання
-      if (itemDetails.cooldownMinutes || itemDetails.maxPerDay) {
-        await tx.itemUsageHistory.create({
-          data: {
-            userId,
-            pixegotchiId,
-            itemId,
-            quantity,
-          },
-        });
-      }
+  //     // 5. Записуємо історію використання
+  //     if (itemDetails.cooldownMinutes || itemDetails.maxPerDay) {
+  //       await tx.itemUsageHistory.create({
+  //         data: {
+  //           userId,
+  //           pixegotchiId,
+  //           itemId,
+  //           quantity,
+  //         },
+  //       });
+  //     }
 
-      return updatedPixegotchi;
-    });
-  }
+  //     return updatedPixegotchi;
+  //   });
+  // }
 
   private async validateItemUsage(
     pixegotchi: Pixegotchi,

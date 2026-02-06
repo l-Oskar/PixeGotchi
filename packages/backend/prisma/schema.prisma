@@ -20,6 +20,11 @@ enum PixegotchiStatus {
   dead
 }
 
+enum PixegotchiGender {
+  male
+  female
+}
+
 enum ElementType {
   fire
   water
@@ -41,9 +46,10 @@ enum RarityType {
   common
   uncommon
   rare
-  mythic
   epic
+  mythic
   legendary
+  unique
 }
 
 enum ItemType {
@@ -102,13 +108,15 @@ model Pixegotchi {
   status            PixegotchiStatus  @default(egg)
   element           ElementType?
   rarity            RarityType?
+  gender            PixegotchiGender? 
   level             Int               @default(1)
   experience        Int               @default(0)
   lives             Int               @default(2)
+  traits            Json
 
   // Stats (0-100)
   health            Int               @default(100)
-  hunger            Int               @default(50)
+  hunger            Int               @default(70)
   energy            Int               @default(100)
   happiness         Int               @default(50)
   cleanliness       Int               @default(100)

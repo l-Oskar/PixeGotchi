@@ -1,6 +1,4 @@
-import { RarityType } from "generated/prisma/enums";
-
-type TraitType =
+export type TraitType =
   // Активність
   | "lazy" // ледачий
   | "energetic" // енергійний
@@ -63,10 +61,9 @@ interface TraitEffect {
     food_preference?: string[]; // улюблена їжа
     special_needs?: string[]; // особливі потреби
   };
-  rarity: RarityType;
 }
 
-const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
+export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
   // === АКТИВНІСТЬ ===
   lazy: {
     trait: "lazy",
@@ -77,7 +74,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       play_requirement: 0.5, // мало потребує ігор
       happiness_gain: 0.7, // важче зробити щасливим
     },
-    rarity: "common",
   },
 
   energetic: {
@@ -89,7 +85,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.3,
       hunger_rate: 1.2,
     },
-    rarity: "common",
   },
 
   hyperactive: {
@@ -102,7 +97,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.5,
       special_needs: ["constant_attention"],
     },
-    rarity: "uncommon",
   },
 
   sleepy: {
@@ -114,7 +108,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       play_requirement: 0.3,
       happiness_gain: 0.8,
     },
-    rarity: "common",
   },
 
   // === ХАРАКТЕР ===
@@ -126,7 +119,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.5,
       energy_drain: 1.2,
     },
-    rarity: "common",
   },
 
   serious: {
@@ -137,7 +129,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 0.8,
       health_modifier: 1.1,
     },
-    rarity: "uncommon",
   },
 
   shy: {
@@ -147,7 +138,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 0.7,
       special_needs: ["quiet_environment", "slow_approach"],
     },
-    rarity: "common",
   },
 
   brave: {
@@ -157,7 +147,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       health_modifier: 1.2,
       happiness_gain: 1.1,
     },
-    rarity: "uncommon",
   },
 
   curious: {
@@ -169,7 +158,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       energy_drain: 1.1,
       special_needs: ["new_toys", "exploration"],
     },
-    rarity: "common",
   },
 
   stubborn: {
@@ -179,7 +167,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 0.6,
       special_needs: ["patience", "specific_food"],
     },
-    rarity: "rare",
   },
 
   // === ЇЖА ===
@@ -192,7 +179,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       health_modifier: 0.9,
       special_needs: ["frequent_feeding"],
     },
-    rarity: "common",
   },
 
   picky: {
@@ -204,7 +190,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       food_preference: ["premium_food", "specific_type"],
       special_needs: ["variety"],
     },
-    rarity: "uncommon",
   },
 
   vegetarian: {
@@ -215,7 +200,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       food_preference: ["vegetables", "fruits", "grass"],
       health_modifier: 1.05,
     },
-    rarity: "uncommon",
   },
 
   carnivore: {
@@ -226,7 +210,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       food_preference: ["meat", "fish"],
       health_modifier: 1.1,
     },
-    rarity: "uncommon",
   },
 
   foodie: {
@@ -238,7 +221,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       food_preference: ["gourmet", "exotic"],
       special_needs: ["high_quality_food"],
     },
-    rarity: "rare",
   },
 
   // === ЧИСТОТА ===
@@ -250,7 +232,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 0.5,
       special_needs: ["frequent_cleaning", "pristine_environment"],
     },
-    rarity: "uncommon",
   },
 
   messy: {
@@ -261,7 +242,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.2,
       health_modifier: 0.9,
     },
-    rarity: "common",
   },
 
   perfectionist: {
@@ -272,7 +252,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 0.4,
       special_needs: ["perfect_order", "routine"],
     },
-    rarity: "rare",
   },
 
   // === СОЦІАЛЬНІСТЬ ===
@@ -283,7 +262,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.3,
       play_requirement: 1.2,
     },
-    rarity: "common",
   },
 
   antisocial: {
@@ -294,7 +272,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       play_requirement: 0.5,
       special_needs: ["alone_time"],
     },
-    rarity: "uncommon",
   },
 
   loyal: {
@@ -304,7 +281,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.5,
       health_modifier: 1.1,
     },
-    rarity: "rare",
   },
 
   independent: {
@@ -315,7 +291,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 0.9,
       health_modifier: 1.05,
     },
-    rarity: "uncommon",
   },
 
   // === ЗДОРОВ'Я ===
@@ -326,7 +301,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       health_modifier: 1.5,
       hunger_rate: 0.9,
     },
-    rarity: "uncommon",
   },
 
   fragile: {
@@ -336,7 +310,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       health_modifier: 0.6,
       special_needs: ["gentle_care", "medicine"],
     },
-    rarity: "common",
   },
 
   immortal: {
@@ -346,7 +319,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       health_modifier: 999,
       special_needs: ["legendary_care"],
     },
-    rarity: "mythic",
   },
 
   sickly: {
@@ -357,7 +329,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       hunger_rate: 0.8,
       special_needs: ["regular_medicine"],
     },
-    rarity: "rare",
   },
 
   // === ОСОБЛИВІ ===
@@ -369,7 +340,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       special_needs: ["night_activity"],
       happiness_gain: 1.2,
     },
-    rarity: "uncommon",
   },
 
   diurnal: {
@@ -380,7 +350,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       energy_drain: 1.1,
       happiness_gain: 1.1,
     },
-    rarity: "common",
   },
 
   greedy: {
@@ -391,7 +360,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 0.7,
       special_needs: ["extra_resources"],
     },
-    rarity: "uncommon",
   },
 
   generous: {
@@ -401,7 +369,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.4,
       hunger_rate: 0.9,
     },
-    rarity: "rare",
   },
 
   wise: {
@@ -412,7 +379,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.1,
       special_needs: ["meditation", "knowledge"],
     },
-    rarity: "epic",
   },
 
   childish: {
@@ -423,7 +389,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       happiness_gain: 1.5,
       energy_drain: 1.4,
     },
-    rarity: "common",
   },
 
   royal: {
@@ -434,7 +399,6 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       food_preference: ["premium", "gourmet"],
       special_needs: ["luxury_treatment", "royal_items"],
     },
-    rarity: "legendary",
   },
 
   wild: {
@@ -446,6 +410,5 @@ const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
       play_requirement: 1.5,
       special_needs: ["freedom", "outdoor_time"],
     },
-    rarity: "epic",
   },
 };

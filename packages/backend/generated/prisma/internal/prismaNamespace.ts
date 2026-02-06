@@ -1214,9 +1214,11 @@ export const PixegotchiScalarFieldEnum = {
   status: 'status',
   element: 'element',
   rarity: 'rarity',
+  gender: 'gender',
   level: 'level',
   experience: 'experience',
   lives: 'lives',
+  traits: 'traits',
   health: 'health',
   hunger: 'hunger',
   energy: 'energy',
@@ -1519,16 +1521,16 @@ export type ListEnumRarityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
- * Reference to a field of type 'ItemType'
+ * Reference to a field of type 'PixegotchiGender'
  */
-export type EnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemType'>
+export type EnumPixegotchiGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PixegotchiGender'>
     
 
 
 /**
- * Reference to a field of type 'ItemType[]'
+ * Reference to a field of type 'PixegotchiGender[]'
  */
-export type ListEnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemType[]'>
+export type ListEnumPixegotchiGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PixegotchiGender[]'>
     
 
 
@@ -1543,6 +1545,20 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'ItemType'
+ */
+export type EnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemType'>
+    
+
+
+/**
+ * Reference to a field of type 'ItemType[]'
+ */
+export type ListEnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemType[]'>
     
 
 

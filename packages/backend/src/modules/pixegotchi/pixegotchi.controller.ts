@@ -48,21 +48,35 @@ export class PixegotchiController {
     return reply.send(pixegotchi);
   }
 
-  async hatch(request: FastifyRequest, reply: FastifyReply) {
+  async getEgg(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
-    const { name } = hatchSchema.parse(request.body);
 
-    //Genome create
+    const getEgg = await this.pixegotchiService.createEgg(userId);
 
-    return reply.code(501).send({ message: "Not implemented yet" });
+    return reply.send(getEgg);
   }
 
-  async feed(
+  async hatch(
     request: FastifyRequest<{ Params: { id: string } }>,
     reply: FastifyReply,
   ) {
     const userId = (request.user as any).userId;
     const id = parseInt(request.params.id);
+    const { name } = hatchSchema.parse(request.body);
+
+    const result = await this.pixegotchiService.hatchEgg(id, userId, name);
+    return reply.send(result);
+
+    // return reply.code(501).send({ message: "Not implemented yet" });
+  }
+
+  async feed(
+    request: FastifyRequest<{ Params: { id: string; itemId: string } }>,
+    reply: FastifyReply,
+  ) {
+    const userId = (request.user as any).userId;
+    const id = parseInt(request.params.id);
+    const itemId = request.params.itemId;
 
     const hasCooldown = await this.cooldownManager.checkCooldown(
       userId.toString(),
@@ -79,7 +93,7 @@ export class PixegotchiController {
         .send({ error: "Action on cooldown", remainingSeconds: remaining });
     }
 
-    const pixegotchi = await this.pixegotchiService.feed(id, userId);
+    const pixegotchi = await this.pixegotchiService.feed(id, userId, itemId);
 
     await this.cooldownManager.setCooldown(
       userId.toString(),

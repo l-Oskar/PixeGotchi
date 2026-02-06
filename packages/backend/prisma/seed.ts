@@ -29,28 +29,28 @@ async function main() {
     skipDuplicates: true,
   });
 
-  const pixegotchi = await prisma.pixegotchi.create({
-    data: {
-      userId: user.id,
-      genomeHash:
-        "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
-      name: "TestPet",
-      status: "active",
-      element: "fire",
-      rarity: "rare",
-      level: 5,
-      experience: 250,
-      health: 85,
-      hunger: 40,
-      energy: 60,
-      happiness: 75,
-      cleanliness: 90,
-      hungerRate: 1.1,
-      energyRate: 0.9,
-      diseaseResistance: 1.2,
-      hatchedAt: new Date(),
-    },
-  });
+  // const pixegotchi = await prisma.pixegotchi.create({
+  //   data: {
+  //     userId: user.id,
+  //     genomeHash:
+  //       "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+  //     name: "TestPet",
+  //     status: "active",
+  //     element: "fire",
+  //     rarity: "rare",
+  //     level: 5,
+  //     experience: 250,
+  //     health: 85,
+  //     hunger: 40,
+  //     energy: 60,
+  //     happiness: 75,
+  //     cleanliness: 90,
+  //     hungerRate: 1.1,
+  //     energyRate: 0.9,
+  //     diseaseResistance: 1.2,
+  //     hatchedAt: new Date(),
+  //   },
+  // });
 
   console.log("Seeding completed!");
 }

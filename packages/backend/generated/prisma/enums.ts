@@ -19,6 +19,14 @@ export const PixegotchiStatus = {
 export type PixegotchiStatus = (typeof PixegotchiStatus)[keyof typeof PixegotchiStatus]
 
 
+export const PixegotchiGender = {
+  male: 'male',
+  female: 'female'
+} as const
+
+export type PixegotchiGender = (typeof PixegotchiGender)[keyof typeof PixegotchiGender]
+
+
 export const ElementType = {
   fire: 'fire',
   water: 'water',
@@ -43,9 +51,10 @@ export const RarityType = {
   common: 'common',
   uncommon: 'uncommon',
   rare: 'rare',
-  mythic: 'mythic',
   epic: 'epic',
-  legendary: 'legendary'
+  mythic: 'mythic',
+  legendary: 'legendary',
+  unique: 'unique'
 } as const
 
 export type RarityType = (typeof RarityType)[keyof typeof RarityType]

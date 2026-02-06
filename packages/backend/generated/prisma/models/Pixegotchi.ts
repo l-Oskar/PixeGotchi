@@ -73,6 +73,7 @@ export type PixegotchiMinAggregateOutputType = {
   status: $Enums.PixegotchiStatus | null
   element: $Enums.ElementType | null
   rarity: $Enums.RarityType | null
+  gender: $Enums.PixegotchiGender | null
   level: number | null
   experience: number | null
   lives: number | null
@@ -106,6 +107,7 @@ export type PixegotchiMaxAggregateOutputType = {
   status: $Enums.PixegotchiStatus | null
   element: $Enums.ElementType | null
   rarity: $Enums.RarityType | null
+  gender: $Enums.PixegotchiGender | null
   level: number | null
   experience: number | null
   lives: number | null
@@ -139,9 +141,11 @@ export type PixegotchiCountAggregateOutputType = {
   status: number
   element: number
   rarity: number
+  gender: number
   level: number
   experience: number
   lives: number
+  traits: number
   health: number
   hunger: number
   energy: number
@@ -212,6 +216,7 @@ export type PixegotchiMinAggregateInputType = {
   status?: true
   element?: true
   rarity?: true
+  gender?: true
   level?: true
   experience?: true
   lives?: true
@@ -245,6 +250,7 @@ export type PixegotchiMaxAggregateInputType = {
   status?: true
   element?: true
   rarity?: true
+  gender?: true
   level?: true
   experience?: true
   lives?: true
@@ -278,9 +284,11 @@ export type PixegotchiCountAggregateInputType = {
   status?: true
   element?: true
   rarity?: true
+  gender?: true
   level?: true
   experience?: true
   lives?: true
+  traits?: true
   health?: true
   hunger?: true
   energy?: true
@@ -398,9 +406,11 @@ export type PixegotchiGroupByOutputType = {
   status: $Enums.PixegotchiStatus
   element: $Enums.ElementType | null
   rarity: $Enums.RarityType | null
+  gender: $Enums.PixegotchiGender | null
   level: number
   experience: number
   lives: number
+  traits: runtime.JsonValue
   health: number
   hunger: number
   energy: number
@@ -454,9 +464,11 @@ export type PixegotchiWhereInput = {
   status?: Prisma.EnumPixegotchiStatusFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   element?: Prisma.EnumElementTypeNullableFilter<"Pixegotchi"> | $Enums.ElementType | null
   rarity?: Prisma.EnumRarityTypeNullableFilter<"Pixegotchi"> | $Enums.RarityType | null
+  gender?: Prisma.EnumPixegotchiGenderNullableFilter<"Pixegotchi"> | $Enums.PixegotchiGender | null
   level?: Prisma.IntFilter<"Pixegotchi"> | number
   experience?: Prisma.IntFilter<"Pixegotchi"> | number
   lives?: Prisma.IntFilter<"Pixegotchi"> | number
+  traits?: Prisma.JsonFilter<"Pixegotchi">
   health?: Prisma.IntFilter<"Pixegotchi"> | number
   hunger?: Prisma.IntFilter<"Pixegotchi"> | number
   energy?: Prisma.IntFilter<"Pixegotchi"> | number
@@ -490,9 +502,11 @@ export type PixegotchiOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   element?: Prisma.SortOrderInput | Prisma.SortOrder
   rarity?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   lives?: Prisma.SortOrder
+  traits?: Prisma.SortOrder
   health?: Prisma.SortOrder
   hunger?: Prisma.SortOrder
   energy?: Prisma.SortOrder
@@ -529,9 +543,11 @@ export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumPixegotchiStatusFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   element?: Prisma.EnumElementTypeNullableFilter<"Pixegotchi"> | $Enums.ElementType | null
   rarity?: Prisma.EnumRarityTypeNullableFilter<"Pixegotchi"> | $Enums.RarityType | null
+  gender?: Prisma.EnumPixegotchiGenderNullableFilter<"Pixegotchi"> | $Enums.PixegotchiGender | null
   level?: Prisma.IntFilter<"Pixegotchi"> | number
   experience?: Prisma.IntFilter<"Pixegotchi"> | number
   lives?: Prisma.IntFilter<"Pixegotchi"> | number
+  traits?: Prisma.JsonFilter<"Pixegotchi">
   health?: Prisma.IntFilter<"Pixegotchi"> | number
   hunger?: Prisma.IntFilter<"Pixegotchi"> | number
   energy?: Prisma.IntFilter<"Pixegotchi"> | number
@@ -565,9 +581,11 @@ export type PixegotchiOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   element?: Prisma.SortOrderInput | Prisma.SortOrder
   rarity?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   lives?: Prisma.SortOrder
+  traits?: Prisma.SortOrder
   health?: Prisma.SortOrder
   hunger?: Prisma.SortOrder
   energy?: Prisma.SortOrder
@@ -606,9 +624,11 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumPixegotchiStatusWithAggregatesFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   element?: Prisma.EnumElementTypeNullableWithAggregatesFilter<"Pixegotchi"> | $Enums.ElementType | null
   rarity?: Prisma.EnumRarityTypeNullableWithAggregatesFilter<"Pixegotchi"> | $Enums.RarityType | null
+  gender?: Prisma.EnumPixegotchiGenderNullableWithAggregatesFilter<"Pixegotchi"> | $Enums.PixegotchiGender | null
   level?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   experience?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   lives?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
+  traits?: Prisma.JsonWithAggregatesFilter<"Pixegotchi">
   health?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   hunger?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   energy?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
@@ -637,9 +657,11 @@ export type PixegotchiCreateInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -673,9 +695,11 @@ export type PixegotchiUncheckedCreateInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -706,9 +730,11 @@ export type PixegotchiUpdateInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -742,9 +768,11 @@ export type PixegotchiUncheckedUpdateInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -777,9 +805,11 @@ export type PixegotchiCreateManyInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -808,9 +838,11 @@ export type PixegotchiUpdateManyMutationInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -841,9 +873,11 @@ export type PixegotchiUncheckedUpdateManyInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -884,9 +918,11 @@ export type PixegotchiCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   element?: Prisma.SortOrder
   rarity?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   lives?: Prisma.SortOrder
+  traits?: Prisma.SortOrder
   health?: Prisma.SortOrder
   hunger?: Prisma.SortOrder
   energy?: Prisma.SortOrder
@@ -936,6 +972,7 @@ export type PixegotchiMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   element?: Prisma.SortOrder
   rarity?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   lives?: Prisma.SortOrder
@@ -969,6 +1006,7 @@ export type PixegotchiMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   element?: Prisma.SortOrder
   rarity?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   lives?: Prisma.SortOrder
@@ -1075,6 +1113,10 @@ export type NullableEnumRarityTypeFieldUpdateOperationsInput = {
   set?: $Enums.RarityType | null
 }
 
+export type NullableEnumPixegotchiGenderFieldUpdateOperationsInput = {
+  set?: $Enums.PixegotchiGender | null
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
@@ -1114,9 +1156,11 @@ export type PixegotchiCreateWithoutUserInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -1148,9 +1192,11 @@ export type PixegotchiUncheckedCreateWithoutUserInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -1212,9 +1258,11 @@ export type PixegotchiScalarWhereInput = {
   status?: Prisma.EnumPixegotchiStatusFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   element?: Prisma.EnumElementTypeNullableFilter<"Pixegotchi"> | $Enums.ElementType | null
   rarity?: Prisma.EnumRarityTypeNullableFilter<"Pixegotchi"> | $Enums.RarityType | null
+  gender?: Prisma.EnumPixegotchiGenderNullableFilter<"Pixegotchi"> | $Enums.PixegotchiGender | null
   level?: Prisma.IntFilter<"Pixegotchi"> | number
   experience?: Prisma.IntFilter<"Pixegotchi"> | number
   lives?: Prisma.IntFilter<"Pixegotchi"> | number
+  traits?: Prisma.JsonFilter<"Pixegotchi">
   health?: Prisma.IntFilter<"Pixegotchi"> | number
   hunger?: Prisma.IntFilter<"Pixegotchi"> | number
   energy?: Prisma.IntFilter<"Pixegotchi"> | number
@@ -1243,9 +1291,11 @@ export type PixegotchiCreateWithoutVaultInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -1278,9 +1328,11 @@ export type PixegotchiUncheckedCreateWithoutVaultInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -1326,9 +1378,11 @@ export type PixegotchiUpdateWithoutVaultInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1361,9 +1415,11 @@ export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1393,9 +1449,11 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -1428,9 +1486,11 @@ export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -1476,9 +1536,11 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1511,9 +1573,11 @@ export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1544,9 +1608,11 @@ export type PixegotchiCreateManyUserInput = {
   status?: $Enums.PixegotchiStatus
   element?: $Enums.ElementType | null
   rarity?: $Enums.RarityType | null
+  gender?: $Enums.PixegotchiGender | null
   level?: number
   experience?: number
   lives?: number
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: number
   hunger?: number
   energy?: number
@@ -1575,9 +1641,11 @@ export type PixegotchiUpdateWithoutUserInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1609,9 +1677,11 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1643,9 +1713,11 @@ export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   element?: Prisma.NullableEnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType | null
   rarity?: Prisma.NullableEnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType | null
+  gender?: Prisma.NullableEnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
   lives?: Prisma.IntFieldUpdateOperationsInput | number
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   health?: Prisma.IntFieldUpdateOperationsInput | number
   hunger?: Prisma.IntFieldUpdateOperationsInput | number
   energy?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1716,9 +1788,11 @@ export type PixegotchiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   status?: boolean
   element?: boolean
   rarity?: boolean
+  gender?: boolean
   level?: boolean
   experience?: boolean
   lives?: boolean
+  traits?: boolean
   health?: boolean
   hunger?: boolean
   energy?: boolean
@@ -1753,9 +1827,11 @@ export type PixegotchiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   element?: boolean
   rarity?: boolean
+  gender?: boolean
   level?: boolean
   experience?: boolean
   lives?: boolean
+  traits?: boolean
   health?: boolean
   hunger?: boolean
   energy?: boolean
@@ -1787,9 +1863,11 @@ export type PixegotchiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   element?: boolean
   rarity?: boolean
+  gender?: boolean
   level?: boolean
   experience?: boolean
   lives?: boolean
+  traits?: boolean
   health?: boolean
   hunger?: boolean
   energy?: boolean
@@ -1821,9 +1899,11 @@ export type PixegotchiSelectScalar = {
   status?: boolean
   element?: boolean
   rarity?: boolean
+  gender?: boolean
   level?: boolean
   experience?: boolean
   lives?: boolean
+  traits?: boolean
   health?: boolean
   hunger?: boolean
   energy?: boolean
@@ -1845,7 +1925,7 @@ export type PixegotchiSelectScalar = {
   createdAt?: boolean
 }
 
-export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "nftAddress" | "genomeHash" | "name" | "status" | "element" | "rarity" | "level" | "experience" | "lives" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "hungerRate" | "energyRate" | "diseaseResistance" | "happinesRate" | "cleanlinessRate" | "lifeRecoveryRate" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt" | "createdAt", ExtArgs["result"]["pixegotchi"]>
+export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "nftAddress" | "genomeHash" | "name" | "status" | "element" | "rarity" | "gender" | "level" | "experience" | "lives" | "traits" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "hungerRate" | "energyRate" | "diseaseResistance" | "happinesRate" | "cleanlinessRate" | "lifeRecoveryRate" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt" | "createdAt", ExtArgs["result"]["pixegotchi"]>
 export type PixegotchiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vault?: boolean | Prisma.Pixegotchi$vaultArgs<ExtArgs>
@@ -1875,9 +1955,11 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     status: $Enums.PixegotchiStatus
     element: $Enums.ElementType | null
     rarity: $Enums.RarityType | null
+    gender: $Enums.PixegotchiGender | null
     level: number
     experience: number
     lives: number
+    traits: runtime.JsonValue
     health: number
     hunger: number
     energy: number
@@ -2331,9 +2413,11 @@ export interface PixegotchiFieldRefs {
   readonly status: Prisma.FieldRef<"Pixegotchi", 'PixegotchiStatus'>
   readonly element: Prisma.FieldRef<"Pixegotchi", 'ElementType'>
   readonly rarity: Prisma.FieldRef<"Pixegotchi", 'RarityType'>
+  readonly gender: Prisma.FieldRef<"Pixegotchi", 'PixegotchiGender'>
   readonly level: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly experience: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly lives: Prisma.FieldRef<"Pixegotchi", 'Int'>
+  readonly traits: Prisma.FieldRef<"Pixegotchi", 'Json'>
   readonly health: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly hunger: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly energy: Prisma.FieldRef<"Pixegotchi", 'Int'>
