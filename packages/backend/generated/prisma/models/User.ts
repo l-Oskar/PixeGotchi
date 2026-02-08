@@ -44,6 +44,7 @@ export type UserMinAggregateOutputType = {
   walletAddress: string | null
   username: string | null
   pgcBalance: runtime.Decimal | null
+  lastActiveAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +55,7 @@ export type UserMaxAggregateOutputType = {
   walletAddress: string | null
   username: string | null
   pgcBalance: runtime.Decimal | null
+  lastActiveAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,6 +66,7 @@ export type UserCountAggregateOutputType = {
   walletAddress: number
   username: number
   pgcBalance: number
+  lastActiveAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -88,6 +91,7 @@ export type UserMinAggregateInputType = {
   walletAddress?: true
   username?: true
   pgcBalance?: true
+  lastActiveAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -98,6 +102,7 @@ export type UserMaxAggregateInputType = {
   walletAddress?: true
   username?: true
   pgcBalance?: true
+  lastActiveAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -108,6 +113,7 @@ export type UserCountAggregateInputType = {
   walletAddress?: true
   username?: true
   pgcBalance?: true
+  lastActiveAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -205,6 +211,7 @@ export type UserGroupByOutputType = {
   walletAddress: string | null
   username: string | null
   pgcBalance: runtime.Decimal
+  lastActiveAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -238,8 +245,10 @@ export type UserWhereInput = {
   walletAddress?: Prisma.StringNullableFilter<"User"> | string | null
   username?: Prisma.StringNullableFilter<"User"> | string | null
   pgcBalance?: Prisma.DecimalFilter<"User"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  eggs?: Prisma.EggListRelationFilter
   pixegotchis?: Prisma.PixegotchiListRelationFilter
   inventory?: Prisma.InventoryListRelationFilter
   vault?: Prisma.VaultListRelationFilter
@@ -253,8 +262,10 @@ export type UserOrderByWithRelationInput = {
   walletAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
   pgcBalance?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  eggs?: Prisma.EggOrderByRelationAggregateInput
   pixegotchis?: Prisma.PixegotchiOrderByRelationAggregateInput
   inventory?: Prisma.InventoryOrderByRelationAggregateInput
   vault?: Prisma.VaultOrderByRelationAggregateInput
@@ -271,8 +282,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   walletAddress?: Prisma.StringNullableFilter<"User"> | string | null
   username?: Prisma.StringNullableFilter<"User"> | string | null
   pgcBalance?: Prisma.DecimalFilter<"User"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  eggs?: Prisma.EggListRelationFilter
   pixegotchis?: Prisma.PixegotchiListRelationFilter
   inventory?: Prisma.InventoryListRelationFilter
   vault?: Prisma.VaultListRelationFilter
@@ -286,6 +299,7 @@ export type UserOrderByWithAggregationInput = {
   walletAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
   pgcBalance?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -304,6 +318,7 @@ export type UserScalarWhereWithAggregatesInput = {
   walletAddress?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   pgcBalance?: Prisma.DecimalWithAggregatesFilter<"User"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -313,8 +328,10 @@ export type UserCreateInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
@@ -328,8 +345,10 @@ export type UserUncheckedCreateInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
@@ -342,8 +361,10 @@ export type UserUpdateInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
@@ -357,8 +378,10 @@ export type UserUncheckedUpdateInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
@@ -372,6 +395,7 @@ export type UserCreateManyInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -381,6 +405,7 @@ export type UserUpdateManyMutationInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -391,6 +416,7 @@ export type UserUncheckedUpdateManyInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -401,6 +427,7 @@ export type UserCountOrderByAggregateInput = {
   walletAddress?: Prisma.SortOrder
   username?: Prisma.SortOrder
   pgcBalance?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -417,6 +444,7 @@ export type UserMaxOrderByAggregateInput = {
   walletAddress?: Prisma.SortOrder
   username?: Prisma.SortOrder
   pgcBalance?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -427,6 +455,7 @@ export type UserMinOrderByAggregateInput = {
   walletAddress?: Prisma.SortOrder
   username?: Prisma.SortOrder
   pgcBalance?: Prisma.SortOrder
+  lastActiveAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -467,6 +496,10 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
@@ -477,6 +510,20 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type UserCreateNestedOneWithoutEggsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEggsInput, Prisma.UserUncheckedCreateWithoutEggsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEggsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEggsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEggsInput, Prisma.UserUncheckedCreateWithoutEggsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEggsInput
+  upsert?: Prisma.UserUpsertWithoutEggsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEggsInput, Prisma.UserUpdateWithoutEggsInput>, Prisma.UserUncheckedUpdateWithoutEggsInput>
 }
 
 export type UserCreateNestedOneWithoutPixegotchisInput = {
@@ -551,13 +598,93 @@ export type UserUpdateOneWithoutPurchasesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPurchasesInput, Prisma.UserUpdateWithoutPurchasesInput>, Prisma.UserUncheckedUpdateWithoutPurchasesInput>
 }
 
+export type UserCreateWithoutEggsInput = {
+  telegramId: bigint | number
+  walletAddress?: string | null
+  username?: string | null
+  pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
+  inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  vault?: Prisma.VaultCreateNestedManyWithoutUserInput
+  listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
+  purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutEggsInput = {
+  id?: number
+  telegramId: bigint | number
+  walletAddress?: string | null
+  username?: string | null
+  pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
+  inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
+  listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
+  purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutEggsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEggsInput, Prisma.UserUncheckedCreateWithoutEggsInput>
+}
+
+export type UserUpsertWithoutEggsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEggsInput, Prisma.UserUncheckedUpdateWithoutEggsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEggsInput, Prisma.UserUncheckedCreateWithoutEggsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEggsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEggsInput, Prisma.UserUncheckedUpdateWithoutEggsInput>
+}
+
+export type UserUpdateWithoutEggsInput = {
+  telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
+  inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
+  listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
+  purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEggsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
+  inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
+  vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
+  listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
+  purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
 export type UserCreateWithoutPixegotchisInput = {
   telegramId: bigint | number
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
@@ -570,8 +697,10 @@ export type UserUncheckedCreateWithoutPixegotchisInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
@@ -599,8 +728,10 @@ export type UserUpdateWithoutPixegotchisInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
@@ -613,8 +744,10 @@ export type UserUncheckedUpdateWithoutPixegotchisInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
@@ -626,8 +759,10 @@ export type UserCreateWithoutInventoryInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
@@ -640,8 +775,10 @@ export type UserUncheckedCreateWithoutInventoryInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
@@ -669,8 +806,10 @@ export type UserUpdateWithoutInventoryInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
@@ -683,8 +822,10 @@ export type UserUncheckedUpdateWithoutInventoryInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
@@ -696,8 +837,10 @@ export type UserCreateWithoutVaultInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
@@ -710,8 +853,10 @@ export type UserUncheckedCreateWithoutVaultInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
@@ -739,8 +884,10 @@ export type UserUpdateWithoutVaultInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
@@ -753,8 +900,10 @@ export type UserUncheckedUpdateWithoutVaultInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
@@ -766,8 +915,10 @@ export type UserCreateWithoutListingsInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
@@ -780,8 +931,10 @@ export type UserUncheckedCreateWithoutListingsInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
@@ -798,8 +951,10 @@ export type UserCreateWithoutPurchasesInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
@@ -812,8 +967,10 @@ export type UserUncheckedCreateWithoutPurchasesInput = {
   walletAddress?: string | null
   username?: string | null
   pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
@@ -841,8 +998,10 @@ export type UserUpdateWithoutListingsInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
@@ -855,8 +1014,10 @@ export type UserUncheckedUpdateWithoutListingsInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
@@ -879,8 +1040,10 @@ export type UserUpdateWithoutPurchasesInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
@@ -893,8 +1056,10 @@ export type UserUncheckedUpdateWithoutPurchasesInput = {
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
@@ -907,6 +1072,7 @@ export type UserUncheckedUpdateWithoutPurchasesInput = {
  */
 
 export type UserCountOutputType = {
+  eggs: number
   pixegotchis: number
   inventory: number
   vault: number
@@ -915,6 +1081,7 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  eggs?: boolean | UserCountOutputTypeCountEggsArgs
   pixegotchis?: boolean | UserCountOutputTypeCountPixegotchisArgs
   inventory?: boolean | UserCountOutputTypeCountInventoryArgs
   vault?: boolean | UserCountOutputTypeCountVaultArgs
@@ -930,6 +1097,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEggsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EggWhereInput
 }
 
 /**
@@ -974,8 +1148,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   walletAddress?: boolean
   username?: boolean
   pgcBalance?: boolean
+  lastActiveAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  eggs?: boolean | Prisma.User$eggsArgs<ExtArgs>
   pixegotchis?: boolean | Prisma.User$pixegotchisArgs<ExtArgs>
   inventory?: boolean | Prisma.User$inventoryArgs<ExtArgs>
   vault?: boolean | Prisma.User$vaultArgs<ExtArgs>
@@ -990,6 +1166,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   walletAddress?: boolean
   username?: boolean
   pgcBalance?: boolean
+  lastActiveAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1000,6 +1177,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   walletAddress?: boolean
   username?: boolean
   pgcBalance?: boolean
+  lastActiveAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1010,12 +1188,14 @@ export type UserSelectScalar = {
   walletAddress?: boolean
   username?: boolean
   pgcBalance?: boolean
+  lastActiveAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "telegramId" | "walletAddress" | "username" | "pgcBalance" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "telegramId" | "walletAddress" | "username" | "pgcBalance" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  eggs?: boolean | Prisma.User$eggsArgs<ExtArgs>
   pixegotchis?: boolean | Prisma.User$pixegotchisArgs<ExtArgs>
   inventory?: boolean | Prisma.User$inventoryArgs<ExtArgs>
   vault?: boolean | Prisma.User$vaultArgs<ExtArgs>
@@ -1029,6 +1209,7 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    eggs: Prisma.$EggPayload<ExtArgs>[]
     pixegotchis: Prisma.$PixegotchiPayload<ExtArgs>[]
     inventory: Prisma.$InventoryPayload<ExtArgs>[]
     vault: Prisma.$VaultPayload<ExtArgs>[]
@@ -1041,6 +1222,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     walletAddress: string | null
     username: string | null
     pgcBalance: runtime.Decimal
+    lastActiveAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1437,6 +1619,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  eggs<T extends Prisma.User$eggsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eggsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EggPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pixegotchis<T extends Prisma.User$pixegotchisArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pixegotchisArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PixegotchiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inventory<T extends Prisma.User$inventoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inventoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vault<T extends Prisma.User$vaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vaultArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VaultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1476,6 +1659,7 @@ export interface UserFieldRefs {
   readonly walletAddress: Prisma.FieldRef<"User", 'String'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly pgcBalance: Prisma.FieldRef<"User", 'Decimal'>
+  readonly lastActiveAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1863,6 +2047,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.eggs
+ */
+export type User$eggsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Egg
+   */
+  select?: Prisma.EggSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Egg
+   */
+  omit?: Prisma.EggOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EggInclude<ExtArgs> | null
+  where?: Prisma.EggWhereInput
+  orderBy?: Prisma.EggOrderByWithRelationInput | Prisma.EggOrderByWithRelationInput[]
+  cursor?: Prisma.EggWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EggScalarFieldEnum | Prisma.EggScalarFieldEnum[]
 }
 
 /**

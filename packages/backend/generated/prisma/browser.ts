@@ -23,10 +23,20 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Egg
+ * 
+ */
+export type Egg = Prisma.EggModel
+/**
  * Model Pixegotchi
  * 
  */
 export type Pixegotchi = Prisma.PixegotchiModel
+/**
+ * Model ActiveEffect
+ * 
+ */
+export type ActiveEffect = Prisma.ActiveEffectModel
 /**
  * Model Inventory
  * 

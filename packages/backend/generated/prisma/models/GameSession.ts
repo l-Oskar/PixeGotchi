@@ -32,7 +32,9 @@ export type GameSessionAvgAggregateOutputType = {
   pixegotchiId: number | null
   score: number | null
   duration: number | null
-  tmcEarned: runtime.Decimal | null
+  pgcEarned: runtime.Decimal | null
+  experienceGained: number | null
+  energySpent: number | null
 }
 
 export type GameSessionSumAggregateOutputType = {
@@ -41,7 +43,9 @@ export type GameSessionSumAggregateOutputType = {
   pixegotchiId: number | null
   score: number | null
   duration: number | null
-  tmcEarned: runtime.Decimal | null
+  pgcEarned: runtime.Decimal | null
+  experienceGained: number | null
+  energySpent: number | null
 }
 
 export type GameSessionMinAggregateOutputType = {
@@ -51,7 +55,9 @@ export type GameSessionMinAggregateOutputType = {
   gameId: string | null
   score: number | null
   duration: number | null
-  tmcEarned: runtime.Decimal | null
+  pgcEarned: runtime.Decimal | null
+  experienceGained: number | null
+  energySpent: number | null
   chestDropped: boolean | null
   completed: boolean | null
   createdAt: Date | null
@@ -65,7 +71,9 @@ export type GameSessionMaxAggregateOutputType = {
   gameId: string | null
   score: number | null
   duration: number | null
-  tmcEarned: runtime.Decimal | null
+  pgcEarned: runtime.Decimal | null
+  experienceGained: number | null
+  energySpent: number | null
   chestDropped: boolean | null
   completed: boolean | null
   createdAt: Date | null
@@ -79,8 +87,11 @@ export type GameSessionCountAggregateOutputType = {
   gameId: number
   score: number
   duration: number
-  tmcEarned: number
+  pgcEarned: number
+  experienceGained: number
+  energySpent: number
   chestDropped: number
+  itemsDropped: number
   completed: number
   createdAt: number
   completedAt: number
@@ -94,7 +105,9 @@ export type GameSessionAvgAggregateInputType = {
   pixegotchiId?: true
   score?: true
   duration?: true
-  tmcEarned?: true
+  pgcEarned?: true
+  experienceGained?: true
+  energySpent?: true
 }
 
 export type GameSessionSumAggregateInputType = {
@@ -103,7 +116,9 @@ export type GameSessionSumAggregateInputType = {
   pixegotchiId?: true
   score?: true
   duration?: true
-  tmcEarned?: true
+  pgcEarned?: true
+  experienceGained?: true
+  energySpent?: true
 }
 
 export type GameSessionMinAggregateInputType = {
@@ -113,7 +128,9 @@ export type GameSessionMinAggregateInputType = {
   gameId?: true
   score?: true
   duration?: true
-  tmcEarned?: true
+  pgcEarned?: true
+  experienceGained?: true
+  energySpent?: true
   chestDropped?: true
   completed?: true
   createdAt?: true
@@ -127,7 +144,9 @@ export type GameSessionMaxAggregateInputType = {
   gameId?: true
   score?: true
   duration?: true
-  tmcEarned?: true
+  pgcEarned?: true
+  experienceGained?: true
+  energySpent?: true
   chestDropped?: true
   completed?: true
   createdAt?: true
@@ -141,8 +160,11 @@ export type GameSessionCountAggregateInputType = {
   gameId?: true
   score?: true
   duration?: true
-  tmcEarned?: true
+  pgcEarned?: true
+  experienceGained?: true
+  energySpent?: true
   chestDropped?: true
+  itemsDropped?: true
   completed?: true
   createdAt?: true
   completedAt?: true
@@ -242,8 +264,11 @@ export type GameSessionGroupByOutputType = {
   gameId: string
   score: number
   duration: number
-  tmcEarned: runtime.Decimal
+  pgcEarned: runtime.Decimal
+  experienceGained: number
+  energySpent: number
   chestDropped: boolean
+  itemsDropped: runtime.JsonValue | null
   completed: boolean
   createdAt: Date
   completedAt: Date | null
@@ -279,8 +304,11 @@ export type GameSessionWhereInput = {
   gameId?: Prisma.StringFilter<"GameSession"> | string
   score?: Prisma.IntFilter<"GameSession"> | number
   duration?: Prisma.IntFilter<"GameSession"> | number
-  tmcEarned?: Prisma.DecimalFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFilter<"GameSession"> | number
+  energySpent?: Prisma.IntFilter<"GameSession"> | number
   chestDropped?: Prisma.BoolFilter<"GameSession"> | boolean
+  itemsDropped?: Prisma.JsonNullableFilter<"GameSession">
   completed?: Prisma.BoolFilter<"GameSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"GameSession"> | Date | string | null
@@ -294,8 +322,11 @@ export type GameSessionOrderByWithRelationInput = {
   gameId?: Prisma.SortOrder
   score?: Prisma.SortOrder
   duration?: Prisma.SortOrder
-  tmcEarned?: Prisma.SortOrder
+  pgcEarned?: Prisma.SortOrder
+  experienceGained?: Prisma.SortOrder
+  energySpent?: Prisma.SortOrder
   chestDropped?: Prisma.SortOrder
+  itemsDropped?: Prisma.SortOrderInput | Prisma.SortOrder
   completed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -312,8 +343,11 @@ export type GameSessionWhereUniqueInput = Prisma.AtLeast<{
   gameId?: Prisma.StringFilter<"GameSession"> | string
   score?: Prisma.IntFilter<"GameSession"> | number
   duration?: Prisma.IntFilter<"GameSession"> | number
-  tmcEarned?: Prisma.DecimalFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFilter<"GameSession"> | number
+  energySpent?: Prisma.IntFilter<"GameSession"> | number
   chestDropped?: Prisma.BoolFilter<"GameSession"> | boolean
+  itemsDropped?: Prisma.JsonNullableFilter<"GameSession">
   completed?: Prisma.BoolFilter<"GameSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"GameSession"> | Date | string | null
@@ -327,8 +361,11 @@ export type GameSessionOrderByWithAggregationInput = {
   gameId?: Prisma.SortOrder
   score?: Prisma.SortOrder
   duration?: Prisma.SortOrder
-  tmcEarned?: Prisma.SortOrder
+  pgcEarned?: Prisma.SortOrder
+  experienceGained?: Prisma.SortOrder
+  energySpent?: Prisma.SortOrder
   chestDropped?: Prisma.SortOrder
+  itemsDropped?: Prisma.SortOrderInput | Prisma.SortOrder
   completed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -349,8 +386,11 @@ export type GameSessionScalarWhereWithAggregatesInput = {
   gameId?: Prisma.StringWithAggregatesFilter<"GameSession"> | string
   score?: Prisma.IntWithAggregatesFilter<"GameSession"> | number
   duration?: Prisma.IntWithAggregatesFilter<"GameSession"> | number
-  tmcEarned?: Prisma.DecimalWithAggregatesFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalWithAggregatesFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntWithAggregatesFilter<"GameSession"> | number
+  energySpent?: Prisma.IntWithAggregatesFilter<"GameSession"> | number
   chestDropped?: Prisma.BoolWithAggregatesFilter<"GameSession"> | boolean
+  itemsDropped?: Prisma.JsonNullableWithAggregatesFilter<"GameSession">
   completed?: Prisma.BoolWithAggregatesFilter<"GameSession"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GameSession"> | Date | string
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"GameSession"> | Date | string | null
@@ -361,8 +401,11 @@ export type GameSessionCreateInput = {
   gameId: string
   score?: number
   duration?: number
-  tmcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: number
+  energySpent?: number
   chestDropped?: boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: boolean
   createdAt?: Date | string
   completedAt?: Date | string | null
@@ -376,8 +419,11 @@ export type GameSessionUncheckedCreateInput = {
   gameId: string
   score?: number
   duration?: number
-  tmcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: number
+  energySpent?: number
   chestDropped?: boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: boolean
   createdAt?: Date | string
   completedAt?: Date | string | null
@@ -388,8 +434,11 @@ export type GameSessionUpdateInput = {
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   duration?: Prisma.IntFieldUpdateOperationsInput | number
-  tmcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFieldUpdateOperationsInput | number
+  energySpent?: Prisma.IntFieldUpdateOperationsInput | number
   chestDropped?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -403,8 +452,11 @@ export type GameSessionUncheckedUpdateInput = {
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   duration?: Prisma.IntFieldUpdateOperationsInput | number
-  tmcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFieldUpdateOperationsInput | number
+  energySpent?: Prisma.IntFieldUpdateOperationsInput | number
   chestDropped?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -417,8 +469,11 @@ export type GameSessionCreateManyInput = {
   gameId: string
   score?: number
   duration?: number
-  tmcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: number
+  energySpent?: number
   chestDropped?: boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: boolean
   createdAt?: Date | string
   completedAt?: Date | string | null
@@ -429,8 +484,11 @@ export type GameSessionUpdateManyMutationInput = {
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   duration?: Prisma.IntFieldUpdateOperationsInput | number
-  tmcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFieldUpdateOperationsInput | number
+  energySpent?: Prisma.IntFieldUpdateOperationsInput | number
   chestDropped?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -443,8 +501,11 @@ export type GameSessionUncheckedUpdateManyInput = {
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   duration?: Prisma.IntFieldUpdateOperationsInput | number
-  tmcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFieldUpdateOperationsInput | number
+  energySpent?: Prisma.IntFieldUpdateOperationsInput | number
   chestDropped?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -467,8 +528,11 @@ export type GameSessionCountOrderByAggregateInput = {
   gameId?: Prisma.SortOrder
   score?: Prisma.SortOrder
   duration?: Prisma.SortOrder
-  tmcEarned?: Prisma.SortOrder
+  pgcEarned?: Prisma.SortOrder
+  experienceGained?: Prisma.SortOrder
+  energySpent?: Prisma.SortOrder
   chestDropped?: Prisma.SortOrder
+  itemsDropped?: Prisma.SortOrder
   completed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
@@ -480,7 +544,9 @@ export type GameSessionAvgOrderByAggregateInput = {
   pixegotchiId?: Prisma.SortOrder
   score?: Prisma.SortOrder
   duration?: Prisma.SortOrder
-  tmcEarned?: Prisma.SortOrder
+  pgcEarned?: Prisma.SortOrder
+  experienceGained?: Prisma.SortOrder
+  energySpent?: Prisma.SortOrder
 }
 
 export type GameSessionMaxOrderByAggregateInput = {
@@ -490,7 +556,9 @@ export type GameSessionMaxOrderByAggregateInput = {
   gameId?: Prisma.SortOrder
   score?: Prisma.SortOrder
   duration?: Prisma.SortOrder
-  tmcEarned?: Prisma.SortOrder
+  pgcEarned?: Prisma.SortOrder
+  experienceGained?: Prisma.SortOrder
+  energySpent?: Prisma.SortOrder
   chestDropped?: Prisma.SortOrder
   completed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -504,7 +572,9 @@ export type GameSessionMinOrderByAggregateInput = {
   gameId?: Prisma.SortOrder
   score?: Prisma.SortOrder
   duration?: Prisma.SortOrder
-  tmcEarned?: Prisma.SortOrder
+  pgcEarned?: Prisma.SortOrder
+  experienceGained?: Prisma.SortOrder
+  energySpent?: Prisma.SortOrder
   chestDropped?: Prisma.SortOrder
   completed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -517,7 +587,9 @@ export type GameSessionSumOrderByAggregateInput = {
   pixegotchiId?: Prisma.SortOrder
   score?: Prisma.SortOrder
   duration?: Prisma.SortOrder
-  tmcEarned?: Prisma.SortOrder
+  pgcEarned?: Prisma.SortOrder
+  experienceGained?: Prisma.SortOrder
+  energySpent?: Prisma.SortOrder
 }
 
 export type GameSessionCreateNestedManyWithoutPixegotchiInput = {
@@ -567,8 +639,11 @@ export type GameSessionCreateWithoutPixegotchiInput = {
   gameId: string
   score?: number
   duration?: number
-  tmcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: number
+  energySpent?: number
   chestDropped?: boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: boolean
   createdAt?: Date | string
   completedAt?: Date | string | null
@@ -580,8 +655,11 @@ export type GameSessionUncheckedCreateWithoutPixegotchiInput = {
   gameId: string
   score?: number
   duration?: number
-  tmcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: number
+  energySpent?: number
   chestDropped?: boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: boolean
   createdAt?: Date | string
   completedAt?: Date | string | null
@@ -623,8 +701,11 @@ export type GameSessionScalarWhereInput = {
   gameId?: Prisma.StringFilter<"GameSession"> | string
   score?: Prisma.IntFilter<"GameSession"> | number
   duration?: Prisma.IntFilter<"GameSession"> | number
-  tmcEarned?: Prisma.DecimalFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFilter<"GameSession"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFilter<"GameSession"> | number
+  energySpent?: Prisma.IntFilter<"GameSession"> | number
   chestDropped?: Prisma.BoolFilter<"GameSession"> | boolean
+  itemsDropped?: Prisma.JsonNullableFilter<"GameSession">
   completed?: Prisma.BoolFilter<"GameSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameSession"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"GameSession"> | Date | string | null
@@ -636,8 +717,11 @@ export type GameSessionCreateManyPixegotchiInput = {
   gameId: string
   score?: number
   duration?: number
-  tmcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: number
+  energySpent?: number
   chestDropped?: boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: boolean
   createdAt?: Date | string
   completedAt?: Date | string | null
@@ -648,8 +732,11 @@ export type GameSessionUpdateWithoutPixegotchiInput = {
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   duration?: Prisma.IntFieldUpdateOperationsInput | number
-  tmcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFieldUpdateOperationsInput | number
+  energySpent?: Prisma.IntFieldUpdateOperationsInput | number
   chestDropped?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -661,8 +748,11 @@ export type GameSessionUncheckedUpdateWithoutPixegotchiInput = {
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   duration?: Prisma.IntFieldUpdateOperationsInput | number
-  tmcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFieldUpdateOperationsInput | number
+  energySpent?: Prisma.IntFieldUpdateOperationsInput | number
   chestDropped?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -674,8 +764,11 @@ export type GameSessionUncheckedUpdateManyWithoutPixegotchiInput = {
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.IntFieldUpdateOperationsInput | number
   duration?: Prisma.IntFieldUpdateOperationsInput | number
-  tmcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  pgcEarned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  experienceGained?: Prisma.IntFieldUpdateOperationsInput | number
+  energySpent?: Prisma.IntFieldUpdateOperationsInput | number
   chestDropped?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  itemsDropped?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -690,8 +783,11 @@ export type GameSessionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   gameId?: boolean
   score?: boolean
   duration?: boolean
-  tmcEarned?: boolean
+  pgcEarned?: boolean
+  experienceGained?: boolean
+  energySpent?: boolean
   chestDropped?: boolean
+  itemsDropped?: boolean
   completed?: boolean
   createdAt?: boolean
   completedAt?: boolean
@@ -705,8 +801,11 @@ export type GameSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   gameId?: boolean
   score?: boolean
   duration?: boolean
-  tmcEarned?: boolean
+  pgcEarned?: boolean
+  experienceGained?: boolean
+  energySpent?: boolean
   chestDropped?: boolean
+  itemsDropped?: boolean
   completed?: boolean
   createdAt?: boolean
   completedAt?: boolean
@@ -720,8 +819,11 @@ export type GameSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   gameId?: boolean
   score?: boolean
   duration?: boolean
-  tmcEarned?: boolean
+  pgcEarned?: boolean
+  experienceGained?: boolean
+  energySpent?: boolean
   chestDropped?: boolean
+  itemsDropped?: boolean
   completed?: boolean
   createdAt?: boolean
   completedAt?: boolean
@@ -735,14 +837,17 @@ export type GameSessionSelectScalar = {
   gameId?: boolean
   score?: boolean
   duration?: boolean
-  tmcEarned?: boolean
+  pgcEarned?: boolean
+  experienceGained?: boolean
+  energySpent?: boolean
   chestDropped?: boolean
+  itemsDropped?: boolean
   completed?: boolean
   createdAt?: boolean
   completedAt?: boolean
 }
 
-export type GameSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "pixegotchiId" | "gameId" | "score" | "duration" | "tmcEarned" | "chestDropped" | "completed" | "createdAt" | "completedAt", ExtArgs["result"]["gameSession"]>
+export type GameSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "pixegotchiId" | "gameId" | "score" | "duration" | "pgcEarned" | "experienceGained" | "energySpent" | "chestDropped" | "itemsDropped" | "completed" | "createdAt" | "completedAt", ExtArgs["result"]["gameSession"]>
 export type GameSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pixegotchi?: boolean | Prisma.PixegotchiDefaultArgs<ExtArgs>
 }
@@ -765,8 +870,11 @@ export type $GameSessionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     gameId: string
     score: number
     duration: number
-    tmcEarned: runtime.Decimal
+    pgcEarned: runtime.Decimal
+    experienceGained: number
+    energySpent: number
     chestDropped: boolean
+    itemsDropped: runtime.JsonValue | null
     completed: boolean
     createdAt: Date
     completedAt: Date | null
@@ -1200,8 +1308,11 @@ export interface GameSessionFieldRefs {
   readonly gameId: Prisma.FieldRef<"GameSession", 'String'>
   readonly score: Prisma.FieldRef<"GameSession", 'Int'>
   readonly duration: Prisma.FieldRef<"GameSession", 'Int'>
-  readonly tmcEarned: Prisma.FieldRef<"GameSession", 'Decimal'>
+  readonly pgcEarned: Prisma.FieldRef<"GameSession", 'Decimal'>
+  readonly experienceGained: Prisma.FieldRef<"GameSession", 'Int'>
+  readonly energySpent: Prisma.FieldRef<"GameSession", 'Int'>
   readonly chestDropped: Prisma.FieldRef<"GameSession", 'Boolean'>
+  readonly itemsDropped: Prisma.FieldRef<"GameSession", 'Json'>
   readonly completed: Prisma.FieldRef<"GameSession", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"GameSession", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"GameSession", 'DateTime'>

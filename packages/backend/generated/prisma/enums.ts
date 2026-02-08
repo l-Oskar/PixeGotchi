@@ -10,8 +10,8 @@
 */
 
 export const PixegotchiStatus = {
-  egg: 'egg',
   active: 'active',
+  critical: 'critical',
   vault: 'vault',
   dead: 'dead'
 } as const
@@ -68,7 +68,8 @@ export const ItemType = {
   chest: 'chest',
   rename: 'rename',
   special: 'special',
-  boost: 'boost'
+  boost: 'boost',
+  resurrection: 'resurrection'
 } as const
 
 export type ItemType = (typeof ItemType)[keyof typeof ItemType]
@@ -76,8 +77,8 @@ export type ItemType = (typeof ItemType)[keyof typeof ItemType]
 
 export const ListingType = {
   egg: 'egg',
-  item: 'item',
-  chest: 'chest'
+  pixegotchi: 'pixegotchi',
+  item: 'item'
 } as const
 
 export type ListingType = (typeof ListingType)[keyof typeof ListingType]

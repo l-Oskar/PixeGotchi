@@ -385,7 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  Egg: 'Egg',
   Pixegotchi: 'Pixegotchi',
+  ActiveEffect: 'ActiveEffect',
   Inventory: 'Inventory',
   Item: 'Item',
   ItemUsageHistory: 'ItemUsageHistory',
@@ -409,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "pixegotchi" | "inventory" | "item" | "itemUsageHistory" | "vault" | "marketplaceListing" | "gameSession" | "quest" | "userQuest"
+    modelProps: "user" | "egg" | "pixegotchi" | "activeEffect" | "inventory" | "item" | "itemUsageHistory" | "vault" | "marketplaceListing" | "gameSession" | "quest" | "userQuest"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -487,6 +489,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Egg: {
+      payload: Prisma.$EggPayload<ExtArgs>
+      fields: Prisma.EggFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EggFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EggFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>
+        }
+        findFirst: {
+          args: Prisma.EggFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EggFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>
+        }
+        findMany: {
+          args: Prisma.EggFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>[]
+        }
+        create: {
+          args: Prisma.EggCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>
+        }
+        createMany: {
+          args: Prisma.EggCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EggCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>[]
+        }
+        delete: {
+          args: Prisma.EggDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>
+        }
+        update: {
+          args: Prisma.EggUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>
+        }
+        deleteMany: {
+          args: Prisma.EggDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EggUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EggUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>[]
+        }
+        upsert: {
+          args: Prisma.EggUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EggPayload>
+        }
+        aggregate: {
+          args: Prisma.EggAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEgg>
+        }
+        groupBy: {
+          args: Prisma.EggGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EggGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EggCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EggCountAggregateOutputType> | number
+        }
+      }
+    }
     Pixegotchi: {
       payload: Prisma.$PixegotchiPayload<ExtArgs>
       fields: Prisma.PixegotchiFieldRefs
@@ -558,6 +634,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PixegotchiCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PixegotchiCountAggregateOutputType> | number
+        }
+      }
+    }
+    ActiveEffect: {
+      payload: Prisma.$ActiveEffectPayload<ExtArgs>
+      fields: Prisma.ActiveEffectFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ActiveEffectFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ActiveEffectFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>
+        }
+        findFirst: {
+          args: Prisma.ActiveEffectFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ActiveEffectFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>
+        }
+        findMany: {
+          args: Prisma.ActiveEffectFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>[]
+        }
+        create: {
+          args: Prisma.ActiveEffectCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>
+        }
+        createMany: {
+          args: Prisma.ActiveEffectCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ActiveEffectCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>[]
+        }
+        delete: {
+          args: Prisma.ActiveEffectDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>
+        }
+        update: {
+          args: Prisma.ActiveEffectUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>
+        }
+        deleteMany: {
+          args: Prisma.ActiveEffectDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ActiveEffectUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ActiveEffectUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>[]
+        }
+        upsert: {
+          args: Prisma.ActiveEffectUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActiveEffectPayload>
+        }
+        aggregate: {
+          args: Prisma.ActiveEffectAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateActiveEffect>
+        }
+        groupBy: {
+          args: Prisma.ActiveEffectGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActiveEffectGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ActiveEffectCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActiveEffectCountAggregateOutputType> | number
         }
       }
     }
@@ -1198,6 +1348,7 @@ export const UserScalarFieldEnum = {
   walletAddress: 'walletAddress',
   username: 'username',
   pgcBalance: 'pgcBalance',
+  lastActiveAt: 'lastActiveAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1205,42 +1356,57 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const EggScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  isListed: 'isListed',
+  createdAt: 'createdAt'
+} as const
+
+export type EggScalarFieldEnum = (typeof EggScalarFieldEnum)[keyof typeof EggScalarFieldEnum]
+
+
 export const PixegotchiScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   nftAddress: 'nftAddress',
   genomeHash: 'genomeHash',
-  name: 'name',
-  status: 'status',
   element: 'element',
   rarity: 'rarity',
   gender: 'gender',
+  traits: 'traits',
+  name: 'name',
+  status: 'status',
   level: 'level',
   experience: 'experience',
-  lives: 'lives',
-  traits: 'traits',
   health: 'health',
   hunger: 'hunger',
   energy: 'energy',
   happiness: 'happiness',
   cleanliness: 'cleanliness',
-  hungerRate: 'hungerRate',
-  energyRate: 'energyRate',
-  diseaseResistance: 'diseaseResistance',
-  happinesRate: 'happinesRate',
-  cleanlinessRate: 'cleanlinessRate',
-  lifeRecoveryRate: 'lifeRecoveryRate',
+  criticalSince: 'criticalSince',
   lastFedAt: 'lastFedAt',
   lastPlayedAt: 'lastPlayedAt',
   lastSleptAt: 'lastSleptAt',
   lastCleanedAt: 'lastCleanedAt',
   lastHealedAt: 'lastHealedAt',
   lastUpdateAt: 'lastUpdateAt',
-  hatchedAt: 'hatchedAt',
   createdAt: 'createdAt'
 } as const
 
 export type PixegotchiScalarFieldEnum = (typeof PixegotchiScalarFieldEnum)[keyof typeof PixegotchiScalarFieldEnum]
+
+
+export const ActiveEffectScalarFieldEnum = {
+  id: 'id',
+  pixegotchiId: 'pixegotchiId',
+  effectType: 'effectType',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ActiveEffectScalarFieldEnum = (typeof ActiveEffectScalarFieldEnum)[keyof typeof ActiveEffectScalarFieldEnum]
 
 
 export const InventoryScalarFieldEnum = {
@@ -1304,11 +1470,12 @@ export const MarketplaceListingScalarFieldEnum = {
   sellerId: 'sellerId',
   buyerId: 'buyerId',
   listingType: 'listingType',
+  eggId: 'eggId',
+  pixegotchiId: 'pixegotchiId',
   itemId: 'itemId',
-  nftAddress: 'nftAddress',
+  quantity: 'quantity',
   price: 'price',
   currency: 'currency',
-  quantity: 'quantity',
   isActive: 'isActive',
   createdAt: 'createdAt',
   soldAt: 'soldAt'
@@ -1324,8 +1491,11 @@ export const GameSessionScalarFieldEnum = {
   gameId: 'gameId',
   score: 'score',
   duration: 'duration',
-  tmcEarned: 'tmcEarned',
+  pgcEarned: 'pgcEarned',
+  experienceGained: 'experienceGained',
+  energySpent: 'energySpent',
   chestDropped: 'chestDropped',
+  itemsDropped: 'itemsDropped',
   completed: 'completed',
   createdAt: 'createdAt',
   completedAt: 'completedAt'
@@ -1375,6 +1545,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1479,16 +1657,9 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'PixegotchiStatus'
+ * Reference to a field of type 'Boolean'
  */
-export type EnumPixegotchiStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PixegotchiStatus'>
-    
-
-
-/**
- * Reference to a field of type 'PixegotchiStatus[]'
- */
-export type ListEnumPixegotchiStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PixegotchiStatus[]'>
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1549,6 +1720,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'PixegotchiStatus'
+ */
+export type EnumPixegotchiStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PixegotchiStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PixegotchiStatus[]'
+ */
+export type ListEnumPixegotchiStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PixegotchiStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'ItemType'
  */
 export type EnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemType'>
@@ -1559,13 +1744,6 @@ export type EnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'ItemType[]'
  */
 export type ListEnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1706,7 +1884,9 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  egg?: Prisma.EggOmit
   pixegotchi?: Prisma.PixegotchiOmit
+  activeEffect?: Prisma.ActiveEffectOmit
   inventory?: Prisma.InventoryOmit
   item?: Prisma.ItemOmit
   itemUsageHistory?: Prisma.ItemUsageHistoryOmit

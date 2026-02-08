@@ -9,7 +9,9 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Egg'
 export type * from './models/Pixegotchi'
+export type * from './models/ActiveEffect'
 export type * from './models/Inventory'
 export type * from './models/Item'
 export type * from './models/ItemUsageHistory'

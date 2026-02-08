@@ -72,22 +72,22 @@ export class ItemEffectHandler {
 
       const config = this.effectConfig[effectKey];
 
-      if (config?.handler === "special") {
-        // Спеціальні ефекти обробляємо окремо
-        this.applySpecialEffect(
-          effectKey as ItemEffectType,
-          pixegotchi,
-          value,
-          quantity,
-          updates,
-        );
-      } else if (config?.field) {
-        // Звичайні ефекти на стати
-        this.applyStatEffect(config, pixegotchi, value, quantity, updates);
-      } else {
-        // Кастомні ефекти (логіка додається за потреби)
-        console.warn(`Unknown effect: ${effectKey}`);
-      }
+      // if (config?.handler === "special") {
+      //   // Спеціальні ефекти обробляємо окремо
+      //   this.applySpecialEffect(
+      //     effectKey as ItemEffectType,
+      //     pixegotchi,
+      //     value,
+      //     quantity,
+      //     updates,
+      //   );
+      // } else if (config?.field) {
+      //   // Звичайні ефекти на стати
+      //   this.applyStatEffect(config, pixegotchi, value, quantity, updates);
+      // } else {
+      //   // Кастомні ефекти (логіка додається за потреби)
+      //   console.warn(`Unknown effect: ${effectKey}`);
+      // }
     }
 
     // Перевірка на level up
@@ -124,40 +124,40 @@ export class ItemEffectHandler {
     updates[field] = newValue;
   }
 
-  private static applySpecialEffect(
-    effectType: ItemEffectType,
-    pixegotchi: Pixegotchi,
-    value: number,
-    quantity: number,
-    updates: any,
-  ) {
-    switch (effectType) {
-      case ItemEffectType.REVIVE:
-        if (pixegotchi.health === 0 && pixegotchi.lives > 0) {
-          updates.health = value; // Відновлює здоров'я до вказаного значення
-          updates.lives = pixegotchi.lives - 1;
-        }
-        break;
+  // private static applySpecialEffect(
+  //   effectType: ItemEffectType,
+  //   pixegotchi: Pixegotchi,
+  //   value: number,
+  //   quantity: number,
+  //   updates: any,
+  // ) {
+  //   switch (effectType) {
+  //     case ItemEffectType.REVIVE:
+  //       if (pixegotchi.health === 0 && pixegotchi.lives > 0) {
+  //         updates.health = value; // Відновлює здоров'я до вказаного значення
+  //         updates.lives = pixegotchi.lives - 1;
+  //       }
+  //       break;
 
-      case ItemEffectType.BOOST_ALL_STATS:
-        const boost = value * quantity;
-        updates.hunger = Math.max(0, pixegotchi.hunger - boost);
-        updates.health = Math.min(100, pixegotchi.health + boost);
-        updates.energy = Math.min(100, pixegotchi.energy + boost);
-        updates.happiness = Math.min(100, pixegotchi.happiness + boost);
-        updates.cleanliness = Math.min(100, pixegotchi.cleanliness + boost);
-        break;
+  //     case ItemEffectType.BOOST_ALL_STATS:
+  //       const boost = value * quantity;
+  //       updates.hunger = Math.max(0, pixegotchi.hunger - boost);
+  //       updates.health = Math.min(100, pixegotchi.health + boost);
+  //       updates.energy = Math.min(100, pixegotchi.energy + boost);
+  //       updates.happiness = Math.min(100, pixegotchi.happiness + boost);
+  //       updates.cleanliness = Math.min(100, pixegotchi.cleanliness + boost);
+  //       break;
 
-      case ItemEffectType.RANDOM_STAT_BOOST:
-        const stats = ["health", "energy", "happiness", "cleanliness"];
-        const randomStat = stats[Math.floor(Math.random() * stats.length)];
-        const currentVal = pixegotchi[randomStat as keyof Pixegotchi] as number;
-        updates[randomStat] = Math.min(100, currentVal + value * quantity);
-        break;
+  //     case ItemEffectType.RANDOM_STAT_BOOST:
+  //       const stats = ["health", "energy", "happiness", "cleanliness"];
+  //       const randomStat = stats[Math.floor(Math.random() * stats.length)];
+  //       const currentVal = pixegotchi[randomStat as keyof Pixegotchi] as number;
+  //       updates[randomStat] = Math.min(100, currentVal + value * quantity);
+  //       break;
 
-      // Додавайте інші спеціальні ефекти тут
-    }
-  }
+  //     // Додавайте інші спеціальні ефекти тут
+  //   }
+  // }
 
   private static calculateLevel(experience: number): number {
     // Приклад формули: кожні 100 XP = 1 рівень

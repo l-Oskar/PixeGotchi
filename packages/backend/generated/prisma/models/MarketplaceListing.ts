@@ -30,16 +30,20 @@ export type MarketplaceListingAvgAggregateOutputType = {
   id: number | null
   sellerId: number | null
   buyerId: number | null
-  price: runtime.Decimal | null
+  eggId: number | null
+  pixegotchiId: number | null
   quantity: number | null
+  price: runtime.Decimal | null
 }
 
 export type MarketplaceListingSumAggregateOutputType = {
   id: number | null
   sellerId: number | null
   buyerId: number | null
-  price: runtime.Decimal | null
+  eggId: number | null
+  pixegotchiId: number | null
   quantity: number | null
+  price: runtime.Decimal | null
 }
 
 export type MarketplaceListingMinAggregateOutputType = {
@@ -47,11 +51,12 @@ export type MarketplaceListingMinAggregateOutputType = {
   sellerId: number | null
   buyerId: number | null
   listingType: $Enums.ListingType | null
+  eggId: number | null
+  pixegotchiId: number | null
   itemId: string | null
-  nftAddress: string | null
+  quantity: number | null
   price: runtime.Decimal | null
   currency: $Enums.CurrencyType | null
-  quantity: number | null
   isActive: boolean | null
   createdAt: Date | null
   soldAt: Date | null
@@ -62,11 +67,12 @@ export type MarketplaceListingMaxAggregateOutputType = {
   sellerId: number | null
   buyerId: number | null
   listingType: $Enums.ListingType | null
+  eggId: number | null
+  pixegotchiId: number | null
   itemId: string | null
-  nftAddress: string | null
+  quantity: number | null
   price: runtime.Decimal | null
   currency: $Enums.CurrencyType | null
-  quantity: number | null
   isActive: boolean | null
   createdAt: Date | null
   soldAt: Date | null
@@ -77,11 +83,12 @@ export type MarketplaceListingCountAggregateOutputType = {
   sellerId: number
   buyerId: number
   listingType: number
+  eggId: number
+  pixegotchiId: number
   itemId: number
-  nftAddress: number
+  quantity: number
   price: number
   currency: number
-  quantity: number
   isActive: number
   createdAt: number
   soldAt: number
@@ -93,16 +100,20 @@ export type MarketplaceListingAvgAggregateInputType = {
   id?: true
   sellerId?: true
   buyerId?: true
-  price?: true
+  eggId?: true
+  pixegotchiId?: true
   quantity?: true
+  price?: true
 }
 
 export type MarketplaceListingSumAggregateInputType = {
   id?: true
   sellerId?: true
   buyerId?: true
-  price?: true
+  eggId?: true
+  pixegotchiId?: true
   quantity?: true
+  price?: true
 }
 
 export type MarketplaceListingMinAggregateInputType = {
@@ -110,11 +121,12 @@ export type MarketplaceListingMinAggregateInputType = {
   sellerId?: true
   buyerId?: true
   listingType?: true
+  eggId?: true
+  pixegotchiId?: true
   itemId?: true
-  nftAddress?: true
+  quantity?: true
   price?: true
   currency?: true
-  quantity?: true
   isActive?: true
   createdAt?: true
   soldAt?: true
@@ -125,11 +137,12 @@ export type MarketplaceListingMaxAggregateInputType = {
   sellerId?: true
   buyerId?: true
   listingType?: true
+  eggId?: true
+  pixegotchiId?: true
   itemId?: true
-  nftAddress?: true
+  quantity?: true
   price?: true
   currency?: true
-  quantity?: true
   isActive?: true
   createdAt?: true
   soldAt?: true
@@ -140,11 +153,12 @@ export type MarketplaceListingCountAggregateInputType = {
   sellerId?: true
   buyerId?: true
   listingType?: true
+  eggId?: true
+  pixegotchiId?: true
   itemId?: true
-  nftAddress?: true
+  quantity?: true
   price?: true
   currency?: true
-  quantity?: true
   isActive?: true
   createdAt?: true
   soldAt?: true
@@ -242,11 +256,12 @@ export type MarketplaceListingGroupByOutputType = {
   sellerId: number
   buyerId: number | null
   listingType: $Enums.ListingType
+  eggId: number | null
+  pixegotchiId: number | null
   itemId: string | null
-  nftAddress: string | null
+  quantity: number
   price: runtime.Decimal
   currency: $Enums.CurrencyType
-  quantity: number
   isActive: boolean
   createdAt: Date
   soldAt: Date | null
@@ -280,11 +295,12 @@ export type MarketplaceListingWhereInput = {
   sellerId?: Prisma.IntFilter<"MarketplaceListing"> | number
   buyerId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
   listingType?: Prisma.EnumListingTypeFilter<"MarketplaceListing"> | $Enums.ListingType
+  eggId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
+  pixegotchiId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
   itemId?: Prisma.StringNullableFilter<"MarketplaceListing"> | string | null
-  nftAddress?: Prisma.StringNullableFilter<"MarketplaceListing"> | string | null
+  quantity?: Prisma.IntFilter<"MarketplaceListing"> | number
   price?: Prisma.DecimalFilter<"MarketplaceListing"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFilter<"MarketplaceListing"> | $Enums.CurrencyType
-  quantity?: Prisma.IntFilter<"MarketplaceListing"> | number
   isActive?: Prisma.BoolFilter<"MarketplaceListing"> | boolean
   createdAt?: Prisma.DateTimeFilter<"MarketplaceListing"> | Date | string
   soldAt?: Prisma.DateTimeNullableFilter<"MarketplaceListing"> | Date | string | null
@@ -297,11 +313,12 @@ export type MarketplaceListingOrderByWithRelationInput = {
   sellerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrderInput | Prisma.SortOrder
   listingType?: Prisma.SortOrder
+  eggId?: Prisma.SortOrderInput | Prisma.SortOrder
+  pixegotchiId?: Prisma.SortOrderInput | Prisma.SortOrder
   itemId?: Prisma.SortOrderInput | Prisma.SortOrder
-  nftAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   soldAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -317,11 +334,12 @@ export type MarketplaceListingWhereUniqueInput = Prisma.AtLeast<{
   sellerId?: Prisma.IntFilter<"MarketplaceListing"> | number
   buyerId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
   listingType?: Prisma.EnumListingTypeFilter<"MarketplaceListing"> | $Enums.ListingType
+  eggId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
+  pixegotchiId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
   itemId?: Prisma.StringNullableFilter<"MarketplaceListing"> | string | null
-  nftAddress?: Prisma.StringNullableFilter<"MarketplaceListing"> | string | null
+  quantity?: Prisma.IntFilter<"MarketplaceListing"> | number
   price?: Prisma.DecimalFilter<"MarketplaceListing"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFilter<"MarketplaceListing"> | $Enums.CurrencyType
-  quantity?: Prisma.IntFilter<"MarketplaceListing"> | number
   isActive?: Prisma.BoolFilter<"MarketplaceListing"> | boolean
   createdAt?: Prisma.DateTimeFilter<"MarketplaceListing"> | Date | string
   soldAt?: Prisma.DateTimeNullableFilter<"MarketplaceListing"> | Date | string | null
@@ -334,11 +352,12 @@ export type MarketplaceListingOrderByWithAggregationInput = {
   sellerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrderInput | Prisma.SortOrder
   listingType?: Prisma.SortOrder
+  eggId?: Prisma.SortOrderInput | Prisma.SortOrder
+  pixegotchiId?: Prisma.SortOrderInput | Prisma.SortOrder
   itemId?: Prisma.SortOrderInput | Prisma.SortOrder
-  nftAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   soldAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -357,11 +376,12 @@ export type MarketplaceListingScalarWhereWithAggregatesInput = {
   sellerId?: Prisma.IntWithAggregatesFilter<"MarketplaceListing"> | number
   buyerId?: Prisma.IntNullableWithAggregatesFilter<"MarketplaceListing"> | number | null
   listingType?: Prisma.EnumListingTypeWithAggregatesFilter<"MarketplaceListing"> | $Enums.ListingType
+  eggId?: Prisma.IntNullableWithAggregatesFilter<"MarketplaceListing"> | number | null
+  pixegotchiId?: Prisma.IntNullableWithAggregatesFilter<"MarketplaceListing"> | number | null
   itemId?: Prisma.StringNullableWithAggregatesFilter<"MarketplaceListing"> | string | null
-  nftAddress?: Prisma.StringNullableWithAggregatesFilter<"MarketplaceListing"> | string | null
+  quantity?: Prisma.IntWithAggregatesFilter<"MarketplaceListing"> | number
   price?: Prisma.DecimalWithAggregatesFilter<"MarketplaceListing"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeWithAggregatesFilter<"MarketplaceListing"> | $Enums.CurrencyType
-  quantity?: Prisma.IntWithAggregatesFilter<"MarketplaceListing"> | number
   isActive?: Prisma.BoolWithAggregatesFilter<"MarketplaceListing"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MarketplaceListing"> | Date | string
   soldAt?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketplaceListing"> | Date | string | null
@@ -369,11 +389,12 @@ export type MarketplaceListingScalarWhereWithAggregatesInput = {
 
 export type MarketplaceListingCreateInput = {
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -386,11 +407,12 @@ export type MarketplaceListingUncheckedCreateInput = {
   sellerId: number
   buyerId?: number | null
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -398,11 +420,12 @@ export type MarketplaceListingUncheckedCreateInput = {
 
 export type MarketplaceListingUpdateInput = {
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -415,11 +438,12 @@ export type MarketplaceListingUncheckedUpdateInput = {
   sellerId?: Prisma.IntFieldUpdateOperationsInput | number
   buyerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -430,11 +454,12 @@ export type MarketplaceListingCreateManyInput = {
   sellerId: number
   buyerId?: number | null
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -442,11 +467,12 @@ export type MarketplaceListingCreateManyInput = {
 
 export type MarketplaceListingUpdateManyMutationInput = {
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -457,11 +483,12 @@ export type MarketplaceListingUncheckedUpdateManyInput = {
   sellerId?: Prisma.IntFieldUpdateOperationsInput | number
   buyerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482,11 +509,12 @@ export type MarketplaceListingCountOrderByAggregateInput = {
   sellerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   listingType?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
+  pixegotchiId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
-  nftAddress?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   soldAt?: Prisma.SortOrder
@@ -496,8 +524,10 @@ export type MarketplaceListingAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
+  pixegotchiId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type MarketplaceListingMaxOrderByAggregateInput = {
@@ -505,11 +535,12 @@ export type MarketplaceListingMaxOrderByAggregateInput = {
   sellerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   listingType?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
+  pixegotchiId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
-  nftAddress?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   soldAt?: Prisma.SortOrder
@@ -520,11 +551,12 @@ export type MarketplaceListingMinOrderByAggregateInput = {
   sellerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   listingType?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
+  pixegotchiId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
-  nftAddress?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  quantity?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   soldAt?: Prisma.SortOrder
@@ -534,8 +566,10 @@ export type MarketplaceListingSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
+  pixegotchiId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type MarketplaceListingCreateNestedManyWithoutSellerInput = {
@@ -632,11 +666,12 @@ export type EnumCurrencyTypeFieldUpdateOperationsInput = {
 
 export type MarketplaceListingCreateWithoutSellerInput = {
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -647,11 +682,12 @@ export type MarketplaceListingUncheckedCreateWithoutSellerInput = {
   id?: number
   buyerId?: number | null
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -669,11 +705,12 @@ export type MarketplaceListingCreateManySellerInputEnvelope = {
 
 export type MarketplaceListingCreateWithoutBuyerInput = {
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -684,11 +721,12 @@ export type MarketplaceListingUncheckedCreateWithoutBuyerInput = {
   id?: number
   sellerId: number
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -728,11 +766,12 @@ export type MarketplaceListingScalarWhereInput = {
   sellerId?: Prisma.IntFilter<"MarketplaceListing"> | number
   buyerId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
   listingType?: Prisma.EnumListingTypeFilter<"MarketplaceListing"> | $Enums.ListingType
+  eggId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
+  pixegotchiId?: Prisma.IntNullableFilter<"MarketplaceListing"> | number | null
   itemId?: Prisma.StringNullableFilter<"MarketplaceListing"> | string | null
-  nftAddress?: Prisma.StringNullableFilter<"MarketplaceListing"> | string | null
+  quantity?: Prisma.IntFilter<"MarketplaceListing"> | number
   price?: Prisma.DecimalFilter<"MarketplaceListing"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFilter<"MarketplaceListing"> | $Enums.CurrencyType
-  quantity?: Prisma.IntFilter<"MarketplaceListing"> | number
   isActive?: Prisma.BoolFilter<"MarketplaceListing"> | boolean
   createdAt?: Prisma.DateTimeFilter<"MarketplaceListing"> | Date | string
   soldAt?: Prisma.DateTimeNullableFilter<"MarketplaceListing"> | Date | string | null
@@ -758,11 +797,12 @@ export type MarketplaceListingCreateManySellerInput = {
   id?: number
   buyerId?: number | null
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -772,11 +812,12 @@ export type MarketplaceListingCreateManyBuyerInput = {
   id?: number
   sellerId: number
   listingType: $Enums.ListingType
+  eggId?: number | null
+  pixegotchiId?: number | null
   itemId?: string | null
-  nftAddress?: string | null
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.CurrencyType
   quantity?: number
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: $Enums.CurrencyType
   isActive?: boolean
   createdAt?: Date | string
   soldAt?: Date | string | null
@@ -784,11 +825,12 @@ export type MarketplaceListingCreateManyBuyerInput = {
 
 export type MarketplaceListingUpdateWithoutSellerInput = {
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -799,11 +841,12 @@ export type MarketplaceListingUncheckedUpdateWithoutSellerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   buyerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -813,11 +856,12 @@ export type MarketplaceListingUncheckedUpdateManyWithoutSellerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   buyerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -825,11 +869,12 @@ export type MarketplaceListingUncheckedUpdateManyWithoutSellerInput = {
 
 export type MarketplaceListingUpdateWithoutBuyerInput = {
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -840,11 +885,12 @@ export type MarketplaceListingUncheckedUpdateWithoutBuyerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   sellerId?: Prisma.IntFieldUpdateOperationsInput | number
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -854,11 +900,12 @@ export type MarketplaceListingUncheckedUpdateManyWithoutBuyerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   sellerId?: Prisma.IntFieldUpdateOperationsInput | number
   listingType?: Prisma.EnumListingTypeFieldUpdateOperationsInput | $Enums.ListingType
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pixegotchiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   itemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyTypeFieldUpdateOperationsInput | $Enums.CurrencyType
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -871,11 +918,12 @@ export type MarketplaceListingSelect<ExtArgs extends runtime.Types.Extensions.In
   sellerId?: boolean
   buyerId?: boolean
   listingType?: boolean
+  eggId?: boolean
+  pixegotchiId?: boolean
   itemId?: boolean
-  nftAddress?: boolean
+  quantity?: boolean
   price?: boolean
   currency?: boolean
-  quantity?: boolean
   isActive?: boolean
   createdAt?: boolean
   soldAt?: boolean
@@ -888,11 +936,12 @@ export type MarketplaceListingSelectCreateManyAndReturn<ExtArgs extends runtime.
   sellerId?: boolean
   buyerId?: boolean
   listingType?: boolean
+  eggId?: boolean
+  pixegotchiId?: boolean
   itemId?: boolean
-  nftAddress?: boolean
+  quantity?: boolean
   price?: boolean
   currency?: boolean
-  quantity?: boolean
   isActive?: boolean
   createdAt?: boolean
   soldAt?: boolean
@@ -905,11 +954,12 @@ export type MarketplaceListingSelectUpdateManyAndReturn<ExtArgs extends runtime.
   sellerId?: boolean
   buyerId?: boolean
   listingType?: boolean
+  eggId?: boolean
+  pixegotchiId?: boolean
   itemId?: boolean
-  nftAddress?: boolean
+  quantity?: boolean
   price?: boolean
   currency?: boolean
-  quantity?: boolean
   isActive?: boolean
   createdAt?: boolean
   soldAt?: boolean
@@ -922,17 +972,18 @@ export type MarketplaceListingSelectScalar = {
   sellerId?: boolean
   buyerId?: boolean
   listingType?: boolean
+  eggId?: boolean
+  pixegotchiId?: boolean
   itemId?: boolean
-  nftAddress?: boolean
+  quantity?: boolean
   price?: boolean
   currency?: boolean
-  quantity?: boolean
   isActive?: boolean
   createdAt?: boolean
   soldAt?: boolean
 }
 
-export type MarketplaceListingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sellerId" | "buyerId" | "listingType" | "itemId" | "nftAddress" | "price" | "currency" | "quantity" | "isActive" | "createdAt" | "soldAt", ExtArgs["result"]["marketplaceListing"]>
+export type MarketplaceListingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sellerId" | "buyerId" | "listingType" | "eggId" | "pixegotchiId" | "itemId" | "quantity" | "price" | "currency" | "isActive" | "createdAt" | "soldAt", ExtArgs["result"]["marketplaceListing"]>
 export type MarketplaceListingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   buyer?: boolean | Prisma.MarketplaceListing$buyerArgs<ExtArgs>
@@ -957,11 +1008,12 @@ export type $MarketplaceListingPayload<ExtArgs extends runtime.Types.Extensions.
     sellerId: number
     buyerId: number | null
     listingType: $Enums.ListingType
+    eggId: number | null
+    pixegotchiId: number | null
     itemId: string | null
-    nftAddress: string | null
+    quantity: number
     price: runtime.Decimal
     currency: $Enums.CurrencyType
-    quantity: number
     isActive: boolean
     createdAt: Date
     soldAt: Date | null
@@ -1394,11 +1446,12 @@ export interface MarketplaceListingFieldRefs {
   readonly sellerId: Prisma.FieldRef<"MarketplaceListing", 'Int'>
   readonly buyerId: Prisma.FieldRef<"MarketplaceListing", 'Int'>
   readonly listingType: Prisma.FieldRef<"MarketplaceListing", 'ListingType'>
+  readonly eggId: Prisma.FieldRef<"MarketplaceListing", 'Int'>
+  readonly pixegotchiId: Prisma.FieldRef<"MarketplaceListing", 'Int'>
   readonly itemId: Prisma.FieldRef<"MarketplaceListing", 'String'>
-  readonly nftAddress: Prisma.FieldRef<"MarketplaceListing", 'String'>
+  readonly quantity: Prisma.FieldRef<"MarketplaceListing", 'Int'>
   readonly price: Prisma.FieldRef<"MarketplaceListing", 'Decimal'>
   readonly currency: Prisma.FieldRef<"MarketplaceListing", 'CurrencyType'>
-  readonly quantity: Prisma.FieldRef<"MarketplaceListing", 'Int'>
   readonly isActive: Prisma.FieldRef<"MarketplaceListing", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"MarketplaceListing", 'DateTime'>
   readonly soldAt: Prisma.FieldRef<"MarketplaceListing", 'DateTime'>

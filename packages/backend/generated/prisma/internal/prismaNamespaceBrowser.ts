@@ -52,7 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Egg: 'Egg',
   Pixegotchi: 'Pixegotchi',
+  ActiveEffect: 'ActiveEffect',
   Inventory: 'Inventory',
   Item: 'Item',
   ItemUsageHistory: 'ItemUsageHistory',
@@ -85,6 +87,7 @@ export const UserScalarFieldEnum = {
   walletAddress: 'walletAddress',
   username: 'username',
   pgcBalance: 'pgcBalance',
+  lastActiveAt: 'lastActiveAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -92,42 +95,57 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const EggScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  isListed: 'isListed',
+  createdAt: 'createdAt'
+} as const
+
+export type EggScalarFieldEnum = (typeof EggScalarFieldEnum)[keyof typeof EggScalarFieldEnum]
+
+
 export const PixegotchiScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   nftAddress: 'nftAddress',
   genomeHash: 'genomeHash',
-  name: 'name',
-  status: 'status',
   element: 'element',
   rarity: 'rarity',
   gender: 'gender',
+  traits: 'traits',
+  name: 'name',
+  status: 'status',
   level: 'level',
   experience: 'experience',
-  lives: 'lives',
-  traits: 'traits',
   health: 'health',
   hunger: 'hunger',
   energy: 'energy',
   happiness: 'happiness',
   cleanliness: 'cleanliness',
-  hungerRate: 'hungerRate',
-  energyRate: 'energyRate',
-  diseaseResistance: 'diseaseResistance',
-  happinesRate: 'happinesRate',
-  cleanlinessRate: 'cleanlinessRate',
-  lifeRecoveryRate: 'lifeRecoveryRate',
+  criticalSince: 'criticalSince',
   lastFedAt: 'lastFedAt',
   lastPlayedAt: 'lastPlayedAt',
   lastSleptAt: 'lastSleptAt',
   lastCleanedAt: 'lastCleanedAt',
   lastHealedAt: 'lastHealedAt',
   lastUpdateAt: 'lastUpdateAt',
-  hatchedAt: 'hatchedAt',
   createdAt: 'createdAt'
 } as const
 
 export type PixegotchiScalarFieldEnum = (typeof PixegotchiScalarFieldEnum)[keyof typeof PixegotchiScalarFieldEnum]
+
+
+export const ActiveEffectScalarFieldEnum = {
+  id: 'id',
+  pixegotchiId: 'pixegotchiId',
+  effectType: 'effectType',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ActiveEffectScalarFieldEnum = (typeof ActiveEffectScalarFieldEnum)[keyof typeof ActiveEffectScalarFieldEnum]
 
 
 export const InventoryScalarFieldEnum = {
@@ -191,11 +209,12 @@ export const MarketplaceListingScalarFieldEnum = {
   sellerId: 'sellerId',
   buyerId: 'buyerId',
   listingType: 'listingType',
+  eggId: 'eggId',
+  pixegotchiId: 'pixegotchiId',
   itemId: 'itemId',
-  nftAddress: 'nftAddress',
+  quantity: 'quantity',
   price: 'price',
   currency: 'currency',
-  quantity: 'quantity',
   isActive: 'isActive',
   createdAt: 'createdAt',
   soldAt: 'soldAt'
@@ -211,8 +230,11 @@ export const GameSessionScalarFieldEnum = {
   gameId: 'gameId',
   score: 'score',
   duration: 'duration',
-  tmcEarned: 'tmcEarned',
+  pgcEarned: 'pgcEarned',
+  experienceGained: 'experienceGained',
+  energySpent: 'energySpent',
   chestDropped: 'chestDropped',
+  itemsDropped: 'itemsDropped',
   completed: 'completed',
   createdAt: 'createdAt',
   completedAt: 'completedAt'
@@ -262,6 +284,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

@@ -2,16 +2,16 @@
 CREATE TYPE "PixegotchiStatus" AS ENUM ('egg', 'active', 'vault', 'dead');
 
 -- CreateEnum
-CREATE TYPE "ElementType" AS ENUM ('fire', 'water', 'earth', 'air', 'light', 'dark');
+CREATE TYPE "PixegotchiGender" AS ENUM ('male', 'female');
 
 -- CreateEnum
-CREATE TYPE "RarityType" AS ENUM ('common', 'uncommon', 'rare', 'epic', 'legendary');
+CREATE TYPE "ElementType" AS ENUM ('fire', 'water', 'earth', 'air', 'electric', 'ice', 'grass', 'metal', 'ghost', 'poison', 'psychic', 'light', 'dark', 'rainbow');
+
+-- CreateEnum
+CREATE TYPE "RarityType" AS ENUM ('common', 'uncommon', 'rare', 'epic', 'mythic', 'legendary', 'unique');
 
 -- CreateEnum
 CREATE TYPE "ItemType" AS ENUM ('food', 'medicine', 'toy', 'cleaning', 'chest', 'rename', 'special', 'boost');
-
--- CreateEnum
-CREATE TYPE "ItemEffect" AS ENUM ('restore_hunger', 'restore_health', 'restore_energy', 'restore_happiness', 'restore_cleanliness', 'boost_experience', 'prevent_disease', 'revive');
 
 -- CreateEnum
 CREATE TYPE "ListingType" AS ENUM ('egg', 'item', 'chest');
@@ -42,17 +42,22 @@ CREATE TABLE "pixegotchis" (
     "status" "PixegotchiStatus" NOT NULL DEFAULT 'egg',
     "element" "ElementType",
     "rarity" "RarityType",
+    "gender" "PixegotchiGender",
     "level" INTEGER NOT NULL DEFAULT 1,
     "experience" INTEGER NOT NULL DEFAULT 0,
     "lives" INTEGER NOT NULL DEFAULT 2,
+    "traits" JSONB NOT NULL,
     "health" INTEGER NOT NULL DEFAULT 100,
-    "hunger" INTEGER NOT NULL DEFAULT 50,
+    "hunger" INTEGER NOT NULL DEFAULT 70,
     "energy" INTEGER NOT NULL DEFAULT 100,
     "happiness" INTEGER NOT NULL DEFAULT 50,
     "cleanliness" INTEGER NOT NULL DEFAULT 100,
     "hunger_rate" DECIMAL(3,2) NOT NULL DEFAULT 1.0,
     "energy_rate" DECIMAL(3,2) NOT NULL DEFAULT 1.0,
     "disease_resistance" DECIMAL(3,2) NOT NULL DEFAULT 1.0,
+    "happines_rate" DECIMAL(3,2) NOT NULL DEFAULT 1.0,
+    "cleanliness_rate" DECIMAL(3,2) NOT NULL DEFAULT 1.0,
+    "life_recovery_rate" DECIMAL(3,2) NOT NULL DEFAULT 1.0,
     "last_fed_at" TIMESTAMP(3),
     "last_played_at" TIMESTAMP(3),
     "last_slept_at" TIMESTAMP(3),

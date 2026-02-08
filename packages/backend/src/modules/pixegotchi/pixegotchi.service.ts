@@ -62,9 +62,6 @@ export class PixegotchiService {
         rarity: "common",
         gender: "male",
         traits: [],
-        hungerRate: 0,
-        energyRate: 0,
-        diseaseResistance: 0,
       },
     });
   }
@@ -80,9 +77,6 @@ export class PixegotchiService {
         rarity: data.rarity as any,
         gender: data.gender as any,
         traits: data.traits,
-        hungerRate: data.hungerRate,
-        energyRate: data.energyRate,
-        diseaseResistance: data.diseaseResistance,
         status: "active",
       },
     });
@@ -90,11 +84,8 @@ export class PixegotchiService {
 
   //Hatching
   async hatchEgg(id: number, userId: number, name?: string) {
-    const active = await this.findActive(userId);
-    if (active) throw new Error("You have active pixegotchi");
-
     const egg = await this.findById(id, userId);
-    if (!egg || egg.status !== "egg") throw new Error("You don't have egg");
+    if (!egg) throw new Error("You don't have egg");
 
     const hatchedEgg = GenomeGenerator.generate();
     const newPixegothi = await this.create({
@@ -118,70 +109,7 @@ export class PixegotchiService {
     });
 
     return newPixegothi;
-
-    // return await prisma.pixegotchi.update({
-    //   where: { id, userId },
-    //   data: {
-    //     status: "active",
-    //     name: name || "Unnamed",
-    //     hatchedAt: new Date(),
-    //   },
-    // });
   }
-
-  // async useItem(
-  //   userId: number,
-  //   pixegotchiId: number,
-  //   itemId: string,
-  //   quantity: number = 1,
-  // ) {
-  //   const pixegotchi = await this.findById(pixegotchiId, userId);
-  //   if (!pixegotchi) throw new Error("Pixegotchi not found");
-  //   if (pixegotchi.status !== "active")
-  //     throw new Error("This pixegitchi is not active");
-
-  //   const itemDetails = await this.inventory.getItemDetail(itemId);
-  //   if (!itemDetails) throw new Error(`Item ${itemId} not found`);
-
-  //   await this.validateItemUsage(pixegotchi, itemDetails, quantity);
-
-  //   // Використовуємо транзакцію
-  //   return await prisma.$transaction(async (tx) => {
-  //     // 1. Забираємо предмет з інвентаря
-  //     await this.inventory.consumeItem(userId, itemId, quantity);
-
-  //     // 2. Застосовуємо ефекти
-  //     const effects = itemDetails.effects as ItemEffects;
-  //     const updates = ItemEffectHandler.applyEffects(
-  //       pixegotchi,
-  //       effects,
-  //       quantity,
-  //     );
-
-  //     // 3. Оновлюємо timestamps
-  //     this.updateActionTimestamp(updates, itemDetails.itemType);
-
-  //     // 4. Зберігаємо зміни
-  //     const updatedPixegotchi = await tx.pixegotchi.update({
-  //       where: { id: pixegotchi.id },
-  //       data: updates,
-  //     });
-
-  //     // 5. Записуємо історію використання
-  //     if (itemDetails.cooldownMinutes || itemDetails.maxPerDay) {
-  //       await tx.itemUsageHistory.create({
-  //         data: {
-  //           userId,
-  //           pixegotchiId,
-  //           itemId,
-  //           quantity,
-  //         },
-  //       });
-  //     }
-
-  //     return updatedPixegotchi;
-  //   });
-  // }
 
   private async validateItemUsage(
     pixegotchi: Pixegotchi,
@@ -281,118 +209,118 @@ export class PixegotchiService {
   }
 
   //Actions
-  async feed(id: number, userId: number, itemId: string) {
-    const pixegotchi = await this.findById(id, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi now found");
+  // async feed(id: number, userId: number, itemId: string) {
+  //   const pixegotchi = await this.findById(id, userId);
+  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
 
-    return await prisma.pixegotchi.update({
-      where: { id },
-      data: {
-        hunger: Math.max(0, pixegotchi.hunger - 30),
-        lastFedAt: new Date(),
-        lastUpdateAt: new Date(),
-      },
-    });
-  }
+  //   return await prisma.pixegotchi.update({
+  //     where: { id },
+  //     data: {
+  //       hunger: Math.max(0, pixegotchi.hunger - 30),
+  //       lastFedAt: new Date(),
+  //       lastUpdateAt: new Date(),
+  //     },
+  //   });
+  // }
 
-  async play(id: number, userId: number) {
-    const pixegotchi = await this.findById(id, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi now found");
-    return await prisma.pixegotchi.update({
-      where: { id },
-      data: {
-        happiness: Math.min(100, pixegotchi.happiness + 20),
-        energy: Math.max(0, pixegotchi.energy - 10),
-        lastPlayedAt: new Date(),
-        lastUpdateAt: new Date(),
-      },
-    });
-  }
+  // async play(id: number, userId: number) {
+  //   const pixegotchi = await this.findById(id, userId);
+  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
+  //   return await prisma.pixegotchi.update({
+  //     where: { id },
+  //     data: {
+  //       happiness: Math.min(100, pixegotchi.happiness + 20),
+  //       energy: Math.max(0, pixegotchi.energy - 10),
+  //       lastPlayedAt: new Date(),
+  //       lastUpdateAt: new Date(),
+  //     },
+  //   });
+  // }
 
-  async sleep(id: number, userId: number) {
-    const pixegotchi = await this.findById(id, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi now found");
+  // async sleep(id: number, userId: number) {
+  //   const pixegotchi = await this.findById(id, userId);
+  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
 
-    return await prisma.pixegotchi.update({
-      where: { id },
-      data: {
-        energy: Math.min(100, pixegotchi.energy + 40),
-        lastSleptAt: new Date(),
-        lastUpdateAt: new Date(),
-      },
-    });
-  }
+  //   return await prisma.pixegotchi.update({
+  //     where: { id },
+  //     data: {
+  //       energy: Math.min(100, pixegotchi.energy + 40),
+  //       lastSleptAt: new Date(),
+  //       lastUpdateAt: new Date(),
+  //     },
+  //   });
+  // }
 
-  async clean(id: number, userId: number) {
-    const pixegotchi = await this.findById(id, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi now found");
+  // async clean(id: number, userId: number) {
+  //   const pixegotchi = await this.findById(id, userId);
+  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
 
-    return await prisma.pixegotchi.update({
-      where: { id },
-      data: {
-        cleanliness: 100,
-        lastCleanedAt: new Date(),
-        lastUpdateAt: new Date(),
-      },
-    });
-  }
+  //   return await prisma.pixegotchi.update({
+  //     where: { id },
+  //     data: {
+  //       cleanliness: 100,
+  //       lastCleanedAt: new Date(),
+  //       lastUpdateAt: new Date(),
+  //     },
+  //   });
+  // }
 
-  async heal(id: number, userId: number) {
-    const pixegotchi = await this.findById(id, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi now found");
+  // async heal(id: number, userId: number) {
+  //   const pixegotchi = await this.findById(id, userId);
+  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
 
-    return await prisma.pixegotchi.update({
-      where: { id },
-      data: {
-        health: Math.min(100, pixegotchi.health + 50),
-        lastHealedAt: new Date(),
-        lastUpdateAt: new Date(),
-      },
-    });
-  }
+  //   return await prisma.pixegotchi.update({
+  //     where: { id },
+  //     data: {
+  //       health: Math.min(100, pixegotchi.health + 50),
+  //       lastHealedAt: new Date(),
+  //       lastUpdateAt: new Date(),
+  //     },
+  //   });
+  // }
 
-  async updateStatus(id: number) {
-    const pixegotchi = await prisma.pixegotchi.findUnique({
-      where: { id },
-    });
+  // async updateStatus(id: number) {
+  //   const pixegotchi = await prisma.pixegotchi.findUnique({
+  //     where: { id },
+  //   });
 
-    if (!pixegotchi || pixegotchi.status !== "active") return;
+  //   if (!pixegotchi || pixegotchi.status !== "active") return;
 
-    const hoursSinceUpdate = this.getHoursSince(pixegotchi.lastUpdateAt);
+  //   const hoursSinceUpdate = this.getHoursSince(pixegotchi.lastUpdateAt);
 
-    if (hoursSinceUpdate < 12) return;
+  //   if (hoursSinceUpdate < 12) return;
 
-    const hungerRate = Number(pixegotchi.hungerRate);
-    const energyRate = Number(pixegotchi.energyRate);
+  //   const hungerRate = Number(pixegotchi.hungerRate);
+  //   const energyRate = Number(pixegotchi.energyRate);
 
-    const newHunger = Math.min(100, pixegotchi.hunger + 10 * hungerRate);
-    const newEnergy = Math.max(0, pixegotchi.energy - 15 * energyRate);
-    const newHappines = Math.max(0, pixegotchi.happiness - 5);
-    const newCleanliness = Math.max(0, pixegotchi.cleanliness - 10);
+  //   const newHunger = Math.min(100, pixegotchi.hunger + 10 * hungerRate);
+  //   const newEnergy = Math.max(0, pixegotchi.energy - 15 * energyRate);
+  //   const newHappines = Math.max(0, pixegotchi.happiness - 5);
+  //   const newCleanliness = Math.max(0, pixegotchi.cleanliness - 10);
 
-    let newLives = pixegotchi.lives;
-    let newStatus: PixegotchiStatus = pixegotchi.status;
+  //   let newLives = pixegotchi.lives;
+  //   let newStatus: PixegotchiStatus = pixegotchi.status;
 
-    if (pixegotchi.hunger >= 100) {
-      newLives = Math.max(0, newLives - 1);
-      if (newLives === 0) {
-        newStatus = "dead";
-      }
-    }
+  //   if (pixegotchi.hunger >= 100) {
+  //     newLives = Math.max(0, newLives - 1);
+  //     if (newLives === 0) {
+  //       newStatus = "dead";
+  //     }
+  //   }
 
-    return await prisma.pixegotchi.update({
-      where: { id },
-      data: {
-        hunger: newHunger,
-        energy: newEnergy,
-        happiness: newHappines,
-        cleanliness: newCleanliness,
-        lives: newLives,
-        status: newStatus,
-        lastUpdateAt: new Date(),
-      },
-    });
-  }
+  //   return await prisma.pixegotchi.update({
+  //     where: { id },
+  //     data: {
+  //       hunger: newHunger,
+  //       energy: newEnergy,
+  //       happiness: newHappines,
+  //       cleanliness: newCleanliness,
+  //       lives: newLives,
+  //       status: newStatus,
+  //       lastUpdateAt: new Date(),
+  //     },
+  //   });
+  // }
 
   async storedInVault(id: number, userId: number) {
     const pixegotchi = await this.findById(id, userId);

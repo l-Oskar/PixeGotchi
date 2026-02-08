@@ -14,8 +14,8 @@ datasource db {
 // ============================================
 
 enum PixegotchiStatus {
-  egg
   active
+  critical  // health = 0, є 10-30 днів щоб врятувати
   vault
   dead
 }
@@ -61,12 +61,13 @@ enum ItemType {
   rename
   special
   boost
+  resurrection  // для воскресіння з dead
 }
 
 enum ListingType {
   egg
+  pixegotchi  // тільки vault (lvl 100)
   item
-  chest
 }
 
 enum CurrencyType {
@@ -84,70 +85,129 @@ model User {
   walletAddress String?  @map("wallet_address") @db.VarChar(48)
   username      String?  @db.VarChar(255)
   pgcBalance    Decimal  @default(0) @map("pgc_balance") @db.Decimal(20, 8)
+  
+  // Додаткові поля
+  lastActiveAt  DateTime? @map("last_active_at")
+  
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   // Relations
-  pixegotchis Pixegotchi[]
-  inventory   Inventory[]
-  vault       Vault[]
-  listings    MarketplaceListing[] @relation("SellerListings")
-  purchases   MarketplaceListing[] @relation("BuyerPurchases")
+  eggs         Egg[]
+  pixegotchis  Pixegotchi[]
+  inventory    Inventory[]
+  vault        Vault[]
+  listings     MarketplaceListing[] @relation("SellerListings")
+  purchases    MarketplaceListing[] @relation("BuyerPurchases")
 
   @@index([telegramId])
   @@index([walletAddress])
   @@map("users")
 }
 
-model Pixegotchi {
-  id                Int               @id @default(autoincrement())
-  userId            Int               @map("user_id")
-  nftAddress        String?           @map("nft_address") @db.VarChar(48)
-  genomeHash        String            @map("genome_hash") @db.VarChar(66)
-  name              String            @default("Unnamed") @db.VarChar(50)
-  status            PixegotchiStatus  @default(egg)
-  element           ElementType?
-  rarity            RarityType?
-  gender            PixegotchiGender? 
-  level             Int               @default(1)
-  experience        Int               @default(0)
-  lives             Int               @default(2)
-  traits            Json
+// ============================================
+// EGG - Окрема таблиця для яєць
+// ============================================
 
-  // Stats (0-100)
-  health            Int               @default(100)
-  hunger            Int               @default(70)
-  energy            Int               @default(100)
-  happiness         Int               @default(50)
-  cleanliness       Int               @default(100)
-
-  // Genome-based characteristics
-  hungerRate        Decimal           @default(1.0) @map("hunger_rate") @db.Decimal(3, 2)
-  energyRate        Decimal           @default(1.0) @map("energy_rate") @db.Decimal(3, 2)
-  diseaseResistance Decimal           @default(1.0) @map("disease_resistance") @db.Decimal(3, 2)
-  happinesRate      Decimal           @default(1.0) @map("happines_rate") @db.Decimal(3, 2)
-  cleanlinessRate   Decimal           @default(1.0) @map("cleanliness_rate") @db.Decimal(3, 2)
-  lifeRecoveryRate  Decimal           @default(1.0) @map("life_recovery_rate") @db.Decimal(3, 2)
-
-  // Action timestamps
-  lastFedAt         DateTime?         @map("last_fed_at")
-  lastPlayedAt      DateTime?         @map("last_played_at")
-  lastSleptAt       DateTime?         @map("last_slept_at")
-  lastCleanedAt     DateTime?         @map("last_cleaned_at")
-  lastHealedAt      DateTime?         @map("last_healed_at")
-  lastUpdateAt      DateTime          @default(now()) @map("last_update_at")
-  hatchedAt         DateTime?         @map("hatched_at")
-  createdAt         DateTime          @default(now()) @map("created_at")
+model Egg {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  
+  // Для відстеження на marketplace
+  isListed  Boolean  @default(false) @map("is_listed")
+  
+  createdAt DateTime @default(now()) @map("created_at")
 
   // Relations
-  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  vault             Vault[]
-  gameSessions      GameSession[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isListed])
+  @@map("eggs")
+}
+
+// ============================================
+// PIXEGOTCHI - Тільки вилуплені пети
+// ============================================
+
+model Pixegotchi {
+  id           Int               @id @default(autoincrement())
+  userId       Int               @map("user_id")
+  nftAddress   String?           @map("nft_address") @db.VarChar(48)
+  
+  // Genome (seed + parsed data)
+  genomeHash   String            @map("genome_hash") @db.VarChar(100)
+  element      ElementType
+  rarity       RarityType
+  gender       PixegotchiGender
+  traits       Json              // ["lazy", "playful", "glutton"]
+  
+  // Basic info
+  name         String            @default("Unnamed") @db.VarChar(50)
+  status       PixegotchiStatus  @default(active)
+  level        Int               @default(1)
+  experience   Int               @default(0)
+
+  // Stats у ВІДСОТКАХ (0-100)
+  health       Decimal           @default(100) @db.Decimal(5, 2)
+  hunger       Decimal           @default(70)  @db.Decimal(5, 2)
+  energy       Decimal           @default(100) @db.Decimal(5, 2)
+  happiness    Decimal           @default(50)  @db.Decimal(5, 2)
+  cleanliness  Decimal           @default(100) @db.Decimal(5, 2)
+
+  // ВИДАЛЕНО: hungerRate, energyRate, etc. (розраховуються динамічно)
+  
+  // Critical state tracking
+  criticalSince DateTime?        @map("critical_since")
+  
+  // Action timestamps
+  lastFedAt     DateTime?        @map("last_fed_at")
+  lastPlayedAt  DateTime?        @map("last_played_at")
+  lastSleptAt   DateTime?        @map("last_slept_at")
+  lastCleanedAt DateTime?        @map("last_cleaned_at")
+  lastHealedAt  DateTime?        @map("last_healed_at")
+  lastUpdateAt  DateTime         @default(now()) @map("last_update_at")
+  
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  // Relations
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vault        Vault[]
+  gameSessions GameSession[]
+  activeEffects ActiveEffect[]
 
   @@index([userId])
   @@index([status])
+  @@index([rarity])
+  @@index([element])
   @@map("pixegotchis")
 }
+
+// ============================================
+// ACTIVE EFFECTS - Тимчасові бафи/дебафи
+// ============================================
+
+model ActiveEffect {
+  id           Int        @id @default(autoincrement())
+  pixegotchiId Int        @map("pixegotchi_id")
+  
+  effectType   String     @db.VarChar(50)  // 'gold_boost', 'energy_regen', 'luck', etc.
+  value        Decimal    @db.Decimal(10, 2)
+  
+  expiresAt    DateTime   @map("expires_at")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  
+  // Relations
+  pixegotchi   Pixegotchi @relation(fields: [pixegotchiId], references: [id], onDelete: Cascade)
+  
+  @@index([pixegotchiId])
+  @@index([expiresAt])
+  @@map("active_effects")
+}
+
+// ============================================
+// INVENTORY & ITEMS
+// ============================================
 
 model Inventory {
   id        Int      @id @default(autoincrement())
@@ -171,13 +231,13 @@ model Item {
   name        String   @db.VarChar(100)
   description String?  @db.Text
   itemType    ItemType @map("item_type")
-  rarity      RarityType @default(common) 
+  rarity      RarityType @default(common)
 
+  // Effects: { health: 50, hunger: 30, buffs: [...] }
   effects     Json
 
   cooldownMinutes Int? @map("cooldown_minutes")
   maxPerDay       Int? @map("max_per_day")
-
   minLevel        Int? @default(1) @map("min_level")
 
   iconUrl     String?  @map("icon_url") @db.VarChar(255)
@@ -210,6 +270,10 @@ model ItemUsageHistory {
   @@map("item_usage_history")
 }
 
+// ============================================
+// VAULT
+// ============================================
+
 model Vault {
   id            Int        @id @default(autoincrement())
   userId        Int        @map("user_id")
@@ -226,50 +290,81 @@ model Vault {
   @@map("vault")
 }
 
+// ============================================
+// MARKETPLACE
+// ============================================
+
 model MarketplaceListing {
-  id          Int          @id @default(autoincrement())
-  sellerId    Int          @map("seller_id")
-  buyerId     Int?         @map("buyer_id")
-  listingType ListingType  @map("listing_type")
-  itemId      String?      @map("item_id") @db.VarChar(50)
-  nftAddress  String?      @map("nft_address") @db.VarChar(48)
-  price       Decimal      @db.Decimal(20, 8)
-  currency    CurrencyType
-  quantity    Int          @default(1)
-  isActive    Boolean      @default(true) @map("is_active")
-  createdAt   DateTime     @default(now()) @map("created_at")
-  soldAt      DateTime?    @map("sold_at")
+  id           Int          @id @default(autoincrement())
+  sellerId     Int          @map("seller_id")
+  buyerId      Int?         @map("buyer_id")
+  
+  listingType  ListingType  @map("listing_type")
+  
+  // Для eggs
+  eggId        Int?         @map("egg_id")
+  
+  // Для pixegotchi (тільки vault, lvl 100)
+  pixegotchiId Int?         @map("pixegotchi_id")
+  
+  // Для items
+  itemId       String?      @map("item_id") @db.VarChar(50)
+  quantity     Int          @default(1)
+  
+  price        Decimal      @db.Decimal(20, 8)
+  currency     CurrencyType @default(pgc)
+  
+  isActive     Boolean      @default(true) @map("is_active")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  soldAt       DateTime?    @map("sold_at")
 
   // Relations
-  seller      User         @relation("SellerListings", fields: [sellerId], references: [id], onDelete: Cascade)
-  buyer       User?        @relation("BuyerPurchases", fields: [buyerId], references: [id])
+  seller       User         @relation("SellerListings", fields: [sellerId], references: [id], onDelete: Cascade)
+  buyer        User?        @relation("BuyerPurchases", fields: [buyerId], references: [id])
 
   @@index([isActive, listingType])
   @@index([sellerId])
+  @@index([eggId])
+  @@index([pixegotchiId])
   @@map("marketplace_listings")
 }
 
+// ============================================
+// GAME SESSIONS
+// ============================================
+
 model GameSession {
-  id            Int        @id @default(autoincrement())
-  userId        Int        @map("user_id")
-  pixegotchiId  Int        @map("pixegotchi_id")
-  gameId        String     @map("game_id") @db.VarChar(50)
-  score         Int        @default(0)
-  duration      Int        @default(0) // seconds
-  tmcEarned     Decimal    @default(0) @map("tmc_earned") @db.Decimal(20, 8)
-  chestDropped  Boolean    @default(false) @map("chest_dropped")
-  completed     Boolean    @default(false)
-  createdAt     DateTime   @default(now()) @map("created_at")
-  completedAt   DateTime?  @map("completed_at")
+  id               Int        @id @default(autoincrement())
+  userId           Int        @map("user_id")
+  pixegotchiId     Int        @map("pixegotchi_id")
+  gameId           String     @map("game_id") @db.VarChar(50)
+  
+  score            Int        @default(0)
+  duration         Int        @default(0) // seconds
+  
+  pgcEarned        Decimal    @default(0) @map("pgc_earned") @db.Decimal(20, 8)  // ВИПРАВЛЕНО: tmcEarned → pgcEarned
+  experienceGained Int        @default(0) @map("experience_gained")
+  energySpent      Int        @default(0) @map("energy_spent")
+  
+  chestDropped     Boolean    @default(false) @map("chest_dropped")
+  itemsDropped     Json?      @map("items_dropped")  // [{ itemId: "apple", quantity: 1 }]
+  
+  completed        Boolean    @default(false)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  completedAt      DateTime?  @map("completed_at")
 
   // Relations
-  pixegotchi    Pixegotchi @relation(fields: [pixegotchiId], references: [id], onDelete: Cascade)
+  pixegotchi       Pixegotchi @relation(fields: [pixegotchiId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([pixegotchiId])
   @@index([createdAt])
   @@map("game_sessions")
 }
+
+// ============================================
+// QUESTS
+// ============================================
 
 model Quest {
   id          Int      @id @default(autoincrement())
