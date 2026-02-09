@@ -4,7 +4,6 @@ import { CooldownManager, cooldownTime } from "@/utils/cooldown";
 import { z } from "zod";
 
 const hatchSchema = z.object({
-  eggId: z.string().optional(),
   name: z.string().min(3).max(30).optional(),
 });
 
@@ -48,197 +47,175 @@ export class PixegotchiController {
     return reply.send(pixegotchi);
   }
 
-  async getEgg(request: FastifyRequest, reply: FastifyReply) {
-    const userId = (request.user as any).userId;
+  // async feed(
+  //   request: FastifyRequest<{ Params: { id: string; itemId: string } }>,
+  //   reply: FastifyReply,
+  // ) {
+  //   const userId = (request.user as any).userId;
+  //   const id = parseInt(request.params.id);
+  //   const itemId = request.params.itemId;
 
-    const getEgg = await this.pixegotchiService.createEgg(userId);
+  //   const hasCooldown = await this.cooldownManager.checkCooldown(
+  //     userId.toString(),
+  //     `feed:${id}`,
+  //   );
 
-    return reply.send(getEgg);
-  }
+  //   if (hasCooldown) {
+  //     const remaining = await this.cooldownManager.getRemainingTime(
+  //       userId.toString(),
+  //       `feed:${id}`,
+  //     );
+  //     return reply
+  //       .code(429)
+  //       .send({ error: "Action on cooldown", remainingSeconds: remaining });
+  //   }
 
-  async hatch(
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-  ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
-    const { name } = hatchSchema.parse(request.body);
+  //   const pixegotchi = await this.pixegotchiService.feed(id, userId, itemId);
 
-    const result = await this.pixegotchiService.hatchEgg(id, userId, name);
-    return reply.send(result);
+  //   await this.cooldownManager.setCooldown(
+  //     userId.toString(),
+  //     `feed:${id}`,
+  //     cooldownTime.FEED_CD,
+  //   );
 
-    // return reply.code(501).send({ message: "Not implemented yet" });
-  }
+  //   return reply.send(pixegotchi);
+  // }
 
-  async feed(
-    request: FastifyRequest<{ Params: { id: string; itemId: string } }>,
-    reply: FastifyReply,
-  ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
-    const itemId = request.params.itemId;
+  // async play(
+  //   request: FastifyRequest<{ Params: { id: string } }>,
+  //   reply: FastifyReply,
+  // ) {
+  //   const userId = (request.user as any).userId;
+  //   const id = parseInt(request.params.id);
 
-    const hasCooldown = await this.cooldownManager.checkCooldown(
-      userId.toString(),
-      `feed:${id}`,
-    );
+  //   const hasCooldown = await this.cooldownManager.checkCooldown(
+  //     userId.toString(),
+  //     `play:${id}`,
+  //   );
 
-    if (hasCooldown) {
-      const remaining = await this.cooldownManager.getRemainingTime(
-        userId.toString(),
-        `feed:${id}`,
-      );
-      return reply
-        .code(429)
-        .send({ error: "Action on cooldown", remainingSeconds: remaining });
-    }
+  //   if (hasCooldown) {
+  //     const remaining = await this.cooldownManager.getRemainingTime(
+  //       userId.toString(),
+  //       `play:${id}`,
+  //     );
 
-    const pixegotchi = await this.pixegotchiService.feed(id, userId, itemId);
+  //     return reply
+  //       .code(429)
+  //       .send({ error: "Action on cooldown", remainingSeconds: remaining });
+  //   }
 
-    await this.cooldownManager.setCooldown(
-      userId.toString(),
-      `feed:${id}`,
-      cooldownTime.FEED_CD,
-    );
+  //   const pixegotchi = await this.pixegotchiService.play(id, userId);
 
-    return reply.send(pixegotchi);
-  }
+  //   await this.cooldownManager.setCooldown(
+  //     userId.toString(),
+  //     `play:${id}`,
+  //     cooldownTime.PLAY_CD,
+  //   );
 
-  async play(
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-  ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
+  //   return reply.send(pixegotchi);
+  // }
 
-    const hasCooldown = await this.cooldownManager.checkCooldown(
-      userId.toString(),
-      `play:${id}`,
-    );
+  // async sleep(
+  //   request: FastifyRequest<{ Params: { id: string } }>,
+  //   reply: FastifyReply,
+  // ) {
+  //   const userId = (request.user as any).userId;
+  //   const id = parseInt(request.params.id);
 
-    if (hasCooldown) {
-      const remaining = await this.cooldownManager.getRemainingTime(
-        userId.toString(),
-        `play:${id}`,
-      );
+  //   const hasCooldown = await this.cooldownManager.checkCooldown(
+  //     userId.toString(),
+  //     `sleep:${id}`,
+  //   );
 
-      return reply
-        .code(429)
-        .send({ error: "Action on cooldown", remainingSeconds: remaining });
-    }
+  //   if (hasCooldown) {
+  //     const remaining = await this.cooldownManager.getRemainingTime(
+  //       userId.toString(),
+  //       `sleep:${id}`,
+  //     );
 
-    const pixegotchi = await this.pixegotchiService.play(id, userId);
+  //     return reply
+  //       .code(429)
+  //       .send({ error: "Action on cooldown", remainingSeconds: remaining });
+  //   }
 
-    await this.cooldownManager.setCooldown(
-      userId.toString(),
-      `play:${id}`,
-      cooldownTime.PLAY_CD,
-    );
+  //   const pixegotchi = await this.pixegotchiService.sleep(id, userId);
 
-    return reply.send(pixegotchi);
-  }
+  //   await this.cooldownManager.setCooldown(
+  //     userId.toString(),
+  //     `sleep:${id}`,
+  //     cooldownTime.SLEEP_CD,
+  //   );
 
-  async sleep(
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-  ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
+  //   return reply.send(pixegotchi);
+  // }
 
-    const hasCooldown = await this.cooldownManager.checkCooldown(
-      userId.toString(),
-      `sleep:${id}`,
-    );
+  // async clean(
+  //   request: FastifyRequest<{ Params: { id: string } }>,
+  //   reply: FastifyReply,
+  // ) {
+  //   const userId = (request.user as any).userId;
+  //   const id = parseInt(request.params.id);
 
-    if (hasCooldown) {
-      const remaining = await this.cooldownManager.getRemainingTime(
-        userId.toString(),
-        `sleep:${id}`,
-      );
+  //   const hasCooldown = await this.cooldownManager.checkCooldown(
+  //     userId.toString(),
+  //     `clean:${id}`,
+  //   );
 
-      return reply
-        .code(429)
-        .send({ error: "Action on cooldown", remainingSeconds: remaining });
-    }
+  //   if (hasCooldown) {
+  //     const remaining = await this.cooldownManager.getRemainingTime(
+  //       userId.toString(),
+  //       `clean:${id}`,
+  //     );
 
-    const pixegotchi = await this.pixegotchiService.sleep(id, userId);
+  //     return reply
+  //       .code(429)
+  //       .send({ error: "Action on cooldown", remainingSeconds: remaining });
+  //   }
 
-    await this.cooldownManager.setCooldown(
-      userId.toString(),
-      `sleep:${id}`,
-      cooldownTime.SLEEP_CD,
-    );
+  //   const pixegotchi = await this.pixegotchiService.clean(id, userId);
 
-    return reply.send(pixegotchi);
-  }
+  //   await this.cooldownManager.setCooldown(
+  //     userId.toString(),
+  //     `clean:${id}`,
+  //     cooldownTime.CLEAN_CD,
+  //   );
 
-  async clean(
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-  ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
+  //   return reply.send(pixegotchi);
+  // }
 
-    const hasCooldown = await this.cooldownManager.checkCooldown(
-      userId.toString(),
-      `clean:${id}`,
-    );
+  // async heal(
+  //   request: FastifyRequest<{ Params: { id: string } }>,
+  //   reply: FastifyReply,
+  // ) {
+  //   const userId = (request.user as any).userId;
+  //   const id = parseInt(request.params.id);
 
-    if (hasCooldown) {
-      const remaining = await this.cooldownManager.getRemainingTime(
-        userId.toString(),
-        `clean:${id}`,
-      );
+  //   const hasCooldown = await this.cooldownManager.checkCooldown(
+  //     userId.toString(),
+  //     `heal:${id}`,
+  //   );
 
-      return reply
-        .code(429)
-        .send({ error: "Action on cooldown", remainingSeconds: remaining });
-    }
+  //   if (hasCooldown) {
+  //     const remaining = await this.cooldownManager.checkCooldown(
+  //       userId.toString(),
+  //       `heal:${id}`,
+  //     );
 
-    const pixegotchi = await this.pixegotchiService.clean(id, userId);
+  //     return reply
+  //       .code(429)
+  //       .send({ error: "Action on cooldown", remainingSeconds: remaining });
+  //   }
 
-    await this.cooldownManager.setCooldown(
-      userId.toString(),
-      `clean:${id}`,
-      cooldownTime.CLEAN_CD,
-    );
+  //   const pixegotchi = await this.pixegotchiService.heal(id, userId);
 
-    return reply.send(pixegotchi);
-  }
+  //   await this.cooldownManager.setCooldown(
+  //     userId.toString(),
+  //     `heal:${id}`,
+  //     cooldownTime.HEAL_CD,
+  //   );
 
-  async heal(
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-  ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
-
-    const hasCooldown = await this.cooldownManager.checkCooldown(
-      userId.toString(),
-      `heal:${id}`,
-    );
-
-    if (hasCooldown) {
-      const remaining = await this.cooldownManager.checkCooldown(
-        userId.toString(),
-        `heal:${id}`,
-      );
-
-      return reply
-        .code(429)
-        .send({ error: "Action on cooldown", remainingSeconds: remaining });
-    }
-
-    const pixegotchi = await this.pixegotchiService.heal(id, userId);
-
-    await this.cooldownManager.setCooldown(
-      userId.toString(),
-      `heal:${id}`,
-      cooldownTime.HEAL_CD,
-    );
-
-    return reply.send(pixegotchi);
-  }
+  //   return reply.send(pixegotchi);
+  // }
 
   async rename(
     request: FastifyRequest<{ Params: { id: string } }>,

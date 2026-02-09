@@ -32,9 +32,11 @@ export class PixegotchiService {
 
   // Get active tamagotchi
   async findActive(userId: number) {
-    return await prisma.pixegotchi.findFirst({
+    const active = await prisma.pixegotchi.findFirst({
       where: { userId, status: "active" },
     });
+    console.log("CONSOLE!:", active);
+    return active;
   }
 
   // Get by ID with ownership check
@@ -50,65 +52,6 @@ export class PixegotchiService {
         userId,
       },
     });
-  }
-
-  async createEgg(userId: number) {
-    return await prisma.pixegotchi.create({
-      data: {
-        name: "Egg",
-        userId,
-        genomeHash: "Egg_hash",
-        element: "earth",
-        rarity: "common",
-        gender: "male",
-        traits: [],
-      },
-    });
-  }
-
-  //Create new pixegotchi from egg
-  async create(data: PixegotchiCreate) {
-    return await prisma.pixegotchi.create({
-      data: {
-        name: data.name,
-        userId: data.userId,
-        genomeHash: data.genomeHash,
-        element: data.element as any,
-        rarity: data.rarity as any,
-        gender: data.gender as any,
-        traits: data.traits,
-        status: "active",
-      },
-    });
-  }
-
-  //Hatching
-  async hatchEgg(id: number, userId: number, name?: string) {
-    const egg = await this.findById(id, userId);
-    if (!egg) throw new Error("You don't have egg");
-
-    const hatchedEgg = GenomeGenerator.generate();
-    const newPixegothi = await this.create({
-      name,
-      userId: userId,
-      genomeHash: hatchedEgg.genome_hash,
-      element: hatchedEgg.element,
-      rarity: hatchedEgg.rarity,
-      gender: hatchedEgg.gender,
-      traits: hatchedEgg.traits,
-      hungerRate: 1,
-      energyRate: 1,
-      diseaseResistance: 1,
-    });
-
-    await prisma.pixegotchi.delete({
-      where: {
-        userId,
-        id,
-      },
-    });
-
-    return newPixegothi;
   }
 
   private async validateItemUsage(

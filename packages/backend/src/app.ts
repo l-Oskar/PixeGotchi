@@ -14,6 +14,7 @@ import { inventoryRoutes } from "@/modules/inventory/inventory.routes";
 import { gamesRoutes } from "@/modules/games/games.routes";
 import { marketplaceRoutes } from "@/modules/marketplace/marketplace.routes";
 import { vaultRoutes } from "@/modules/vault/vault.routes";
+import { eggsRoutes } from "./modules/eggs/eggs.routes";
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -72,6 +73,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(authRoutes, { prefix: "/api/auth" });
   await app.register(usersRoutes, { prefix: "/api/users" });
   await app.register(pixegotchiRoutes, { prefix: "/api/pixegotchi" });
+  await app.register(eggsRoutes, { prefix: "/api/eggs" });
   // await app.register(inventoryRoutes, { prefix: "/api/inventory" });
   // await app.register(gamesRoutes, { prefix: "/api/games" });
   // await app.register(marketplaceRoutes, { prefix: "/api/marketplace" });
