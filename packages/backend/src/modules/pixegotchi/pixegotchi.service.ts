@@ -1,23 +1,8 @@
 import { prisma } from "@/database/prisma";
-import { PixegotchiStatus } from "../../../generated/prisma/enums";
 import { Inventory } from "../inventory/inventory.service";
 import { ItemEffectHandler } from "../inventory/item-effect-handler.service";
 import { ItemEffects } from "@/types/item-effects";
 import { Item, Pixegotchi } from "generated/prisma/client";
-import { GenomeGenerator } from "../../utils/genome-generator";
-
-interface PixegotchiCreate {
-  name?: string;
-  userId: number;
-  genomeHash: string;
-  element: string;
-  rarity: string;
-  gender: string;
-  traits: string[];
-  hungerRate: number;
-  energyRate: number;
-  diseaseResistance: number;
-}
 
 export class PixegotchiService {
   private inventory = new Inventory();

@@ -36,17 +36,30 @@ const MainPage: React.FC = () => {
   const wallet = useTonWallet();
   const [currentPage, setCurrentPage] = useState<PageType>("home");
   const [activeTamagotchi, setActivePixegotchi] = useState<Pixegotchi>({
+    id: 1,
+    userId: 1,
+    nftAddress: null,
+    genomeHash: "genome",
+    element: "air",
+    rarity: "rare",
+    gender: "male",
     name: "Uni",
-    level: 15,
-    element: "rainbow",
-    rarity: "legendary",
+    status: "active",
+    level: 1,
+    experience: 356,
     health: 85,
-    hunger: 40,
-    energy: 60,
-    happiness: 75,
-    cleanliness: 90,
-    experience: 750,
-    nextLevelExp: 1000,
+    hunger: 85,
+    energy: 85,
+    happiness: 85,
+    cleanliness: 85,
+    criticalSince: null,
+    lastFedAt: null,
+    lastPlayedAt: null,
+    lastSleptAt: null,
+    lastCleanedAt: null,
+    lastHealedAt: null,
+    lastUpdateAt: null,
+    createdAt: null,
   });
 
   const pages: Record<PageType, React.ReactNode> = {
@@ -178,14 +191,14 @@ const PixeGotchiPage: React.FC<HomePageProps> = ({
               <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
                 <span>EXP</span>
                 <span>
-                  {tama.experience} / {tama.nextLevelExp}
+                  {tama.experience} / {1000}
                 </span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
                   style={{
-                    width: `${(tama.experience / tama.nextLevelExp) * 100}%`,
+                    width: `${(tama.experience / (1000 - tama.experience)) * 100}%`,
                   }}
                 />
               </div>

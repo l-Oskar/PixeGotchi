@@ -17,19 +17,33 @@ export type ElementType =
   | "dark"
   | "rainbow";
 export type RarityType = "common" | "uncommon" | "rare" | "epic" | "legendary";
+export type PixegotchiGender = "male" | "female";
 
 export interface Pixegotchi {
-  name: string;
+  id: number;
+  userId: number | null;
+  nftAddress: string | null;
+  genomeHash: string | null;
+  element: ElementType | null;
+  rarity: RarityType | null;
+  gender: PixegotchiGender | null;
+  name: string | null;
+  status: string;
   level: number;
-  element: ElementType;
-  rarity: RarityType;
+  experience: number;
   health: number;
   hunger: number;
   energy: number;
   happiness: number;
   cleanliness: number;
-  experience: number;
-  nextLevelExp: number;
+  criticalSince: Date | null;
+  lastFedAt: Date | null;
+  lastPlayedAt: Date | null;
+  lastSleptAt: Date | null;
+  lastCleanedAt: Date | null;
+  lastHealedAt: Date | null;
+  lastUpdateAt: Date | null;
+  createdAt: Date | null;
 }
 
 export interface Cooldowns {
