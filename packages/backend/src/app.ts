@@ -62,7 +62,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     }
   });
 
-  app.get("/health", async (request, reply) => {
+  app.get("/health", async () => {
     return {
       status: "ok",
       timeStamp: new Date().toISOString(),
@@ -74,12 +74,12 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(usersRoutes, { prefix: "/api/users" });
   await app.register(pixegotchiRoutes, { prefix: "/api/pixegotchi" });
   await app.register(eggsRoutes, { prefix: "/api/eggs" });
-  // await app.register(inventoryRoutes, { prefix: "/api/inventory" });
-  // await app.register(gamesRoutes, { prefix: "/api/games" });
-  // await app.register(marketplaceRoutes, { prefix: "/api/marketplace" });
-  // await app.register(vaultRoutes, { prefix: "/api/vault" });
+  await app.register(inventoryRoutes, { prefix: "/api/inventory" });
+  await app.register(gamesRoutes, { prefix: "/api/games" });
+  await app.register(marketplaceRoutes, { prefix: "/api/marketplace" });
+  await app.register(vaultRoutes, { prefix: "/api/vault" });
 
-  app.setErrorHandler((error: any, request, reply) => {
+  app.setErrorHandler((error: any, reply: any) => {
     app.log.error(error);
 
     if (error.name === "PrismaClientKnownRequestError") {

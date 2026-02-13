@@ -1,4 +1,4 @@
-import { RarityType } from "generated/prisma/enums";
+import { RarityType } from "../../generated/prisma/enums";
 
 export interface RarityEffects {
   max_status: number; // Максимальне значення статусів (HP, Energy, etc.)

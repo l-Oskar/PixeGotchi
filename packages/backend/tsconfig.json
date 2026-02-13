@@ -4,11 +4,17 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "target": "ES2023",
+    "rootDir": ".",
+    "outDir": "./dist",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
     // "ignoreDeprecations": "6.0"
-  }
+  },
+  "include": ["src/**/*.ts", "generated/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

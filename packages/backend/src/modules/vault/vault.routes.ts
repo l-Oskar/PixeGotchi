@@ -1,1 +1,1 @@
-export const vaultRoutes = {};
+export async function vaultRoutes() {}

@@ -5,12 +5,12 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "migrate": "node-pg-migrate up",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "prisma:seed": "tsx prisma/seed.ts",
+    "prisma:seed": "tsx src/database/seed.ts",
     "test": "jest"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "node-pg-migrate": "^7.0.0",
     "prisma": "^7.3.0",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "tsc-alias": "^1.8.16"
   }
 }

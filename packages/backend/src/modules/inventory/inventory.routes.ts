@@ -1,1 +1,1 @@
-export const inventoryRoutes = {};
+export async function inventoryRoutes() {}

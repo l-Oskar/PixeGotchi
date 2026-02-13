@@ -3,12 +3,15 @@ import { apiClient } from "../client";
 export interface UserProfile {
   id: number;
   telegramId: string;
-  username?: string;
-  walletAddress?: string;
-  tmcBalance: string;
-  tamagotchis: any[];
-  inventory: any[];
-  vault: any[];
+  walletAddress: string | null;
+  username: string;
+  pgcBalance: string;
+  lastActiveAt: Date | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  pixegotchis: [];
+  inventory: [];
+  vault: [];
 }
 
 export const usersApi = {

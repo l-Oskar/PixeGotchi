@@ -19,8 +19,6 @@ const envShema = z.object({
 
   TON_NETWORK: z.enum(["mainnet", "testnet"]).default("testnet"),
   TON_API_KEY: z.string().optional(),
-
-  ORACLE_PRIVATE_KEY: z.string(),
 });
 
 const parsedEnv = envShema.safeParse(process.env);
@@ -41,5 +39,4 @@ export const config = {
   telegramBotToken: parsedEnv.data.TELEGRAM_BOT_TOKEN,
   tonNetwork: parsedEnv.data.TON_NETWORK,
   tonApiKey: parsedEnv.data.TON_API_KEY,
-  oraclePrivateKey: parsedEnv.data.ORACLE_PRIVATE_KEY,
 };

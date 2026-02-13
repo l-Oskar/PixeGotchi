@@ -1,1 +1,1 @@
-export const gamesRoutes = {};
+export async function gamesRoutes() {}

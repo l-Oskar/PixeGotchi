@@ -5,7 +5,7 @@ export interface AuthResponse {
     id: number;
     telegramId: string;
     username?: string;
-    pgsBalance: string;
+    pgcBalance: string;
   };
   token: string;
 }

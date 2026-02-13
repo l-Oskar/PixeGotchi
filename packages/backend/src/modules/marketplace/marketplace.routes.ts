@@ -1,1 +1,1 @@
-export const marketplaceRoutes = {};
+export async function marketplaceRoutes() {}

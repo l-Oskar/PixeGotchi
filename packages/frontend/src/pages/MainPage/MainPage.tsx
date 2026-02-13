@@ -31,6 +31,7 @@ import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 
 import { useTonWallet } from "@tonconnect/ui-react";
+import { useUserProfile } from "@/services/queries/users.queries";
 
 const MainPage: React.FC = () => {
   const wallet = useTonWallet();
