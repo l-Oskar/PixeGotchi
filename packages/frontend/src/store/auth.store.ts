@@ -1,8 +1,10 @@
 import { create } from "zustand";
 
 interface User {
-  userId: string;
+  id: number;
   telegramId: string;
+  username?: string;
+  pgcBalance: string;
 }
 
 interface AuthState {

@@ -11,7 +11,7 @@ export interface AuthResponse {
 }
 
 export const authApi = {
-  telegram: async (initData: string): Promise<AuthResponse> => {
+  telegramLogin: async (initData: string): Promise<AuthResponse> => {
     const { data } = await apiClient.post<AuthResponse>("/auth/telegram", {
       initData,
     });
