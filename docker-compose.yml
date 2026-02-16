@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - tamagotchi-network
+      - pixegotchi-network
 
   redis:
     image: redis:7-alpine
@@ -21,31 +21,38 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - tamagotchi-network
+      - pixegotchi-network
 
   backend:
-    image: fediukv/pixegotchi-backend:latest
+    build:
+      context: ./packages/backend
+      dockerfile: Dockerfile
+    # image: fediukv/pixegotchi-backend:latest
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgresql://admin:adminpixe@postgres:5432/pixegotchi
+      DATABASE_URL: postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
       JWT_SECRET: your-super-secret-jwt-key-change-in-production
       TELEGRAM_BOT_TOKEN: your-bot-token
       REDIS_URL: redis://redis:6379
       TON_NETWORK: testnet
-    # volumes:
-    #   - ./packages/backend/src:/app/src
-    #   - ./packages/backend/prisma:/app/prisma
+      NODE_ENV: development
+    env_file:
+      - ./packages/backend/.env
+    volumes:
+      - ./packages/backend:/app
+      - ./packages/backend/prisma:/app/prisma
     depends_on:
       - postgres
       - redis
     networks:
-      - tamagotchi-network
+      - pixegotchi-network
+    command: sh -c "npx prisma migrate deploy && npx prisma generate && npm run dev"
 
 volumes:
   postgres_data:
   redis_data:
 
 networks:
-  tamagotchi-network:
+  pixegotchi-network:
     driver: bridge

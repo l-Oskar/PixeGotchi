@@ -5,6 +5,7 @@ WORKDIR /app
 # Копіюємо файли залежностей
 COPY package*.json ./
 COPY tsconfig.json ./
+COPY prisma.config.ts ./
 COPY prisma ./prisma/
 
 # Встановлюємо залежності
