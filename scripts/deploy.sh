@@ -7,6 +7,9 @@ echo "🚀 Starting deployment..."
 # Pull latest code
 git pull origin main
 
+echo "🗑 Очищення старих образів..."
+docker image prune -f
+
 # Build images
 echo "📦 Building Docker images..."
 docker compose -f docker-compose.yml build --no-cache
