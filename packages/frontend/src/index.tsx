@@ -14,6 +14,8 @@ import "./index.css";
 // Mock the environment in case, we are outside Telegram.
 import "./mockEnv.ts";
 import { QueryProvider } from "./providers/QueryProvider.tsx";
+import { AutoLiginProvider } from "./providers/AutoLoginProvider.tsx";
+import { GameBootstrap } from "./providers/GameBootstrap.tsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
@@ -33,7 +35,11 @@ try {
     root.render(
       <StrictMode>
         <QueryProvider>
-          <Root />
+          <AutoLiginProvider>
+            <GameBootstrap>
+              <Root />
+            </GameBootstrap>
+          </AutoLiginProvider>
         </QueryProvider>
       </StrictMode>,
     );

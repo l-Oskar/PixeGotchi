@@ -16,7 +16,14 @@ export type ElementType =
   | "light"
   | "dark"
   | "rainbow";
-export type RarityType = "common" | "uncommon" | "rare" | "epic" | "legendary";
+export type RarityType =
+  | "common"
+  | "uncommon"
+  | "rare"
+  | "mythic"
+  | "epic"
+  | "legendary"
+  | "unique";
 export type PixegotchiGender = "male" | "female";
 
 export interface Pixegotchi {

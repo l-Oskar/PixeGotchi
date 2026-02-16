@@ -20,7 +20,6 @@ export class PixegotchiService {
     const active = await prisma.pixegotchi.findFirst({
       where: { userId, status: "active" },
     });
-    console.log("CONSOLE!:", active);
     return active;
   }
 

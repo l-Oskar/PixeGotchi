@@ -2,6 +2,8 @@ import { prisma } from "@/database/prisma";
 import { GenomeGenerator } from "@/utils/genome-generator";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 
+const EGG_PRICE = 999;
+
 export class EggService {
   private pixegotchiService = new PixegotchiService();
 
@@ -33,15 +35,38 @@ export class EggService {
   }
 
   async createEgg(userId: number) {
-    const createdEgg = await prisma.egg.create({
-      data: {
-        userId,
-        isListed: false,
-        createdAt: new Date(),
-      },
-    });
+    return await prisma.$transaction(async (prisma) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
 
-    return createdEgg;
+      if (!user) throw new Error("User not found");
+      if (Number(user.pgcBalance) < EGG_PRICE)
+        throw new Error("Not enought funds");
+
+      await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          pgcBalance: {
+            decrement: 999,
+          },
+        },
+      });
+
+      const createdEgg = await prisma.egg.create({
+        data: {
+          userId,
+          isListed: false,
+          createdAt: new Date(),
+        },
+      });
+
+      return createdEgg;
+    });
   }
 
   async hatchEgg(userId: number, id: number, name?: string) {

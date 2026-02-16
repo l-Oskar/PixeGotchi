@@ -14,11 +14,14 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     let token: string | null;
-    if (import.meta.env.DEV) {
-      token = import.meta.env.VITE_DEV_TOKEN;
-    } else {
-      token = useAuthStore.getState().accessToken;
-    }
+    token = useAuthStore.getState().accessToken;
+
+    // if (import.meta.env.DEV) {
+    //   token = import.meta.env.VITE_DEV_TOKEN;
+    // } else {
+    //   token = useAuthStore.getState().accessToken;
+    // }
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
