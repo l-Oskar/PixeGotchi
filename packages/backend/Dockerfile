@@ -10,7 +10,6 @@ COPY prisma ./prisma/
 
 # Встановлюємо залежності
 RUN npm install
-RUN npx prisma generate
 
 # Копіюємо код
 COPY src ./src
