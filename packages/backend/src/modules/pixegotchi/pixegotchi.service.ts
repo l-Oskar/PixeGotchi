@@ -7,7 +7,6 @@ import { Item, Pixegotchi } from "generated/prisma/client";
 export class PixegotchiService {
   private inventory = new Inventory();
 
-  // Get all user's tamagotchis
   async findByUserId(userId: number) {
     return await prisma.pixegotchi.findMany({
       where: { userId },
@@ -15,12 +14,11 @@ export class PixegotchiService {
     });
   }
 
-  // Get active tamagotchi
   async findActive(userId: number) {
     const active = await prisma.pixegotchi.findFirst({
       where: { userId, status: "active" },
     });
-    return active;
+    return active ?? null;
   }
 
   // Get by ID with ownership check

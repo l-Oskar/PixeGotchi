@@ -25,9 +25,9 @@ export class PixegotchiController {
     const userId = (request.user as any).userId;
     const activePixegotchi = await this.pixegotchiService.findActive(userId);
 
-    if (!activePixegotchi) {
-      return reply.status(404).send({ error: "No active tamagotchi" });
-    }
+    // if (!activePixegotchi) {
+    //   return reply.send({ error: "No active pixegotchi" });
+    // }
 
     return reply.send(activePixegotchi);
   }
@@ -235,7 +235,6 @@ export class PixegotchiController {
     const userId = (request.user as any).userId;
     const id = parseInt(request.params.id);
 
-    // Буде реалізовано у TamagotchiService
     return reply.code(501).send({ message: "Not implemented yet" });
   }
 }

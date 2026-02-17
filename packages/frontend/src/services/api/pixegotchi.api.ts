@@ -1,4 +1,4 @@
-import { apiClient } from "../client";
+import { apiClient } from "./client";
 import {
   PixegotchiStatus,
   PixegotchiGender,
@@ -39,9 +39,16 @@ export const pixegotchiApi = {
     return data;
   },
 
-  getActive: async (): Promise<Pixegotchi> => {
-    const { data } = await apiClient.get("/pixegotchi/active");
-    return data;
+  getActive: async (): Promise<Pixegotchi | null> => {
+    try {
+      const { data } = await apiClient.get("/pixegotchi/active");
+      return data;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        return null;
+      }
+      throw error;
+    }
   },
 
   getById: async (id: number): Promise<Pixegotchi> => {

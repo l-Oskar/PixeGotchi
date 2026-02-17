@@ -20,7 +20,6 @@ import ActionButton from "@/components/MainPage/ActionButton";
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   tama,
   onNavigate,
-  setActivePixegotchi,
 }) => {
   const [cooldowns, setCooldowns] = useState<Cooldowns>({
     feed: false,
@@ -39,18 +38,16 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
 
   return (
     <div className="p-4 space-y-4">
-      {/* Tamagotchi Card */}
+      {/* Pixegotchi Card */}
       <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
         <div className="flex flex-col gap-1 mb-4">
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold flex items-center gap-2">
-              {tama.name}
+              {tama!.name ?? "Unknown"}
               <span className="text-lg">🌈</span>
             </h2>
             <Link to="/index">
-              <button
-                onClick={() => setActivePixegotchi(tama)}
-                className="text-white/60 hover:text-white">
+              <button className="text-white/60 hover:text-white">
                 <Menu size={20} />
               </button>
             </Link>
@@ -58,10 +55,10 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="flex gap-2 mt-1">
             <div className="flex items-center gap-2">
               <span className="text-xs px-2 py-0.5 bg-orange-500/30 rounded-full border border-orange-400/50 capitalize">
-                {tama.rarity}
+                {tama!.rarity}
               </span>
               <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
-                Lvl {tama.level}
+                Lvl {tama!.level}
               </span>
             </div>
 
@@ -70,14 +67,14 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
                 <span>EXP</span>
                 <span>
-                  {tama.experience} / {1000}
+                  {tama!.experience} / {1000}
                 </span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
                   style={{
-                    width: `${(tama.experience / (1000 - tama.experience)) * 100}%`,
+                    width: `${(tama!.experience / (1000 - tama!.experience)) * 100}%`,
                   }}
                 />
               </div>
@@ -89,37 +86,37 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <div className="grid grid-cols-5 gap-2 mb-3">
           <CompactStat
             icon={Heart}
-            value={tama.health}
+            value={tama!.health}
             bgColor="bg-red-500/20"
             strokeColor="text-red-500"
           />
           <CompactStat
             icon={Apple}
-            value={100 - tama.hunger}
+            value={100 - tama!.hunger}
             bgColor="bg-orange-500/20"
             strokeColor="text-orange-500"
           />
           <CompactStat
             icon={Zap}
-            value={tama.energy}
+            value={tama!.energy}
             bgColor="bg-yellow-500/20"
             strokeColor="text-yellow-500"
           />
           <CompactStat
             icon={Smile}
-            value={tama.happiness}
+            value={tama!.happiness}
             bgColor="bg-pink-500/20"
             strokeColor="text-pink-500"
           />
           <CompactStat
             icon={Droplets}
-            value={tama.cleanliness}
+            value={tama!.cleanliness}
             bgColor="bg-blue-500/20"
             strokeColor="text-blue-500"
           />
         </div>
 
-        {/* Tamagotchi Visual */}
+        {/* Pixegotchi Visual */}
         <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
           <div className="text-9xl animate-bounce">🦄</div>
         </div>

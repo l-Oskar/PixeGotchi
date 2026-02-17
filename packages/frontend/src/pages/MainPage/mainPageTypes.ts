@@ -1,5 +1,11 @@
 // Types
-export type PageType = "home" | "inventory" | "games" | "marketplace" | "vault";
+export type PageType =
+  | "home"
+  | "egg"
+  | "inventory"
+  | "games"
+  | "marketplace"
+  | "vault";
 
 export type ElementType =
   | "fire"
@@ -61,8 +67,14 @@ export interface Cooldowns {
   heal: boolean;
 }
 
+export interface User {
+  id: number;
+  telegramId: string;
+  username?: string;
+  pgcBalance: string;
+}
+
 export interface HomePageProps {
-  tama: Pixegotchi;
+  tama: Pixegotchi | null;
   onNavigate: (page: PageType) => void;
-  setActivePixegotchi: (tama: Pixegotchi) => void;
 }

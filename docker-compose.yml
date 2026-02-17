@@ -52,6 +52,23 @@ services:
     command: sh -c "sleep infinity"
     # command: sh -c "npx prisma migrate deploy && npx prisma generate && npm run dev"
 
+  prisma-studio:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./packages/backend:/app
+      - /app/node_modules
+    command: sh -c "npx prisma studio --port 51212 --hostname 0.0.0.0"
+    ports:
+      - "51212:51212"
+    environment:
+      - DATABASE_URL=postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
+    depends_on:
+      - postgres
+    networks:
+      - pixegotchi-network
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   redis_data:
