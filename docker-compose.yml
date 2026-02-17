@@ -53,11 +53,9 @@ services:
     # command: sh -c "npx prisma migrate deploy && npx prisma generate && npm run dev"
 
   prisma-studio:
-    image: node:18-alpine
-    working_dir: /app
-    volumes:
-      - ./packages/backend:/app
-      - /app/node_modules
+    build:
+      context: ./packages/backend
+      dockerfile: prisma-studio.Dockerfile
     command: sh -c "sleep infinity"
     # command: sh -c "npx prisma studio --port 51212 --hostname 0.0.0.0"
     ports:
