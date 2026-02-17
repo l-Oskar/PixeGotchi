@@ -58,7 +58,8 @@ services:
     volumes:
       - ./packages/backend:/app
       - /app/node_modules
-    command: sh -c "npx prisma studio --port 51212 --hostname 0.0.0.0"
+    command: sh -c "sleep infinity"
+    # command: sh -c "npx prisma studio --port 51212 --hostname 0.0.0.0"
     ports:
       - "51212:51212"
     environment:
