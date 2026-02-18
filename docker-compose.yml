@@ -54,14 +54,14 @@ services:
     networks:
       - pixegotchi-network
     # command: sh -c "sleep infinity"
-    command: sh -c "npx prisma generate && npx prisma migrate dev && npm run dev"
+    command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run dev"
 
   prisma-studio:
     build:
       context: ./packages/backend
       dockerfile: prisma-studio.Dockerfile
     # command: sh -c "sleep infinity"
-    command: sh -c "BROWSER=none npx prisma studio --port 51212"
+    command: sh -c "npm run prisma:generate && BROWSER=none npx prisma studio --port 51212"
     ports:
       - "51212:51212"
     # expose:
