@@ -18,10 +18,17 @@ export class UsersService {
     });
   }
 
-  async findOrCreate(telegramId: number, username?: string) {
-    const user = await this.findByTelegramId(telegramId);
-    if (user) return user;
-    return await this.create({ telegramId, username });
+  async findOrCreate(data: { telegramId: number; username?: string }) {
+    return await prisma.user.upsert({
+      where: { telegramId: data.telegramId },
+      update: {
+        username: data.username,
+      },
+      create: {
+        telegramId: data.telegramId,
+        username: data.username,
+      },
+    });
   }
 
   async updatePGCBalance(userId: number, amount: number) {

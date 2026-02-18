@@ -18,10 +18,10 @@ export class AuthService {
 
     const userData = this.parseTelegramInitData(initData);
 
-    const user = await this.userService.findOrCreate(
-      userData.id,
-      userData.username,
-    );
+    const user = await this.userService.findOrCreate({
+      telegramId: userData.id,
+      username: userData.username,
+    });
 
     return {
       user: {

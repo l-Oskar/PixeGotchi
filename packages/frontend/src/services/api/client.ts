@@ -1,7 +1,9 @@
 import axios, { AxiosError } from "axios";
 import { useAuthStore } from "@/store/auth.store";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const API_URL = "https://pixegotchi.run.place/api";
+// const API_URL =
+//   import.meta.env.VITE_API_URL || "https://pixegotchi.run.place/api";
 
 export const apiClient = axios.create({
   baseURL: API_URL,

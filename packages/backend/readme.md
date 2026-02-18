@@ -3,6 +3,7 @@ npx prisma migrate dev ? --dotenv .env
 # Enter Container
 
 docker exec -it pixegotchi-backend-1 sh
+docker exec -it pixegotchi-backend-1 sh -c "npx prisma studio"
 
 # Логи конкретного сервісу
 
@@ -15,3 +16,8 @@ docker exec pixegotchi-backend-1 ping postgres
 # АБО
 
 docker exec pixegotchi-backend-1 nslookup postgres
+
+# IpTables
+
+sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT

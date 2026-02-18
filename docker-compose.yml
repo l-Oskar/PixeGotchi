@@ -13,6 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - pixegotchi-network
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
@@ -22,6 +23,7 @@ services:
       - redis_data:/data
     networks:
       - pixegotchi-network
+    restart: unless-stopped
 
   backend:
     build:
@@ -30,6 +32,8 @@ services:
     # image: fediukv/pixegotchi-backend:latest
     ports:
       - "3000:3000"
+    # expose:
+    #   - "3000"
     environment:
       DATABASE_URL: postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
       JWT_SECRET: your-super-secret-jwt-key-change-in-production
@@ -49,17 +53,19 @@ services:
       - redis
     networks:
       - pixegotchi-network
-    command: sh -c "sleep infinity"
-    # command: sh -c "npx prisma migrate deploy && npx prisma generate && npm run dev"
+    # command: sh -c "sleep infinity"
+    command: sh -c "npx prisma generate && npx prisma migrate dev && npm run dev"
 
   prisma-studio:
     build:
       context: ./packages/backend
       dockerfile: prisma-studio.Dockerfile
-    command: sh -c "sleep infinity"
-    # command: sh -c "npx prisma studio --port 51212 --hostname 0.0.0.0"
+    # command: sh -c "sleep infinity"
+    command: sh -c "BROWSER=none npx prisma studio --port 51212"
     ports:
       - "51212:51212"
+    # expose:
+    #   - "51212"
     environment:
       - DATABASE_URL=postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
     depends_on:
@@ -67,6 +73,24 @@ services:
     networks:
       - pixegotchi-network
     restart: unless-stopped
+
+  # nginx:
+  #   build:
+  #     context: ./nginx
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./packages/nginx/conf.d:/etc/nginx/conf.d
+  #     - /etc/letsencrypt:/etc/letsencrypt:ro
+  #     - ./packages/nginx/.htpasswd:/etc/nginx/.htpasswd
+  #   depends_on:
+  #     - backend
+  #     - prisma-studio
+  #   networks:
+  #     - pixegotchi-network
+  #   restart: unless-stopped
 
 volumes:
   postgres_data:

@@ -5,7 +5,7 @@ export interface EggPageProps {
   onNavigate?: (page: PageType) => void;
 }
 
-const EggComponents: React.FC<EggPageProps> = ({ onNavigate }) => {
+const EggComponents: React.FC<EggPageProps> = () => {
   return <div>EggComponents</div>;
 };
 

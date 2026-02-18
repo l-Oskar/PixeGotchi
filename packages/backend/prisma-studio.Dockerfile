@@ -11,8 +11,8 @@ COPY prisma ./prisma/
 COPY prisma.config.ts ./
 
 # Генеруємо Prisma Client (опціонально, можна і при запуску)
-# RUN npx prisma generate
+RUN npx prisma generate
 
 EXPOSE 51212
 
-# CMD ["npx", "prisma", "studio", "--port", "51212", "--hostname", "0.0.0.0"]
+CMD ["BROWSER=none", "npx", "prisma", "studio", "--port", "51212"]
