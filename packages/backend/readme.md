@@ -1,5 +1,9 @@
 npx prisma migrate dev ? --dotenv .env
 
+# Build
+
+backend % docker build -f prisma-studio.Dockerfile -t fediukv/pixegotchi-prisma-studio:latest .
+
 # Enter Container
 
 docker exec -it pixegotchi-backend-1 sh

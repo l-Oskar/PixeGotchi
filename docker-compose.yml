@@ -56,23 +56,21 @@ services:
     # command: sh -c "sleep infinity"
     command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run dev"
 
-  # prisma-studio:
-  #   build:
-  #     context: ./packages/backend
-  #     dockerfile: prisma-studio.Dockerfile
-  #   # command: sh -c "sleep infinity"
-  #   command: sh -c "npm run prisma:generate && BROWSER=none npx prisma studio --port 51212"
-  #   ports:
-  #     - "51212:51212"
-  #   # expose:
-  #   #   - "51212"
-  #   environment:
-  #     - DATABASE_URL=postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - pixegotchi-network
-  #   restart: unless-stopped
+  prisma-studio:
+    image: fediukv/pixegotchi-prisma-studio:latest
+    # command: sh -c "sleep infinity"
+    command: sh -c "npm run prisma:generate && BROWSER=none npx prisma studio --port 51212"
+    ports:
+      - "51212:51212"
+    # expose:
+    #   - "51212"
+    environment:
+      - DATABASE_URL=postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
+    depends_on:
+      - postgres
+    networks:
+      - pixegotchi-network
+    restart: unless-stopped
 
   # nginx:
   #   build:
