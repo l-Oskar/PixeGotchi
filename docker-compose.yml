@@ -59,7 +59,7 @@ services:
   prisma-studio:
     image: fediukv/pixegotchi-prisma-studio:latest
     # command: sh -c "sleep infinity"
-    command: sh -c "npm run prisma:generate && BROWSER=none npx prisma studio --port 51212"
+    command: sh -c "npx prisma generate && BROWSER=none npx prisma studio --port 51212"
     ports:
       - "51212:51212"
     # expose:
