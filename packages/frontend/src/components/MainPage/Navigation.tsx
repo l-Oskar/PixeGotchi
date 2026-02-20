@@ -1,6 +1,6 @@
 import React from "react";
 import { Heart, ShoppingBag, Gamepad2, Archive, Coins } from "lucide-react";
-import { PageType } from "@/pages/MainPage/mainPageTypes";
+import { PageType } from "@shared";
 
 export interface NavigationProps {
   currentPage: PageType;

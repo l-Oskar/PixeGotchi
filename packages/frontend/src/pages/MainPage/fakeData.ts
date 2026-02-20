@@ -1,14 +1,20 @@
-import { Pixegotchi } from "./mainPageTypes";
+import {
+  Pixegotchi,
+  ElementType,
+  RarityType,
+  PixegotchiStatus,
+  PixegotchiGender,
+} from "@shared";
 export const pixe: Pixegotchi = {
   id: 1,
   userId: 1,
   nftAddress: null,
   genomeHash: "genome",
-  element: "air",
-  rarity: "rare",
-  gender: "male",
+  element: "fire" as ElementType,
+  rarity: "rare" as RarityType,
+  gender: "male" as PixegotchiGender,
   name: "Uni",
-  status: "active",
+  status: "active" as PixegotchiStatus,
   level: 1,
   experience: 356,
   health: 85,
@@ -24,4 +30,5 @@ export const pixe: Pixegotchi = {
   lastHealedAt: null,
   lastUpdateAt: null,
   createdAt: null,
+  traits: [],
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { Pixegotchi, PageType } from "@/pages/MainPage/mainPageTypes";
+import type { Pixegotchi, PageType } from "@shared";
 import VaultPage from "../VaultPage/VaultPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
 import GamesPage from "../GamePage/GamePage";
@@ -7,7 +7,6 @@ import MarketplacePage from "../MarketplacePage/MarketplaceGage";
 import Header from "@/components/MainPage/Header";
 import Navigation from "@/components/MainPage/Navigation";
 import { ShowPixeGotchi } from "@/components/PixegotchiPage/ShowPixegotchi";
-
 import { useAuthStore } from "@/store/auth.store";
 import { useActivePixegotchi } from "@/services/queries/pixegotchi.queries";
 import EggComponents from "@/components/EggComponent/EggComponents";
@@ -17,7 +16,7 @@ const MainPage: React.FC = () => {
   const user = useAuthStore((s) => s.user);
   const { data: pixegotchi } = useActivePixegotchi();
 
-  const [currentPage, setCurrentPage] = useState<PageType>("home");
+  const [currentPage, setCurrentPage] = useState<PageType>("home" as PageType);
   const [activePixegotchi, setActivePixegotchi] = useState<Pixegotchi>(pixe);
 
   useEffect(() => {

@@ -1,16 +1,7 @@
-import { PageType } from "../MainPage/mainPageTypes";
+import { PageType, MarketplaceListing, CurrencyType } from "@shared";
 
 export interface MarketplacePageProps {
   onNavigate?: (page: PageType) => void;
-}
-
-export interface MarketplaceListing {
-  id: number;
-  item: string;
-  price: number;
-  currency: "PGC" | "TON";
-  seller: string;
-  icon: string;
 }
 
 // MarketplacePage
@@ -20,7 +11,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 1,
       item: "Fire Egg",
       price: 500,
-      currency: "PGC",
+      currency: "PGC" as CurrencyType,
       seller: "User#123",
       icon: "🥚",
     },
@@ -28,7 +19,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 2,
       item: "Legendary Chest",
       price: 2,
-      currency: "TON",
+      currency: "TON" as CurrencyType,
       seller: "User#456",
       icon: "📦",
     },
@@ -36,7 +27,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 3,
       item: "Health Pack x10",
       price: 150,
-      currency: "PGC",
+      currency: "PGC" as CurrencyType,
       seller: "User#789",
       icon: "💊",
     },

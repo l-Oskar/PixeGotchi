@@ -4,7 +4,6 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
-    "rootDir": "./src",
     "outDir": "./dist",
 
     "strict": true,
@@ -28,6 +27,7 @@
 
     "baseUrl": ".",
     "paths": {
+      "@shared": ["../shared/src/index.ts"],
       "@/*": ["./src/*"],
       "@/database/*": ["./src/database/*"],
       "@/modules/*": ["./src/modules/*"],
@@ -40,6 +40,7 @@
     "newLine": "lf"
   },
   "include": ["src/**/*", "prisma/**/*"],
+  "references": [{ "path": "../shared" }],
   "exclude": [
     "node_modules",
     "dist",

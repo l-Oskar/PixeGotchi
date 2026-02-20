@@ -25,10 +25,6 @@ export class PixegotchiController {
     const userId = (request.user as any).userId;
     const activePixegotchi = await this.pixegotchiService.findActive(userId);
 
-    // if (!activePixegotchi) {
-    //   return reply.send({ error: "No active pixegotchi" });
-    // }
-
     return reply.send(activePixegotchi);
   }
 

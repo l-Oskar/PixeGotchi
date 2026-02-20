@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
-import { User } from "@/pages/MainPage/mainPageTypes";
+import { User } from "@shared";
 import { Sparkles, Wallet, Coins } from "lucide-react";
 
 export interface HeaderProps {

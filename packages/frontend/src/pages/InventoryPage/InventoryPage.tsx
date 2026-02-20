@@ -1,9 +1,10 @@
-import { PageType } from "../MainPage/mainPageTypes";
+import { PageType } from "@shared";
 
 export interface InventoryPageProps {
   onNavigate?: (page: PageType) => void;
 }
 
+// Change interface to SHARED!
 interface InventoryItem {
   id: number;
   name: string;

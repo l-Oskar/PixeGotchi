@@ -1,20 +1,12 @@
-import { PageType } from "../MainPage/mainPageTypes";
+import { PageType, GameStruct } from "@shared";
 
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
 }
 
-export interface Game {
-  id: number;
-  name: string;
-  difficulty: "Easy" | "Medium" | "Hard";
-  reward: string;
-  icon: string;
-}
-
 // GamesPage
 const GamesPage: React.FC<GamePageProps> = () => {
-  const games: Game[] = [
+  const games: GameStruct[] = [
     {
       id: 1,
       name: "Memory Match",

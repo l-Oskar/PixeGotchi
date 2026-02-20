@@ -29,3 +29,25 @@ body {
   font-family: monospace;
   font-size: 24px;
 }
+
+@keyframes eggWobble {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(7deg);
+  }
+}
+
+.animate-egg-wobble {
+  display: inline-block;
+  transform-origin: center bottom; /* Це ключовий момент! */
+  animation: eggWobble 2s infinite ease-in-out;
+}

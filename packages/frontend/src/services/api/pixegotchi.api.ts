@@ -1,37 +1,5 @@
 import { apiClient } from "./client";
-import {
-  PixegotchiStatus,
-  PixegotchiGender,
-  ElementType,
-  RarityType,
-} from "../../../../backend/generated/prisma/enums";
-
-export interface Pixegotchi {
-  id: number;
-  userId: number;
-  nftAddress: string | null;
-  genomeHash: string;
-  element: ElementType;
-  rarity: RarityType;
-  gender: PixegotchiGender;
-  name: string;
-  status: PixegotchiStatus;
-  level: number;
-  experience: number;
-  health: number;
-  hunger: number;
-  energy: number;
-  happiness: number;
-  cleanliness: number;
-  criticalSince: Date;
-  lastFedAt: Date;
-  lastPlayedAt: Date;
-  lastSleptAt: Date | null;
-  lastCleanedAt: Date | null;
-  lastHealedAt: Date | null;
-  lastUpdateAt: Date | null;
-  createdAt: Date | null;
-}
+import type { Pixegotchi } from "@shared";
 
 export const pixegotchiApi = {
   getAll: async (): Promise<Pixegotchi[]> => {

@@ -1,11 +1,5 @@
 import { create } from "zustand";
-
-interface User {
-  id: number;
-  telegramId: string;
-  username?: string;
-  pgcBalance: string;
-}
+import { User } from "@shared";
 
 interface AuthState {
   user: User | null;

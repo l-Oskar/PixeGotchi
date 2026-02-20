@@ -45,6 +45,7 @@ services:
       - ./packages/backend/.env
     volumes:
       - ./packages/backend/src:/app/src
+      - ./packages/shared/src:/app/shared
       - ./packages/backend/prisma:/app/prisma
       - ./packages/backend/.env:/app/.env
       - /app/node_modules

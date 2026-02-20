@@ -1,7 +1,5 @@
 import { prisma } from "@/database/prisma";
 import { Inventory } from "../inventory/inventory.service";
-import { ItemEffectHandler } from "../inventory/item-effect-handler.service";
-import { ItemEffects } from "@/types/item-effects";
 import { Item, Pixegotchi } from "generated/prisma/client";
 
 export class PixegotchiService {
@@ -23,11 +21,6 @@ export class PixegotchiService {
 
   // Get by ID with ownership check
   async findById(id: number, userId: number) {
-    console.log("=== findById DEBUG ===");
-    console.log("Called with id:", id, "userId:", userId);
-    if (!id || isNaN(id)) {
-      throw new Error("Invalid pixegotchi ID");
-    }
     return await prisma.pixegotchi.findFirst({
       where: {
         id,
@@ -133,123 +126,9 @@ export class PixegotchiService {
     }
   }
 
-  //Actions
-  // async feed(id: number, userId: number, itemId: string) {
-  //   const pixegotchi = await this.findById(id, userId);
-  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
-
-  //   return await prisma.pixegotchi.update({
-  //     where: { id },
-  //     data: {
-  //       hunger: Math.max(0, pixegotchi.hunger - 30),
-  //       lastFedAt: new Date(),
-  //       lastUpdateAt: new Date(),
-  //     },
-  //   });
-  // }
-
-  // async play(id: number, userId: number) {
-  //   const pixegotchi = await this.findById(id, userId);
-  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
-  //   return await prisma.pixegotchi.update({
-  //     where: { id },
-  //     data: {
-  //       happiness: Math.min(100, pixegotchi.happiness + 20),
-  //       energy: Math.max(0, pixegotchi.energy - 10),
-  //       lastPlayedAt: new Date(),
-  //       lastUpdateAt: new Date(),
-  //     },
-  //   });
-  // }
-
-  // async sleep(id: number, userId: number) {
-  //   const pixegotchi = await this.findById(id, userId);
-  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
-
-  //   return await prisma.pixegotchi.update({
-  //     where: { id },
-  //     data: {
-  //       energy: Math.min(100, pixegotchi.energy + 40),
-  //       lastSleptAt: new Date(),
-  //       lastUpdateAt: new Date(),
-  //     },
-  //   });
-  // }
-
-  // async clean(id: number, userId: number) {
-  //   const pixegotchi = await this.findById(id, userId);
-  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
-
-  //   return await prisma.pixegotchi.update({
-  //     where: { id },
-  //     data: {
-  //       cleanliness: 100,
-  //       lastCleanedAt: new Date(),
-  //       lastUpdateAt: new Date(),
-  //     },
-  //   });
-  // }
-
-  // async heal(id: number, userId: number) {
-  //   const pixegotchi = await this.findById(id, userId);
-  //   if (!pixegotchi) throw new Error("Pixegotchi now found");
-
-  //   return await prisma.pixegotchi.update({
-  //     where: { id },
-  //     data: {
-  //       health: Math.min(100, pixegotchi.health + 50),
-  //       lastHealedAt: new Date(),
-  //       lastUpdateAt: new Date(),
-  //     },
-  //   });
-  // }
-
-  // async updateStatus(id: number) {
-  //   const pixegotchi = await prisma.pixegotchi.findUnique({
-  //     where: { id },
-  //   });
-
-  //   if (!pixegotchi || pixegotchi.status !== "active") return;
-
-  //   const hoursSinceUpdate = this.getHoursSince(pixegotchi.lastUpdateAt);
-
-  //   if (hoursSinceUpdate < 12) return;
-
-  //   const hungerRate = Number(pixegotchi.hungerRate);
-  //   const energyRate = Number(pixegotchi.energyRate);
-
-  //   const newHunger = Math.min(100, pixegotchi.hunger + 10 * hungerRate);
-  //   const newEnergy = Math.max(0, pixegotchi.energy - 15 * energyRate);
-  //   const newHappines = Math.max(0, pixegotchi.happiness - 5);
-  //   const newCleanliness = Math.max(0, pixegotchi.cleanliness - 10);
-
-  //   let newLives = pixegotchi.lives;
-  //   let newStatus: PixegotchiStatus = pixegotchi.status;
-
-  //   if (pixegotchi.hunger >= 100) {
-  //     newLives = Math.max(0, newLives - 1);
-  //     if (newLives === 0) {
-  //       newStatus = "dead";
-  //     }
-  //   }
-
-  //   return await prisma.pixegotchi.update({
-  //     where: { id },
-  //     data: {
-  //       hunger: newHunger,
-  //       energy: newEnergy,
-  //       happiness: newHappines,
-  //       cleanliness: newCleanliness,
-  //       lives: newLives,
-  //       status: newStatus,
-  //       lastUpdateAt: new Date(),
-  //     },
-  //   });
-  // }
-
   async storedInVault(id: number, userId: number) {
     const pixegotchi = await this.findById(id, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi now found");
+    if (!pixegotchi) throw new Error("Pixegotchi not found");
 
     if (pixegotchi.level % 10 !== 0)
       throw new Error("Can only store at levels 10, 20, 30...");
@@ -273,6 +152,6 @@ export class PixegotchiService {
   }
 
   private getHoursSince(date: Date) {
-    return Date.now() - date.getTime() / (1000 * 60 * 60);
+    return (Date.now() - date.getTime()) / (1000 * 60 * 60);
   }
 }

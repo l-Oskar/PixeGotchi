@@ -99,6 +99,10 @@ export const EggScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   isListed: 'isListed',
+  isHatching: 'isHatching',
+  hatchStartedAt: 'hatchStartedAt',
+  hatchingTimeMs: 'hatchingTimeMs',
+  tapCount: 'tapCount',
   createdAt: 'createdAt'
 } as const
 
@@ -108,6 +112,7 @@ export type EggScalarFieldEnum = (typeof EggScalarFieldEnum)[keyof typeof EggSca
 export const PixegotchiScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  eggId: 'eggId',
   nftAddress: 'nftAddress',
   genomeHash: 'genomeHash',
   element: 'element',
@@ -130,7 +135,7 @@ export const PixegotchiScalarFieldEnum = {
   lastCleanedAt: 'lastCleanedAt',
   lastHealedAt: 'lastHealedAt',
   lastUpdateAt: 'lastUpdateAt',
-  createdAt: 'createdAt'
+  hatchedAt: 'hatchedAt'
 } as const
 
 export type PixegotchiScalarFieldEnum = (typeof PixegotchiScalarFieldEnum)[keyof typeof PixegotchiScalarFieldEnum]

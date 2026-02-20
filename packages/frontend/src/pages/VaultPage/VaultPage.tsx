@@ -1,5 +1,5 @@
 import { Sparkles } from "lucide-react";
-import { PageType, ElementType } from "../MainPage/mainPageTypes";
+import { PageType, ElementType } from "@shared";
 
 interface VaultPageProps {
   onNavigate?: (page: PageType) => void;
@@ -16,9 +16,27 @@ interface VaultItem {
 // VaultPage
 const VaultPage: React.FC<VaultPageProps> = () => {
   const vaultItems: VaultItem[] = [
-    { id: 1, name: "Aqua", level: 10, element: "water", icon: "🐟" },
-    { id: 2, name: "Terra", level: 20, element: "earth", icon: "🦖" },
-    { id: 3, name: "Zephyr", level: 10, element: "air", icon: "🦅" },
+    {
+      id: 1,
+      name: "Aqua",
+      level: 10,
+      element: "water" as ElementType,
+      icon: "🐟",
+    },
+    {
+      id: 2,
+      name: "Terra",
+      level: 20,
+      element: "earth" as ElementType,
+      icon: "🦖",
+    },
+    {
+      id: 3,
+      name: "Zephyr",
+      level: 10,
+      element: "air" as ElementType,
+      icon: "🦅",
+    },
   ];
 
   return (

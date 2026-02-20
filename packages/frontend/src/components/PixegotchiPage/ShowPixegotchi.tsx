@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@/components/Link/Link.tsx";
-import type { Cooldowns, HomePageProps } from "@/pages/MainPage/mainPageTypes";
+import { Cooldowns, HomePageProps, PageType } from "@shared";
 import {
   Heart,
   ShoppingBag,
@@ -118,7 +118,14 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
 
         {/* Pixegotchi Visual */}
         <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
-          <div className="text-9xl animate-bounce">🦄</div>
+          <div className="text-9xl animate-egg-wobble">
+            <img
+              className="w-25 h-33"
+              // src={`public/${tama?.element}-1.png`}
+              src={`public/egg-0.png`}
+              alt={tama?.element}
+            />
+          </div>
         </div>
       </div>
 
@@ -162,7 +169,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <ActionButton
           icon={ShoppingBag}
           label="Items"
-          onClick={() => onNavigate("inventory")}
+          onClick={() => onNavigate("inventory" as PageType)}
           gradient="from-yellow-500 to-orange-500"
         />
       </div>

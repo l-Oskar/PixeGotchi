@@ -29,6 +29,7 @@ export type AggregatePixegotchi = {
 export type PixegotchiAvgAggregateOutputType = {
   id: number | null
   userId: number | null
+  eggId: number | null
   level: number | null
   experience: number | null
   health: runtime.Decimal | null
@@ -41,6 +42,7 @@ export type PixegotchiAvgAggregateOutputType = {
 export type PixegotchiSumAggregateOutputType = {
   id: number | null
   userId: number | null
+  eggId: number | null
   level: number | null
   experience: number | null
   health: runtime.Decimal | null
@@ -53,6 +55,7 @@ export type PixegotchiSumAggregateOutputType = {
 export type PixegotchiMinAggregateOutputType = {
   id: number | null
   userId: number | null
+  eggId: number | null
   nftAddress: string | null
   genomeHash: string | null
   element: $Enums.ElementType | null
@@ -74,12 +77,13 @@ export type PixegotchiMinAggregateOutputType = {
   lastCleanedAt: Date | null
   lastHealedAt: Date | null
   lastUpdateAt: Date | null
-  createdAt: Date | null
+  hatchedAt: Date | null
 }
 
 export type PixegotchiMaxAggregateOutputType = {
   id: number | null
   userId: number | null
+  eggId: number | null
   nftAddress: string | null
   genomeHash: string | null
   element: $Enums.ElementType | null
@@ -101,12 +105,13 @@ export type PixegotchiMaxAggregateOutputType = {
   lastCleanedAt: Date | null
   lastHealedAt: Date | null
   lastUpdateAt: Date | null
-  createdAt: Date | null
+  hatchedAt: Date | null
 }
 
 export type PixegotchiCountAggregateOutputType = {
   id: number
   userId: number
+  eggId: number
   nftAddress: number
   genomeHash: number
   element: number
@@ -129,7 +134,7 @@ export type PixegotchiCountAggregateOutputType = {
   lastCleanedAt: number
   lastHealedAt: number
   lastUpdateAt: number
-  createdAt: number
+  hatchedAt: number
   _all: number
 }
 
@@ -137,6 +142,7 @@ export type PixegotchiCountAggregateOutputType = {
 export type PixegotchiAvgAggregateInputType = {
   id?: true
   userId?: true
+  eggId?: true
   level?: true
   experience?: true
   health?: true
@@ -149,6 +155,7 @@ export type PixegotchiAvgAggregateInputType = {
 export type PixegotchiSumAggregateInputType = {
   id?: true
   userId?: true
+  eggId?: true
   level?: true
   experience?: true
   health?: true
@@ -161,6 +168,7 @@ export type PixegotchiSumAggregateInputType = {
 export type PixegotchiMinAggregateInputType = {
   id?: true
   userId?: true
+  eggId?: true
   nftAddress?: true
   genomeHash?: true
   element?: true
@@ -182,12 +190,13 @@ export type PixegotchiMinAggregateInputType = {
   lastCleanedAt?: true
   lastHealedAt?: true
   lastUpdateAt?: true
-  createdAt?: true
+  hatchedAt?: true
 }
 
 export type PixegotchiMaxAggregateInputType = {
   id?: true
   userId?: true
+  eggId?: true
   nftAddress?: true
   genomeHash?: true
   element?: true
@@ -209,12 +218,13 @@ export type PixegotchiMaxAggregateInputType = {
   lastCleanedAt?: true
   lastHealedAt?: true
   lastUpdateAt?: true
-  createdAt?: true
+  hatchedAt?: true
 }
 
 export type PixegotchiCountAggregateInputType = {
   id?: true
   userId?: true
+  eggId?: true
   nftAddress?: true
   genomeHash?: true
   element?: true
@@ -237,7 +247,7 @@ export type PixegotchiCountAggregateInputType = {
   lastCleanedAt?: true
   lastHealedAt?: true
   lastUpdateAt?: true
-  createdAt?: true
+  hatchedAt?: true
   _all?: true
 }
 
@@ -330,6 +340,7 @@ export type PixegotchiGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type PixegotchiGroupByOutputType = {
   id: number
   userId: number
+  eggId: number | null
   nftAddress: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -352,7 +363,7 @@ export type PixegotchiGroupByOutputType = {
   lastCleanedAt: Date | null
   lastHealedAt: Date | null
   lastUpdateAt: Date
-  createdAt: Date
+  hatchedAt: Date
   _count: PixegotchiCountAggregateOutputType | null
   _avg: PixegotchiAvgAggregateOutputType | null
   _sum: PixegotchiSumAggregateOutputType | null
@@ -381,6 +392,7 @@ export type PixegotchiWhereInput = {
   NOT?: Prisma.PixegotchiWhereInput | Prisma.PixegotchiWhereInput[]
   id?: Prisma.IntFilter<"Pixegotchi"> | number
   userId?: Prisma.IntFilter<"Pixegotchi"> | number
+  eggId?: Prisma.IntNullableFilter<"Pixegotchi"> | number | null
   nftAddress?: Prisma.StringNullableFilter<"Pixegotchi"> | string | null
   genomeHash?: Prisma.StringFilter<"Pixegotchi"> | string
   element?: Prisma.EnumElementTypeFilter<"Pixegotchi"> | $Enums.ElementType
@@ -403,8 +415,9 @@ export type PixegotchiWhereInput = {
   lastCleanedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
-  createdAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
+  hatchedAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  egg?: Prisma.XOR<Prisma.EggNullableScalarRelationFilter, Prisma.EggWhereInput> | null
   vault?: Prisma.VaultListRelationFilter
   gameSessions?: Prisma.GameSessionListRelationFilter
   activeEffects?: Prisma.ActiveEffectListRelationFilter
@@ -413,6 +426,7 @@ export type PixegotchiWhereInput = {
 export type PixegotchiOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  eggId?: Prisma.SortOrderInput | Prisma.SortOrder
   nftAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   genomeHash?: Prisma.SortOrder
   element?: Prisma.SortOrder
@@ -435,8 +449,9 @@ export type PixegotchiOrderByWithRelationInput = {
   lastCleanedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  hatchedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  egg?: Prisma.EggOrderByWithRelationInput
   vault?: Prisma.VaultOrderByRelationAggregateInput
   gameSessions?: Prisma.GameSessionOrderByRelationAggregateInput
   activeEffects?: Prisma.ActiveEffectOrderByRelationAggregateInput
@@ -444,6 +459,7 @@ export type PixegotchiOrderByWithRelationInput = {
 
 export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  eggId?: number
   AND?: Prisma.PixegotchiWhereInput | Prisma.PixegotchiWhereInput[]
   OR?: Prisma.PixegotchiWhereInput[]
   NOT?: Prisma.PixegotchiWhereInput | Prisma.PixegotchiWhereInput[]
@@ -470,16 +486,18 @@ export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
   lastCleanedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
-  createdAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
+  hatchedAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  egg?: Prisma.XOR<Prisma.EggNullableScalarRelationFilter, Prisma.EggWhereInput> | null
   vault?: Prisma.VaultListRelationFilter
   gameSessions?: Prisma.GameSessionListRelationFilter
   activeEffects?: Prisma.ActiveEffectListRelationFilter
-}, "id">
+}, "id" | "eggId">
 
 export type PixegotchiOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  eggId?: Prisma.SortOrderInput | Prisma.SortOrder
   nftAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   genomeHash?: Prisma.SortOrder
   element?: Prisma.SortOrder
@@ -502,7 +520,7 @@ export type PixegotchiOrderByWithAggregationInput = {
   lastCleanedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  hatchedAt?: Prisma.SortOrder
   _count?: Prisma.PixegotchiCountOrderByAggregateInput
   _avg?: Prisma.PixegotchiAvgOrderByAggregateInput
   _max?: Prisma.PixegotchiMaxOrderByAggregateInput
@@ -516,6 +534,7 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PixegotchiScalarWhereWithAggregatesInput | Prisma.PixegotchiScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   userId?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
+  eggId?: Prisma.IntNullableWithAggregatesFilter<"Pixegotchi"> | number | null
   nftAddress?: Prisma.StringNullableWithAggregatesFilter<"Pixegotchi"> | string | null
   genomeHash?: Prisma.StringWithAggregatesFilter<"Pixegotchi"> | string
   element?: Prisma.EnumElementTypeWithAggregatesFilter<"Pixegotchi"> | $Enums.ElementType
@@ -538,7 +557,7 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   lastCleanedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeWithAggregatesFilter<"Pixegotchi"> | Date | string
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Pixegotchi"> | Date | string
+  hatchedAt?: Prisma.DateTimeWithAggregatesFilter<"Pixegotchi"> | Date | string
 }
 
 export type PixegotchiCreateInput = {
@@ -564,8 +583,9 @@ export type PixegotchiCreateInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
+  egg?: Prisma.EggCreateNestedOneWithoutPixegotchiInput
   vault?: Prisma.VaultCreateNestedManyWithoutPixegotchiInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectCreateNestedManyWithoutPixegotchiInput
@@ -574,6 +594,7 @@ export type PixegotchiCreateInput = {
 export type PixegotchiUncheckedCreateInput = {
   id?: number
   userId: number
+  eggId?: number | null
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -596,7 +617,7 @@ export type PixegotchiUncheckedCreateInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -625,8 +646,9 @@ export type PixegotchiUpdateInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
+  egg?: Prisma.EggUpdateOneWithoutPixegotchiNestedInput
   vault?: Prisma.VaultUpdateManyWithoutPixegotchiNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUpdateManyWithoutPixegotchiNestedInput
@@ -635,6 +657,7 @@ export type PixegotchiUpdateInput = {
 export type PixegotchiUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -657,7 +680,7 @@ export type PixegotchiUncheckedUpdateInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -666,6 +689,7 @@ export type PixegotchiUncheckedUpdateInput = {
 export type PixegotchiCreateManyInput = {
   id?: number
   userId: number
+  eggId?: number | null
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -688,7 +712,7 @@ export type PixegotchiCreateManyInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
 }
 
 export type PixegotchiUpdateManyMutationInput = {
@@ -714,12 +738,13 @@ export type PixegotchiUpdateManyMutationInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PixegotchiUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -742,7 +767,7 @@ export type PixegotchiUncheckedUpdateManyInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PixegotchiListRelationFilter = {
@@ -755,9 +780,15 @@ export type PixegotchiOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type PixegotchiNullableScalarRelationFilter = {
+  is?: Prisma.PixegotchiWhereInput | null
+  isNot?: Prisma.PixegotchiWhereInput | null
+}
+
 export type PixegotchiCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
   nftAddress?: Prisma.SortOrder
   genomeHash?: Prisma.SortOrder
   element?: Prisma.SortOrder
@@ -780,12 +811,13 @@ export type PixegotchiCountOrderByAggregateInput = {
   lastCleanedAt?: Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  hatchedAt?: Prisma.SortOrder
 }
 
 export type PixegotchiAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   health?: Prisma.SortOrder
@@ -798,6 +830,7 @@ export type PixegotchiAvgOrderByAggregateInput = {
 export type PixegotchiMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
   nftAddress?: Prisma.SortOrder
   genomeHash?: Prisma.SortOrder
   element?: Prisma.SortOrder
@@ -819,12 +852,13 @@ export type PixegotchiMaxOrderByAggregateInput = {
   lastCleanedAt?: Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  hatchedAt?: Prisma.SortOrder
 }
 
 export type PixegotchiMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
   nftAddress?: Prisma.SortOrder
   genomeHash?: Prisma.SortOrder
   element?: Prisma.SortOrder
@@ -846,12 +880,13 @@ export type PixegotchiMinOrderByAggregateInput = {
   lastCleanedAt?: Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  hatchedAt?: Prisma.SortOrder
 }
 
 export type PixegotchiSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  eggId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   health?: Prisma.SortOrder
@@ -908,6 +943,38 @@ export type PixegotchiUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.PixegotchiScalarWhereInput | Prisma.PixegotchiScalarWhereInput[]
 }
 
+export type PixegotchiCreateNestedOneWithoutEggInput = {
+  create?: Prisma.XOR<Prisma.PixegotchiCreateWithoutEggInput, Prisma.PixegotchiUncheckedCreateWithoutEggInput>
+  connectOrCreate?: Prisma.PixegotchiCreateOrConnectWithoutEggInput
+  connect?: Prisma.PixegotchiWhereUniqueInput
+}
+
+export type PixegotchiUncheckedCreateNestedOneWithoutEggInput = {
+  create?: Prisma.XOR<Prisma.PixegotchiCreateWithoutEggInput, Prisma.PixegotchiUncheckedCreateWithoutEggInput>
+  connectOrCreate?: Prisma.PixegotchiCreateOrConnectWithoutEggInput
+  connect?: Prisma.PixegotchiWhereUniqueInput
+}
+
+export type PixegotchiUpdateOneWithoutEggNestedInput = {
+  create?: Prisma.XOR<Prisma.PixegotchiCreateWithoutEggInput, Prisma.PixegotchiUncheckedCreateWithoutEggInput>
+  connectOrCreate?: Prisma.PixegotchiCreateOrConnectWithoutEggInput
+  upsert?: Prisma.PixegotchiUpsertWithoutEggInput
+  disconnect?: Prisma.PixegotchiWhereInput | boolean
+  delete?: Prisma.PixegotchiWhereInput | boolean
+  connect?: Prisma.PixegotchiWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PixegotchiUpdateToOneWithWhereWithoutEggInput, Prisma.PixegotchiUpdateWithoutEggInput>, Prisma.PixegotchiUncheckedUpdateWithoutEggInput>
+}
+
+export type PixegotchiUncheckedUpdateOneWithoutEggNestedInput = {
+  create?: Prisma.XOR<Prisma.PixegotchiCreateWithoutEggInput, Prisma.PixegotchiUncheckedCreateWithoutEggInput>
+  connectOrCreate?: Prisma.PixegotchiCreateOrConnectWithoutEggInput
+  upsert?: Prisma.PixegotchiUpsertWithoutEggInput
+  disconnect?: Prisma.PixegotchiWhereInput | boolean
+  delete?: Prisma.PixegotchiWhereInput | boolean
+  connect?: Prisma.PixegotchiWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PixegotchiUpdateToOneWithWhereWithoutEggInput, Prisma.PixegotchiUpdateWithoutEggInput>, Prisma.PixegotchiUncheckedUpdateWithoutEggInput>
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -926,6 +993,14 @@ export type EnumPixegotchiGenderFieldUpdateOperationsInput = {
 
 export type EnumPixegotchiStatusFieldUpdateOperationsInput = {
   set?: $Enums.PixegotchiStatus
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type PixegotchiCreateNestedOneWithoutActiveEffectsInput = {
@@ -993,7 +1068,8 @@ export type PixegotchiCreateWithoutUserInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
+  egg?: Prisma.EggCreateNestedOneWithoutPixegotchiInput
   vault?: Prisma.VaultCreateNestedManyWithoutPixegotchiInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectCreateNestedManyWithoutPixegotchiInput
@@ -1001,6 +1077,7 @@ export type PixegotchiCreateWithoutUserInput = {
 
 export type PixegotchiUncheckedCreateWithoutUserInput = {
   id?: number
+  eggId?: number | null
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1023,7 +1100,7 @@ export type PixegotchiUncheckedCreateWithoutUserInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -1061,6 +1138,7 @@ export type PixegotchiScalarWhereInput = {
   NOT?: Prisma.PixegotchiScalarWhereInput | Prisma.PixegotchiScalarWhereInput[]
   id?: Prisma.IntFilter<"Pixegotchi"> | number
   userId?: Prisma.IntFilter<"Pixegotchi"> | number
+  eggId?: Prisma.IntNullableFilter<"Pixegotchi"> | number | null
   nftAddress?: Prisma.StringNullableFilter<"Pixegotchi"> | string | null
   genomeHash?: Prisma.StringFilter<"Pixegotchi"> | string
   element?: Prisma.EnumElementTypeFilter<"Pixegotchi"> | $Enums.ElementType
@@ -1083,7 +1161,145 @@ export type PixegotchiScalarWhereInput = {
   lastCleanedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
-  createdAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
+  hatchedAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
+}
+
+export type PixegotchiCreateWithoutEggInput = {
+  nftAddress?: string | null
+  genomeHash: string
+  element: $Enums.ElementType
+  rarity: $Enums.RarityType
+  gender: $Enums.PixegotchiGender
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  name?: string
+  status?: $Enums.PixegotchiStatus
+  level?: number
+  experience?: number
+  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  criticalSince?: Date | string | null
+  lastFedAt?: Date | string | null
+  lastPlayedAt?: Date | string | null
+  lastSleptAt?: Date | string | null
+  lastCleanedAt?: Date | string | null
+  lastHealedAt?: Date | string | null
+  lastUpdateAt?: Date | string
+  hatchedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
+  vault?: Prisma.VaultCreateNestedManyWithoutPixegotchiInput
+  gameSessions?: Prisma.GameSessionCreateNestedManyWithoutPixegotchiInput
+  activeEffects?: Prisma.ActiveEffectCreateNestedManyWithoutPixegotchiInput
+}
+
+export type PixegotchiUncheckedCreateWithoutEggInput = {
+  id?: number
+  userId: number
+  nftAddress?: string | null
+  genomeHash: string
+  element: $Enums.ElementType
+  rarity: $Enums.RarityType
+  gender: $Enums.PixegotchiGender
+  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  name?: string
+  status?: $Enums.PixegotchiStatus
+  level?: number
+  experience?: number
+  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  criticalSince?: Date | string | null
+  lastFedAt?: Date | string | null
+  lastPlayedAt?: Date | string | null
+  lastSleptAt?: Date | string | null
+  lastCleanedAt?: Date | string | null
+  lastHealedAt?: Date | string | null
+  lastUpdateAt?: Date | string
+  hatchedAt?: Date | string
+  vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
+  gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutPixegotchiInput
+  activeEffects?: Prisma.ActiveEffectUncheckedCreateNestedManyWithoutPixegotchiInput
+}
+
+export type PixegotchiCreateOrConnectWithoutEggInput = {
+  where: Prisma.PixegotchiWhereUniqueInput
+  create: Prisma.XOR<Prisma.PixegotchiCreateWithoutEggInput, Prisma.PixegotchiUncheckedCreateWithoutEggInput>
+}
+
+export type PixegotchiUpsertWithoutEggInput = {
+  update: Prisma.XOR<Prisma.PixegotchiUpdateWithoutEggInput, Prisma.PixegotchiUncheckedUpdateWithoutEggInput>
+  create: Prisma.XOR<Prisma.PixegotchiCreateWithoutEggInput, Prisma.PixegotchiUncheckedCreateWithoutEggInput>
+  where?: Prisma.PixegotchiWhereInput
+}
+
+export type PixegotchiUpdateToOneWithWhereWithoutEggInput = {
+  where?: Prisma.PixegotchiWhereInput
+  data: Prisma.XOR<Prisma.PixegotchiUpdateWithoutEggInput, Prisma.PixegotchiUncheckedUpdateWithoutEggInput>
+}
+
+export type PixegotchiUpdateWithoutEggInput = {
+  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
+  gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
+  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
+  vault?: Prisma.VaultUpdateManyWithoutPixegotchiNestedInput
+  gameSessions?: Prisma.GameSessionUpdateManyWithoutPixegotchiNestedInput
+  activeEffects?: Prisma.ActiveEffectUpdateManyWithoutPixegotchiNestedInput
+}
+
+export type PixegotchiUncheckedUpdateWithoutEggInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
+  gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
+  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  experience?: Prisma.IntFieldUpdateOperationsInput | number
+  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
+  gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutPixegotchiNestedInput
+  activeEffects?: Prisma.ActiveEffectUncheckedUpdateManyWithoutPixegotchiNestedInput
 }
 
 export type PixegotchiCreateWithoutActiveEffectsInput = {
@@ -1109,8 +1325,9 @@ export type PixegotchiCreateWithoutActiveEffectsInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
+  egg?: Prisma.EggCreateNestedOneWithoutPixegotchiInput
   vault?: Prisma.VaultCreateNestedManyWithoutPixegotchiInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutPixegotchiInput
 }
@@ -1118,6 +1335,7 @@ export type PixegotchiCreateWithoutActiveEffectsInput = {
 export type PixegotchiUncheckedCreateWithoutActiveEffectsInput = {
   id?: number
   userId: number
+  eggId?: number | null
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1140,7 +1358,7 @@ export type PixegotchiUncheckedCreateWithoutActiveEffectsInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutPixegotchiInput
 }
@@ -1184,8 +1402,9 @@ export type PixegotchiUpdateWithoutActiveEffectsInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
+  egg?: Prisma.EggUpdateOneWithoutPixegotchiNestedInput
   vault?: Prisma.VaultUpdateManyWithoutPixegotchiNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutPixegotchiNestedInput
 }
@@ -1193,6 +1412,7 @@ export type PixegotchiUpdateWithoutActiveEffectsInput = {
 export type PixegotchiUncheckedUpdateWithoutActiveEffectsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1215,7 +1435,7 @@ export type PixegotchiUncheckedUpdateWithoutActiveEffectsInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutPixegotchiNestedInput
 }
@@ -1243,8 +1463,9 @@ export type PixegotchiCreateWithoutVaultInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
+  egg?: Prisma.EggCreateNestedOneWithoutPixegotchiInput
   gameSessions?: Prisma.GameSessionCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectCreateNestedManyWithoutPixegotchiInput
 }
@@ -1252,6 +1473,7 @@ export type PixegotchiCreateWithoutVaultInput = {
 export type PixegotchiUncheckedCreateWithoutVaultInput = {
   id?: number
   userId: number
+  eggId?: number | null
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1274,7 +1496,7 @@ export type PixegotchiUncheckedCreateWithoutVaultInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectUncheckedCreateNestedManyWithoutPixegotchiInput
 }
@@ -1318,8 +1540,9 @@ export type PixegotchiUpdateWithoutVaultInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
+  egg?: Prisma.EggUpdateOneWithoutPixegotchiNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUpdateManyWithoutPixegotchiNestedInput
 }
@@ -1327,6 +1550,7 @@ export type PixegotchiUpdateWithoutVaultInput = {
 export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1349,7 +1573,7 @@ export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUncheckedUpdateManyWithoutPixegotchiNestedInput
 }
@@ -1377,8 +1601,9 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
+  egg?: Prisma.EggCreateNestedOneWithoutPixegotchiInput
   vault?: Prisma.VaultCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectCreateNestedManyWithoutPixegotchiInput
 }
@@ -1386,6 +1611,7 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
 export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   id?: number
   userId: number
+  eggId?: number | null
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1408,7 +1634,7 @@ export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
   activeEffects?: Prisma.ActiveEffectUncheckedCreateNestedManyWithoutPixegotchiInput
 }
@@ -1452,8 +1678,9 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
+  egg?: Prisma.EggUpdateOneWithoutPixegotchiNestedInput
   vault?: Prisma.VaultUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUpdateManyWithoutPixegotchiNestedInput
 }
@@ -1461,6 +1688,7 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
 export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1483,13 +1711,14 @@ export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUncheckedUpdateManyWithoutPixegotchiNestedInput
 }
 
 export type PixegotchiCreateManyUserInput = {
   id?: number
+  eggId?: number | null
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1512,7 +1741,7 @@ export type PixegotchiCreateManyUserInput = {
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
   lastUpdateAt?: Date | string
-  createdAt?: Date | string
+  hatchedAt?: Date | string
 }
 
 export type PixegotchiUpdateWithoutUserInput = {
@@ -1538,7 +1767,8 @@ export type PixegotchiUpdateWithoutUserInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  egg?: Prisma.EggUpdateOneWithoutPixegotchiNestedInput
   vault?: Prisma.VaultUpdateManyWithoutPixegotchiNestedInput
   gameSessions?: Prisma.GameSessionUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUpdateManyWithoutPixegotchiNestedInput
@@ -1546,6 +1776,7 @@ export type PixegotchiUpdateWithoutUserInput = {
 
 export type PixegotchiUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1568,7 +1799,7 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutPixegotchiNestedInput
   activeEffects?: Prisma.ActiveEffectUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -1576,6 +1807,7 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
 
 export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1598,7 +1830,7 @@ export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1653,6 +1885,7 @@ export type PixegotchiCountOutputTypeCountActiveEffectsArgs<ExtArgs extends runt
 export type PixegotchiSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  eggId?: boolean
   nftAddress?: boolean
   genomeHash?: boolean
   element?: boolean
@@ -1675,8 +1908,9 @@ export type PixegotchiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
   lastUpdateAt?: boolean
-  createdAt?: boolean
+  hatchedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
   vault?: boolean | Prisma.Pixegotchi$vaultArgs<ExtArgs>
   gameSessions?: boolean | Prisma.Pixegotchi$gameSessionsArgs<ExtArgs>
   activeEffects?: boolean | Prisma.Pixegotchi$activeEffectsArgs<ExtArgs>
@@ -1686,6 +1920,7 @@ export type PixegotchiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type PixegotchiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  eggId?: boolean
   nftAddress?: boolean
   genomeHash?: boolean
   element?: boolean
@@ -1708,13 +1943,15 @@ export type PixegotchiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
   lastUpdateAt?: boolean
-  createdAt?: boolean
+  hatchedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
 }, ExtArgs["result"]["pixegotchi"]>
 
 export type PixegotchiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  eggId?: boolean
   nftAddress?: boolean
   genomeHash?: boolean
   element?: boolean
@@ -1737,13 +1974,15 @@ export type PixegotchiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
   lastUpdateAt?: boolean
-  createdAt?: boolean
+  hatchedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
 }, ExtArgs["result"]["pixegotchi"]>
 
 export type PixegotchiSelectScalar = {
   id?: boolean
   userId?: boolean
+  eggId?: boolean
   nftAddress?: boolean
   genomeHash?: boolean
   element?: boolean
@@ -1766,12 +2005,13 @@ export type PixegotchiSelectScalar = {
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
   lastUpdateAt?: boolean
-  createdAt?: boolean
+  hatchedAt?: boolean
 }
 
-export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "nftAddress" | "genomeHash" | "element" | "rarity" | "gender" | "traits" | "name" | "status" | "level" | "experience" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "criticalSince" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "createdAt", ExtArgs["result"]["pixegotchi"]>
+export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eggId" | "nftAddress" | "genomeHash" | "element" | "rarity" | "gender" | "traits" | "name" | "status" | "level" | "experience" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "criticalSince" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt", ExtArgs["result"]["pixegotchi"]>
 export type PixegotchiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
   vault?: boolean | Prisma.Pixegotchi$vaultArgs<ExtArgs>
   gameSessions?: boolean | Prisma.Pixegotchi$gameSessionsArgs<ExtArgs>
   activeEffects?: boolean | Prisma.Pixegotchi$activeEffectsArgs<ExtArgs>
@@ -1779,15 +2019,18 @@ export type PixegotchiInclude<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 export type PixegotchiIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
 }
 export type PixegotchiIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
 }
 
 export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Pixegotchi"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    egg: Prisma.$EggPayload<ExtArgs> | null
     vault: Prisma.$VaultPayload<ExtArgs>[]
     gameSessions: Prisma.$GameSessionPayload<ExtArgs>[]
     activeEffects: Prisma.$ActiveEffectPayload<ExtArgs>[]
@@ -1795,6 +2038,7 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     userId: number
+    eggId: number | null
     nftAddress: string | null
     genomeHash: string
     element: $Enums.ElementType
@@ -1817,7 +2061,7 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     lastCleanedAt: Date | null
     lastHealedAt: Date | null
     lastUpdateAt: Date
-    createdAt: Date
+    hatchedAt: Date
   }, ExtArgs["result"]["pixegotchi"]>
   composites: {}
 }
@@ -2213,6 +2457,7 @@ readonly fields: PixegotchiFieldRefs;
 export interface Prisma__PixegotchiClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  egg<T extends Prisma.Pixegotchi$eggArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pixegotchi$eggArgs<ExtArgs>>): Prisma.Prisma__EggClient<runtime.Types.Result.GetResult<Prisma.$EggPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   vault<T extends Prisma.Pixegotchi$vaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pixegotchi$vaultArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VaultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   gameSessions<T extends Prisma.Pixegotchi$gameSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pixegotchi$gameSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GameSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activeEffects<T extends Prisma.Pixegotchi$activeEffectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pixegotchi$activeEffectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActiveEffectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2247,6 +2492,7 @@ export interface Prisma__PixegotchiClient<T, Null = never, ExtArgs extends runti
 export interface PixegotchiFieldRefs {
   readonly id: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly userId: Prisma.FieldRef<"Pixegotchi", 'Int'>
+  readonly eggId: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly nftAddress: Prisma.FieldRef<"Pixegotchi", 'String'>
   readonly genomeHash: Prisma.FieldRef<"Pixegotchi", 'String'>
   readonly element: Prisma.FieldRef<"Pixegotchi", 'ElementType'>
@@ -2269,7 +2515,7 @@ export interface PixegotchiFieldRefs {
   readonly lastCleanedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastHealedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastUpdateAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
-  readonly createdAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
+  readonly hatchedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
 }
     
 
@@ -2663,6 +2909,25 @@ export type PixegotchiDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Pixegotchis to delete.
    */
   limit?: number
+}
+
+/**
+ * Pixegotchi.egg
+ */
+export type Pixegotchi$eggArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Egg
+   */
+  select?: Prisma.EggSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Egg
+   */
+  omit?: Prisma.EggOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EggInclude<ExtArgs> | null
+  where?: Prisma.EggWhereInput
 }
 
 /**
