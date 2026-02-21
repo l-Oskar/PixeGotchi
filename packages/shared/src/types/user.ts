@@ -7,8 +7,8 @@ export interface User {
   username: string | null;
   pgcBalance: string;
   lastActiveAt: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | null;
+  updatedAt: string | null;
 }
 
 export interface UserProfile extends User {

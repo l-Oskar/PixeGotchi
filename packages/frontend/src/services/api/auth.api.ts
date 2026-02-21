@@ -1,12 +1,8 @@
+import { User } from "@shared";
 import { apiClient } from "./client";
 
 export interface AuthResponse {
-  user: {
-    id: number;
-    telegramId: string;
-    username?: string;
-    pgcBalance: string;
-  };
+  user: User;
   token: string;
 }
 

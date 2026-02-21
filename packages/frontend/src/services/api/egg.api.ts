@@ -8,7 +8,7 @@ export const eggApi = {
     const { data } = await apiClient.get(egg_url);
     return data;
   },
-  getEggById: async (id: string): Promise<Egg> => {
+  getEggById: async (id: number): Promise<Egg> => {
     const { data } = await apiClient.get(`${egg_url}/${id}`);
     return data;
   },
