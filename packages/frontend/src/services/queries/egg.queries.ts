@@ -1,4 +1,4 @@
-import { useQuery, useIsMutating, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { eggApi } from "../api/egg.api";
 import { useAuthStore } from "@/store/auth.store";
 
@@ -34,5 +34,14 @@ export const startHatching = async (eggId: number | null) => {
   return useMutation({
     mutationKey: ["startHatching", eggId],
     mutationFn: () => eggApi.startHatching(eggId!),
+  });
+};
+
+export const getHatchingStatus = async (eggId: number | null) => {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  return useQuery({
+    queryKey: ["eggHatchingStatus"],
+    queryFn: () => eggApi.getHatchingStatus(eggId!),
+    enabled: isAuthenticated,
   });
 };
