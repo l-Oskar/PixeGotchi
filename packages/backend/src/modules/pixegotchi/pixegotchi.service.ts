@@ -8,7 +8,7 @@ export class PixegotchiService {
   async findByUserId(userId: number) {
     return await prisma.pixegotchi.findMany({
       where: { userId },
-      orderBy: { createdAt: "desc" },
+      orderBy: { hatchedAt: "desc" },
     });
   }
 

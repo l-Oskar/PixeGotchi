@@ -3,7 +3,7 @@ import { GenomeGenerator } from "@/utils/genome-generator";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 
 const EGG_PRICE = 999;
-const HATCHING_TIME = 86400000;
+const HATCHING_TIME = 10000; //86400000
 
 export class EggService {
   private pixegotchiService = new PixegotchiService();
@@ -176,7 +176,6 @@ export class EggService {
     const genome = GenomeGenerator.generate();
 
     const data = await prisma.$transaction([
-      
       prisma.pixegotchi.create({
         data: {
           userId,
@@ -188,19 +187,19 @@ export class EggService {
           gender: genome.gender,
           traits: genome.traits,
           status: "active",
-          
+
           health: 100,
           hunger: 70,
           energy: 100,
           happiness: 50,
           cleanliness: 100,
-          
+
           hatchedAt: new Date(),
         },
       }),
       prisma.egg.delete({ where: { userId, id } }),
     ]);
 
-    return data[1];
+    return data[0];
   }
 }

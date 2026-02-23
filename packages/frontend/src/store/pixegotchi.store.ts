@@ -1,27 +1,20 @@
 import { create } from "zustand";
-
-interface ActivePixegotchi {
-  id: number | null;
-  userId: number | null;
-  name: string;
-  level: number | null;
-  experience: number | null;
-  health: number | null;
-  hunger: number | null;
-  energy: number | null;
-  happiness: number | null;
-  cleanliness: number | null;
-}
+import { Pixegotchi } from "@shared";
 
 interface PixegotchiStore {
-  activePixegotchi: ActivePixegotchi | null;
-  setActive: (pixegotchi: ActivePixegotchi) => void;
+  activePixegotchi: Pixegotchi | null;
+  setActive: (pixegotchi: Pixegotchi) => void;
+  setToVault: (pixegotchi: Pixegotchi) => void;
 }
 
-export const pixegitchiStore = create<PixegotchiStore>((set) => ({
+export const usePixegotchiStore = create<PixegotchiStore>((set) => ({
   activePixegotchi: null,
-  setActive: (pixegotchi: ActivePixegotchi) =>
+  setActive: (pixegotchi: Pixegotchi) =>
     set({
       activePixegotchi: pixegotchi,
+    }),
+  setToVault: () =>
+    set({
+      activePixegotchi: null,
     }),
 }));

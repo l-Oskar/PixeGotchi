@@ -6,7 +6,7 @@ const API_URL = "https://pixegotchi.run.place/api";
 //   import.meta.env.VITE_API_URL || "https://pixegotchi.run.place/api";
 
 export const apiClient = axios.create({
-  baseURL: API_URL,
+  baseURL: import.meta.env.VITE_API_URL_LOCAL,
   headers: {
     "Content-Type": "application/json",
   },
