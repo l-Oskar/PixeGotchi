@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { PageType, Egg } from "@shared";
 import { Menu } from "lucide-react";
+import { useGetHatchingStatus } from "@/services/queries/egg.queries";
 
 export interface EggPageProps {
   egg: Egg | null;
@@ -9,14 +10,17 @@ export interface EggPageProps {
 }
 
 const EggComponents: React.FC<EggPageProps> = ({ egg }) => {
+  if (!egg) return <div>Loading...</div>;
+
+  useEffect(() => {}, [egg]);
+  const status = useGetHatchingStatus(egg.id);
   return (
     <>
       <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
         <div className="flex flex-col gap-1 mb-4">
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold flex items-center gap-2">
-              {`Egg-${egg?.id}`}
-              <span className="text-lg">🌈</span>
+              {`Egg-#${egg?.id}`}
             </h2>
             <Link to="/index">
               <button className="text-white/60 hover:text-white">
@@ -27,10 +31,14 @@ const EggComponents: React.FC<EggPageProps> = ({ egg }) => {
           <div className="flex gap-2 mt-1">
             <div className="flex items-center gap-2">
               <span className="text-xs px-2 py-0.5 bg-orange-500/30 rounded-full border border-orange-400/50 capitalize">
-                {egg?.isHatching}
+                {status.data?.canHatchNow ? "Ready" : "Hatching"}
               </span>
               <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
-                Time {`${egg!.hatchStartedAt}`}
+                Progress
+                {status.isFetched
+                  ? " " + Math.floor(status!.data!.progress * 10) / 10
+                  : "-"}
+                %
               </span>
             </div>
           </div>
@@ -43,7 +51,7 @@ const EggComponents: React.FC<EggPageProps> = ({ egg }) => {
               className="w-25 h-33"
               // src={`public/${tama?.element}-1.png`}
               src={`public/egg-0.png`}
-              alt={`Egg-${egg!.id}`}
+              alt={`Egg-${egg?.id}`}
             />
           </div>
         </div>

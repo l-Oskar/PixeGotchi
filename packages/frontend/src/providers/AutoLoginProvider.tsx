@@ -17,12 +17,11 @@ export const AutoLiginProvider = ({
 
     if (initDataRaw) {
       loginMutation.mutate(initDataRaw);
-      console.log(initDataRaw);
     }
   }, [isAuthenticate, initDataRaw]);
 
   if (!isAuthenticate) {
-    return <div className="splash">{`Authorization...`}</div>;
+    return <div className="splash animation-bounce">{`Authorization...`}</div>;
   }
 
   return <>{children}</>;

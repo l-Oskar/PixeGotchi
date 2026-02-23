@@ -31,6 +31,13 @@ export class EggsController {
     return reply.send(egg);
   }
 
+  async getHatchingEgg(request: FastifyRequest, reply: FastifyReply) {
+    const userId = (request.user as any).userId;
+    const hatchingEgg = await this.eggService.getHatchingEgg(userId);
+
+    return reply.send(hatchingEgg);
+  }
+
   async getEgg(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
     const egg = await this.eggService.createEgg(userId);

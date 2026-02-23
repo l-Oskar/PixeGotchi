@@ -27,3 +27,7 @@ export interface Item {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Inventory {
+  inventory: InventoryItem[];
+}

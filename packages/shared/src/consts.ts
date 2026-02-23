@@ -1,0 +1,4 @@
+export const EGG_CONSTANTS = {
+  HATCHING_TIME: 86400000,
+  EGG_PRICE: 100,
+};

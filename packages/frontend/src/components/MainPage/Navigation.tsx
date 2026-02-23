@@ -1,5 +1,12 @@
 import React from "react";
-import { Heart, ShoppingBag, Gamepad2, Archive, Coins } from "lucide-react";
+import {
+  Heart,
+  ShoppingBag,
+  Gamepad2,
+  Archive,
+  Coins,
+  Egg,
+} from "lucide-react";
 import { PageType } from "@shared";
 
 export interface NavigationProps {
@@ -15,7 +22,7 @@ const Navigation: React.FC<NavigationProps> = ({
     <nav className="fixed bottom-0 left-0 right-0 pb-1 bg-black/40 backdrop-blur-xl border-t border-white/10">
       <div className="max-w-md mx-auto px-4 py-3 flex justify-around">
         {[
-          { id: "home" as PageType, icon: Heart, label: "Home" },
+          { id: "home" as PageType, icon: Egg, label: "Home" },
           { id: "inventory" as PageType, icon: ShoppingBag, label: "Bag" },
           { id: "games" as PageType, icon: Gamepad2, label: "Games" },
           { id: "marketplace" as PageType, icon: Coins, label: "Market" },

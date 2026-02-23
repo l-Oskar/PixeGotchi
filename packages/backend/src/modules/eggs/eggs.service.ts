@@ -1,9 +1,7 @@
 import { prisma } from "@/database/prisma";
 import { GenomeGenerator } from "@/utils/genome-generator";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
-
-const EGG_PRICE = 999;
-const HATCHING_TIME = 10000; //86400000
+import { EGG_CONSTANTS } from "@shared";
 
 export class EggService {
   private pixegotchiService = new PixegotchiService();
@@ -35,6 +33,18 @@ export class EggService {
     return egg;
   }
 
+  async getHatchingEgg(userId: number) {
+    const hatchingEgg = await prisma.egg.findFirst({
+      where: {
+        userId,
+        isHatching: true,
+      },
+    });
+
+    // if (!hatchingEgg) throw new Error("You don\'t have hatching egg");
+    return hatchingEgg ?? null;
+  }
+
   async createEgg(userId: number) {
     return await prisma.$transaction(async (prisma) => {
       const user = await prisma.user.findUnique({
@@ -44,7 +54,7 @@ export class EggService {
       });
 
       if (!user) throw new Error("User not found");
-      if (Number(user.pgcBalance) < EGG_PRICE)
+      if (Number(user.pgcBalance) < EGG_CONSTANTS.EGG_PRICE)
         throw new Error("Not enought funds");
 
       await prisma.user.update({
@@ -70,8 +80,8 @@ export class EggService {
   }
 
   async startHatching(userId: number, id: number) {
-    const activePixegitchi = await this.pixegotchiService.findActive(userId);
-    if (activePixegitchi)
+    const activePixegotchi = await this.pixegotchiService.findActive(userId);
+    if (activePixegotchi)
       throw new Error("You already have an active Pixegotchi");
 
     const egg = await this.getEggById(userId, id);
@@ -84,7 +94,7 @@ export class EggService {
       data: {
         isHatching: true,
         hatchStartedAt: new Date(),
-        hatchingTimeMs: HATCHING_TIME,
+        hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
         tapCount: 0,
       },
     });
@@ -108,7 +118,7 @@ export class EggService {
       data: {
         isHatching: false,
         hatchStartedAt: null,
-        hatchingTimeMs: HATCHING_TIME,
+        hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
         tapCount: 0,
       },
     });

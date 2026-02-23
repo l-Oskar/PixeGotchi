@@ -5,6 +5,7 @@ import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export const EGG_KEYS = {
   all: ["eggs"] as const,
+  hatching: ["hatchingEgg"] as const,
   details: (eggId: number | null) => ["egg", eggId] as const,
   status: (eggId: number | null) => ["egg", eggId, "status"] as const,
   create: ["createEgg"] as const,
@@ -25,10 +26,17 @@ export const useGetById = (eggId: number | null) => {
   });
 };
 
+export const useGetHatchingEgg = () => {
+  return useQuery({
+    queryKey: EGG_KEYS.hatching,
+    queryFn: eggApi.getHatchingEgg,
+  });
+};
+
 export const useCreateEgg = () => {
   return useQuery({
     queryKey: EGG_KEYS.create,
-    queryFn: () => eggApi.createEgg(),
+    queryFn: eggApi.createEgg,
   });
 };
 
@@ -51,7 +59,7 @@ export const useGetHatchingStatus = (eggId: number | null) => {
   });
 };
 
-export const useHatchEgg = (eggId: number | null) => {
+export const useHatchEgg = () => {
   const setActivePixegotchi = usePixegotchiStore((s) => s.setActive);
   const hatchEgg = useEggStore((s) => s.hatchEgg);
   const queryClient = useQueryClient();

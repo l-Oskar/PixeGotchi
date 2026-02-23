@@ -1,26 +1,26 @@
 import { apiClient } from "./client";
 import type { Pixegotchi } from "@shared";
 
+export const PIXEGOTCHI_URL = "/pixegotchi";
+export const PIXEGOTCHI_URL_KEYS = {
+  all: `${PIXEGOTCHI_URL}` as const,
+  active: `${PIXEGOTCHI_URL}/active` as const,
+  id: (id: number | null) => `${PIXEGOTCHI_URL}/${id}` as const,
+};
+
 export const pixegotchiApi = {
   getAll: async (): Promise<Pixegotchi[]> => {
-    const { data } = await apiClient.get("/pixegotchi");
+    const { data } = await apiClient.get(PIXEGOTCHI_URL_KEYS.all);
     return data;
   },
 
   getActive: async (): Promise<Pixegotchi | null> => {
-    try {
-      const { data } = await apiClient.get("/pixegotchi/active");
-      return data;
-    } catch (error: any) {
-      if (error.response?.status === 404) {
-        return null;
-      }
-      throw error;
-    }
+    const { data } = await apiClient.get(PIXEGOTCHI_URL_KEYS.active);
+    return data;
   },
 
-  getById: async (id: number): Promise<Pixegotchi> => {
-    const { data } = await apiClient.get(`/pixegotchi/${id}`);
+  getById: async (id: number): Promise<Pixegotchi | null> => {
+    const { data } = await apiClient.get(PIXEGOTCHI_URL_KEYS.id(id));
     return data;
   },
 
@@ -46,11 +46,6 @@ export const pixegotchiApi = {
 
   heal: async (id: number): Promise<Pixegotchi> => {
     const { data } = await apiClient.post(`/pixegotchi/${id}/heal`);
-    return data;
-  },
-
-  hatch: async (name?: string): Promise<Pixegotchi> => {
-    const { data } = await apiClient.post("/pixegotchi/hatch", { name });
     return data;
   },
 };

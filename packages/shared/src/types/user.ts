@@ -1,3 +1,5 @@
+import { Egg } from "./egg";
+import { Inventory } from "./inventory";
 import type { Pixegotchi } from "./pixegotchi";
 
 export interface User {
@@ -13,4 +15,6 @@ export interface User {
 
 export interface UserProfile extends User {
   pixegotchis: Pixegotchi[];
+  eggs: Egg[];
+  inventory: Inventory;
 }

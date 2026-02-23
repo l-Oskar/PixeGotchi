@@ -1,14 +1,27 @@
 // app/GameBootstrap.tsx
+import { useEffect } from "react";
 import { useActivePixegotchi } from "../services/queries/pixegotchi.queries";
-import { useAuthStore } from "../store/auth.store";
 import SplashScreen from "../components/MainPage/SplashScreen";
+import { useGetHatchingEgg } from "@/services/queries/egg.queries";
+import { useEggStore } from "@/store/egg.store";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { data: pixegotchi, isLoading: pixeLoading } = useActivePixegotchi();
+  const { data: egg, isLoading: eggLoading } = useGetHatchingEgg();
+  const setEgg = useEggStore((s) => s.setHatchingEgg);
+  const setActive = usePixegotchiStore((s) => s.setActive);
 
-  const { isLoading } = useActivePixegotchi();
+  useEffect(() => {
+    if (egg) {
+      setEgg(egg);
+    }
+    if (pixegotchi) {
+      setActive(pixegotchi);
+    }
+  }, [egg, pixegotchi, setEgg, setActive]);
 
-  if (!isAuthenticated || isLoading) {
+  if (eggLoading || pixeLoading) {
     return <SplashScreen />;
   }
 
