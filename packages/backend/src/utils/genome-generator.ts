@@ -1,9 +1,5 @@
 import { TraitType } from "./traits";
-import {
-  RarityType,
-  ElementType,
-  PixegotchiGender,
-} from "generated/prisma/enums";
+import { RarityType, ElementType, PixegotchiGender } from "@shared";
 
 interface GenomeInfo {
   genome_hash: string;
@@ -138,8 +134,8 @@ export class GenomeGenerator {
   }
 
   private static determineGender(hash: string): PixegotchiGender {
-    const seed = this.hashToNumber(hash.split("-")[0] || hash);
-    return this.weightedRandom(this.GENDER_WEIGHTS, seed);
+    const genderSeed = this.hashToNumber(hash.split("-")[0] || hash);
+    return this.weightedRandom(this.GENDER_WEIGHTS, genderSeed);
   }
 
   private static determineElement(hash: string): ElementType {
@@ -317,7 +313,7 @@ export class GenomeGenerator {
       }
     }
 
-    return entries[0][0];
+    return entries[0]![0];
   }
 
   private static randomInRange(min: number, max: number, seed: number): number {
@@ -491,195 +487,197 @@ export class GenomeGenerator {
   static compareRarity(rarity1: RarityType, rarity2: RarityType): number {
     return this.getRarityIndex(rarity1) - this.getRarityIndex(rarity2);
   }
-}
 
-// STATISTIC
-function getStats() {
-  // ============= ПРИКЛАДИ ВИКОРИСТАННЯ =============
+  static async getStats() {
+    // Генерація 10000 петів для статистики
+    const pets = Array.from({ length: 10000 }, () =>
+      GenomeGenerator.generate(),
+    );
 
-  // 1. Генерація 10000 петів для статистики
-  const pets = Array.from({ length: 10000 }, () => GenomeGenerator.generate());
+    // 1. Статистика по рідкості
+    const rarityStats = pets.reduce(
+      (acc, pet) => {
+        acc[pet.rarity] = (acc[pet.rarity] || 0) + 1;
+        return acc;
+      },
+      {} as Record<RarityType, number>,
+    );
 
-  // 2. Статистика по рідкості
-  const rarityStats = pets.reduce(
-    (acc, pet) => {
-      acc[pet.rarity] = (acc[pet.rarity] || 0) + 1;
-      return acc;
-    },
-    {} as Record<RarityType, number>,
-  );
+    // Розрахунок відсотків для рідкості
+    const rarityDistribution = Object.entries(rarityStats)
+      .map(([rarity, count]) => ({
+        rarity,
+        count,
+        percentage: (count / 100).toFixed(1) + "%",
+      }))
+      .sort((a, b) => b.count - a.count);
 
-  console.log("=== RARITY DISTRIBUTION (10000 pets) ===");
-  console.log(
-    "Common:    ",
-    rarityStats.common || 0,
-    `(${((rarityStats.common || 0) / 100).toFixed(1)}%)`,
-  );
-  console.log(
-    "Uncommon:  ",
-    rarityStats.uncommon || 0,
-    `(${((rarityStats.uncommon || 0) / 100).toFixed(1)}%)`,
-  );
-  console.log(
-    "Rare:      ",
-    rarityStats.rare || 0,
-    `(${((rarityStats.rare || 0) / 100).toFixed(1)}%)`,
-  );
-  console.log(
-    "Epic:      ",
-    rarityStats.epic || 0,
-    `(${((rarityStats.epic || 0) / 100).toFixed(1)}%)`,
-  );
-  console.log(
-    "Mythic:    ",
-    rarityStats.mythic || 0,
-    `(${((rarityStats.mythic || 0) / 100).toFixed(1)}%)`,
-  );
-  console.log(
-    "Legendary: ",
-    rarityStats.legendary || 0,
-    `(${((rarityStats.legendary || 0) / 100).toFixed(1)}%)`,
-  );
-  console.log(
-    "Unique:    ",
-    rarityStats.unique || 0,
-    `(${((rarityStats.unique || 0) / 100).toFixed(1)}%)`,
-  );
+    const elementStats = pets.reduce(
+      (acc, pet) => {
+        acc[pet.element] = (acc[pet.element] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-  // 3. Статистика по immortal
-  const immortalPets = pets.filter((p) => p.traits.includes("immortal"));
-  const legendaryPets = pets.filter((p) => p.rarity === "legendary");
+    const elementDistribution = Object.entries(elementStats)
+      .map(([element, count]) => ({
+        element,
+        count,
+        percentage: ((count / pets.length) * 100).toFixed(2) + "%",
+      }))
+      .sort((a, b) => b.count - a.count);
 
-  console.log("\n=== IMMORTAL TRAIT STATISTICS ===");
-  console.log(`Total immortal pets: ${immortalPets.length}`);
-  console.log(`Total legendary pets: ${legendaryPets.length}`);
-  console.log(
-    `Legendary with immortal: ${immortalPets.length}/${legendaryPets.length} (${((immortalPets.length / Math.max(legendaryPets.length, 1)) * 100).toFixed(1)}%)`,
-  );
-  console.log("Immortal pet rarities:", [
-    ...new Set(immortalPets.map((p) => p.rarity)),
-  ]);
+    const rarityElementStats = pets.reduce(
+      (acc, pet) => {
+        const key = `${pet.rarity}_${pet.element}`;
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-  // 4. Знайти топ-10 найрідкісніших петів
-  const topPets = pets
-    .map((pet) => ({
-      pet,
-      stats: GenomeGenerator.getGenomeStats(pet),
-    }))
-    .sort((a, b) => b.stats.totalScore - a.stats.totalScore)
-    .slice(0, 10);
+    const rarityElementDistribution = Object.entries(rarityElementStats)
+      .map(([key, count]) => {
+        const [rarity, element] = key.split("_");
+        return {
+          rarity,
+          element,
+          count,
+          percentage: ((count / pets.length) * 100).toFixed(3) + "%",
+        };
+      })
+      .sort((a, b) => b.count - a.count);
 
-  console.log("\n=== TOP 10 RAREST PETS ===");
-  topPets.forEach((item, i) => {
-    const { pet, stats } = item;
-    console.log(`\n${i + 1}. Score: ${stats.totalScore}`);
-    console.log(`   ${pet.rarity.toUpperCase()} ${pet.element}`);
-    console.log(`   Traits: ${pet.traits.join(", ")}`);
-    console.log(`   Immortal: ${stats.hasImmortal ? "✓" : "✗"}`);
-  });
+    // 2. Статистика по immortal
+    const immortalPets = pets.filter((p) => p.traits.includes("immortal"));
+    const legendaryPets = pets.filter((p) => p.rarity === "legendary");
 
-  // 5. Пошук святого грааля: Legendary Rainbow Immortal
-  console.log(
-    "\n=== SEARCHING FOR HOLY GRAIL (Legendary Rainbow Immortal) ===",
-  );
-  let holyGrail = null;
-  let attempts = 0;
-  const maxAttempts = 100000;
+    const immortalStats = {
+      totalImmortal: immortalPets.length,
+      totalLegendary: legendaryPets.length,
+      legendaryWithImmortal: immortalPets.length,
+      legendaryWithImmortalPercentage:
+        (
+          (immortalPets.length / Math.max(legendaryPets.length, 1)) *
+          100
+        ).toFixed(1) + "%",
+      immortalRarities: [...new Set(immortalPets.map((p) => p.rarity))],
+    };
 
-  while (!holyGrail && attempts < maxAttempts) {
-    const pet = GenomeGenerator.generate();
-    if (
-      pet.rarity === "legendary" &&
-      pet.element === "rainbow" &&
-      pet.traits.includes("immortal")
-    ) {
-      holyGrail = pet;
+    // 3. Топ-10 найрідкісніших петів
+    const topPets = pets
+      .map((pet) => ({
+        pet: {
+          rarity: pet.rarity,
+          element: pet.element,
+          traits: pet.traits,
+          gender: pet.gender,
+          // Додайте інші поля які потрібні
+        },
+        stats: GenomeGenerator.getGenomeStats(pet),
+      }))
+      .sort((a, b) => b.stats.totalScore - a.stats.totalScore)
+      .slice(0, 10);
+
+    // 4. Пошук святого грааля
+    let holyGrail = null;
+    let attempts = 0;
+    const maxAttempts = 100000;
+
+    while (!holyGrail && attempts < maxAttempts) {
+      const pet = GenomeGenerator.generate();
+      if (
+        pet.rarity === "legendary" &&
+        pet.element === "rainbow" &&
+        pet.traits.includes("immortal")
+      ) {
+        holyGrail = {
+          pet,
+          stats: GenomeGenerator.getGenomeStats(pet),
+        };
+      }
+      attempts++;
     }
-    attempts++;
-  }
 
-  if (holyGrail) {
-    console.log(`FOUND after ${attempts} attempts!`);
-    console.log(holyGrail);
-    const stats = GenomeGenerator.getGenomeStats(holyGrail);
-    console.log(`Total score: ${stats.totalScore}`);
-  } else {
-    console.log(`Not found in ${maxAttempts} attempts`);
-    console.log(
-      "Estimated probability: ~0.0009% (legendary 0.9% × rainbow 1% × immortal 10%)",
+    const holyGrailStats = {
+      found: !!holyGrail,
+      attempts,
+      maxAttempts,
+      estimatedProbability: "0.0009%",
+      ...(holyGrail && {
+        pet: holyGrail.pet,
+        score: holyGrail.stats.totalScore,
+      }),
+    };
+
+    // 5. Порівняння рідкостей
+    const rarityComparison = {
+      commonVsLegendary: GenomeGenerator.compareRarity("common", "legendary"),
+      legendaryVsUnique: GenomeGenerator.compareRarity("legendary", "unique"),
+      epicVsRare: GenomeGenerator.compareRarity("epic", "rare"),
+    };
+
+    // 6. Статистика по гендеру
+    const genderStats = GenomeGenerator.getGenderStats(pets);
+
+    const genderDistribution = {
+      male: genderStats.male,
+      female: genderStats.female,
+      malePercentage: genderStats.malePercentage.toFixed(1) + "%",
+      femalePercentage: genderStats.femalePercentage.toFixed(1) + "%",
+    };
+
+    // 7. Статистика рідкості по гендеру
+    const femalePets = pets.filter((p) => p.gender === "female");
+    const malePets = pets.filter((p) => p.gender === "male");
+
+    const maleRarities = malePets.reduce(
+      (acc, p) => {
+        acc[p.rarity] = (acc[p.rarity] || 0) + 1;
+        return acc;
+      },
+      {} as Record<RarityType, number>,
     );
-  }
 
-  // 6. Порівняння рідкостей
-  console.log("\n=== RARITY COMPARISON ===");
-  console.log(
-    "Common vs Legendary:",
-    GenomeGenerator.compareRarity("common", "legendary"),
-  ); // -5
-  console.log(
-    "Legendary vs Unique:",
-    GenomeGenerator.compareRarity("legendary", "unique"),
-  ); // -1
-  console.log("Epic vs Rare:", GenomeGenerator.compareRarity("epic", "rare")); // 1
-
-  // 7. Практичний приклад: гравець відкриває "legendary egg"
-  console.log("\n=== OPENING LEGENDARY EGG ===");
-  const legendaryEgg = pets.find((p) => p.rarity === "legendary");
-  if (legendaryEgg) {
-    console.log("Congratulations! You got:");
-    console.log(
-      `${legendaryEgg.element.toUpperCase()} ${legendaryEgg.rarity.toUpperCase()}`,
+    const femaleRarities = femalePets.reduce(
+      (acc, p) => {
+        acc[p.rarity] = (acc[p.rarity] || 0) + 1;
+        return acc;
+      },
+      {} as Record<RarityType, number>,
     );
-    console.log(`Traits: ${legendaryEgg.traits.join(", ")}`);
-    const stats = GenomeGenerator.getGenomeStats(legendaryEgg);
-    console.log(`Immortal: ${stats.hasImmortal ? "YES! 🎉" : "No"}`);
-    console.log(`Total value: ${stats.totalScore} points`);
+
+    // Повертаємо всі дані у структурованому форматі
+    return {
+      timestamp: new Date().toISOString(),
+      totalPetsGenerated: pets.length,
+      data: {
+        rarityDistribution,
+        elementDistribution,
+        rarityElementDistribution,
+        immortalStats,
+        topPets,
+        holyGrail: holyGrailStats,
+        rarityComparison,
+        genderDistribution,
+        rarityByGender: {
+          male: maleRarities,
+          female: femaleRarities,
+        },
+        summary: {
+          mostCommonElement: elementDistribution.sort(
+            (a, b) => b.count - a.count,
+          )[0],
+          rarestElement: elementDistribution.sort(
+            (a, b) => a.count - b.count,
+          )[0],
+        },
+      },
+      metadata: {
+        generationTime: Date.now(),
+        version: "1.0.1",
+      },
+    };
   }
-
-  const genderStats = GenomeGenerator.getGenderStats(pets);
-
-  console.log("=== GENDER DISTRIBUTION ===");
-  console.log(
-    `Male:   ${genderStats.male} (${genderStats.malePercentage.toFixed(1)}%)`,
-  );
-  console.log(
-    `Female: ${genderStats.female} (${genderStats.femalePercentage.toFixed(1)}%)`,
-  );
-
-  // 4. Фільтрація по гендеру
-  const femalePets = pets.filter((p) => p.gender === "female");
-  const malePets = pets.filter((p) => p.gender === "male");
-
-  console.log(`\nFemale pets: ${femalePets.length}`);
-  console.log(`Male pets: ${malePets.length}`);
-
-  // 5. Знайти рідкісну female legendary
-  const rareFemale = pets.find(
-    (p) => p.gender === "female" && p.rarity === "legendary",
-  );
-  if (rareFemale) {
-    console.log("\n=== RARE FEMALE LEGENDARY ===");
-    console.log(rareFemale);
-  }
-
-  // 6. Статистика: чи впливає гендер на рідкість? (спойлер: ні)
-  const maleRarities = malePets.reduce(
-    (acc, p) => {
-      acc[p.rarity] = (acc[p.rarity] || 0) + 1;
-      return acc;
-    },
-    {} as Record<RarityType, number>,
-  );
-
-  const femaleRarities = femalePets.reduce(
-    (acc, p) => {
-      acc[p.rarity] = (acc[p.rarity] || 0) + 1;
-      return acc;
-    },
-    {} as Record<RarityType, number>,
-  );
-
-  console.log("\n=== RARITY BY GENDER ===");
-  console.log("Male rarities:", maleRarities);
-  console.log("Female rarities:", femaleRarities);
 }

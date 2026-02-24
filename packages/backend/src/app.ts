@@ -15,6 +15,7 @@ import { gamesRoutes } from "@/modules/games/games.routes";
 import { marketplaceRoutes } from "@/modules/marketplace/marketplace.routes";
 import { vaultRoutes } from "@/modules/vault/vault.routes";
 import { eggsRoutes } from "./modules/eggs/eggs.routes";
+import { GenomeGenerator } from "./utils/genome-generator";
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -67,6 +68,13 @@ export async function buildApp(): Promise<FastifyInstance> {
       status: "ok",
       timeStamp: new Date().toISOString(),
       uptime: process.uptime(),
+    };
+  });
+
+  app.get("/stats", async () => {
+    return {
+      title: "Pixegotchi generator Statistic",
+      statistic: await GenomeGenerator.getStats(),
     };
   });
 

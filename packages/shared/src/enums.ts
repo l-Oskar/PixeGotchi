@@ -3,73 +3,91 @@
 // Keep in sync when schema changes!
 // ============================================
 
-export enum PixegotchiStatus {
-  active = "active",
-  critical = "critical",
-  vault = "vault",
-  dead = "dead",
-}
+export const PixegotchiStatus = {
+  active: "active",
+  critical: "critical",
+  vault: "vault",
+  dead: "dead",
+} as const;
 
-export enum PixegotchiGender {
-  male = "male",
-  female = "female",
-}
+export type PixegotchiStatus =
+  (typeof PixegotchiStatus)[keyof typeof PixegotchiStatus];
 
-export enum ElementType {
-  fire = "fire",
-  water = "water",
-  earth = "earth",
-  air = "air",
-  electric = "electric",
-  ice = "ice",
-  grass = "grass",
-  metal = "metal",
-  ghost = "ghost",
-  poison = "poison",
-  psychic = "psychic",
-  light = "light",
-  dark = "dark",
-  rainbow = "rainbow",
-}
+export const PixegotchiGender = {
+  male: "male",
+  female: "female",
+} as const;
 
-export enum RarityType {
-  common = "common",
-  uncommon = "uncommon",
-  rare = "rare",
-  epic = "epic",
-  mythic = "mythic",
-  legendary = "legendary",
-  unique = "unique",
-}
+export type PixegotchiGender =
+  (typeof PixegotchiGender)[keyof typeof PixegotchiGender];
 
-export enum ItemType {
-  food = "food",
-  medicine = "medicine",
-  toy = "toy",
-  cleaning = "cleaning",
-  chest = "chest",
-  rename = "rename",
-  special = "special",
-  boost = "boost",
-  resurrection = "resurrection",
-}
+export const ElementType = {
+  fire: "fire",
+  water: "water",
+  earth: "earth",
+  air: "air",
+  electric: "electric",
+  ice: "ice",
+  grass: "grass",
+  metal: "metal",
+  ghost: "ghost",
+  poison: "poison",
+  psychic: "psychic",
+  light: "light",
+  dark: "dark",
+  rainbow: "rainbow",
+} as const;
 
-export enum ListingType {
-  egg = "egg",
-  pixegotchi = "pixegotchi",
-  item = "item",
-}
+export type ElementType = (typeof ElementType)[keyof typeof ElementType];
 
-export enum CurrencyType {
-  pgc = "pgc",
-  ton = "ton",
-}
+export const RarityType = {
+  common: "common",
+  uncommon: "uncommon",
+  rare: "rare",
+  epic: "epic",
+  mythic: "mythic",
+  legendary: "legendary",
+  unique: "unique",
+} as const;
 
-export enum PageType {
-  home = "home",
-  egg = "egg",
-  inventory = "inventory",
-  games = "games",
-  marketplace = "marketplace",
-  vault = "vault",
-}
+export type RarityType = (typeof RarityType)[keyof typeof RarityType];
+
+export const ItemType = {
+  food: "food",
+  medicine: "medicine",
+  toy: "toy",
+  cleaning: "cleaning",
+  chest: "chest",
+  rename: "rename",
+  special: "special",
+  boost: "boost",
+  resurrection: "resurrection",
+} as const;
+
+export type ItemType = (typeof ItemType)[keyof typeof ItemType];
+
+export const ListingType = {
+  egg: "egg",
+  pixegotchi: "pixegotchi",
+  item: "item",
+} as const;
+
+export type ListingType = (typeof ListingType)[keyof typeof ListingType];
+
+export const CurrencyType = {
+  pgc: "pgc",
+  ton: "ton",
+} as const;
+
+export type CurrencyType = (typeof CurrencyType)[keyof typeof CurrencyType];
+
+export const PageType = {
+  home: "home",
+  egg: "egg",
+  inventory: "inventory",
+  games: "games",
+  marketplace: "marketplace",
+  vault: "vault",
+} as const;
+
+export type PageType = (typeof PageType)[keyof typeof PageType];
