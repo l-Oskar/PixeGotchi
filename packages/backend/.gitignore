@@ -6,7 +6,7 @@ node_modules/
 .env.*
 
 # builds
-generated/prisma/
+generated/
 dist/
 build/
 .next/

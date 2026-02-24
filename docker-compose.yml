@@ -45,7 +45,7 @@ services:
       - ./packages/backend/.env
     volumes:
       - ./packages/backend/src:/app/src
-      - ./packages/shared/src:/app/shared
+      - ./packages/shared/src:/app/shared/src
       - ./packages/backend/prisma:/app/prisma
       - ./packages/backend/.env:/app/.env
       - /app/node_modules
@@ -54,8 +54,8 @@ services:
       - redis
     networks:
       - pixegotchi-network
-    # command: sh -c "sleep infinity"
-    command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run dev"
+    command: sh -c "sleep infinity"
+    # command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run dev"
 
   prisma-studio:
     image: fediukv/pixegotchi-prisma-studio:latest
