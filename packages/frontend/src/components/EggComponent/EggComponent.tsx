@@ -1,19 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { PageType, Egg } from "@shared";
 import { Menu } from "lucide-react";
 import { useGetHatchingStatus } from "@/services/queries/egg.queries";
+import { useEggStore } from "@/store/egg.store";
 
 export interface EggPageProps {
   egg: Egg | null;
   onNavigate?: (page: PageType) => void;
 }
 
-const EggComponents: React.FC<EggPageProps> = ({ egg }) => {
-  if (!egg) return <div>Loading...</div>;
+const EggComponent: React.FC<EggPageProps> = () => {
+  const egg = useEggStore((s) => s.hatchingEgg);
 
-  useEffect(() => {}, [egg]);
+  if (!egg) return <div>Loading...</div>;
   const status = useGetHatchingStatus(egg.id);
+
   return (
     <>
       <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
@@ -49,7 +51,6 @@ const EggComponents: React.FC<EggPageProps> = ({ egg }) => {
           <div className="text-9xl animate-egg-wobble">
             <img
               className="w-25 h-33"
-              // src={`public/${tama?.element}-1.png`}
               src={`public/egg-0.png`}
               alt={`Egg-${egg?.id}`}
             />
@@ -60,4 +61,4 @@ const EggComponents: React.FC<EggPageProps> = ({ egg }) => {
   );
 };
 
-export default EggComponents;
+export default EggComponent;

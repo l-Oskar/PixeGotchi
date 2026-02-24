@@ -36,6 +36,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     }, 3000);
   };
 
+  if (!tama) return <div>Loading...</div>;
+
   return (
     <div className="p-4 space-y-4">
       {/* Pixegotchi Card */}
@@ -43,7 +45,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <div className="flex flex-col gap-1 mb-4">
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold flex items-center gap-2">
-              {tama!.name ?? "Unknown"}
+              {tama.name ?? "Unknown"}
               <span className="text-lg">🌈</span>
             </h2>
             <Link to="/index">
@@ -55,10 +57,13 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="flex gap-2 mt-1">
             <div className="flex items-center gap-2">
               <span className="text-xs px-2 py-0.5 bg-orange-500/30 rounded-full border border-orange-400/50 capitalize">
-                {tama!.rarity}
+                {tama.rarity}
+              </span>
+              <span className="text-xs px-2 py-0.5 bg-blue-500/30 rounded-full border border-blue-400/50 capitalize">
+                {tama.element}
               </span>
               <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
-                Lvl {tama!.level}
+                Lvl {tama.level}
               </span>
             </div>
 
@@ -67,14 +72,14 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
                 <span>EXP</span>
                 <span>
-                  {tama!.experience} / {1000}
+                  {tama.experience} / {1000}
                 </span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
                   style={{
-                    width: `${(tama!.experience / (1000 - tama!.experience)) * 100}%`,
+                    width: `${(tama.experience / (1000 - tama.experience)) * 100}%`,
                   }}
                 />
               </div>
@@ -118,12 +123,11 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
 
         {/* Pixegotchi Visual */}
         <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
-          <div className="text-9xl animate-egg-wobble">
+          <div className="text-9xl animate-bounce">
             <img
-              className="w-25 h-33"
-              // src={`public/${tama?.element}-1.png`}
-              src={`public/egg-0.png`}
-              alt={tama?.element}
+              className="w-50 h-50 -mb-10"
+              src={`public/${tama.element}-1.png`}
+              alt={`${tama.element}-picture`}
             />
           </div>
         </div>

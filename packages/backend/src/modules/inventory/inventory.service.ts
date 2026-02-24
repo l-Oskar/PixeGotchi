@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { ItemType } from "../../../generated/prisma/enums";
+import { ItemType } from "@shared";
 
 export class Inventory {
   async getUserById(userId: number) {

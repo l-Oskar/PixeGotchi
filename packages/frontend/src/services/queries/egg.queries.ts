@@ -34,9 +34,12 @@ export const useGetHatchingEgg = () => {
 };
 
 export const useCreateEgg = () => {
-  return useQuery({
-    queryKey: EGG_KEYS.create,
-    queryFn: eggApi.createEgg,
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: eggApi.createEgg,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+    },
   });
 };
 

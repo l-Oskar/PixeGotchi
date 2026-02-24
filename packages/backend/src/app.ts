@@ -78,14 +78,23 @@ export async function buildApp(): Promise<FastifyInstance> {
     };
   });
 
-  await app.register(authRoutes, { prefix: "/api/auth" });
-  await app.register(usersRoutes, { prefix: "/api/users" });
-  await app.register(pixegotchiRoutes, { prefix: "/api/pixegotchi" });
-  await app.register(eggsRoutes, { prefix: "/api/eggs" });
-  await app.register(inventoryRoutes, { prefix: "/api/inventory" });
-  await app.register(gamesRoutes, { prefix: "/api/games" });
-  await app.register(marketplaceRoutes, { prefix: "/api/marketplace" });
-  await app.register(vaultRoutes, { prefix: "/api/vault" });
+  await app.register(
+    async (apiInstance) => {
+      await apiInstance.register(authRoutes, { prefix: "/auth" });
+      await apiInstance.register(usersRoutes, { prefix: "/users" });
+      await apiInstance.register(pixegotchiRoutes, {
+        prefix: "/pixegotchi",
+      });
+      await apiInstance.register(eggsRoutes, { prefix: "/eggs" });
+      await apiInstance.register(inventoryRoutes, { prefix: "/inventory" });
+      await apiInstance.register(gamesRoutes, { prefix: "/games" });
+      await apiInstance.register(marketplaceRoutes, {
+        prefix: "/marketplace",
+      });
+      await apiInstance.register(vaultRoutes, { prefix: "/vault" });
+    },
+    { prefix: "/api" },
+  );
 
   app.setErrorHandler((error: any, reply: any) => {
     app.log.error(error);

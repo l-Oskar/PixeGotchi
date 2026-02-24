@@ -1,4 +1,10 @@
-import { PageType, MarketplaceListing, CurrencyType } from "@shared";
+import { useCreateEgg } from "@/services/queries/egg.queries";
+import {
+  PageType,
+  MarketplaceListing,
+  CurrencyType,
+  EGG_CONSTANTS,
+} from "@shared";
 
 export interface MarketplacePageProps {
   onNavigate?: (page: PageType) => void;
@@ -6,13 +12,27 @@ export interface MarketplacePageProps {
 
 // MarketplacePage
 const MarketplacePage: React.FC<MarketplacePageProps> = () => {
+  const createEgg = useCreateEgg();
+
+  const handleCreateEgg = () => {
+    createEgg.mutate(undefined, {
+      onSuccess: () => {
+        // Можна показати toast або оновити UI
+        alert("Egg created successfully!");
+      },
+      onError: (error) => {
+        alert("Failed to create egg");
+      },
+    });
+  };
+
   const listings: MarketplaceListing[] = [
     {
       id: 1,
       item: "Fire Egg",
-      price: 500,
+      price: EGG_CONSTANTS.EGG_PRICE,
       currency: "PGC" as CurrencyType,
-      seller: "User#123",
+      seller: "Pixegotchi",
       icon: "🥚",
     },
     {
@@ -52,7 +72,9 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                 <div className="font-bold text-yellow-400">
                   {listing.price} {listing.currency}
                 </div>
-                <button className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
+                <button
+                  onClick={handleCreateEgg}
+                  className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
                   Buy
                 </button>
               </div>

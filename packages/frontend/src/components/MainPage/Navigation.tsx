@@ -8,6 +8,7 @@ import {
   Egg,
 } from "lucide-react";
 import { PageType } from "@shared";
+import { useEggStore } from "@/store/egg.store";
 
 export interface NavigationProps {
   currentPage: PageType;
@@ -18,11 +19,12 @@ const Navigation: React.FC<NavigationProps> = ({
   currentPage,
   setCurrentPage,
 }) => {
+  const egg = useEggStore((s) => s.hatchingEgg);
   return (
     <nav className="fixed bottom-0 left-0 right-0 pb-1 bg-black/40 backdrop-blur-xl border-t border-white/10">
       <div className="max-w-md mx-auto px-4 py-3 flex justify-around">
         {[
-          { id: "home" as PageType, icon: Egg, label: "Home" },
+          { id: "home" as PageType, icon: egg ? Egg : Heart, label: "Home" },
           { id: "inventory" as PageType, icon: ShoppingBag, label: "Bag" },
           { id: "games" as PageType, icon: Gamepad2, label: "Games" },
           { id: "marketplace" as PageType, icon: Coins, label: "Market" },

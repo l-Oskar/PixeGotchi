@@ -3,13 +3,12 @@ import { type Pixegotchi, type PageType, Egg } from "@shared";
 import VaultPage from "../VaultPage/VaultPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
 import GamesPage from "../GamePage/GamePage";
-import MarketplacePage from "../MarketplacePage/MarketplaceGage";
+import MarketplacePage from "../MarketplacePage/MarketplacePage";
 import Header from "@/components/MainPage/Header";
 import Navigation from "@/components/MainPage/Navigation";
 import { ShowPixeGotchi } from "@/components/PixegotchiPage/ShowPixegotchi";
 import { useAuthStore } from "@/store/auth.store";
-import EggComponents from "@/components/EggComponent/EggComponents";
-import { pixe } from "./fakeData";
+import EggComponent from "@/components/EggComponent/EggComponent";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { useEggStore } from "@/store/egg.store";
 
@@ -45,7 +44,7 @@ const MainPage: React.FC = () => {
     home: (
       <ShowPixeGotchi tama={activePixegotchi} onNavigate={setCurrentPage} />
     ),
-    egg: <EggComponents egg={hatchingEgg} onNavigate={setCurrentPage} />,
+    egg: <EggComponent egg={hatchingEgg} onNavigate={setCurrentPage} />,
     inventory: <InventoryPage onNavigate={setCurrentPage} />,
     games: <GamesPage onNavigate={setCurrentPage} />,
     marketplace: <MarketplacePage onNavigate={setCurrentPage} />,

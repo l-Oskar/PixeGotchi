@@ -604,7 +604,9 @@ export class GenomeGenerator {
       found: !!holyGrail,
       attempts,
       maxAttempts,
-      estimatedProbability: "0.0009%",
+      estimatedProbability: holyGrail
+        ? ((1 / attempts) * 100).toFixed(6) + "%"
+        : "0%",
       ...(holyGrail && {
         pet: holyGrail.pet,
         score: holyGrail.stats.totalScore,
