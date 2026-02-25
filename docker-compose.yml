@@ -45,16 +45,16 @@ services:
       - ./packages/backend/.env
     volumes:
       - ./packages/backend/src:/app/src
-      - ./packages/shared:/app/shared
+      - ./packages/shared:/shared
       - ./packages/backend/prisma:/app/prisma
       - ./packages/backend/.env:/app/.env
-      - /app/node_modules
     depends_on:
       - postgres
       - redis
     networks:
       - pixegotchi-network
     command: sh -c "sleep infinity"
+    # command: sh -c "npm install && npm run dev"
     # command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run dev"
 
   prisma-studio:
