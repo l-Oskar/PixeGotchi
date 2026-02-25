@@ -126,7 +126,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="text-9xl animate-bounce">
             <img
               className="w-50 h-50 -mb-10"
-              src={`public/${tama.element}-1.png`}
+              src={`assets/${tama.element}-1.png`}
               alt={`${tama.element}-picture`}
             />
           </div>

@@ -12,6 +12,7 @@
     "test": "turbo run test",
     "contracts:deploy": "npm run deploy --workspace=packages/contracts",
     "backend:dev": "npm run dev --workspace=packages/backend",
+    "prisma:dev": "npm run prisma:studio --workspace=packages/backend",
     "frontend:dev": "npm run dev --workspace=packages/frontend"
   },
   "devDependencies": {
