@@ -13,10 +13,14 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
 }) => {
   return (
     <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
-      <div className="text-9xl animate-egg-wobble">
+      <div
+        className={
+          `text-9xl ` +
+          (!status.canHatchNow ? "animate-egg-wobble" : "animate-pulse")
+        }>
         <img
           className="w-25 h-33"
-          src={`assets/${getImage(egg, status!)}`}
+          src={`./${getImage(egg, status!)}`}
           alt={`Egg-${egg.id}`}
         />
       </div>
@@ -27,11 +31,11 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
 const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   return (
     <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
-      <div className="text-9xl animate-egg-wobble">
+      <div className="-mb-15 text-9xl animate-bounce">
         <img
-          className="w-25 h-33"
-          src={`assets/${getImage(pixe)}`}
-          alt={`Pixegitchi-${pixe.id}`}
+          className="w-50 h-50"
+          src={`./${getImage(pixe)}`}
+          alt={`Pixegotchi-${pixe.id}`}
         />
       </div>
     </div>

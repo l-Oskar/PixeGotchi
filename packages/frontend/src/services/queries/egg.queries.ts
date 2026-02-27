@@ -13,9 +13,14 @@ export const EGG_KEYS = {
 };
 
 export const useGetAllEggs = () => {
+  const setAllEggs = useEggStore((s) => s.setAllEggs);
   return useQuery({
     queryKey: EGG_KEYS.all,
-    queryFn: eggApi.getAllEggs,
+    queryFn: async () => {
+      const allEggs = await eggApi.getAllEggs();
+      setAllEggs(allEggs);
+      return allEggs;
+    },
   });
 };
 
@@ -63,7 +68,7 @@ export const useGetHatchingStatus = (eggId: number | null) => {
     queryKey: EGG_KEYS.status(eggId),
     queryFn: () => eggApi.getHatchingStatus(eggId!),
     enabled: !!eggId,
-    refetchInterval: 5000,
+    refetchInterval: 3000,
   });
 };
 

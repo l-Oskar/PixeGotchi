@@ -42,7 +42,10 @@ const MainPage: React.FC = () => {
   const pages: Record<PageType, React.ReactNode> = {
     start: <Empty />,
     home: activePixegotchi ? (
-      <ShowPixeGotchi tama={activePixegotchi} onNavigate={setCurrentPage} />
+      <ShowPixeGotchi
+        pixegotchi={activePixegotchi}
+        onNavigate={setCurrentPage}
+      />
     ) : null,
     egg: egg ? <EggComponent onNavigate={setCurrentPage} /> : null,
     inventory: <InventoryPage onNavigate={setCurrentPage} />,

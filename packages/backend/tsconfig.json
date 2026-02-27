@@ -41,7 +41,6 @@
     "newLine": "lf"
   },
   "include": ["src/**/*", "prisma/**/*"],
-  "references": [{ "path": "../shared" }],
   "exclude": [
     "node_modules",
     "dist",

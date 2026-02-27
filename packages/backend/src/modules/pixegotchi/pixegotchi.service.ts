@@ -19,6 +19,16 @@ export class PixegotchiService {
     return active ?? null;
   }
 
+  async setInActive(userId: number) {
+    const active = await this.findActive(userId);
+    await prisma.pixegotchi.update({
+      where: { id: active!.id },
+      data: {
+        status: "vault",
+      },
+    });
+  }
+
   // Get by ID with ownership check
   async findById(id: number, userId: number) {
     return await prisma.pixegotchi.findFirst({

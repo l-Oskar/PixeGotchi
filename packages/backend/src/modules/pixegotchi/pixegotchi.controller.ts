@@ -28,6 +28,13 @@ export class PixegotchiController {
     return reply.send(activePixegotchi);
   }
 
+  async setInActive(request: FastifyRequest, reply: FastifyReply) {
+    const userId = (request.user as any).userId;
+    const inActivePixegotchi = await this.pixegotchiService.setInActive(userId);
+
+    return reply.send(inActivePixegotchi);
+  }
+
   async getById(
     request: FastifyRequest<{ Params: { id: string } }>,
     reply: FastifyReply,

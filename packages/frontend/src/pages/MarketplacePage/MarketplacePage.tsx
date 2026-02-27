@@ -1,4 +1,5 @@
-import { useCreateEgg } from "@/services/queries/egg.queries";
+import { useCreateEgg, useGetAllEggs } from "@/services/queries/egg.queries";
+import { useEggStore } from "@/store/egg.store";
 import {
   PageType,
   MarketplaceListing,
@@ -10,14 +11,17 @@ export interface MarketplacePageProps {
   onNavigate?: (page: PageType) => void;
 }
 
-const MarketplacePage: React.FC<MarketplacePageProps> = () => {
+const MarketplacePage: React.FC<MarketplacePageProps> = ({ onNavigate }) => {
   const createEgg = useCreateEgg();
+  const getAllEggs = useGetAllEggs();
+  const setAllEggs = useEggStore((s) => s.setAllEggs);
 
   const handleCreateEgg = () => {
     createEgg.mutate(undefined, {
       onSuccess: () => {
-        // Можна показати toast або оновити UI
+        setAllEggs(getAllEggs.data!);
         alert("Egg created successfully!");
+        onNavigate?.("start");
       },
       onError: (error) => {
         alert("Failed to create egg" + error);

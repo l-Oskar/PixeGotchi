@@ -9,6 +9,7 @@ export async function pixegotchiRoutes(app: FastifyInstance) {
   app.get("/", controller.getAll.bind(controller));
   app.get("/active", controller.getActive.bind(controller));
   app.get("/:id", controller.getById.bind(controller));
+  app.post("/inactive", controller.setInActive.bind(controller));
   app.delete("/:id", controller.release.bind(controller));
 
   // app.post("/:id/feed", controller.feed.bind(controller));

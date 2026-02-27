@@ -16,13 +16,15 @@ import {
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
-import { getImage } from "@/utils/getImage";
+import { Visual } from "../MainPage/Visual";
+import { eggApi } from "@/services/api/egg.api";
+import { pixegotchiApi } from "@/services/api/pixegotchi.api";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
-  tama,
+  pixegotchi,
   onNavigate,
 }) => {
-  const [cooldowns, setCooldowns] = useState<Cooldowns>({
+  const [cooldowns] = useState<Cooldowns>({
     feed: false,
     play: false,
     sleep: false,
@@ -40,7 +42,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     console.log(action);
   };
 
-  if (!tama) return <div>Loading...</div>;
+  if (!pixegotchi) return <div>Loading...</div>;
 
   return (
     <div className="p-4 space-y-4">
@@ -49,7 +51,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <div className="flex flex-col gap-1 mb-4">
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold flex items-center gap-2">
-              {tama.name ?? "Unknown"}
+              {pixegotchi.name ?? "Unknown"}
               <span className="text-lg">🌈</span>
             </h2>
             <Link to="/index">
@@ -61,13 +63,13 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="flex gap-2 mt-1">
             <div className="flex items-center gap-2">
               <span className="text-xs px-2 py-0.5 bg-orange-500/30 rounded-full border border-orange-400/50 capitalize">
-                {tama.rarity}
+                {pixegotchi.rarity}
               </span>
               <span className="text-xs px-2 py-0.5 bg-blue-500/30 rounded-full border border-blue-400/50 capitalize">
-                {tama.element}
+                {pixegotchi.element}
               </span>
               <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
-                Lvl {tama.level}
+                Lvl {pixegotchi.level}
               </span>
             </div>
 
@@ -76,14 +78,14 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
                 <span>EXP</span>
                 <span>
-                  {tama.experience} / {1000}
+                  {pixegotchi.experience} / {1000}
                 </span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
                   style={{
-                    width: `${(tama.experience / (1000 - tama.experience)) * 100}%`,
+                    width: `${(pixegotchi.experience / (1000 - pixegotchi.experience)) * 100}%`,
                   }}
                 />
               </div>
@@ -95,46 +97,38 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <div className="grid grid-cols-5 gap-2 mb-3">
           <CompactStat
             icon={Heart}
-            value={tama!.health}
+            value={pixegotchi!.health}
             bgColor="bg-red-500/20"
             strokeColor="text-red-500"
           />
           <CompactStat
             icon={Apple}
-            value={100 - tama!.hunger}
+            value={100 - pixegotchi!.hunger}
             bgColor="bg-orange-500/20"
             strokeColor="text-orange-500"
           />
           <CompactStat
             icon={Zap}
-            value={tama!.energy}
+            value={pixegotchi!.energy}
             bgColor="bg-yellow-500/20"
             strokeColor="text-yellow-500"
           />
           <CompactStat
             icon={Smile}
-            value={tama!.happiness}
+            value={pixegotchi!.happiness}
             bgColor="bg-pink-500/20"
             strokeColor="text-pink-500"
           />
           <CompactStat
             icon={Droplets}
-            value={tama!.cleanliness}
+            value={pixegotchi!.cleanliness}
             bgColor="bg-blue-500/20"
             strokeColor="text-blue-500"
           />
         </div>
 
         {/* Pixegotchi Visual */}
-        <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
-          <div className="text-9xl animate-bounce">
-            <img
-              className="w-50 h-50 -mb-10"
-              src={`assets/${getImage(tama)}`}
-              alt={`pixegotchi-${tama.element}-img`}
-            />
-          </div>
-        </div>
+        <Visual pet={pixegotchi} status={null} />
       </div>
 
       {/* Action Buttons */}
@@ -170,7 +164,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <ActionButton
           icon={Trash2}
           label="Clean"
-          onClick={() => handleAction("clean")}
+          onClick={() => pixegotchiApi.setInActive()}
           disabled={cooldowns.clean}
           gradient="from-cyan-500 to-blue-500"
         />

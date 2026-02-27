@@ -1,4 +1,5 @@
 import { prisma } from "@/database/prisma";
+import { USER_CONST } from "@shared";
 
 export class UsersService {
   async findByTelegramId(telegramId: number) {
@@ -14,6 +15,7 @@ export class UsersService {
       data: {
         telegramId: BigInt(data.telegramId),
         username: data.username,
+        pgcBalance: USER_CONST.START_BALANCE,
       },
     });
   }
