@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
+import { getImage } from "@/utils/getImage";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   tama,
@@ -126,8 +127,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="text-9xl animate-bounce">
             <img
               className="w-50 h-50 -mb-10"
-              src={`assets/${tama.element}-1.png`}
-              alt={`${tama.element}-picture`}
+              src={`assets/${getImage(tama)}`}
+              alt={`pixegotchi-${tama.element}-img`}
             />
           </div>
         </div>

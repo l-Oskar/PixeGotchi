@@ -16,9 +16,7 @@ export class EggService {
       },
     });
 
-    if (eggs.length < 1) throw new Error("You don't have eggs");
-
-    return eggs;
+    return eggs ?? [];
   }
 
   async getEggById(userId: number, id: number) {
@@ -57,13 +55,13 @@ export class EggService {
       if (Number(user.pgcBalance) < EGG_CONSTANTS.EGG_PRICE)
         throw new Error("Not enought funds");
 
-      await prisma.user.update({
+      const newBalance = await prisma.user.update({
         where: {
           id: userId,
         },
         data: {
           pgcBalance: {
-            decrement: 999,
+            decrement: EGG_CONSTANTS.EGG_PRICE,
           },
         },
       });
@@ -72,10 +70,11 @@ export class EggService {
         data: {
           userId,
           createdAt: new Date(),
+          hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
         },
       });
 
-      return createdEgg;
+      return { ...createdEgg, pgcBalance: newBalance.pgcBalance.toString() };
     });
   }
 
@@ -94,7 +93,6 @@ export class EggService {
       data: {
         isHatching: true,
         hatchStartedAt: new Date(),
-        hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
         tapCount: 0,
       },
     });

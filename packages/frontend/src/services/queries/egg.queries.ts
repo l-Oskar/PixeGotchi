@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { eggApi } from "../api/egg.api";
 import { useEggStore } from "@/store/egg.store";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
+import { useUserStore } from "@/store/user.store";
 
 export const EGG_KEYS = {
   all: ["eggs"] as const,
@@ -35,10 +36,12 @@ export const useGetHatchingEgg = () => {
 
 export const useCreateEgg = () => {
   const queryClient = useQueryClient();
+  const updateBallance = useUserStore((s) => s.updateBallance);
   return useMutation({
     mutationFn: eggApi.createEgg,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      updateBallance(data.pgcBalance.toString());
     },
   });
 };
@@ -59,6 +62,8 @@ export const useGetHatchingStatus = (eggId: number | null) => {
   return useQuery({
     queryKey: EGG_KEYS.status(eggId),
     queryFn: () => eggApi.getHatchingStatus(eggId!),
+    enabled: !!eggId,
+    refetchInterval: 5000,
   });
 };
 

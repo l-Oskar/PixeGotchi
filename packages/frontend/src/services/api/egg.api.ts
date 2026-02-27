@@ -1,6 +1,10 @@
 import { apiClient } from "./client";
 import { Egg, Pixegotchi, UpdatedEgg, EggHatchingStatus } from "@shared";
 
+interface EggWithBalance extends Egg {
+  pgcBalance: string;
+}
+
 export const EGG_URL = "/eggs";
 export const EGG_URL_KEYS = {
   eggs: EGG_URL,
@@ -26,7 +30,7 @@ export const eggApi = {
     const { data } = await apiClient.get(EGG_URL_KEYS.hatchingEgg);
     return data;
   },
-  createEgg: async (): Promise<Egg> => {
+  createEgg: async (): Promise<EggWithBalance> => {
     const { data } = await apiClient.post(EGG_URL_KEYS.getEgg);
     return data;
   },
@@ -38,8 +42,8 @@ export const eggApi = {
     const { data } = await apiClient.get(EGG_URL_KEYS.hatchingStatus(id));
     return data;
   },
-  hatchEgg: async (id: number): Promise<Pixegotchi> => {
-    const { data } = await apiClient.post(EGG_URL_KEYS.hatchEgg(id));
+  hatchEgg: async (id: number, name?: string): Promise<Pixegotchi> => {
+    const { data } = await apiClient.post(EGG_URL_KEYS.hatchEgg(id), { name });
     return data;
   },
   cancelHatching: async (id: number): Promise<UpdatedEgg> => {

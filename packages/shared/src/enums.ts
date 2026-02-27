@@ -88,6 +88,22 @@ export const PageType = {
   games: "games",
   marketplace: "marketplace",
   vault: "vault",
+  start: "start",
 } as const;
 
 export type PageType = (typeof PageType)[keyof typeof PageType];
+
+export enum EggEvolutionStage {
+  BASE = 0,
+  STAGE_1 = 1,
+  STAGE_2 = 2,
+  STAGE_3 = 3,
+  STAGE_4 = 4,
+  HATCHED = 5,
+}
+
+export enum PixegotchiEvolutionStage {
+  BABY = 1,
+  TEEN = 2,
+  ADULT = 3,
+}
