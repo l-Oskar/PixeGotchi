@@ -8,7 +8,6 @@ import {
   Egg,
 } from "lucide-react";
 import { PageType } from "@shared";
-import { useEggStore } from "@/store/egg.store";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export interface NavigationProps {

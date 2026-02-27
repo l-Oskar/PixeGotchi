@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { PageType } from "@shared";
 import { Gamepad2, Moon, Egg as EggIcon, Menu } from "lucide-react";

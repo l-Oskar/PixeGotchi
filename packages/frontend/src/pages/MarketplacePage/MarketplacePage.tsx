@@ -20,7 +20,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
         alert("Egg created successfully!");
       },
       onError: (error) => {
-        alert("Failed to create egg");
+        alert("Failed to create egg" + error);
       },
     });
   };

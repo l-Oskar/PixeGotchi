@@ -30,11 +30,14 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     heal: false,
   });
 
-  const handleAction = (action: keyof Cooldowns) => {
-    setCooldowns((prev) => ({ ...prev, [action]: true }));
-    setTimeout(() => {
-      setCooldowns((prev) => ({ ...prev, [action]: false }));
-    }, 3000);
+  // const handleAction = (action: keyof Cooldowns) => {
+  //   setCooldowns((prev) => ({ ...prev, [action]: true }));
+  //   setTimeout(() => {
+  //     setCooldowns((prev) => ({ ...prev, [action]: false }));
+  //   }, 3000);
+  // };
+  const handleAction = (action: string) => {
+    console.log(action);
   };
 
   if (!tama) return <div>Loading...</div>;
