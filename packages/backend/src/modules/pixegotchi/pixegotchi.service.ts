@@ -1,10 +1,7 @@
 import { prisma } from "@/database/prisma";
-import { Inventory } from "../inventory/inventory.service";
-import { Item, Pixegotchi } from "generated/prisma/client";
+import { Item, Pixegotchi } from "@shared";
 
 export class PixegotchiService {
-  private inventory = new Inventory();
-
   async findByUserId(userId: number) {
     return await prisma.pixegotchi.findMany({
       where: { userId },

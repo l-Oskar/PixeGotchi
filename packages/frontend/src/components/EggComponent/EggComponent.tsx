@@ -81,8 +81,8 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <>
-      <div className="mt-5 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
+    <div className="p-4 space-y-4">
+      <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
         <div className="flex flex-col gap-1 mb-4">
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -159,7 +159,7 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,11 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { PixegotchiService } from "./pixegotchi.service";
-import { CooldownManager, cooldownTime } from "@/utils/cooldown";
 import { z } from "zod";
-
-const hatchSchema = z.object({
-  name: z.string().min(3).max(30).optional(),
-});
 
 const renameSchema = z.object({
   name: z.string().min(3).max(30),
@@ -13,7 +8,6 @@ const renameSchema = z.object({
 
 export class PixegotchiController {
   private pixegotchiService = new PixegotchiService();
-  private cooldownManager = new CooldownManager();
 
   async getAll(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;

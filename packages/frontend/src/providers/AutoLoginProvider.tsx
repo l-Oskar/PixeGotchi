@@ -16,7 +16,9 @@ export const AutoLiginProvider = ({
     if (isAuthenticate) return;
 
     if (initDataRaw) {
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       loginMutation.mutate(initDataRaw);
+      //loginMutation.mutate(import.meta.env.VITE_DEV_INIT_DATA);
     }
   }, [isAuthenticate, initDataRaw]);
 

@@ -188,7 +188,7 @@ export class EggService {
         data: {
           userId,
           name,
-          eggId: id,
+          eggId: egg.id,
           genomeHash: genome.genome_hash,
           element: genome.element,
           rarity: genome.rarity,

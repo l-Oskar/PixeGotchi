@@ -18,4 +18,5 @@ export type { HomePageProps } from "./types/pages";
 export type { GameStruct } from "./types/game";
 export type { MarketplaceListing } from "./types/marketplace";
 export type { Egg, UpdatedEgg, EggHatchingStatus } from "./types/egg";
+export type { ElementStats, VaultStats } from "./types/vault";
 export { isApiError } from "./types/api";

@@ -13,7 +13,7 @@ export interface Pixegotchi {
   element: ElementType;
   rarity: RarityType;
   gender: PixegotchiGender;
-  traits: string[];
+  traits: string[] | null;
   name: string;
   status: PixegotchiStatus;
   level: number;

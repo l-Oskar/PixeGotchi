@@ -1,9 +1,13 @@
 import { useStartHatching } from "@/services/queries/egg.queries";
 import { useEggStore } from "@/store/egg.store";
-import { Egg } from "@shared";
-import { useEffect } from "react";
+import { Egg, PageType } from "@shared";
+import React, { useEffect } from "react";
 
-const StartPage = () => {
+interface StartPageProps {
+  onNavigate: (page: PageType) => void;
+}
+
+const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
   const allEggs = useEggStore((s) => s.allEggs);
   const startHatchingEgg = useStartHatching();
   if (!allEggs) return <div>Loading eggs...</div>;
@@ -17,16 +21,20 @@ const StartPage = () => {
     if (allEggs) return;
   }, [allEggs]);
 
+  if (allEggs.length == 0)
+    return <div className="m-10 flex justify-center text-2xl">No eggs</div>;
+
   return (
-    <div>
+    <div className="grid justify-center text-2xl">
       {allEggs.map((egg) => (
-        <div key={egg.id}>
-          <span>🥚Egg-#{egg.id} | </span>
-          <span>Created at: {egg.createdAt.toString().split("T")[0]}</span>
+        <div className="m-1 px-20 border rounded-xl" key={egg.id}>
+          <span>🥚Egg-#{egg.id}</span>
           {/* <span>Is listed: {egg.isListed ? "Yes" : "No"} </span> */}
           <button
-            className="m-2 p-2 border rounded-2xl border-fuchsia-500 hover:bg-fuchsia-500 hover:border-amber-50"
-            onClick={() => handleHatch(egg)}>
+            className="m-2 px-2 py-1 border rounded-2xl border-fuchsia-500 hover:bg-fuchsia-500 hover:border-amber-50"
+            onClick={() => {
+              handleHatch(egg), onNavigate("egg");
+            }}>
             Hatch
           </button>
         </div>

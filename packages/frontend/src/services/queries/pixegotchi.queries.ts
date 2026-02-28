@@ -1,10 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { pixegotchiApi } from "@/services/api/pixegotchi.api";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export const useAllPixegotchi = () => {
+  const setAllPixegotchi = usePixegotchiStore((s) => s.setAllPixegotchi);
   return useQuery({
     queryKey: ["allPixegotchi"],
-    queryFn: pixegotchiApi.getAll,
+    queryFn: async () => {
+      const allPixe = await pixegotchiApi.getAll();
+      setAllPixegotchi(allPixe);
+      return allPixe;
+    },
   });
 };
 

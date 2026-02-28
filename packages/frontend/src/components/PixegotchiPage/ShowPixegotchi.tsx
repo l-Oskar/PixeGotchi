@@ -13,17 +13,21 @@ import {
   Smile,
   Droplets,
   Menu,
+  Mars,
+  Venus,
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
-import { eggApi } from "@/services/api/egg.api";
 import { pixegotchiApi } from "@/services/api/pixegotchi.api";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,
   onNavigate,
+  setActive,
 }) => {
+  const clearPixegotchi = usePixegotchiStore((s) => s.setToVault);
   const [cooldowns] = useState<Cooldowns>({
     feed: false,
     play: false,
@@ -52,7 +56,6 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold flex items-center gap-2">
               {pixegotchi.name ?? "Unknown"}
-              <span className="text-lg">🌈</span>
             </h2>
             <Link to="/index">
               <button className="text-white/60 hover:text-white">
@@ -67,6 +70,13 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               </span>
               <span className="text-xs px-2 py-0.5 bg-blue-500/30 rounded-full border border-blue-400/50 capitalize">
                 {pixegotchi.element}
+              </span>
+              <span className="text-xs px-2 py-0.5 bg-amber-300/30 rounded-full border border-amber-300">
+                {pixegotchi.gender == "male" ? (
+                  <Mars size={16} className="text-blue-400" />
+                ) : (
+                  <Venus size={16} className="text-pink-400" />
+                )}
               </span>
               <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
                 Lvl {pixegotchi.level}
@@ -164,7 +174,12 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <ActionButton
           icon={Trash2}
           label="Clean"
-          onClick={() => pixegotchiApi.setInActive()}
+          onClick={() => {
+            pixegotchiApi.setInActive(),
+              clearPixegotchi(),
+              setActive(null),
+              onNavigate("start");
+          }}
           disabled={cooldowns.clean}
           gradient="from-cyan-500 to-blue-500"
         />

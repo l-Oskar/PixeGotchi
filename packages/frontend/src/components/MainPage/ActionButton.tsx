@@ -21,7 +21,6 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     className={`bg-linear-to-br ${gradient} hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl p-4 transition flex flex-col items-center gap-2 shadow-lg`}>
     <Icon size={24} />
     <span className="text-xs font-semibold">{label}</span>
-    {disabled && <span className="text-[10px] text-white/60">Cooldown...</span>}
   </button>
 );
 

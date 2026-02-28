@@ -40,10 +40,11 @@ const MainPage: React.FC = () => {
   }, [activePixegotchi, egg]);
 
   const pages: Record<PageType, React.ReactNode> = {
-    start: <Empty />,
+    start: <Empty onNavigate={setCurrentPage} />,
     home: activePixegotchi ? (
       <ShowPixeGotchi
         pixegotchi={activePixegotchi}
+        setActive={setActivePixegotchi}
         onNavigate={setCurrentPage}
       />
     ) : null,

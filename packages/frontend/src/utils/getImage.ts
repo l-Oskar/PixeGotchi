@@ -4,6 +4,7 @@ import {
   EggHatchingStatus,
   EggEvolutionStage,
   PixegotchiEvolutionStage,
+  ElementStats,
 } from "@shared";
 
 type Pet = Egg | Pixegotchi;
@@ -16,19 +17,37 @@ export function isPixegotchi(pet: Pet): pet is Pixegotchi {
   return "level" in pet && "element" in pet;
 }
 
-export function getPixegotchiEvolution(pixegotchi: Pixegotchi) {
-  if (pixegotchi.level < 20) {
+export function getPixegotchiEvolution(level: number) {
+  if (level < 20) {
     return PixegotchiEvolutionStage.BABY;
   }
-  if (pixegotchi.level >= 20 && pixegotchi.level < 50) {
+  if (level >= 20 && level < 50) {
     return PixegotchiEvolutionStage.TEEN;
   } else {
     return PixegotchiEvolutionStage.ADULT;
   }
 }
 
-export function getPixegotchiImg(pixegotchi: Pixegotchi) {
-  return `pixegotchi/${pixegotchi.element}-${getPixegotchiEvolution(pixegotchi)}.png`;
+export function getPixegotchiImgOld(pixegotchi: Pixegotchi) {
+  return `pixegotchi/${pixegotchi.element}-${getPixegotchiEvolution(pixegotchi.level)}.png`;
+}
+
+export function getPixegotchiImg(
+  pixegotchi: Pixegotchi | ElementStats,
+): string {
+  let level: number;
+  let element: string;
+
+  if ("level" in pixegotchi) {
+    level = pixegotchi.level;
+    element = pixegotchi.element;
+  } else {
+    level = pixegotchi.highestLevel;
+    element = pixegotchi.element;
+  }
+  const evolution = getPixegotchiEvolution(level);
+
+  return `pixegotchi/${element}-${evolution}.png`;
 }
 
 export function getEggEvolution(status: EggHatchingStatus) {

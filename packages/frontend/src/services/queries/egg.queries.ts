@@ -68,7 +68,7 @@ export const useGetHatchingStatus = (eggId: number | null) => {
     queryKey: EGG_KEYS.status(eggId),
     queryFn: () => eggApi.getHatchingStatus(eggId!),
     enabled: !!eggId,
-    refetchInterval: 3000,
+    refetchInterval: 1000,
   });
 };
 
