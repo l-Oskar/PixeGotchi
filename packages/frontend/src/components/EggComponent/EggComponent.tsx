@@ -86,11 +86,6 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
             <h2 className="text-2xl font-bold flex items-center gap-2">
               {`Egg-#${egg.id}`}
             </h2>
-            <Link to="/index">
-              <button className="text-white/60 hover:text-white">
-                <Menu size={20} />
-              </button>
-            </Link>
           </div>
 
           <div className="flex gap-2 mt-1">

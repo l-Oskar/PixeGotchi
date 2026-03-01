@@ -11,7 +11,7 @@ export interface MarketplacePageProps {
   onNavigate?: (page: PageType) => void;
 }
 
-const MarketplacePage: React.FC<MarketplacePageProps> = ({ onNavigate }) => {
+const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const createEgg = useCreateEgg();
   const getAllEggs = useGetAllEggs();
   const setAllEggs = useEggStore((s) => s.setAllEggs);

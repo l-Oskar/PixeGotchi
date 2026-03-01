@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { Cooldowns, HomePageProps, PageType } from "@shared";
 import {
@@ -26,6 +26,7 @@ import QuickInfo from "../Other/QuickInfo";
 import Loader from "../Other/Loader";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
+  pixegotchi,
   onNavigate,
   setActive,
 }) => {
@@ -52,7 +53,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
 
   if (getActive.isLoading) return <Loader title={"Pixegotchi is loading..."} />;
 
-  if (getActive.data)
+  if (pixegotchi)
     return (
       <div className="p-4 space-y-4">
         {/* Pixegotchi Card */}
@@ -60,31 +61,31 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="flex flex-col gap-1 mb-4">
             <div className="flex justify-between">
               <h2 className="text-2xl font-bold flex items-center gap-2">
-                {getActive.data.name ?? "Unknown"}
+                {pixegotchi.name ?? "Unknown"}
               </h2>
-              <Link to="/index">
-                <button className="text-white/60 hover:text-white">
-                  <Menu size={20} />
-                </button>
-              </Link>
+              <button
+                onClick={() => onNavigate("data")}
+                className="text-white/60 hover:text-white">
+                <Menu size={20} />
+              </button>
             </div>
             <div className="flex gap-2 mt-1">
               <div className="flex items-center gap-2">
                 <span className="text-xs px-2 py-0.5 bg-orange-500/30 rounded-full border border-orange-400/50 capitalize">
-                  {getActive.data.rarity}
+                  {pixegotchi.rarity}
                 </span>
                 <span className="text-xs px-2 py-0.5 bg-blue-500/30 rounded-full border border-blue-400/50 capitalize">
-                  {getActive.data.element}
+                  {pixegotchi.element}
                 </span>
                 <span className="text-xs px-2 py-0.5 bg-amber-300/30 rounded-full border border-amber-300">
-                  {getActive.data.gender == "male" ? (
+                  {pixegotchi.gender == "male" ? (
                     <Mars size={16} className="text-blue-400" />
                   ) : (
                     <Venus size={16} className="text-pink-400" />
                   )}
                 </span>
                 <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
-                  Lvl {getActive.data.level}
+                  Lvl {pixegotchi.level}
                 </span>
               </div>
 
@@ -93,14 +94,14 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
                   <span>EXP</span>
                   <span>
-                    {getActive.data.experience} / {1000}
+                    {pixegotchi.experience} / {1000}
                   </span>
                 </div>
                 <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
                     style={{
-                      width: `${(getActive.data.experience / (1000 - getActive.data.experience)) * 100}%`,
+                      width: `${(pixegotchi.experience / (1000 - pixegotchi.experience)) * 100}%`,
                     }}
                   />
                 </div>
@@ -112,38 +113,38 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-5 gap-2 mb-3">
             <CompactStat
               icon={Heart}
-              value={getActive.data!.health}
+              value={pixegotchi.health}
               bgColor="bg-red-500/20"
               strokeColor="text-red-500"
             />
             <CompactStat
               icon={Apple}
-              value={100 - getActive.data!.hunger}
+              value={100 - pixegotchi.hunger}
               bgColor="bg-orange-500/20"
               strokeColor="text-orange-500"
             />
             <CompactStat
               icon={Zap}
-              value={getActive.data.energy}
+              value={pixegotchi.energy}
               bgColor="bg-yellow-500/20"
               strokeColor="text-yellow-500"
             />
             <CompactStat
               icon={Smile}
-              value={getActive.data.happiness}
+              value={pixegotchi.happiness}
               bgColor="bg-pink-500/20"
               strokeColor="text-pink-500"
             />
             <CompactStat
               icon={Droplets}
-              value={getActive.data.cleanliness}
+              value={pixegotchi.cleanliness}
               bgColor="bg-blue-500/20"
               strokeColor="text-blue-500"
             />
           </div>
 
           {/* Pixegotchi Visual */}
-          <Visual pet={getActive.data} status={null} />
+          <Visual pet={pixegotchi} status={null} />
         </div>
 
         {/* Action Buttons */}

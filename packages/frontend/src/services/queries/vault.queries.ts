@@ -9,6 +9,7 @@ export const useAllVault = () => {
     queryFn: async () => {
       const data = await vaultApi.getAllVault();
       setAllVault(data);
+      return data;
     },
   });
 };

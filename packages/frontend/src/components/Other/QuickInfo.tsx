@@ -1,4 +1,3 @@
-import React from "react";
 import { useVaultStore } from "@/store/vault.store";
 import { VaultStats, ElementStats, User } from "@shared";
 import { useUserStore } from "@/store/user.store";
@@ -18,7 +17,7 @@ const QuickInfo = () => {
   const userAge = (user: User) => {
     if (!user) return "0";
 
-    const dateNow = Date.now();
+    //const dateNow = Date.now();
     const userStr = user.createdAt?.toString();
     return userStr;
   };

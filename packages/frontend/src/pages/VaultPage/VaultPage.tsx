@@ -1,5 +1,5 @@
 import { Sparkles } from "lucide-react";
-import { PageType } from "@shared";
+import { ElementStats, PageType } from "@shared";
 import Loader from "@/components/Other/Loader";
 import { useAllVault } from "@/services/queries/vault.queries";
 import { useVaultStore } from "@/store/vault.store";
@@ -24,13 +24,11 @@ const RARITY_COLORS: Record<string, string> = {
 const VaultPage: React.FC<VaultPageProps> = () => {
   const { isLoading, data } = useAllVault();
   const allVault = useVaultStore((s) => s.allVault);
-  const [vaultStats, setVaultStats] = useState<any[]>([]);
+  const [vaultStats, setVaultStats] = useState<ElementStats[] | []>([]);
 
   useEffect(() => {
     if (data) {
       setVaultStats(data);
-    } else if (allVault) {
-      setVaultStats(allVault);
     }
   }, [data, allVault]);
 

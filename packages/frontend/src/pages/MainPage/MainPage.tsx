@@ -13,6 +13,7 @@ import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import Empty from "@/components/MainPage/StartPage";
 import { useEggStore } from "@/store/egg.store";
 import Loader from "@/components/Other/Loader";
+import PixegothiData from "@/components/PixegotchiPage/PixegothiData";
 
 const MainPage: React.FC = () => {
   const user = useUserStore((s) => s.user);
@@ -25,6 +26,9 @@ const MainPage: React.FC = () => {
   );
 
   useEffect(() => {
+    if (pixegotchi) {
+      setActivePixegotchi(pixegotchi);
+    }
     if (activePixegotchi) {
       setCurrentPage("home");
     } else if (egg) {
@@ -32,13 +36,15 @@ const MainPage: React.FC = () => {
     } else {
       setCurrentPage("start");
     }
-  }, [activePixegotchi, egg]);
+  }, [activePixegotchi, egg, pixegotchi]);
 
   const pages: Record<PageType, React.ReactNode> = {
+    data: <PixegothiData pixegotchi={activePixegotchi} />,
     loader: <Loader />,
     start: <Empty onNavigate={setCurrentPage} />,
     home: activePixegotchi ? (
       <ShowPixeGotchi
+        pixegotchi={activePixegotchi}
         setActive={setActivePixegotchi}
         onNavigate={setCurrentPage}
       />
