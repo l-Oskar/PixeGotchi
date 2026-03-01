@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth.store";
 import { useTelegramLogin } from "@/services/queries/auth.queries";
 import { retrieveRawInitData } from "@tma.js/sdk";
+import AuthorizationScreen from "@/components/Other/AuthorizationScreen";
 
-export const AutoLiginProvider = ({
+export const AutoLoginProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -23,7 +24,11 @@ export const AutoLiginProvider = ({
   }, [isAuthenticate, initDataRaw]);
 
   if (!isAuthenticate) {
-    return <div className="splash animation-bounce">{`Authorization...`}</div>;
+    return (
+      <div className="splash">
+        <AuthorizationScreen />
+      </div>
+    );
   }
 
   return <>{children}</>;

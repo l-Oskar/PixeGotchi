@@ -8,9 +8,9 @@ export interface User {
   walletAddress: string | null;
   username: string | null;
   pgcBalance: string;
-  lastActiveAt: string | null;
-  createdAt: string | null;
-  updatedAt: string | null;
+  lastActiveAt: Date | string | null;
+  createdAt: Date | string | null;
+  updatedAt: Date | string | null;
 }
 
 export interface UserProfile extends User {

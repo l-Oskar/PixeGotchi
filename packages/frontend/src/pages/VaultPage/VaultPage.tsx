@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { PageType } from "@shared";
+import Loader from "@/components/Other/Loader";
 import { useAllVault } from "@/services/queries/vault.queries";
 import { useVaultStore } from "@/store/vault.store";
 import { getPixegotchiImg } from "@/utils/getImage";
@@ -39,14 +40,7 @@ const VaultPage: React.FC<VaultPageProps> = () => {
   const totalCount = 14;
 
   if (isLoading) {
-    return (
-      <div className="p-4 space-y-4">
-        <h1 className="text-2xl font-bold">Vault Collection</h1>
-        <div className="flex justify-center items-center h-64">
-          <div className="text-white/60">Loading vault...</div>
-        </div>
-      </div>
-    );
+    <Loader title={"Loading vault..."} />;
   }
 
   return (
@@ -79,7 +73,7 @@ const VaultPage: React.FC<VaultPageProps> = () => {
           <div
             key={item.element}
             className={`
-              rounded-2xl p-4 border transition-all
+              rounded-2xl p-4 border transition-all min-h-43
               ${
                 item.isEmpty
                   ? "bg-white/5 border-white/10 border-dashed opacity-50"
@@ -87,19 +81,19 @@ const VaultPage: React.FC<VaultPageProps> = () => {
                    ${RARITY_COLORS[item.bestRarity]?.replace("text", "border") || "border-white/20"}`
               }
             `}>
-            <div className="text-5xl">
+            <div className="text-5xl flex justify-center items-center">
               {item.isEmpty ? (
-                "❓"
+                <span className="pt-10">❓</span>
               ) : (
                 <img
-                  className="w-40 h-40 -my-6"
+                  className="-my-8 object-contain"
                   src={`./${getPixegotchiImg(item)}`}
                   alt={`Pixegotchi-${item.element}`}
                 />
               )}
             </div>
             <h3 className="font-semibold capitalize">
-              {item.element}
+              {!item.isEmpty ? item.element : ""}
               {!item.isEmpty && item.count > 1 && (
                 <span className="ml-1 text-base text-white/40">
                   x{item.count}
@@ -118,7 +112,9 @@ const VaultPage: React.FC<VaultPageProps> = () => {
                 </div>
               </>
             ) : (
-              <div className="text-xs text-white/40 mt-1">Not collected</div>
+              <div className="text-xs text-center text-white/40 mt-1">
+                Not collected
+              </div>
             )}
           </div>
         ))}

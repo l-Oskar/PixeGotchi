@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { PageType } from "@shared";
-import { Gamepad2, Moon, Egg as EggIcon, Menu } from "lucide-react";
+import { Hourglass, CircleX, Egg as EggIcon, Menu } from "lucide-react";
 import {
   useGetHatchingStatus,
   useHatchEgg,
@@ -9,6 +9,8 @@ import {
 import { useEggStore } from "@/store/egg.store";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
+import Loader from "../Other/Loader";
+import QuickInfo from "../Other/QuickInfo";
 
 export interface EggPageProps {
   onNavigate?: (page: PageType) => void;
@@ -24,9 +26,11 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
   // Ранній вихід якщо немає яйця
   if (!egg) {
     return (
-      <div className="mt-5 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-        <div className="flex justify-center items-center h-56">
-          <div className="text-white/60">No egg is hatching</div>
+      <div className="p-4 space-y-4">
+        <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
+          <div className="flex justify-center items-center h-56">
+            <div className="text-white/60">No egg is hatching</div>
+          </div>
         </div>
       </div>
     );
@@ -34,13 +38,7 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
 
   // Статус завантаження
   if (status.isLoading) {
-    return (
-      <div className="mt-5 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-        <div className="flex justify-center items-center h-56">
-          <div className="text-white/60">Loading egg status...</div>
-        </div>
-      </div>
-    );
+    <Loader title={"Loading egg status..."} />;
   }
 
   // Обробка помилки
@@ -137,15 +135,15 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
             gradient="from-orange-500 to-red-500"
           />
           <ActionButton
-            icon={Gamepad2}
-            label="Play"
+            icon={Hourglass}
+            label="Tap"
             onClick={handleTap}
             disabled={false}
             gradient="from-purple-500 to-pink-500"
           />
           <ActionButton
-            icon={Moon}
-            label="Sleep"
+            icon={CircleX}
+            label="Cancel"
             onClick={() => {}}
             disabled={true}
             gradient="from-blue-500 to-indigo-500"
@@ -155,10 +153,11 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
         {/* Підказка для користувача */}
         {!isReady && (
           <div className="mt-4 text-xs text-white/40 text-center">
-            Tap "Play" to interact with the egg and speed up hatching!
+            Tap to interact with the egg and speed up hatching!
           </div>
         )}
       </div>
+      <QuickInfo />
     </div>
   );
 };

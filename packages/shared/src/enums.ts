@@ -89,6 +89,7 @@ export const PageType = {
   marketplace: "marketplace",
   vault: "vault",
   start: "start",
+  loader: "loader",
 } as const;
 
 export type PageType = (typeof PageType)[keyof typeof PageType];

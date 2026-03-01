@@ -32,7 +32,7 @@ const GamesPage: React.FC<GamePageProps> = () => {
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Mini Games</h1>
+      <h1 className="text-2xl font-bold">Mini Games (Comming soon!)</h1>
 
       <div className="space-y-3">
         {games.map((game) => (

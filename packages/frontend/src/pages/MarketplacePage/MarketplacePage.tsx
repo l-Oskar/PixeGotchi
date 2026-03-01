@@ -20,8 +20,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = ({ onNavigate }) => {
     createEgg.mutate(undefined, {
       onSuccess: () => {
         setAllEggs(getAllEggs.data!);
-        alert("Egg created successfully!");
-        onNavigate?.("start");
+        alert("You bought an egg!");
       },
       onError: (error) => {
         alert("Failed to create egg" + error);
@@ -32,28 +31,20 @@ const MarketplacePage: React.FC<MarketplacePageProps> = ({ onNavigate }) => {
   const listings: MarketplaceListing[] = [
     {
       id: 1,
-      item: "Fire Egg",
+      item: "Element Egg",
       price: EGG_CONSTANTS.EGG_PRICE,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🥚",
     },
-    {
-      id: 2,
-      item: "Legendary Chest",
-      price: 2,
-      currency: "TON" as CurrencyType,
-      seller: "User#456",
-      icon: "📦",
-    },
-    {
-      id: 3,
-      item: "Health Pack x10",
-      price: 150,
-      currency: "PGC" as CurrencyType,
-      seller: "User#789",
-      icon: "💊",
-    },
+    // {
+    //   id: 2,
+    //   item: "Legendary Chest",
+    //   price: 2,
+    //   currency: "TON" as CurrencyType,
+    //   seller: "User#456",
+    //   icon: "📦",
+    // },
   ];
 
   return (
@@ -78,7 +69,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = ({ onNavigate }) => {
                 <button
                   onClick={handleCreateEgg}
                   className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
-                  Buy
+                  BUY
                 </button>
               </div>
             </div>

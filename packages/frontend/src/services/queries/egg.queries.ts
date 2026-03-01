@@ -47,6 +47,7 @@ export const useCreateEgg = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
       updateBallance(data.pgcBalance.toString());
+      return data;
     },
   });
 };

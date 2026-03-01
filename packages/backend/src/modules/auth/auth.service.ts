@@ -29,6 +29,7 @@ export class AuthService {
         telegramId: user.telegramId.toString(),
         username: user.username,
         pgcBalance: user.pgcBalance.toString(),
+        createdAt: user.createdAt,
       },
     };
   }

@@ -26,7 +26,7 @@ const InventoryPage: React.FC<InventoryPageProps> = () => {
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Inventory</h1>
+      <h1 className="text-2xl font-bold">Inventory (Comming soon!)</h1>
 
       <div className="grid grid-cols-3 gap-3">
         {items.map((item) => (

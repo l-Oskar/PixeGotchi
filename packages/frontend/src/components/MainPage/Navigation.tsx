@@ -4,11 +4,13 @@ import {
   ShoppingBag,
   Gamepad2,
   Archive,
-  Coins,
+  Vault,
+  Store,
   Egg,
 } from "lucide-react";
 import { PageType } from "@shared";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
+import { useEggStore } from "@/store/egg.store";
 
 export interface NavigationProps {
   currentPage: PageType;
@@ -20,19 +22,26 @@ const Navigation: React.FC<NavigationProps> = ({
   setCurrentPage,
 }) => {
   const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
+  const hatchingEgg = useEggStore((s) => s.hatchingEgg);
+  const navButton = () => {
+    if (hatchingEgg) {
+      return { id: "egg" as PageType, icon: Egg, label: "Egg" };
+    } else if (activePixegotchi) {
+      return { id: "home" as PageType, icon: Heart, label: "Home" };
+    } else {
+      return { id: "start" as PageType, icon: Egg, label: "Egg" };
+    }
+  };
   return (
     <nav className="fixed bottom-0 left-0 right-0 pb-1 bg-black/40 backdrop-blur-xl border-t border-white/10">
       <div className="max-w-md mx-auto px-4 py-3 flex justify-around">
         {[
-          {
-            id: !activePixegotchi ? ("egg" as PageType) : ("home" as PageType),
-            icon: !activePixegotchi ? Egg : Heart,
-            label: !activePixegotchi ? "Egg" : "Home",
-          },
-          { id: "inventory" as PageType, icon: ShoppingBag, label: "Bag" },
+          navButton(),
+          { id: "inventory" as PageType, icon: ShoppingBag, label: "Items" },
           { id: "games" as PageType, icon: Gamepad2, label: "Games" },
-          { id: "marketplace" as PageType, icon: Coins, label: "Market" },
-          { id: "vault" as PageType, icon: Archive, label: "Vault" },
+          { id: "marketplace" as PageType, icon: Store, label: "Market" },
+          { id: "vault" as PageType, icon: Vault, label: "Vault" },
+          // { id: "loader" as PageType, icon: Archive, label: "Load" },
         ].map((item) => (
           <button
             key={item.id}

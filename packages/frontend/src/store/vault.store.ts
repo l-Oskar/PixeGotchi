@@ -2,13 +2,13 @@ import { VaultStats } from "@shared";
 import { create } from "zustand";
 
 interface VaultStore {
-  allVault: VaultStats[] | [];
-  setAllVault: (list: VaultStats[]) => void;
+  allVault: VaultStats | null;
+  setAllVault: (list: VaultStats) => void;
 }
 
 export const useVaultStore = create<VaultStore>((set) => ({
-  allVault: [],
-  setAllVault: (list: VaultStats[]) =>
+  allVault: null,
+  setAllVault: (list: VaultStats) =>
     set({
       allVault: list,
     }),

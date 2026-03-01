@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { User } from "@shared";
-import { Sparkles, Wallet, Coins } from "lucide-react";
+import { Crown, Wallet, Coins } from "lucide-react";
 
 export interface HeaderProps {
   user: User | null;
@@ -13,10 +13,10 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
       <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-linear-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-            <Sparkles size={16} />
+            <Crown size={16} />
           </div>
           <span className="font-bold text-lg">
-            {user?.username || "Unknown"}
+            {user?.username || "Unknown User"}
           </span>
         </div>
 

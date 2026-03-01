@@ -12,11 +12,11 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
   status,
 }) => {
   return (
-    <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
+    <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl min-h-56 flex items-center justify-center border border-white/5">
       <div
         className={
           `text-9xl ` +
-          (!status.canHatchNow ? "animate-egg-wobble" : "animate-pulse")
+          (!status.canHatchNow ? "animate-egg-wobble" : "animate-egg-wobble")
         }>
         <img
           className="w-25 h-33"
