@@ -19,7 +19,7 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
           (!status.canHatchNow ? "animate-egg-wobble" : "animate-egg-wobble")
         }>
         <img
-          className="w-25 h-33"
+          className="-mb-5 w-25 h-33"
           src={`./${getImage(egg, status!)}`}
           alt={`Egg-${egg.id}`}
         />

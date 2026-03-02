@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Link } from "@/components/Link/Link.tsx";
+import { useState } from "react";
 import { Cooldowns, HomePageProps, PageType } from "@shared";
 import {
   Heart,

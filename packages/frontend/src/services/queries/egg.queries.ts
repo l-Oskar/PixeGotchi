@@ -58,8 +58,8 @@ export const useStartHatching = () => {
   return useMutation({
     mutationFn: (eggId: number) => eggApi.startHatching(eggId!),
     onSuccess: (data) => {
-      setHatching(data),
-        queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      setHatching(data);
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
     },
   });
 };
@@ -77,14 +77,15 @@ export const useHatchEgg = () => {
   const setActivePixegotchi = usePixegotchiStore((s) => s.setActive);
   const hatchEgg = useEggStore((s) => s.hatchEgg);
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (eggId: number) => {
       return eggApi.hatchEgg(eggId!);
     },
     onSuccess: (data) => {
-      hatchEgg(),
-        setActivePixegotchi(data),
-        queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      hatchEgg();
+      setActivePixegotchi(data);
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
     },
   });
 };

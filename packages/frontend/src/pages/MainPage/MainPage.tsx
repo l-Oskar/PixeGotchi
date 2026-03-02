@@ -49,7 +49,7 @@ const MainPage: React.FC = () => {
         onNavigate={setCurrentPage}
       />
     ) : null,
-    egg: egg ? <EggComponent onNavigate={setCurrentPage} /> : null,
+    egg: egg ? <EggComponent setActivePixegotchi={setActivePixegotchi} onNavigate={setCurrentPage} /> : null,
     inventory: <InventoryPage onNavigate={setCurrentPage} />,
     games: <GamesPage onNavigate={setCurrentPage} />,
     marketplace: <MarketplacePage onNavigate={setCurrentPage} />,

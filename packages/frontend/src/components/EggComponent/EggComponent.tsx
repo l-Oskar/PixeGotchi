@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "@/components/Link/Link.tsx";
-import { PageType } from "@shared";
-import { Hourglass, CircleX, Egg as EggIcon, Menu } from "lucide-react";
+import { PageType, Pixegotchi } from "@shared";
+import { Hourglass, CircleX, Egg as EggIcon } from "lucide-react";
 import {
   useGetHatchingStatus,
   useHatchEgg,
@@ -14,9 +13,13 @@ import QuickInfo from "../Other/QuickInfo";
 
 export interface EggPageProps {
   onNavigate?: (page: PageType) => void;
+  setActivePixegotchi: (pixegitchi: Pixegotchi) => void;
 }
 
-const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
+const EggComponent: React.FC<EggPageProps> = ({
+  onNavigate,
+  setActivePixegotchi,
+}) => {
   const egg = useEggStore((s) => s.hatchingEgg);
   const hatchEgg = useHatchEgg();
 
@@ -59,8 +62,8 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
   const handleHatch = async () => {
     if (isReady) {
       try {
-        hatchEgg.mutate(egg.id);
-        console.log("Hatching egg...");
+        const newPixe = await hatchEgg.mutateAsync(egg.id);
+        setActivePixegotchi(newPixe);
         onNavigate?.("home");
       } catch (error) {
         console.error("Failed to hatch egg:", error);
