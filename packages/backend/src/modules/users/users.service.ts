@@ -1,7 +1,7 @@
 import { prisma } from "@/database/prisma";
 import { USER_CONST } from "@shared";
 
-export class UsersService {
+export class UserService {
   async findByTelegramId(telegramId: number) {
     return await prisma.user.findUnique({
       where: {

@@ -1,10 +1,10 @@
 import crypto from "crypto";
 import { config } from "@/config/env";
-import { UsersService } from "@/modules/users/users.service";
+import { UserService } from "@/modules/users/users.service";
 import { URLSearchParams } from "url";
 
 export class AuthService {
-  private userService = new UsersService();
+  private userService = new UserService();
 
   async authenticateTelegram(initData: string) {
     if (config.nodeEnv !== "production") {

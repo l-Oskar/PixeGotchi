@@ -1,12 +1,12 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { UsersService } from "./users.service";
+import { UserService } from "./users.service";
 
 export class UsersController {
-  private usersService = new UsersService();
+  private userService = new UserService();
 
   async getProfile(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
-    const profile = await this.usersService.getProfile(userId);
+    const profile = await this.userService.getProfile(userId);
 
     if (!profile) {
       return reply.code(404).send({ error: "User not found" });
