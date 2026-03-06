@@ -1,5 +1,5 @@
 import type { ItemType, RarityType } from "../enums";
-import type { ItemEffects } from "../item-effects";
+import type { ItemBuffs } from "./item_buffs";
 
 export interface InventoryItem {
   id: number;
@@ -8,6 +8,15 @@ export interface InventoryItem {
   itemType: ItemType;
   quantity: number;
   createdAt: string;
+}
+
+export interface ItemEffects {
+  hunger: number;
+  happiness: number;
+  health: number;
+  cleanliness: number;
+  energy: number;
+  buffs: ItemBuffs[] | [];
 }
 
 export interface Item {
@@ -24,8 +33,8 @@ export interface Item {
   iconUrl: string | null;
   isStackable: boolean;
   maxStack: number | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 }
 
 export interface Inventory {

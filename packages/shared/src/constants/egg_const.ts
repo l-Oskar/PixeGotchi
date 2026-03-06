@@ -2,7 +2,3 @@ export const EGG_CONSTANTS = {
   HATCHING_TIME: 1000 * 60, //86400000
   EGG_PRICE: 100,
 };
-
-export const USER_CONST = {
-  START_BALANCE: 10000,
-};

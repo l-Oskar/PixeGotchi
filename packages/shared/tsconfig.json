@@ -23,6 +23,6 @@
     "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/types/item_buffs.ts"],
   "exclude": ["node_modules", "dist"]
 }

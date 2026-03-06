@@ -1,0 +1,33 @@
+import { Item } from "../../types/inventory";
+import { ItemType, RarityType } from "../../enums";
+import { ItemBuffsType } from "../../types/item_buffs";
+
+export const EXP_BOOSTER: Item = {
+  id: 7,
+  itemId: "exp_booster",
+  name: "EXP Booster",
+  description: "Temporarily boosts experience gain.",
+  itemType: ItemType.boost,
+  rarity: RarityType.epic,
+  effects: {
+    hunger: 0,
+    happiness: 0,
+    health: 0,
+    cleanliness: 0,
+    energy: 0,
+    buffs: [
+      {
+        [ItemBuffsType.BOOST_EXPERIENCE]: 50,
+        [ItemBuffsType.TEMPORARY_BUFF]: 30,
+      },
+    ],
+  },
+  cooldownMinutes: 120,
+  maxPerDay: 2,
+  minLevel: 5,
+  iconUrl: null,
+  isStackable: true,
+  maxStack: 10,
+};
+
+export const BOOST_ITEMS: Item[] = [EXP_BOOSTER];

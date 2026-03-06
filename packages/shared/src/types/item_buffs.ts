@@ -1,10 +1,4 @@
-export enum ItemEffectType {
-  RESTORE_HUNGER = "restore_hunger",
-  RESTORE_HEALTH = "restore_health",
-  RESTORE_ENERGY = "restore_energy",
-  RESTORE_HAPPINESS = "restore_happiness",
-  RESTORE_CLEANLINESS = "restore_cleanliness",
-
+export enum ItemBuffsType {
   BOOST_EXPERIENCE = "boost_experience",
 
   REVIVE = "revive",
@@ -19,8 +13,8 @@ export enum ItemEffectType {
   PERMANENT_BUFF = "permanent_buff",
 }
 
-export type ItemEffects = {
-  [key in ItemEffectType]?: number;
+export type ItemBuffs = {
+  [key in ItemBuffsType]?: number;
 } & {
   [key: string]: number | undefined;
 };

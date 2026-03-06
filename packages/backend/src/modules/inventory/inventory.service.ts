@@ -1,8 +1,11 @@
 import { prisma } from "@/database/prisma";
-import { ItemType } from "@shared";
+import { ItemType, ITEMS_BY_ID } from "@shared";
+import { ItemsService } from "../items/items.service";
 
 export class Inventory {
-  async getUserById(userId: number) {
+  private itemService = new ItemsService();
+
+  async getInventory(userId: number) {
     return await prisma.inventory.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
@@ -11,7 +14,7 @@ export class Inventory {
 
   async addItem(
     userId: number,
-    itemId: string,
+    itemId: keyof typeof ITEMS_BY_ID,
     itemType: ItemType,
     quantity: number = 1,
   ) {
@@ -64,11 +67,5 @@ export class Inventory {
       });
     }
     return item;
-  }
-
-  async getItemDetail(itemId: string) {
-    return await prisma.item.findUnique({
-      where: { itemId },
-    });
   }
 }

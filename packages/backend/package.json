@@ -12,6 +12,7 @@
     "prisma:studio": "prisma studio",
     "prisma:server": "BROWSER=none npx prisma studio --port 51212",
     "prisma:seed": "tsx src/database/seed.ts",
+    "prisma:items": "tsx src/database/seed_items.ts",
     "test": "jest"
   },
   "dependencies": {

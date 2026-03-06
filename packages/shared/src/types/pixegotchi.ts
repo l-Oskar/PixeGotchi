@@ -52,3 +52,22 @@ export interface Cooldowns {
   clean: boolean;
   heal: boolean;
 }
+
+export interface RarityStatsType {
+  maxStatus: number;
+  degradationReduce: number;
+  traits: {
+    min: number;
+    max: number;
+  };
+  goldEarn: number;
+}
+
+export interface RarityStats {
+  common: RarityStatsType;
+  uncommon: RarityStatsType;
+  rare: RarityStatsType;
+  epic: RarityStatsType;
+  mythic: RarityStatsType;
+  legendary: RarityStatsType;
+}
