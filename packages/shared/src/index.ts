@@ -16,6 +16,7 @@ export type {
 } from "./types/pixegotchi";
 export type { User, UserProfile } from "./types/user";
 export type { InventoryItem, Item } from "./types/inventory";
+export { parseItem, parseItemEffects } from "./types/inventory";
 export type { ApiSuccess, ApiError, ApiResponse } from "./types/api";
 export type { HomePageProps } from "./types/pages";
 export type { GameStruct } from "./types/game";

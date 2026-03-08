@@ -32,11 +32,11 @@ export type PixegotchiAvgAggregateOutputType = {
   eggId: number | null
   level: number | null
   experience: number | null
-  health: runtime.Decimal | null
-  hunger: runtime.Decimal | null
-  energy: runtime.Decimal | null
-  happiness: runtime.Decimal | null
-  cleanliness: runtime.Decimal | null
+  health: number | null
+  hunger: number | null
+  energy: number | null
+  happiness: number | null
+  cleanliness: number | null
 }
 
 export type PixegotchiSumAggregateOutputType = {
@@ -45,11 +45,11 @@ export type PixegotchiSumAggregateOutputType = {
   eggId: number | null
   level: number | null
   experience: number | null
-  health: runtime.Decimal | null
-  hunger: runtime.Decimal | null
-  energy: runtime.Decimal | null
-  happiness: runtime.Decimal | null
-  cleanliness: runtime.Decimal | null
+  health: number | null
+  hunger: number | null
+  energy: number | null
+  happiness: number | null
+  cleanliness: number | null
 }
 
 export type PixegotchiMinAggregateOutputType = {
@@ -65,11 +65,11 @@ export type PixegotchiMinAggregateOutputType = {
   status: $Enums.PixegotchiStatus | null
   level: number | null
   experience: number | null
-  health: runtime.Decimal | null
-  hunger: runtime.Decimal | null
-  energy: runtime.Decimal | null
-  happiness: runtime.Decimal | null
-  cleanliness: runtime.Decimal | null
+  health: number | null
+  hunger: number | null
+  energy: number | null
+  happiness: number | null
+  cleanliness: number | null
   criticalSince: Date | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
@@ -93,11 +93,11 @@ export type PixegotchiMaxAggregateOutputType = {
   status: $Enums.PixegotchiStatus | null
   level: number | null
   experience: number | null
-  health: runtime.Decimal | null
-  hunger: runtime.Decimal | null
-  energy: runtime.Decimal | null
-  happiness: runtime.Decimal | null
-  cleanliness: runtime.Decimal | null
+  health: number | null
+  hunger: number | null
+  energy: number | null
+  happiness: number | null
+  cleanliness: number | null
   criticalSince: Date | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
@@ -346,16 +346,16 @@ export type PixegotchiGroupByOutputType = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: runtime.JsonValue
+  traits: string[]
   name: string
   status: $Enums.PixegotchiStatus
   level: number
   experience: number
-  health: runtime.Decimal
-  hunger: runtime.Decimal
-  energy: runtime.Decimal
-  happiness: runtime.Decimal
-  cleanliness: runtime.Decimal
+  health: number
+  hunger: number
+  energy: number
+  happiness: number
+  cleanliness: number
   criticalSince: Date | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
@@ -398,16 +398,16 @@ export type PixegotchiWhereInput = {
   element?: Prisma.EnumElementTypeFilter<"Pixegotchi"> | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFilter<"Pixegotchi"> | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFilter<"Pixegotchi"> | $Enums.PixegotchiGender
-  traits?: Prisma.JsonFilter<"Pixegotchi">
+  traits?: Prisma.StringNullableListFilter<"Pixegotchi">
   name?: Prisma.StringFilter<"Pixegotchi"> | string
   status?: Prisma.EnumPixegotchiStatusFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   level?: Prisma.IntFilter<"Pixegotchi"> | number
   experience?: Prisma.IntFilter<"Pixegotchi"> | number
-  health?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFilter<"Pixegotchi"> | number
+  hunger?: Prisma.IntFilter<"Pixegotchi"> | number
+  energy?: Prisma.IntFilter<"Pixegotchi"> | number
+  happiness?: Prisma.IntFilter<"Pixegotchi"> | number
+  cleanliness?: Prisma.IntFilter<"Pixegotchi"> | number
   criticalSince?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -469,16 +469,16 @@ export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
   element?: Prisma.EnumElementTypeFilter<"Pixegotchi"> | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFilter<"Pixegotchi"> | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFilter<"Pixegotchi"> | $Enums.PixegotchiGender
-  traits?: Prisma.JsonFilter<"Pixegotchi">
+  traits?: Prisma.StringNullableListFilter<"Pixegotchi">
   name?: Prisma.StringFilter<"Pixegotchi"> | string
   status?: Prisma.EnumPixegotchiStatusFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   level?: Prisma.IntFilter<"Pixegotchi"> | number
   experience?: Prisma.IntFilter<"Pixegotchi"> | number
-  health?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFilter<"Pixegotchi"> | number
+  hunger?: Prisma.IntFilter<"Pixegotchi"> | number
+  energy?: Prisma.IntFilter<"Pixegotchi"> | number
+  happiness?: Prisma.IntFilter<"Pixegotchi"> | number
+  cleanliness?: Prisma.IntFilter<"Pixegotchi"> | number
   criticalSince?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -540,16 +540,16 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   element?: Prisma.EnumElementTypeWithAggregatesFilter<"Pixegotchi"> | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeWithAggregatesFilter<"Pixegotchi"> | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderWithAggregatesFilter<"Pixegotchi"> | $Enums.PixegotchiGender
-  traits?: Prisma.JsonWithAggregatesFilter<"Pixegotchi">
+  traits?: Prisma.StringNullableListFilter<"Pixegotchi">
   name?: Prisma.StringWithAggregatesFilter<"Pixegotchi"> | string
   status?: Prisma.EnumPixegotchiStatusWithAggregatesFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   level?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   experience?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
-  health?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalWithAggregatesFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
+  hunger?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
+  energy?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
+  happiness?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
+  cleanliness?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   criticalSince?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
@@ -566,16 +566,16 @@ export type PixegotchiCreateInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -600,16 +600,16 @@ export type PixegotchiUncheckedCreateInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -629,16 +629,16 @@ export type PixegotchiUpdateInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -663,16 +663,16 @@ export type PixegotchiUncheckedUpdateInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -695,16 +695,16 @@ export type PixegotchiCreateManyInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -721,16 +721,16 @@ export type PixegotchiUpdateManyMutationInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -750,16 +750,16 @@ export type PixegotchiUncheckedUpdateManyInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -783,6 +783,14 @@ export type PixegotchiOrderByRelationAggregateInput = {
 export type PixegotchiNullableScalarRelationFilter = {
   is?: Prisma.PixegotchiWhereInput | null
   isNot?: Prisma.PixegotchiWhereInput | null
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type PixegotchiCountOrderByAggregateInput = {
@@ -975,6 +983,10 @@ export type PixegotchiUncheckedUpdateOneWithoutEggNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PixegotchiUpdateToOneWithWhereWithoutEggInput, Prisma.PixegotchiUpdateWithoutEggInput>, Prisma.PixegotchiUncheckedUpdateWithoutEggInput>
 }
 
+export type PixegotchiCreatetraitsInput = {
+  set: string[]
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -989,6 +1001,11 @@ export type EnumRarityTypeFieldUpdateOperationsInput = {
 
 export type EnumPixegotchiGenderFieldUpdateOperationsInput = {
   set?: $Enums.PixegotchiGender
+}
+
+export type PixegotchiUpdatetraitsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type EnumPixegotchiStatusFieldUpdateOperationsInput = {
@@ -1051,16 +1068,16 @@ export type PixegotchiCreateWithoutUserInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1083,16 +1100,16 @@ export type PixegotchiUncheckedCreateWithoutUserInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1144,16 +1161,16 @@ export type PixegotchiScalarWhereInput = {
   element?: Prisma.EnumElementTypeFilter<"Pixegotchi"> | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFilter<"Pixegotchi"> | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFilter<"Pixegotchi"> | $Enums.PixegotchiGender
-  traits?: Prisma.JsonFilter<"Pixegotchi">
+  traits?: Prisma.StringNullableListFilter<"Pixegotchi">
   name?: Prisma.StringFilter<"Pixegotchi"> | string
   status?: Prisma.EnumPixegotchiStatusFilter<"Pixegotchi"> | $Enums.PixegotchiStatus
   level?: Prisma.IntFilter<"Pixegotchi"> | number
   experience?: Prisma.IntFilter<"Pixegotchi"> | number
-  health?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFilter<"Pixegotchi"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFilter<"Pixegotchi"> | number
+  hunger?: Prisma.IntFilter<"Pixegotchi"> | number
+  energy?: Prisma.IntFilter<"Pixegotchi"> | number
+  happiness?: Prisma.IntFilter<"Pixegotchi"> | number
+  cleanliness?: Prisma.IntFilter<"Pixegotchi"> | number
   criticalSince?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -1170,16 +1187,16 @@ export type PixegotchiCreateWithoutEggInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1202,16 +1219,16 @@ export type PixegotchiUncheckedCreateWithoutEggInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1247,16 +1264,16 @@ export type PixegotchiUpdateWithoutEggInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1279,16 +1296,16 @@ export type PixegotchiUncheckedUpdateWithoutEggInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1308,16 +1325,16 @@ export type PixegotchiCreateWithoutActiveEffectsInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1341,16 +1358,16 @@ export type PixegotchiUncheckedCreateWithoutActiveEffectsInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1385,16 +1402,16 @@ export type PixegotchiUpdateWithoutActiveEffectsInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1418,16 +1435,16 @@ export type PixegotchiUncheckedUpdateWithoutActiveEffectsInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1446,16 +1463,16 @@ export type PixegotchiCreateWithoutVaultInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1479,16 +1496,16 @@ export type PixegotchiUncheckedCreateWithoutVaultInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1523,16 +1540,16 @@ export type PixegotchiUpdateWithoutVaultInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1556,16 +1573,16 @@ export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1584,16 +1601,16 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1617,16 +1634,16 @@ export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1661,16 +1678,16 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1694,16 +1711,16 @@ export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1724,16 +1741,16 @@ export type PixegotchiCreateManyUserInput = {
   element: $Enums.ElementType
   rarity: $Enums.RarityType
   gender: $Enums.PixegotchiGender
-  traits: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiCreatetraitsInput | string[]
   name?: string
   status?: $Enums.PixegotchiStatus
   level?: number
   experience?: number
-  health?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: number
+  hunger?: number
+  energy?: number
+  happiness?: number
+  cleanliness?: number
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1750,16 +1767,16 @@ export type PixegotchiUpdateWithoutUserInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1782,16 +1799,16 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1813,16 +1830,16 @@ export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
   rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   gender?: Prisma.EnumPixegotchiGenderFieldUpdateOperationsInput | $Enums.PixegotchiGender
-  traits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  traits?: Prisma.PixegotchiUpdatetraitsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPixegotchiStatusFieldUpdateOperationsInput | $Enums.PixegotchiStatus
   level?: Prisma.IntFieldUpdateOperationsInput | number
   experience?: Prisma.IntFieldUpdateOperationsInput | number
-  health?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  hunger?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  energy?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  happiness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  cleanliness?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  health?: Prisma.IntFieldUpdateOperationsInput | number
+  hunger?: Prisma.IntFieldUpdateOperationsInput | number
+  energy?: Prisma.IntFieldUpdateOperationsInput | number
+  happiness?: Prisma.IntFieldUpdateOperationsInput | number
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2044,16 +2061,16 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     element: $Enums.ElementType
     rarity: $Enums.RarityType
     gender: $Enums.PixegotchiGender
-    traits: runtime.JsonValue
+    traits: string[]
     name: string
     status: $Enums.PixegotchiStatus
     level: number
     experience: number
-    health: runtime.Decimal
-    hunger: runtime.Decimal
-    energy: runtime.Decimal
-    happiness: runtime.Decimal
-    cleanliness: runtime.Decimal
+    health: number
+    hunger: number
+    energy: number
+    happiness: number
+    cleanliness: number
     criticalSince: Date | null
     lastFedAt: Date | null
     lastPlayedAt: Date | null
@@ -2498,16 +2515,16 @@ export interface PixegotchiFieldRefs {
   readonly element: Prisma.FieldRef<"Pixegotchi", 'ElementType'>
   readonly rarity: Prisma.FieldRef<"Pixegotchi", 'RarityType'>
   readonly gender: Prisma.FieldRef<"Pixegotchi", 'PixegotchiGender'>
-  readonly traits: Prisma.FieldRef<"Pixegotchi", 'Json'>
+  readonly traits: Prisma.FieldRef<"Pixegotchi", 'String[]'>
   readonly name: Prisma.FieldRef<"Pixegotchi", 'String'>
   readonly status: Prisma.FieldRef<"Pixegotchi", 'PixegotchiStatus'>
   readonly level: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly experience: Prisma.FieldRef<"Pixegotchi", 'Int'>
-  readonly health: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
-  readonly hunger: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
-  readonly energy: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
-  readonly happiness: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
-  readonly cleanliness: Prisma.FieldRef<"Pixegotchi", 'Decimal'>
+  readonly health: Prisma.FieldRef<"Pixegotchi", 'Int'>
+  readonly hunger: Prisma.FieldRef<"Pixegotchi", 'Int'>
+  readonly energy: Prisma.FieldRef<"Pixegotchi", 'Int'>
+  readonly happiness: Prisma.FieldRef<"Pixegotchi", 'Int'>
+  readonly cleanliness: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly criticalSince: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastFedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastPlayedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>

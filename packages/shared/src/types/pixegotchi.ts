@@ -13,28 +13,28 @@ export interface Pixegotchi {
   element: ElementType;
   rarity: RarityType;
   gender: PixegotchiGender;
-  traits: string[] | null;
+  traits: string[];
   name: string;
   status: PixegotchiStatus;
   level: number;
   experience: number;
 
   // Stats (0–100)
-  health: number;
-  hunger: number;
-  energy: number;
-  happiness: number;
-  cleanliness: number;
+  health: number | string;
+  hunger: number | string;
+  energy: number | string;
+  happiness: number | string;
+  cleanliness: number | string;
 
   // Timestamps
-  criticalSince: string | null;
-  lastFedAt: string | null;
-  lastPlayedAt: string | null;
-  lastSleptAt: string | null;
-  lastCleanedAt: string | null;
-  lastHealedAt: string | null;
-  lastUpdateAt: string | null;
-  hatchedAt: string | null;
+  criticalSince: Date | string | null;
+  lastFedAt: Date | string | null;
+  lastPlayedAt: Date | string | null;
+  lastSleptAt: Date | string | null;
+  lastCleanedAt: Date | string | null;
+  lastHealedAt: Date | string | null;
+  lastUpdateAt: Date | string | null;
+  hatchedAt: Date | string | null;
 }
 
 export interface PixegotchiStats {

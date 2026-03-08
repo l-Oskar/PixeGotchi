@@ -9,7 +9,7 @@ const addItemScema = z.object({
   quantity: z.number().optional(),
 });
 
-const consumeItemScheme = z.object({
+const useItemScheme = z.object({
   itemId: z.enum(ITEMS_BY_ID as any),
   quantity: z.number().optional(),
 });
@@ -37,5 +37,19 @@ export class InventoryController {
     );
 
     return reply.send(addItem);
+  }
+
+  async useItem(request: FastifyRequest, reply: FastifyReply) {
+    const useId = (request.user as any).useId;
+
+    const { itemId, quantity } = useItemScheme.parse(request.body);
+
+    const useItem = await this.inventoryService.useItem(
+      useId,
+      itemId,
+      quantity,
+    );
+
+    return reply.send(useItem);
   }
 }

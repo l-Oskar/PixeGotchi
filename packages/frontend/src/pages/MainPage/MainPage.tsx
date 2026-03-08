@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { type Pixegotchi, type PageType } from "@shared";
 import VaultPage from "../VaultPage/VaultPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
@@ -21,30 +21,30 @@ const MainPage: React.FC = () => {
   const pixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
 
   const [currentPage, setCurrentPage] = useState<PageType>("start");
-  const [activePixegotchi, setActivePixegotchi] = useState<Pixegotchi | null>(
-    pixegotchi,
-  );
+  const [activePixegotchi, setActivePixegotchi] = useState<Pixegotchi | null>(null);
 
-  useEffect(() => {
-    if (pixegotchi) {
-      setActivePixegotchi(pixegotchi);
-    }
-    if (activePixegotchi) {
-      setCurrentPage("home");
-    } else if (egg) {
-      setCurrentPage("egg");
-    } else {
-      setCurrentPage("start");
-    }
-  }, [activePixegotchi, egg, pixegotchi]);
+  // Compute effective pixegotchi: use active override if set, otherwise use store value
+  const effectivePixegotchi = activePixegotchi ?? pixegotchi;
+
+  // Derive currentPage based on state (no circular deps)
+  const derivedPage = useMemo<PageType>(() => {
+    if (effectivePixegotchi) return "home";
+    if (egg) return "egg";
+    return "start";
+  }, [effectivePixegotchi, egg]);
+
+  // Use derived page for rendering, but allow manual override via setCurrentPage
+  const resolvedPage = currentPage === "start" && derivedPage !== "start"
+    ? derivedPage
+    : currentPage;
 
   const pages: Record<PageType, React.ReactNode> = {
-    data: <PixegothiData pixegotchi={activePixegotchi} />,
+    data: <PixegothiData pixegotchi={effectivePixegotchi} />,
     loader: <Loader />,
     start: <Empty onNavigate={setCurrentPage} />,
-    home: activePixegotchi ? (
+    home: effectivePixegotchi ? (
       <ShowPixeGotchi
-        pixegotchi={activePixegotchi}
+        pixegotchi={effectivePixegotchi}
         setActive={setActivePixegotchi}
         onNavigate={setCurrentPage}
       />
@@ -61,9 +61,9 @@ const MainPage: React.FC = () => {
       {/* Header */}
       <Header user={user} />
       {/* Content */}
-      <main className="max-w-md mx-auto pb-20">{pages[currentPage]}</main>
+      <main className="max-w-md mx-auto pb-20">{pages[resolvedPage]}</main>
       {/* Bottom Navigation */}
-      <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <Navigation currentPage={resolvedPage} setCurrentPage={setCurrentPage} />
     </div>
   );
 };

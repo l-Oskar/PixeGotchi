@@ -1,9 +1,11 @@
 import { prisma } from "@/database/prisma";
-import { ItemType, ITEMS_BY_ID } from "@shared";
+import { ItemType, ITEMS_BY_ID, Pixegotchi, Item } from "@shared";
 import { ItemsService } from "../items/items.service";
+import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 
 export class Inventory {
   private itemService = new ItemsService();
+  private pixegotchiService = new PixegotchiService();
 
   async getInventory(userId: number) {
     return await prisma.inventory.findMany({
@@ -67,5 +69,18 @@ export class Inventory {
       });
     }
     return item;
+  }
+
+  async useItem(userId: number, itemId: string, quantity?: number) {
+    const pixegotchi = await this.pixegotchiService.findActive(userId);
+    if (!pixegotchi) throw new Error("No active pixegotchi");
+
+    const item = await this.itemService.getItemDetails(itemId);
+
+    const valid = this.itemService.validateItemUsage(pixegotchi, item);
+
+    if (!valid) throw new Error("You can't use this item now!");
+
+    return await this.consumeItem(userId, itemId, quantity);
   }
 }

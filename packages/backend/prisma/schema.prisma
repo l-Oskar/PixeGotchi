@@ -147,7 +147,7 @@ model Pixegotchi {
   element      ElementType
   rarity       RarityType
   gender       PixegotchiGender
-  traits       Json              // ["lazy", "playful", "glutton"]
+  traits       String[]          // ["lazy", "playful", "glutton"]
   
   // Basic info
   name         String            @default("Unnamed") @db.VarChar(50)
@@ -156,11 +156,11 @@ model Pixegotchi {
   experience   Int               @default(0)
 
   // Stats у ВІДСОТКАХ (0-100)
-  health       Decimal           @default(100) @db.Decimal(5, 2)
-  hunger       Decimal           @default(70)  @db.Decimal(5, 2)
-  energy       Decimal           @default(100) @db.Decimal(5, 2)
-  happiness    Decimal           @default(50)  @db.Decimal(5, 2)
-  cleanliness  Decimal           @default(100) @db.Decimal(5, 2)
+  health       Int               @default(100)
+  hunger       Int               @default(70)
+  energy       Int               @default(100)
+  happiness    Int               @default(50)
+  cleanliness  Int               @default(100)
 
   // ВИДАЛЕНО: hungerRate, energyRate, etc. (розраховуються динамічно)
   
