@@ -70,6 +70,7 @@ export type PixegotchiMinAggregateOutputType = {
   energy: number | null
   happiness: number | null
   cleanliness: number | null
+  healthZeroAt: Date | null
   criticalSince: Date | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
@@ -98,6 +99,7 @@ export type PixegotchiMaxAggregateOutputType = {
   energy: number | null
   happiness: number | null
   cleanliness: number | null
+  healthZeroAt: Date | null
   criticalSince: Date | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
@@ -127,6 +129,7 @@ export type PixegotchiCountAggregateOutputType = {
   energy: number
   happiness: number
   cleanliness: number
+  healthZeroAt: number
   criticalSince: number
   lastFedAt: number
   lastPlayedAt: number
@@ -183,6 +186,7 @@ export type PixegotchiMinAggregateInputType = {
   energy?: true
   happiness?: true
   cleanliness?: true
+  healthZeroAt?: true
   criticalSince?: true
   lastFedAt?: true
   lastPlayedAt?: true
@@ -211,6 +215,7 @@ export type PixegotchiMaxAggregateInputType = {
   energy?: true
   happiness?: true
   cleanliness?: true
+  healthZeroAt?: true
   criticalSince?: true
   lastFedAt?: true
   lastPlayedAt?: true
@@ -240,6 +245,7 @@ export type PixegotchiCountAggregateInputType = {
   energy?: true
   happiness?: true
   cleanliness?: true
+  healthZeroAt?: true
   criticalSince?: true
   lastFedAt?: true
   lastPlayedAt?: true
@@ -356,6 +362,7 @@ export type PixegotchiGroupByOutputType = {
   energy: number
   happiness: number
   cleanliness: number
+  healthZeroAt: Date | null
   criticalSince: Date | null
   lastFedAt: Date | null
   lastPlayedAt: Date | null
@@ -408,6 +415,7 @@ export type PixegotchiWhereInput = {
   energy?: Prisma.IntFilter<"Pixegotchi"> | number
   happiness?: Prisma.IntFilter<"Pixegotchi"> | number
   cleanliness?: Prisma.IntFilter<"Pixegotchi"> | number
+  healthZeroAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   criticalSince?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -442,6 +450,7 @@ export type PixegotchiOrderByWithRelationInput = {
   energy?: Prisma.SortOrder
   happiness?: Prisma.SortOrder
   cleanliness?: Prisma.SortOrder
+  healthZeroAt?: Prisma.SortOrderInput | Prisma.SortOrder
   criticalSince?: Prisma.SortOrderInput | Prisma.SortOrder
   lastFedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -479,6 +488,7 @@ export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
   energy?: Prisma.IntFilter<"Pixegotchi"> | number
   happiness?: Prisma.IntFilter<"Pixegotchi"> | number
   cleanliness?: Prisma.IntFilter<"Pixegotchi"> | number
+  healthZeroAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   criticalSince?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -513,6 +523,7 @@ export type PixegotchiOrderByWithAggregationInput = {
   energy?: Prisma.SortOrder
   happiness?: Prisma.SortOrder
   cleanliness?: Prisma.SortOrder
+  healthZeroAt?: Prisma.SortOrderInput | Prisma.SortOrder
   criticalSince?: Prisma.SortOrderInput | Prisma.SortOrder
   lastFedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -550,6 +561,7 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   energy?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   happiness?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   cleanliness?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
+  healthZeroAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   criticalSince?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
@@ -576,6 +588,7 @@ export type PixegotchiCreateInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -610,6 +623,7 @@ export type PixegotchiUncheckedCreateInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -639,6 +653,7 @@ export type PixegotchiUpdateInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -673,6 +688,7 @@ export type PixegotchiUncheckedUpdateInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -705,6 +721,7 @@ export type PixegotchiCreateManyInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -731,6 +748,7 @@ export type PixegotchiUpdateManyMutationInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -760,6 +778,7 @@ export type PixegotchiUncheckedUpdateManyInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -812,6 +831,7 @@ export type PixegotchiCountOrderByAggregateInput = {
   energy?: Prisma.SortOrder
   happiness?: Prisma.SortOrder
   cleanliness?: Prisma.SortOrder
+  healthZeroAt?: Prisma.SortOrder
   criticalSince?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrder
@@ -853,6 +873,7 @@ export type PixegotchiMaxOrderByAggregateInput = {
   energy?: Prisma.SortOrder
   happiness?: Prisma.SortOrder
   cleanliness?: Prisma.SortOrder
+  healthZeroAt?: Prisma.SortOrder
   criticalSince?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrder
@@ -881,6 +902,7 @@ export type PixegotchiMinOrderByAggregateInput = {
   energy?: Prisma.SortOrder
   happiness?: Prisma.SortOrder
   cleanliness?: Prisma.SortOrder
+  healthZeroAt?: Prisma.SortOrder
   criticalSince?: Prisma.SortOrder
   lastFedAt?: Prisma.SortOrder
   lastPlayedAt?: Prisma.SortOrder
@@ -1078,6 +1100,7 @@ export type PixegotchiCreateWithoutUserInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1110,6 +1133,7 @@ export type PixegotchiUncheckedCreateWithoutUserInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1171,6 +1195,7 @@ export type PixegotchiScalarWhereInput = {
   energy?: Prisma.IntFilter<"Pixegotchi"> | number
   happiness?: Prisma.IntFilter<"Pixegotchi"> | number
   cleanliness?: Prisma.IntFilter<"Pixegotchi"> | number
+  healthZeroAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   criticalSince?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastFedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastPlayedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
@@ -1197,6 +1222,7 @@ export type PixegotchiCreateWithoutEggInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1229,6 +1255,7 @@ export type PixegotchiUncheckedCreateWithoutEggInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1274,6 +1301,7 @@ export type PixegotchiUpdateWithoutEggInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1306,6 +1334,7 @@ export type PixegotchiUncheckedUpdateWithoutEggInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1335,6 +1364,7 @@ export type PixegotchiCreateWithoutActiveEffectsInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1368,6 +1398,7 @@ export type PixegotchiUncheckedCreateWithoutActiveEffectsInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1412,6 +1443,7 @@ export type PixegotchiUpdateWithoutActiveEffectsInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1445,6 +1477,7 @@ export type PixegotchiUncheckedUpdateWithoutActiveEffectsInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1473,6 +1506,7 @@ export type PixegotchiCreateWithoutVaultInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1506,6 +1540,7 @@ export type PixegotchiUncheckedCreateWithoutVaultInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1550,6 +1585,7 @@ export type PixegotchiUpdateWithoutVaultInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1583,6 +1619,7 @@ export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1611,6 +1648,7 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1644,6 +1682,7 @@ export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1688,6 +1727,7 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1721,6 +1761,7 @@ export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1751,6 +1792,7 @@ export type PixegotchiCreateManyUserInput = {
   energy?: number
   happiness?: number
   cleanliness?: number
+  healthZeroAt?: Date | string | null
   criticalSince?: Date | string | null
   lastFedAt?: Date | string | null
   lastPlayedAt?: Date | string | null
@@ -1777,6 +1819,7 @@ export type PixegotchiUpdateWithoutUserInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1809,6 +1852,7 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1840,6 +1884,7 @@ export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   energy?: Prisma.IntFieldUpdateOperationsInput | number
   happiness?: Prisma.IntFieldUpdateOperationsInput | number
   cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  healthZeroAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criticalSince?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastFedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastPlayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1918,6 +1963,7 @@ export type PixegotchiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   energy?: boolean
   happiness?: boolean
   cleanliness?: boolean
+  healthZeroAt?: boolean
   criticalSince?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
@@ -1953,6 +1999,7 @@ export type PixegotchiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   energy?: boolean
   happiness?: boolean
   cleanliness?: boolean
+  healthZeroAt?: boolean
   criticalSince?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
@@ -1984,6 +2031,7 @@ export type PixegotchiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   energy?: boolean
   happiness?: boolean
   cleanliness?: boolean
+  healthZeroAt?: boolean
   criticalSince?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
@@ -2015,6 +2063,7 @@ export type PixegotchiSelectScalar = {
   energy?: boolean
   happiness?: boolean
   cleanliness?: boolean
+  healthZeroAt?: boolean
   criticalSince?: boolean
   lastFedAt?: boolean
   lastPlayedAt?: boolean
@@ -2025,7 +2074,7 @@ export type PixegotchiSelectScalar = {
   hatchedAt?: boolean
 }
 
-export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eggId" | "nftAddress" | "genomeHash" | "element" | "rarity" | "gender" | "traits" | "name" | "status" | "level" | "experience" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "criticalSince" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt", ExtArgs["result"]["pixegotchi"]>
+export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eggId" | "nftAddress" | "genomeHash" | "element" | "rarity" | "gender" | "traits" | "name" | "status" | "level" | "experience" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "healthZeroAt" | "criticalSince" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt", ExtArgs["result"]["pixegotchi"]>
 export type PixegotchiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
@@ -2071,6 +2120,7 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     energy: number
     happiness: number
     cleanliness: number
+    healthZeroAt: Date | null
     criticalSince: Date | null
     lastFedAt: Date | null
     lastPlayedAt: Date | null
@@ -2525,6 +2575,7 @@ export interface PixegotchiFieldRefs {
   readonly energy: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly happiness: Prisma.FieldRef<"Pixegotchi", 'Int'>
   readonly cleanliness: Prisma.FieldRef<"Pixegotchi", 'Int'>
+  readonly healthZeroAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly criticalSince: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastFedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastPlayedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>

@@ -12,6 +12,7 @@ build/
 .cache/
 .cursor/
 .turbo/
+.qwen/
 
 # OS
 .DS_Store

@@ -58,10 +58,8 @@ enum ItemType {
   toy
   cleaning
   chest
-  rename
   special
   boost
-  resurrection  // для воскресіння з dead
 }
 
 enum ListingType {
@@ -165,6 +163,7 @@ model Pixegotchi {
   // ВИДАЛЕНО: hungerRate, energyRate, etc. (розраховуються динамічно)
   
   // Critical state tracking
+  healthZeroAt  DateTime?        @map("health_zero_at")
   criticalSince DateTime?        @map("critical_since")
   
   // Action timestamps

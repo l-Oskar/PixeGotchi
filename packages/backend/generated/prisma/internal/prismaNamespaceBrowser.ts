@@ -128,6 +128,7 @@ export const PixegotchiScalarFieldEnum = {
   energy: 'energy',
   happiness: 'happiness',
   cleanliness: 'cleanliness',
+  healthZeroAt: 'healthZeroAt',
   criticalSince: 'criticalSince',
   lastFedAt: 'lastFedAt',
   lastPlayedAt: 'lastPlayedAt',

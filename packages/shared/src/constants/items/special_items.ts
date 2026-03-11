@@ -7,7 +7,7 @@ export const RENAME_TAG: Item = {
   itemId: "rename_tag",
   name: "Rename Tag",
   description: "Allows you to rename your Pixegotchi.",
-  itemType: ItemType.rename,
+  itemType: ItemType.special,
   rarity: RarityType.rare,
   effects: {
     hunger: 0,
@@ -30,7 +30,7 @@ export const REVIVE_STONE: Item = {
   itemId: "revive_stone",
   name: "Revive Stone",
   description: "Revives a dead Pixegotchi.",
-  itemType: ItemType.resurrection,
+  itemType: ItemType.special,
   rarity: RarityType.legendary,
   effects: {
     hunger: 0,

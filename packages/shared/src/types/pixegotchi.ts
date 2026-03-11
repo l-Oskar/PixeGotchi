@@ -27,6 +27,7 @@ export interface Pixegotchi {
   cleanliness: number | string;
 
   // Timestamps
+  healthZeroAt: Date | string | null;
   criticalSince: Date | string | null;
   lastFedAt: Date | string | null;
   lastPlayedAt: Date | string | null;
@@ -54,7 +55,7 @@ export interface Cooldowns {
 }
 
 export interface RarityStatsType {
-  maxStatus: number;
+  maxStat: number;
   degradationReduce: number;
   traits: {
     min: number;
