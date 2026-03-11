@@ -6,5 +6,6 @@ export async function vaultRoutes(app: FastifyInstance) {
 
   app.addHook("onRequest", app.authenticate);
 
-  app.get("/", controller.getAllVault.bind(controller));
+  app.get("/stats", controller.getStatsVault.bind(controller));
+  app.get("/", controller.getAllVautl.bind(controller));
 }

@@ -13,3 +13,15 @@ export const useAllVault = () => {
     },
   });
 };
+
+export const useStatsVault = () => {
+  const setStatsVault = useVaultStore((s) => s.setStatsVault);
+  return useQuery({
+    queryKey: ["stats"],
+    queryFn: async () => {
+      const data = await vaultApi.getStatsVault();
+      setStatsVault(data);
+      return data;
+    },
+  });
+};

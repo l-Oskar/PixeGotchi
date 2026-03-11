@@ -5,7 +5,7 @@ import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 export class VaultService {
   private pixegotchi = new PixegotchiService();
 
-  async getAllVault(userId: number) {
+  async getStatsVault(userId: number) {
     const vaultPixe = await prisma.pixegotchi.findMany({
       where: {
         userId,
@@ -15,5 +15,16 @@ export class VaultService {
     if (!vaultPixe) throw new Error("Error vault");
     const stats = getVaultStats(vaultPixe);
     return stats;
+  }
+
+  async getAllVault(userId: number) {
+    const vaultPixe = await prisma.pixegotchi.findMany({
+      where: {
+        userId,
+        status: "vault",
+      },
+    });
+
+    return vaultPixe;
   }
 }

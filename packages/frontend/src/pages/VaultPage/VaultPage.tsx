@@ -1,7 +1,7 @@
 import { Sparkles } from "lucide-react";
 import { ElementStats, PageType } from "@shared";
 import Loader from "@/components/Other/Loader";
-import { useAllVault } from "@/services/queries/vault.queries";
+import { useStatsVault } from "@/services/queries/vault.queries";
 import { useVaultStore } from "@/store/vault.store";
 import { getPixegotchiImg } from "@/utils/getImage";
 import { useEffect, useState } from "react";
@@ -22,15 +22,15 @@ const RARITY_COLORS: Record<string, string> = {
 };
 
 const VaultPage: React.FC<VaultPageProps> = () => {
-  const { isLoading, data } = useAllVault();
-  const allVault = useVaultStore((s) => s.allVault);
+  const { isLoading, data } = useStatsVault();
+  const statsVault = useVaultStore((s) => s.statsVault);
   const [vaultStats, setVaultStats] = useState<ElementStats[] | []>([]);
 
   useEffect(() => {
     if (data) {
       setVaultStats(data);
     }
-  }, [data, allVault]);
+  }, [data, statsVault]);
 
   const collectedCount = vaultStats
     ? vaultStats.filter((stat) => !stat.isEmpty).length
