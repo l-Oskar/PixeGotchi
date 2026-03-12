@@ -7,7 +7,16 @@ export interface InventoryItem {
   itemId: string;
   itemType: ItemType;
   quantity: number;
-  createdAt: string;
+  createdAt: string | Date;
+}
+export interface InventoryWithDetails {
+  id: number;
+  userId: number;
+  itemId: string;
+  itemType: ItemType;
+  quantity: number;
+  createdAt: string | Date;
+  details: Item | null;
 }
 
 export interface ItemEffects {

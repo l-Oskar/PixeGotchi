@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { ItemType, ITEMS_BY_ID, Pixegotchi, Item } from "@shared";
+import { ItemType, ITEMS_BY_ID, InventoryWithDetails } from "@shared";
 import { ItemsService } from "../items/items.service";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 
@@ -12,6 +12,28 @@ export class Inventory {
       where: { userId },
       orderBy: { createdAt: "desc" },
     });
+  }
+
+  async getInventoryWithDetails(
+    userId: number,
+  ): Promise<InventoryWithDetails[]> {
+    const inventory = await prisma.inventory.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const inventoryWithDetails = await Promise.all(
+      inventory.map(async (item) => {
+        try {
+          const details = await this.itemService.getItemDetails(item.itemId);
+          return { ...item, details };
+        } catch {
+          return { ...item, details: null };
+        }
+      }),
+    );
+
+    return inventoryWithDetails;
   }
 
   async addItem(
