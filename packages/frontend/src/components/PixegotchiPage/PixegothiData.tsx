@@ -17,7 +17,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
         <p>Element: {pixegotchi?.element}</p>
         <p>Rarity: {pixegotchi?.rarity}</p>
         <p>Gender: {pixegotchi?.gender}</p>
-        <p>Created at: {pixegotchi?.hatchedAt}</p>
+        <p>Created at: {pixegotchi?.hatchedAt ? new Date(pixegotchi.hatchedAt).toLocaleString() : "N/A"}</p>
         <p>Genome: {pixegotchi?.genomeHash}</p>
         <p>
           Traits:{" "}

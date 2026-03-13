@@ -112,31 +112,31 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-5 gap-2 mb-3">
             <CompactStat
               icon={Heart}
-              value={pixegotchi.health}
+              value={Number(pixegotchi.health)}
               bgColor="bg-red-500/20"
               strokeColor="text-red-500"
             />
             <CompactStat
               icon={Apple}
-              value={100 - pixegotchi.hunger}
+              value={100 - Number(pixegotchi.hunger)}
               bgColor="bg-orange-500/20"
               strokeColor="text-orange-500"
             />
             <CompactStat
               icon={Zap}
-              value={pixegotchi.energy}
+              value={Number(pixegotchi.energy)}
               bgColor="bg-yellow-500/20"
               strokeColor="text-yellow-500"
             />
             <CompactStat
               icon={Smile}
-              value={pixegotchi.happiness}
+              value={Number(pixegotchi.happiness)}
               bgColor="bg-pink-500/20"
               strokeColor="text-pink-500"
             />
             <CompactStat
               icon={Droplets}
-              value={pixegotchi.cleanliness}
+              value={Number(pixegotchi.cleanliness)}
               bgColor="bg-blue-500/20"
               strokeColor="text-blue-500"
             />

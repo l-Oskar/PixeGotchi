@@ -2,7 +2,7 @@ import { RarityStats } from "../types/pixegotchi";
 
 export const RARITY_STATS: RarityStats = {
   common: {
-    maxStatus: 100,
+    maxStat: 100,
     degradationReduce: 0,
     traits: {
       min: 0,
@@ -11,7 +11,7 @@ export const RARITY_STATS: RarityStats = {
     goldEarn: 1,
   },
   uncommon: {
-    maxStatus: 110,
+    maxStat: 110,
     degradationReduce: 5,
     traits: {
       min: 1,
@@ -20,7 +20,7 @@ export const RARITY_STATS: RarityStats = {
     goldEarn: 1,
   },
   rare: {
-    maxStatus: 115,
+    maxStat: 115,
     degradationReduce: 10,
     traits: {
       min: 1,
@@ -29,7 +29,7 @@ export const RARITY_STATS: RarityStats = {
     goldEarn: 1,
   },
   epic: {
-    maxStatus: 120,
+    maxStat: 120,
     degradationReduce: 15,
     traits: {
       min: 2,
@@ -38,7 +38,7 @@ export const RARITY_STATS: RarityStats = {
     goldEarn: 1.1,
   },
   mythic: {
-    maxStatus: 130,
+    maxStat: 130,
     degradationReduce: 20,
     traits: {
       min: 2,
@@ -47,7 +47,7 @@ export const RARITY_STATS: RarityStats = {
     goldEarn: 1.2,
   },
   legendary: {
-    maxStatus: 150,
+    maxStat: 150,
     degradationReduce: 25,
     traits: {
       min: 4,

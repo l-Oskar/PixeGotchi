@@ -13,7 +13,7 @@ export class VaultController {
     return reply.send(getStatsVault);
   }
 
-  async getAllVautl(request: FastifyRequest, reply: FastifyReply) {
+  async getAllVault(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
 
     const getAllVault = await this.vaultService.getAllVault(userId);
