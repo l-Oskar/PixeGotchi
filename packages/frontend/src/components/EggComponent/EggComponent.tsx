@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { PageType, Pixegotchi } from "@shared";
 import { Hourglass, CircleX, Egg as EggIcon } from "lucide-react";
 import {
   useGetHatchingStatus,
   useHatchEgg,
+  useBatchTap,
 } from "@/services/queries/egg.queries";
 import { useEggStore } from "@/store/egg.store";
 import ActionButton from "@/components/MainPage/ActionButton";
@@ -16,15 +17,23 @@ export interface EggPageProps {
   setActivePixegotchi: (pixegitchi: Pixegotchi) => void;
 }
 
+const TAP_INTERVAL = 2000; // 2 секунди
+
 const EggComponent: React.FC<EggPageProps> = ({
   onNavigate,
   setActivePixegotchi,
 }) => {
   const egg = useEggStore((s) => s.hatchingEgg);
   const hatchEgg = useHatchEgg();
+  const batchTap = useBatchTap();
 
   // Використовуємо умовний запит - тільки якщо є egg
   const status = useGetHatchingStatus(egg?.id!);
+
+  // Реф для зберігання кількості тапів
+  const tapCountRef = useRef<number>(0);
+  // Реф для зберігання ID інтервалу
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Ранній вихід якщо немає яйця
   if (!egg) {
@@ -71,15 +80,39 @@ const EggComponent: React.FC<EggPageProps> = ({
     }
   };
 
-  const handleTap = async () => {
-    try {
-      // Логіка для tap (прискорення висиджування)
-      console.log("Tapping egg...");
-      // Можна викликати мутацію для tap
-    } catch (error) {
-      console.error("Failed to tap egg:", error);
-    }
+  const handleTap = () => {
+    // Збільшуємо лічильник тапів
+    tapCountRef.current += 1;
+    console.log(`Tap! Total taps: ${tapCountRef.current}`);
   };
+
+  // Ефект для відправки batch tap запиту кожні 2 секунди
+  useEffect(() => {
+    if (!egg?.id || isReady) return;
+
+    // Очищаємо попередній інтервал
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
+      const tapCount = tapCountRef.current;
+
+      if (tapCount > 0) {
+        console.log(`Sending batch tap: ${tapCount} taps`);
+        batchTap.mutate({ eggId: egg.id, tapCount });
+        tapCountRef.current = 0; // Скидаємо лічильник після відправки
+      }
+    }, TAP_INTERVAL);
+
+    // Очищення при розмонтуванні або зміні залежностей
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [egg?.id, isReady, batchTap]);
 
   return (
     <div className="p-4 space-y-4">

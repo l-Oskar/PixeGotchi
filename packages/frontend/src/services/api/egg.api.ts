@@ -9,6 +9,7 @@ export const EGG_URL = "/eggs";
 export const EGG_URL_KEYS = {
   eggs: EGG_URL,
   id: (id: number | null) => `${EGG_URL}/${id}` as const,
+  tap: `${EGG_URL}/tap/batch` as const,
   hatchingEgg: `${EGG_URL}/hatching_egg` as const,
   getEgg: `${EGG_URL}/get_egg` as const,
   hatchStart: `${EGG_URL}/hatch/start` as const,
@@ -36,6 +37,13 @@ export const eggApi = {
   },
   startHatching: async (eggId: number): Promise<Egg> => {
     const { data } = await apiClient.post(EGG_URL_KEYS.hatchStart, { eggId });
+    return data;
+  },
+  batchTap: async (eggId: number, tapCount: number) => {
+    const { data } = await apiClient.post(EGG_URL_KEYS.tap, {
+      eggId,
+      tapCount,
+    });
     return data;
   },
   getHatchingStatus: async (id: number): Promise<EggHatchingStatus> => {

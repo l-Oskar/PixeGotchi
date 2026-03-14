@@ -12,6 +12,7 @@ export async function eggsRoutes(app: FastifyInstance) {
   app.post("/get_egg", controller.getEgg.bind(controller));
 
   app.post("/hatch/start", controller.startHatching.bind(controller));
+  app.post("/tap/batch", controller.batchTap.bind(controller));
   app.get("/:id/status", controller.getHatchingStatus.bind(controller));
   app.post("/:id/open", controller.hatchEgg.bind(controller));
   app.post("/:id/cancel", controller.cancelHatching.bind(controller));

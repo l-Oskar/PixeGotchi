@@ -1,6 +1,9 @@
 // Enums
 export * from "./enums";
 
+// Utils
+export { validateGenomeHash, assertValidGenomeHash } from "./utils/genome-validator";
+
 // Item effects
 export * from "./types/item_buffs";
 export * from "./constants/pixegitchi_const";

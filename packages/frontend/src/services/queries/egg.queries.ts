@@ -7,6 +7,7 @@ import { useUserStore } from "@/store/user.store";
 export const EGG_KEYS = {
   all: ["eggs"] as const,
   hatching: ["hatchingEgg"] as const,
+  tap: ["tap"] as const,
   details: (eggId: number | null) => ["egg", eggId] as const,
   status: (eggId: number | null) => ["egg", eggId, "status"] as const,
   create: ["createEgg"] as const,
@@ -60,6 +61,19 @@ export const useStartHatching = () => {
     onSuccess: (data) => {
       setHatching(data);
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+    },
+  });
+};
+
+export const useBatchTap = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ eggId, tapCount }: { eggId: number; tapCount: number }) =>
+      eggApi.batchTap(eggId, tapCount),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.hatching });
+      return data;
     },
   });
 };

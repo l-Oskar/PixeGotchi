@@ -1,10 +1,16 @@
 import { prisma } from "@/database/prisma";
 import { GenomeGenerator } from "@/utils/genome-generator";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
-import { EGG_CONSTANTS } from "@shared";
+import { EGG_CONSTANTS, assertValidGenomeHash } from "@shared";
+import Redis from "ioredis";
 
 export class EggService {
   private pixegotchiService = new PixegotchiService();
+  private redis: Redis;
+
+  constructor() {
+    this.redis = new Redis(process.env.REDIS_URL!);
+  }
 
   async findAllEggs(userId: number) {
     const eggs = await prisma.egg.findMany({
@@ -182,6 +188,14 @@ export class EggService {
     }
 
     const genome = GenomeGenerator.generate();
+    assertValidGenomeHash(genome.genome_hash);
+
+    const usedEgg = await prisma.pixegotchi.findFirst({
+      where: {
+        eggId: id,
+      },
+    });
+    if (usedEgg) throw new Error("Egg was used");
 
     const data = await prisma.$transaction([
       prisma.pixegotchi.create({
@@ -209,5 +223,50 @@ export class EggService {
     ]);
 
     return data[0];
+  }
+
+  async proccessTapBatch(userId: number, eggId: number, tapCount: number) {
+    const egg = await this.getHatchingEgg(userId);
+
+    if (!egg) throw new Error("Egg not found or not hatching");
+
+    const maxTapPerBatch = EGG_CONSTANTS.EGG_MAX_BATCH_TAP;
+    const actualTaps = Math.min(tapCount, maxTapPerBatch);
+
+    const redisKey = `egg:${eggId}:taps:${userId}`;
+    const lastBatchTime = await this.redis.get(`${redisKey}:time`);
+
+    if (lastBatchTime) {
+      const timeSinceLastBatch = Date.now() - parseInt(lastBatchTime);
+      // Мінімум 1 секунда між батчами (захист від ботів)
+      if (timeSinceLastBatch < 500) {
+        throw new Error("Too many requests. Please wait.");
+      }
+    }
+
+    await this.redis.setex(`${redisKey}:time`, 60, Date.now().toString());
+
+    const currentTime = Date.now();
+    const startTime = egg.hatchStartedAt!.getTime();
+    const elapsedTime = currentTime - startTime;
+    const remainingTime = Math.max(0, egg.hatchingTimeMs - elapsedTime);
+
+    // Зменшити час: 1 тап = -1000 мс (1 секунда)
+    const tapReduction = 1000 * actualTaps;
+    const newRemainingTime = Math.max(0, remainingTime - tapReduction);
+
+    await prisma.egg.update({
+      where: {
+        id: eggId,
+      },
+      data: {
+        tapCount: { increment: actualTaps },
+        hatchingTimeMs: Math.floor(elapsedTime + newRemainingTime),
+      },
+    });
+
+    const newStatus = this.getHatchingStatus(userId, eggId);
+
+    return newStatus;
   }
 }
