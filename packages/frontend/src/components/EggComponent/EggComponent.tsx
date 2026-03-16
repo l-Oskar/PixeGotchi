@@ -25,7 +25,11 @@ const EggComponent: React.FC<EggPageProps> = ({
 }) => {
   const egg = useEggStore((s) => s.hatchingEgg);
   const hatchEgg = useHatchEgg();
-  const batchTap = useBatchTap();
+  const batchTapMutation = useBatchTap();
+
+  // Реф для доступу до мутації без перевизначення інтервалу
+  const batchTapRef = useRef(batchTapMutation.mutate);
+  batchTapRef.current = batchTapMutation.mutate;
 
   // Використовуємо умовний запит - тільки якщо є egg
   const status = useGetHatchingStatus(egg?.id!);
@@ -100,7 +104,7 @@ const EggComponent: React.FC<EggPageProps> = ({
 
       if (tapCount > 0) {
         console.log(`Sending batch tap: ${tapCount} taps`);
-        batchTap.mutate({ eggId: egg.id, tapCount });
+        batchTapRef.current({ eggId: egg.id, tapCount });
         tapCountRef.current = 0; // Скидаємо лічильник після відправки
       }
     }, TAP_INTERVAL);
@@ -112,7 +116,7 @@ const EggComponent: React.FC<EggPageProps> = ({
         intervalRef.current = null;
       }
     };
-  }, [egg?.id, isReady, batchTap]);
+  }, [egg?.id, isReady]);
 
   return (
     <div className="p-4 space-y-4">

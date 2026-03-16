@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { ItemType, ITEMS_BY_ID, InventoryWithDetails } from "@shared";
+import { ITEMS_BY_ID, InventoryWithDetails } from "@shared";
 import { ItemsService } from "../items/items.service";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 
@@ -39,9 +39,16 @@ export class Inventory {
   async addItem(
     userId: number,
     itemId: keyof typeof ITEMS_BY_ID,
-    itemType: ItemType,
     quantity: number = 1,
   ) {
+    const item = await prisma.item.findFirst({
+      where: {
+        itemId
+      }
+    })
+
+    if(!item) throw new Error(`Item ${itemId} not found`)
+
     const existing = await prisma.inventory.findUnique({
       where: {
         userId_itemId: { userId, itemId },
@@ -61,7 +68,7 @@ export class Inventory {
       data: {
         userId,
         itemId,
-        itemType,
+        itemType: item.itemType,
         quantity,
       },
     });

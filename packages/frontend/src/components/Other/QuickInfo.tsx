@@ -1,25 +1,19 @@
 import { useVaultStore } from "@/store/vault.store";
-import { VaultStats, ElementStats, User } from "@shared";
+import { User } from "@shared";
 import { useUserStore } from "@/store/user.store";
 
 const QuickInfo = () => {
   const vault = useVaultStore((s) => s.allVault);
   const user = useUserStore((s) => s.user);
-
-  const pixegotchisSum = (vault: VaultStats | null | undefined): number => {
-    if (!vault) return 0;
-
-    return Object.values(vault).reduce((acc: number, item: ElementStats) => {
-      return acc + (item.count || 0);
-    }, 0);
-  };
+  console.log(user?.createdAt);
 
   const userAge = (user: User) => {
     if (!user) return "0";
 
-    //const dateNow = Date.now();
-    const userStr = user.createdAt?.toString();
-    return userStr;
+    const dateNow = Date.now();
+    const createdAt = Date.parse(`${user.createdAt!}`);
+    const timeSince = Math.floor((dateNow - createdAt) / 1000 / 86400);
+    return timeSince;
   };
   return (
     <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
@@ -31,9 +25,7 @@ const QuickInfo = () => {
           </div>
           <div>
             <div className="text-white/60 text-xs">Have Pixegotchis</div>
-            <div className="font-semibold">
-              {vault ? pixegotchisSum(vault) : "?"}
-            </div>
+            <div className="font-semibold">{vault ? vault.length : "?"}</div>
           </div>
         </div>
         <div className="flex items-center gap-2">

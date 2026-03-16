@@ -25,14 +25,21 @@ export class InventoryController {
     return reply.send(userInventory);
   }
 
+  async getDetailedInventory(request: FastifyRequest, reply: FastifyReply) {
+    const userId = (request.user as any).userId
+
+    const userDetailedInventory = await this.inventoryService.getInventoryWithDetails(userId)
+
+    return reply.send(userDetailedInventory)
+  }
+
   async addItem(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
-    const { itemId, itemType, quantity } = addItemScema.parse(request.body);
+    const { itemId, quantity } = addItemScema.parse(request.body);
 
     const addItem = await this.inventoryService.addItem(
       userId,
       itemId,
-      itemType,
       quantity,
     );
 

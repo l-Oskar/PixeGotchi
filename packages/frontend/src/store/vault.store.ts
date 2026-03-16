@@ -2,21 +2,21 @@ import { Pixegotchi, VaultStats } from "@shared";
 import { create } from "zustand";
 
 interface VaultStore {
-  allVault: VaultStats | null;
-  statsVault: Pixegotchi[] | [] | null;
-  setAllVault: (list: VaultStats) => void;
-  setStatsVault: (list: Pixegotchi[] | []) => void;
+  statsVault: VaultStats | null;
+  allVault: Pixegotchi[] | [] | null;
+  setStatsVault: (list: VaultStats) => void;
+  setAllVault: (list: Pixegotchi[] | []) => void;
 }
 
 export const useVaultStore = create<VaultStore>((set) => ({
   allVault: null,
   statsVault: null,
-  setAllVault: (list: VaultStats) =>
-    set({
-      allVault: list,
-    }),
-  setStatsVault: (list: Pixegotchi[] | []) =>
+  setStatsVault: (list: VaultStats) =>
     set({
       statsVault: list,
+    }),
+  setAllVault: (list: Pixegotchi[] | []) =>
+    set({
+      allVault: list,
     }),
 }));
