@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Cooldowns, HomePageProps, PageType } from "@shared";
 import {
   Heart,
@@ -30,6 +30,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   setActive,
 }) => {
   const getActive = useActivePixegotchi();
+
+  useEffect(() => {}, [getActive.data]);
 
   const clearPixegotchi = usePixegotchiStore((s) => s.setToVault);
   const [cooldowns] = useState<Cooldowns>({
@@ -118,7 +120,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             />
             <CompactStat
               icon={Apple}
-              value={100 - Number(pixegotchi.hunger)}
+              value={Number(pixegotchi.hunger)}
               bgColor="bg-orange-500/20"
               strokeColor="text-orange-500"
             />

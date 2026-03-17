@@ -53,8 +53,11 @@ export const useUseItem = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["detailed", "activePixegotchi"],
-      });
+        queryKey: ["detailed"],
+      }),
+        queryClient.invalidateQueries({
+          queryKey: ["activePixegotchi"],
+        });
     },
   });
 };
