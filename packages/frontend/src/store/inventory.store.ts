@@ -1,12 +1,15 @@
-import { InventoryItem, InventoryWithDetails } from '@shared'
-import {create} from 'zustand'
+import { InventoryItem, InventoryWithDetails, Item } from "@shared";
+import { create } from "zustand";
 
-interface InventoryStore{
-    inventory: InventoryItem[] | null,
-    detailedInventory: InventoryWithDetails[] | null,
+interface InventoryStore {
+  inventory: InventoryItem[] | null;
+  detailedInventory: InventoryWithDetails[] | [];
+  updateInventory: (inventory: InventoryWithDetails[]) => void;
 }
 
 export const useInventoryStore = create<InventoryStore>((set) => ({
-    inventory: null,
-    detailedInventory: null,
-}))
+  inventory: null,
+  detailedInventory: [],
+  updateInventory: (inventory: InventoryWithDetails[] | []) =>
+    set({ detailedInventory: inventory }),
+}));

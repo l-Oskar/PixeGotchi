@@ -1,5 +1,10 @@
 import { useCreateEgg, useGetAllEggs } from "@/services/queries/egg.queries";
+import {
+  useAddItem,
+  useDetailedInventory,
+} from "@/services/queries/inventory.queries";
 import { useEggStore } from "@/store/egg.store";
+import { useInventoryStore } from "@/store/inventory.store";
 import {
   PageType,
   MarketplaceListing,
@@ -14,7 +19,10 @@ export interface MarketplacePageProps {
 const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const createEgg = useCreateEgg();
   const getAllEggs = useGetAllEggs();
+  const getDetailed = useDetailedInventory();
+  const addItem = useAddItem();
   const setAllEggs = useEggStore((s) => s.setAllEggs);
+  const updateInventory = useInventoryStore((s) => s.updateInventory);
 
   const handleCreateEgg = () => {
     createEgg.mutate(undefined, {
@@ -28,23 +36,39 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
     });
   };
 
+  const handleAddItem = (itemId: string, quantity?: number) => {
+    addItem.mutate(
+      { itemId, quantity },
+      {
+        onSuccess: () => {
+          alert(`Item ${itemId} purchased!`);
+        },
+        onError: (error) => {
+          console.log("Failed to add item: " + error);
+        },
+      },
+    );
+  };
+
   const listings: MarketplaceListing[] = [
     {
       id: 1,
       item: "Element Egg",
+      itemId: "egg",
       price: EGG_CONSTANTS.EGG_PRICE,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🥚",
     },
-    // {
-    //   id: 2,
-    //   item: "Legendary Chest",
-    //   price: 2,
-    //   currency: "TON" as CurrencyType,
-    //   seller: "User#456",
-    //   icon: "📦",
-    // },
+    {
+      id: 2,
+      item: "Apple",
+      itemId: "apple",
+      price: 10,
+      currency: "PGC" as CurrencyType,
+      seller: "Pixegotchi",
+      icon: "🍎",
+    },
   ];
 
   return (
@@ -67,7 +91,11 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                   {listing.price} {listing.currency}
                 </div>
                 <button
-                  onClick={handleCreateEgg}
+                  onClick={() => {
+                    listing.itemId === "egg"
+                      ? handleCreateEgg()
+                      : handleAddItem(listing.itemId, 1);
+                  }}
                   className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
                   BUY
                 </button>

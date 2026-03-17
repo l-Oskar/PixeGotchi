@@ -5,7 +5,6 @@ import { z } from "zod";
 
 const addItemScema = z.object({
   itemId: z.enum(ITEMS_BY_ID as any),
-  itemType: z.enum(ItemType as any),
   quantity: z.number().optional(),
 });
 
@@ -26,11 +25,12 @@ export class InventoryController {
   }
 
   async getDetailedInventory(request: FastifyRequest, reply: FastifyReply) {
-    const userId = (request.user as any).userId
+    const userId = (request.user as any).userId;
 
-    const userDetailedInventory = await this.inventoryService.getInventoryWithDetails(userId)
+    const userDetailedInventory =
+      await this.inventoryService.getInventoryWithDetails(userId);
 
-    return reply.send(userDetailedInventory)
+    return reply.send(userDetailedInventory);
   }
 
   async addItem(request: FastifyRequest, reply: FastifyReply) {
