@@ -110,6 +110,9 @@ export class Inventory {
 
     if (!valid) throw new Error("You can't use this item now!");
 
+    if (item.itemType === "food" || "medicine" || "toy" || "cleaning") {
+      await this.pixegotchiService.applyStats(userId, item, quantity);
+    }
     return await this.consumeItem(userId, itemId, quantity);
   }
 }

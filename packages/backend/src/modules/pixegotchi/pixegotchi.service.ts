@@ -1,4 +1,5 @@
 import { prisma } from "@/database/prisma";
+import { Item } from "@shared";
 
 export class PixegotchiService {
   async findByUserId(userId: number) {
@@ -57,6 +58,25 @@ export class PixegotchiService {
           finalLevel: pixegotchi.level,
         },
       });
+    });
+  }
+
+  async applyStats(userId: number, item: Item, quantity: number = 1) {
+    const pixegotchi = await this.findActive(userId);
+    if (!pixegotchi) throw new Error("You don't have active pixegotchi");
+
+    return await prisma.pixegotchi.update({
+      where: {
+        id: pixegotchi.id,
+      },
+      data: {
+        health: { increment: (item.effects?.hunger ?? 0) * quantity },
+        hunger: { increment: (item.effects?.hunger ?? 0) * quantity },
+        energy: { increment: (item.effects?.energy ?? 0) * quantity },
+        cleanliness: { increment: (item.effects?.cleanliness ?? 0) * quantity },
+        happiness: { increment: (item.effects?.happiness ?? 0) * quantity },
+        lastUpdateAt: new Date(),
+      },
     });
   }
 }

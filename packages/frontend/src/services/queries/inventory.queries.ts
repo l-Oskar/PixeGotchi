@@ -52,7 +52,9 @@ export const useUseItem = () => {
       return inventoryApi.useItem(itemId, quantity);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["detailed"] });
+      queryClient.invalidateQueries({
+        queryKey: ["detailed", "activePixegotchi"],
+      });
     },
   });
 };
