@@ -1,15 +1,15 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { Inventory } from "./inventory.service";
-import { ITEMS_BY_ID, ItemType } from "@shared";
+import { ITEMS_BY_ID } from "@shared";
 import { z } from "zod";
 
 const addItemScema = z.object({
-  itemId: z.enum(ITEMS_BY_ID as any),
+  itemId: z.enum(Object.keys(ITEMS_BY_ID) as [string, ...string[]]),
   quantity: z.number().optional(),
 });
 
 const useItemScheme = z.object({
-  itemId: z.enum(ITEMS_BY_ID as any),
+  itemId: z.enum(Object.keys(ITEMS_BY_ID) as [string, ...string[]]),
   quantity: z.number().optional(),
 });
 
