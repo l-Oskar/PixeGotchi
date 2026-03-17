@@ -47,12 +47,12 @@ export class InventoryController {
   }
 
   async useItem(request: FastifyRequest, reply: FastifyReply) {
-    const useId = (request.user as any).useId;
+    const userId = (request.user as any).userId;
 
     const { itemId, quantity } = useItemScheme.parse(request.body);
 
     const useItem = await this.inventoryService.useItem(
-      useId,
+      userId,
       itemId,
       quantity,
     );

@@ -43,11 +43,11 @@ export class Inventory {
   ) {
     const item = await prisma.item.findFirst({
       where: {
-        itemId
-      }
-    })
+        itemId,
+      },
+    });
 
-    if(!item) throw new Error(`Item ${itemId} not found`)
+    if (!item) throw new Error(`Item ${itemId} not found`);
 
     const existing = await prisma.inventory.findUnique({
       where: {

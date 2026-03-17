@@ -1,10 +1,6 @@
 import { useCreateEgg, useGetAllEggs } from "@/services/queries/egg.queries";
-import {
-  useAddItem,
-  useDetailedInventory,
-} from "@/services/queries/inventory.queries";
+import { useAddItem } from "@/services/queries/inventory.queries";
 import { useEggStore } from "@/store/egg.store";
-import { useInventoryStore } from "@/store/inventory.store";
 import {
   PageType,
   MarketplaceListing,
@@ -19,10 +15,8 @@ export interface MarketplacePageProps {
 const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const createEgg = useCreateEgg();
   const getAllEggs = useGetAllEggs();
-  const getDetailed = useDetailedInventory();
   const addItem = useAddItem();
   const setAllEggs = useEggStore((s) => s.setAllEggs);
-  const updateInventory = useInventoryStore((s) => s.updateInventory);
 
   const handleCreateEgg = () => {
     createEgg.mutate(undefined, {
@@ -68,6 +62,33 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🍎",
+    },
+    {
+      id: 3,
+      item: "Pill",
+      itemId: "small_medicine",
+      price: 10,
+      currency: "PGC" as CurrencyType,
+      seller: "Pixegotchi",
+      icon: "💊",
+    },
+    {
+      id: 4,
+      item: "Soap",
+      itemId: "soap",
+      price: 10,
+      currency: "PGC" as CurrencyType,
+      seller: "Pixegotchi",
+      icon: "🧼",
+    },
+    {
+      id: 5,
+      item: "Rubber ball",
+      itemId: "rubber_ball",
+      price: 10,
+      currency: "PGC" as CurrencyType,
+      seller: "Pixegotchi",
+      icon: "☄️",
     },
   ];
 

@@ -1,4 +1,4 @@
-import { InventoryItem, InventoryWithDetails, Item } from "@shared";
+import { InventoryItem, InventoryWithDetails } from "@shared";
 import { create } from "zustand";
 
 interface InventoryStore {

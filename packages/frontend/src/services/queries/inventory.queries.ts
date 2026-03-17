@@ -38,3 +38,21 @@ export const useAddItem = () => {
     },
   });
 };
+
+export const useUseItem = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      itemId,
+      quantity,
+    }: {
+      itemId: string;
+      quantity: number;
+    }) => {
+      return inventoryApi.useItem(itemId, quantity);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["detailed"] });
+    },
+  });
+};

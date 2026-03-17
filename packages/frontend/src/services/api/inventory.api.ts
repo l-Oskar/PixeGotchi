@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import { InventoryItem, InventoryWithDetails, Item } from "@shared";
+import { InventoryItem, InventoryWithDetails } from "@shared";
 
 const INVENTORY_URL = "/inventory";
 const INVENTORY_KEYS = {
@@ -28,7 +28,7 @@ export const inventoryApi = {
     });
     return data;
   },
-  useItem: async (itemId: number, quantity?: number): Promise<void> => {
+  useItem: async (itemId: string, quantity?: number): Promise<void> => {
     const { data } = await apiClient.post(INVENTORY_KEYS.useItem, {
       itemId,
       quantity,
