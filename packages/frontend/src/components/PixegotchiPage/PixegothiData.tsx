@@ -12,12 +12,19 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
         <div className="text-center">Pixegotchi data</div>
         <p>ID: #{pixegotchi?.id}</p>
         <p>Name: {pixegotchi?.name}</p>
-        <p>LVL: {pixegotchi?.level}</p>
-        <p>Experiance: {pixegotchi?.experience}</p>
+        <p>
+          LVL: {pixegotchi?.level} Experiance: {pixegotchi?.experience}
+        </p>
+        <p></p>
         <p>Element: {pixegotchi?.element}</p>
         <p>Rarity: {pixegotchi?.rarity}</p>
         <p>Gender: {pixegotchi?.gender}</p>
-        <p>Created at: {pixegotchi?.hatchedAt ? new Date(pixegotchi.hatchedAt).toLocaleString() : "N/A"}</p>
+        <p>
+          Created at:{" "}
+          {pixegotchi?.hatchedAt
+            ? new Date(pixegotchi.hatchedAt).toLocaleString()
+            : "N/A"}
+        </p>
         <p>Genome: {pixegotchi?.genomeHash}</p>
         <p>
           Traits:{" "}

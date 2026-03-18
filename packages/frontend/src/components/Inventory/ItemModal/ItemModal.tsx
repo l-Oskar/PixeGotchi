@@ -23,7 +23,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
 
   if (!item) return null;
 
-  const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
+  // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
   const canUse = useQuantity >= 1 && useQuantity <= quantity && !isUsing;
 
   const handleUse = async () => {
