@@ -107,7 +107,7 @@ export class PixegotchiService {
     if (!pixegotchi) throw new Error("Not active pixegotchi");
 
     if (pixegotchi.experience + exp < MAX_EXP) {
-      await prisma.pixegotchi.update({
+      return await prisma.pixegotchi.update({
         where: {
           id: pixegotchi.id,
         },
@@ -117,7 +117,7 @@ export class PixegotchiService {
       });
     }
 
-    await prisma.pixegotchi.update({
+    return await prisma.pixegotchi.update({
       where: {
         id: pixegotchi.id,
       },
