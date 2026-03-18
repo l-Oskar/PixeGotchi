@@ -58,7 +58,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 2,
       item: "Apple",
       itemId: "apple",
-      price: 10,
+      price: 0,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🍎",
@@ -67,7 +67,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 3,
       item: "Pill",
       itemId: "small_medicine",
-      price: 10,
+      price: 0,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "💊",
@@ -76,7 +76,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 4,
       item: "Soap",
       itemId: "soap",
-      price: 10,
+      price: 0,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🧼",
@@ -85,7 +85,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 5,
       item: "Rubber ball",
       itemId: "rubber_ball",
-      price: 10,
+      price: 0,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "☄️",
@@ -109,7 +109,9 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
               </div>
               <div className="text-right">
                 <div className="font-bold text-yellow-400">
-                  {listing.price} {listing.currency}
+                  {listing.price == 0
+                    ? "Free"
+                    : `${listing.price} ${listing.currency}`}
                 </div>
                 <button
                   onClick={() => {

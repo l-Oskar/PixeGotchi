@@ -114,7 +114,9 @@ model Egg {
   // Для відстеження на marketplace
   isListed        Boolean  @default(false) @map("is_listed")
   isHatching      Boolean  @default(false) @map("is_hatching")
+  isHatched       Boolean  @default(false) @map("is_hatched")
   hatchStartedAt  DateTime? @map("hatch_started_at")
+  hatchedAt       DateTime? @map("hatched_at") 
   hatchingTimeMs  Int       @default(86400000) @map("hatching_time_ms") // 24 години в мс
   tapCount        Int       @default(0) @map("tap_count")
   
@@ -127,6 +129,7 @@ model Egg {
   @@index([userId])
   @@index([isListed])
   @@index([isHatching])
+  @@index([isHatched])
   @@map("eggs")
 }
 

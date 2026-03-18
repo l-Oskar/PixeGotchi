@@ -1,5 +1,5 @@
 import { Sparkles } from "lucide-react";
-import { ElementStats, PageType } from "@shared";
+import { ElementStats, PageType, RARITY_COLORS } from "@shared";
 import Loader from "@/components/Other/Loader";
 import { useStatsVault } from "@/services/queries/vault.queries";
 import { useVaultStore } from "@/store/vault.store";
@@ -9,17 +9,6 @@ import { useEffect, useState } from "react";
 interface VaultPageProps {
   onNavigate?: (page: PageType) => void;
 }
-
-// Кольори для рідкості
-const RARITY_COLORS: Record<string, string> = {
-  common: "text-gray-400",
-  uncommon: "text-green-400",
-  rare: "text-blue-400",
-  epic: "text-purple-400",
-  mythic: "text-pink-400",
-  legendary: "text-yellow-400",
-  unique: "text-orange-400",
-};
 
 const VaultPage: React.FC<VaultPageProps> = () => {
   const { isLoading, data } = useStatsVault();

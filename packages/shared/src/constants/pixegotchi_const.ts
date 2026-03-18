@@ -66,6 +66,25 @@ export const RARITY_STATS: RarityStats = {
   },
 };
 
+export const RARITY_COLORS: Record<string, string> = {
+  common: "text-gray-400",
+  uncommon: "text-green-400",
+  rare: "text-blue-400",
+  epic: "text-purple-400",
+  mythic: "text-pink-400",
+  legendary: "text-yellow-400",
+  unique: "text-orange-400",
+};
+
+export const CREATE_STATS: Record<string, number> = {
+  health: 100,
+  hunger: 70,
+  energy: 100,
+  happiness: 50,
+  cleanliness: 100,
+};
+
+export const MAX_EXP: number = 1000;
 export const CRITICAL_TIME: number = 86400000;
 export const DEAD_TIME: number = 86400000;
 

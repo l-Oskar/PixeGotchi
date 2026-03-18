@@ -1,7 +1,7 @@
 import { prisma } from "@/database/prisma";
 import { GenomeGenerator } from "@/utils/genome-generator";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
-import { EGG_CONSTANTS, assertValidGenomeHash } from "@shared";
+import { CREATE_STATS, EGG_CONSTANTS, assertValidGenomeHash } from "@shared";
 import Redis from "ioredis";
 
 export class EggService {
@@ -178,6 +178,7 @@ export class EggService {
     });
 
     if (!egg) throw new Error("Egg not found or not hatching");
+    if (egg.isHatched) throw new Error("Egg was hatched");
 
     const status = await this.getHatchingStatus(userId, id);
 
@@ -190,19 +191,12 @@ export class EggService {
     const genome = GenomeGenerator.generate();
     assertValidGenomeHash(genome.genome_hash);
 
-    const usedEgg = await prisma.pixegotchi.findFirst({
-      where: {
-        eggId: id,
-      },
-    });
-    if (usedEgg) throw new Error("Egg was used");
-
     const data = await prisma.$transaction([
       prisma.pixegotchi.create({
         data: {
           userId,
           name,
-          eggId: egg.id,
+          eggId: id,
           genomeHash: genome.genome_hash,
           element: genome.element,
           rarity: genome.rarity,
@@ -210,16 +204,23 @@ export class EggService {
           traits: genome.traits,
           status: "active",
 
-          health: 100,
-          hunger: 70,
-          energy: 100,
-          happiness: 50,
-          cleanliness: 100,
+          health: CREATE_STATS.health,
+          hunger: CREATE_STATS.hunger,
+          energy: CREATE_STATS.energy,
+          happiness: CREATE_STATS.happiness,
+          cleanliness: CREATE_STATS.cleanliness,
 
           hatchedAt: new Date(),
         },
       }),
-      prisma.egg.delete({ where: { userId, id } }),
+      prisma.egg.update({
+        where: { userId, id },
+        data: {
+          isHatched: true,
+          hatchedAt: new Date(),
+          isHatching: false,
+        },
+      }),
     ]);
 
     return data[0];

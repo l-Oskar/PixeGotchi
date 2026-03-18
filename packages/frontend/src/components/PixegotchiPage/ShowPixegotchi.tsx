@@ -102,7 +102,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                   <div
                     className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
                     style={{
-                      width: `${(pixegotchi.experience / (1000 - pixegotchi.experience)) * 100}%`,
+                      width: `${(pixegotchi.experience * 100) / 1000}%`,
                     }}
                   />
                 </div>

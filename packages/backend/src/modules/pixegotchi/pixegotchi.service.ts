@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { Item, RARITY_STATS } from "@shared";
+import { Item, ITEM_EXP, MAX_EXP, RARITY_STATS } from "@shared";
 
 export class PixegotchiService {
   async findByUserId(userId: number) {
@@ -65,6 +65,8 @@ export class PixegotchiService {
     const pixegotchi = await this.findActive(userId);
     if (!pixegotchi) throw new Error("You don't have active pixegotchi");
 
+    await this.addExp(userId, ITEM_EXP);
+
     return await prisma.pixegotchi.update({
       where: {
         id: pixegotchi.id,
@@ -96,6 +98,32 @@ export class PixegotchiService {
         // energy: { increment: (item.effects?.energy ?? 0) * quantity },
         // cleanliness: { increment: (item.effects?.cleanliness ?? 0) * quantity },
         // happiness: { increment: (item.effects?.happiness ?? 0) * quantity },
+      },
+    });
+  }
+
+  async addExp(userId: number, exp: number) {
+    const pixegotchi = await this.findActive(userId);
+    if (!pixegotchi) throw new Error("Not active pixegotchi");
+
+    if (pixegotchi.experience + exp < MAX_EXP) {
+      await prisma.pixegotchi.update({
+        where: {
+          id: pixegotchi.id,
+        },
+        data: {
+          experience: { increment: exp },
+        },
+      });
+    }
+
+    await prisma.pixegotchi.update({
+      where: {
+        id: pixegotchi.id,
+      },
+      data: {
+        experience: pixegotchi.experience + exp - MAX_EXP,
+        level: { increment: 1 },
       },
     });
   }

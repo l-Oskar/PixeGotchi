@@ -1361,7 +1361,9 @@ export const EggScalarFieldEnum = {
   userId: 'userId',
   isListed: 'isListed',
   isHatching: 'isHatching',
+  isHatched: 'isHatched',
   hatchStartedAt: 'hatchStartedAt',
+  hatchedAt: 'hatchedAt',
   hatchingTimeMs: 'hatchingTimeMs',
   tapCount: 'tapCount',
   createdAt: 'createdAt'

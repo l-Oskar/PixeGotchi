@@ -64,21 +64,21 @@ interface TraitEffect {
 }
 
 export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
-  // === АКТИВНІСТЬ ===
+  // === ACTIVITY ===
   lazy: {
     trait: "lazy",
-    description: "Обожнює спати і уникає активностей",
+    description: "Loves to sleep and avoids activities",
     effects: {
-      energy_drain: 0.5, // витрачає менше енергії
-      sleep_requirement: 1.5, // спить більше
-      play_requirement: 0.5, // мало потребує ігор
-      happiness_gain: 0.7, // важче зробити щасливим
+      energy_drain: 0.5,
+      sleep_requirement: 1.5,
+      play_requirement: 0.5,
+      happiness_gain: 0.7,
     },
   },
 
   energetic: {
     trait: "energetic",
-    description: "Завжди готовий до пригод",
+    description: "Always ready for adventure",
     effects: {
       energy_drain: 1.3,
       play_requirement: 1.5,
@@ -89,7 +89,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   hyperactive: {
     trait: "hyperactive",
-    description: "Не може всидіти на місці",
+    description: "Can't sit still",
     effects: {
       energy_drain: 1.8,
       play_requirement: 2.0,
@@ -101,7 +101,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   sleepy: {
     trait: "sleepy",
-    description: "Постійно хоче спати",
+    description: "Always wants to sleep",
     effects: {
       sleep_requirement: 2.0,
       energy_drain: 0.3,
@@ -110,10 +110,10 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     },
   },
 
-  // === ХАРАКТЕР ===
+  // === CHARACTER ===
   playful: {
     trait: "playful",
-    description: "Обожнює гратися",
+    description: "Loves to play",
     effects: {
       play_requirement: 1.8,
       happiness_gain: 1.5,
@@ -123,7 +123,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   serious: {
     trait: "serious",
-    description: "Серйозний і зосереджений",
+    description: "Serious and focused",
     effects: {
       play_requirement: 0.5,
       happiness_gain: 0.8,
@@ -133,7 +133,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   shy: {
     trait: "shy",
-    description: "Боїться незнайомців",
+    description: "Afraid of strangers",
     effects: {
       happiness_gain: 0.7,
       special_needs: ["quiet_environment", "slow_approach"],
@@ -142,7 +142,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   brave: {
     trait: "brave",
-    description: "Нічого не боїться",
+    description: "Afraid of nothing",
     effects: {
       health_modifier: 1.2,
       happiness_gain: 1.1,
@@ -151,7 +151,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   curious: {
     trait: "curious",
-    description: "Цікавиться всім навколо",
+    description: "Curious about everything",
     effects: {
       play_requirement: 1.3,
       happiness_gain: 1.2,
@@ -162,17 +162,17 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   stubborn: {
     trait: "stubborn",
-    description: "Робить тільки те, що хоче",
+    description: "Does only what it wants",
     effects: {
       happiness_gain: 0.6,
       special_needs: ["patience", "specific_food"],
     },
   },
 
-  // === ЇЖА ===
+  // === FOOD ===
   glutton: {
     trait: "glutton",
-    description: "Постійно голодний",
+    description: "Always hungry",
     effects: {
       hunger_rate: 2.0,
       happiness_gain: 1.5,
@@ -183,7 +183,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   picky: {
     trait: "picky",
-    description: "Їсть тільки вибрані страви",
+    description: "Eats only selected dishes",
     effects: {
       hunger_rate: 0.8,
       happiness_gain: 0.5,
@@ -194,7 +194,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   vegetarian: {
     trait: "vegetarian",
-    description: "Їсть тільки рослинну їжу",
+    description: "Eats only plant-based food",
     effects: {
       hunger_rate: 1.1,
       food_preference: ["vegetables", "fruits", "grass"],
@@ -204,7 +204,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   carnivore: {
     trait: "carnivore",
-    description: "Їсть тільки м'ясо",
+    description: "Eats only meat",
     effects: {
       hunger_rate: 1.2,
       food_preference: ["meat", "fish"],
@@ -214,7 +214,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   foodie: {
     trait: "foodie",
-    description: "Справжній гурман",
+    description: "A true gourmet",
     effects: {
       hunger_rate: 1.0,
       happiness_gain: 2.0,
@@ -223,10 +223,10 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     },
   },
 
-  // === ЧИСТОТА ===
+  // === CLEANLINESS ===
   cleanfreak: {
     trait: "cleanfreak",
-    description: "Одержимий чистотою",
+    description: "Obsessed with cleanliness",
     effects: {
       cleanliness_decay: 2.0,
       happiness_gain: 0.5,
@@ -236,7 +236,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   messy: {
     trait: "messy",
-    description: "Не звертає уваги на бруд",
+    description: "Doesn't care about dirt",
     effects: {
       cleanliness_decay: 0.3,
       happiness_gain: 1.2,
@@ -246,7 +246,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   perfectionist: {
     trait: "perfectionist",
-    description: "Все має бути ідеально",
+    description: "Everything must be perfect",
     effects: {
       cleanliness_decay: 1.5,
       happiness_gain: 0.4,
@@ -254,10 +254,10 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     },
   },
 
-  // === СОЦІАЛЬНІСТЬ ===
+  // === SOCIAL ===
   friendly: {
     trait: "friendly",
-    description: "Любить всіх",
+    description: "Loves everyone",
     effects: {
       happiness_gain: 1.3,
       play_requirement: 1.2,
@@ -266,7 +266,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   antisocial: {
     trait: "antisocial",
-    description: "Віддає перевагу самотності",
+    description: "Prefers solitude",
     effects: {
       happiness_gain: 0.6,
       play_requirement: 0.5,
@@ -276,7 +276,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   loyal: {
     trait: "loyal",
-    description: "Відданий своєму власнику",
+    description: "Devoted to its owner",
     effects: {
       happiness_gain: 1.5,
       health_modifier: 1.1,
@@ -285,7 +285,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   independent: {
     trait: "independent",
-    description: "Не потребує багато уваги",
+    description: "Doesn't need much attention",
     effects: {
       play_requirement: 0.7,
       happiness_gain: 0.9,
@@ -293,10 +293,10 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     },
   },
 
-  // === ЗДОРОВ'Я ===
+  // === HEALTH ===
   hardy: {
     trait: "hardy",
-    description: "Дуже міцне здоров'я",
+    description: "Very strong health",
     effects: {
       health_modifier: 1.5,
       hunger_rate: 0.9,
@@ -305,7 +305,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   fragile: {
     trait: "fragile",
-    description: "Легко хворіє",
+    description: "Gets sick easily",
     effects: {
       health_modifier: 0.6,
       special_needs: ["gentle_care", "medicine"],
@@ -314,7 +314,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   immortal: {
     trait: "immortal",
-    description: "Не може померти",
+    description: "Cannot die",
     effects: {
       health_modifier: 999,
       special_needs: ["legendary_care"],
@@ -323,7 +323,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   sickly: {
     trait: "sickly",
-    description: "Часто хворіє",
+    description: "Often sick",
     effects: {
       health_modifier: 0.7,
       hunger_rate: 0.8,
@@ -331,10 +331,10 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     },
   },
 
-  // === ОСОБЛИВІ ===
+  // === SPECIAL ===
   nocturnal: {
     trait: "nocturnal",
-    description: "Активний вночі",
+    description: "Active at night",
     effects: {
       sleep_requirement: 1.0,
       special_needs: ["night_activity"],
@@ -344,7 +344,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   diurnal: {
     trait: "diurnal",
-    description: "Активний вдень",
+    description: "Active during the day",
     effects: {
       sleep_requirement: 1.0,
       energy_drain: 1.1,
@@ -354,7 +354,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   greedy: {
     trait: "greedy",
-    description: "Хоче більше всього",
+    description: "Wants more of everything",
     effects: {
       hunger_rate: 1.5,
       happiness_gain: 0.7,
@@ -364,7 +364,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   generous: {
     trait: "generous",
-    description: "Готовий ділитися",
+    description: "Ready to share",
     effects: {
       happiness_gain: 1.4,
       hunger_rate: 0.9,
@@ -373,7 +373,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   wise: {
     trait: "wise",
-    description: "Мудрий і досвідчений",
+    description: "Wise and experienced",
     effects: {
       health_modifier: 1.2,
       happiness_gain: 1.1,
@@ -383,7 +383,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   childish: {
     trait: "childish",
-    description: "Поводиться як дитина",
+    description: "Behaves like a child",
     effects: {
       play_requirement: 2.0,
       happiness_gain: 1.5,
@@ -393,7 +393,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   royal: {
     trait: "royal",
-    description: "Має королівські манери",
+    description: "Has royal manners",
     effects: {
       happiness_gain: 0.6,
       food_preference: ["premium", "gourmet"],
@@ -403,7 +403,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
 
   wild: {
     trait: "wild",
-    description: "Дикий і неприборканий",
+    description: "Wild and untamed",
     effects: {
       health_modifier: 1.3,
       happiness_gain: 0.5,

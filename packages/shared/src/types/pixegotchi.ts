@@ -8,6 +8,7 @@ import type {
 export interface Pixegotchi {
   id: number;
   userId: number;
+  eggId: number;
   nftAddress: string | null;
   genomeHash: string;
   element: ElementType;
