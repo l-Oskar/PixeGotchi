@@ -100,6 +100,7 @@ export const useHatchEgg = () => {
       hatchEgg();
       setActivePixegotchi(data);
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.hatching });
     },
   });
 };

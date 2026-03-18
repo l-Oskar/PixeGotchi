@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { Item } from "@shared";
+import { Item, RARITY_STATS } from "@shared";
 
 export class PixegotchiService {
   async findByUserId(userId: number) {
@@ -70,12 +70,32 @@ export class PixegotchiService {
         id: pixegotchi.id,
       },
       data: {
-        health: { increment: (item.effects?.hunger ?? 0) * quantity },
-        hunger: { increment: (item.effects?.hunger ?? 0) * quantity },
-        energy: { increment: (item.effects?.energy ?? 0) * quantity },
-        cleanliness: { increment: (item.effects?.cleanliness ?? 0) * quantity },
-        happiness: { increment: (item.effects?.happiness ?? 0) * quantity },
+        health: Math.min(
+          RARITY_STATS[pixegotchi.rarity].maxStat,
+          pixegotchi.health + (item.effects?.health ?? 0) * quantity,
+        ),
+        hunger: Math.min(
+          RARITY_STATS[pixegotchi.rarity].maxStat,
+          pixegotchi.hunger + (item.effects?.hunger ?? 0) * quantity,
+        ),
+        energy: Math.min(
+          RARITY_STATS[pixegotchi.rarity].maxStat,
+          pixegotchi.energy + (item.effects?.energy ?? 0) * quantity,
+        ),
+        cleanliness: Math.min(
+          RARITY_STATS[pixegotchi.rarity].maxStat,
+          pixegotchi.cleanliness + (item.effects?.cleanliness ?? 0) * quantity,
+        ),
+        happiness: Math.min(
+          RARITY_STATS[pixegotchi.rarity].maxStat,
+          pixegotchi.happiness + (item.effects?.happiness ?? 0) * quantity,
+        ),
         lastUpdateAt: new Date(),
+        // health: { increment: (item.effects?.hunger ?? 0) * quantity },
+        // hunger: { increment: (item.effects?.hunger ?? 0) * quantity },
+        // energy: { increment: (item.effects?.energy ?? 0) * quantity },
+        // cleanliness: { increment: (item.effects?.cleanliness ?? 0) * quantity },
+        // happiness: { increment: (item.effects?.happiness ?? 0) * quantity },
       },
     });
   }

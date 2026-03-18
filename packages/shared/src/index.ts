@@ -2,11 +2,14 @@
 export * from "./enums";
 
 // Utils
-export { validateGenomeHash, assertValidGenomeHash } from "./utils/genome-validator";
+export {
+  validateGenomeHash,
+  assertValidGenomeHash,
+} from "./utils/genome-validator";
 
 // Item effects
 export * from "./types/item_buffs";
-export * from "./constants/pixegitchi_const";
+export * from "./constants/pixegotchi_const";
 export * from "./constants/egg_const";
 export * from "./constants/user_const";
 export * from "./constants/item_const";

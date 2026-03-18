@@ -71,4 +71,5 @@ export interface RarityStats {
   epic: RarityStatsType;
   mythic: RarityStatsType;
   legendary: RarityStatsType;
+  unique: RarityStatsType;
 }

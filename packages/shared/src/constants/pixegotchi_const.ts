@@ -55,6 +55,15 @@ export const RARITY_STATS: RarityStats = {
     },
     goldEarn: 1.5,
   },
+  unique: {
+    maxStat: 150,
+    degradationReduce: 25,
+    traits: {
+      min: 4,
+      max: 4,
+    },
+    goldEarn: 1.5,
+  },
 };
 
 export const CRITICAL_TIME: number = 86400000;
