@@ -1,4 +1,4 @@
-import { Item } from "../types/inventory";
+import { Item } from "../types/item";
 import { ItemType } from "../enums";
 
 import { FOOD_ITEMS } from "./items/food_items";

@@ -22,13 +22,14 @@ export type {
   Cooldowns,
 } from "./types/pixegotchi";
 export type { User, UserProfile } from "./types/user";
+export type { InventoryItem, InventoryWithDetails } from "./types/inventory";
 export type {
-  InventoryItem,
-  InventoryWithDetails,
   Item,
   ItemEffects,
-} from "./types/inventory";
-export { parseItem, parseItemEffects } from "./types/inventory";
+  parseItem,
+  parseItemEffects,
+} from "./types/item";
+export {} from "./types/inventory";
 export type { ApiSuccess, ApiError, ApiResponse } from "./types/api";
 export type { HomePageProps } from "./types/pages";
 export type { GameStruct } from "./types/game";

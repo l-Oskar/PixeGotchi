@@ -5,29 +5,29 @@ interface PixegothiDataProps {
   pixegotchi: Pixegotchi | null;
 }
 
-const StatBar: React.FC<{
-  label: string;
-  value: number | string;
-  color: string;
-}> = ({ label, value, color }) => {
-  const numericValue = typeof value === "number" ? value : 0;
-  const percentage = Math.min(100, Math.max(0, numericValue));
+// const StatBar: React.FC<{
+//   label: string;
+//   value: number | string;
+//   color: string;
+// }> = ({ label, value, color }) => {
+//   const numericValue = typeof value === "number" ? value : 0;
+//   const percentage = Math.min(100, Math.max(0, numericValue));
 
-  return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-sm">
-        <span className="text-white/80">{label}</span>
-        <span className="text-white font-medium">{numericValue}</span>
-      </div>
-      <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
-        <div
-          className={`h-full ${color} transition-all duration-500 ease-out`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="space-y-1">
+//       <div className="flex justify-between text-sm">
+//         <span className="text-white/80">{label}</span>
+//         <span className="text-white font-medium">{numericValue}</span>
+//       </div>
+//       <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+//         <div
+//           className={`h-full ${color} transition-all duration-500 ease-out`}
+//           style={{ width: `${percentage}%` }}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
 
 const InfoBadge: React.FC<{ label: string; value: string; color?: string }> = ({
   label,

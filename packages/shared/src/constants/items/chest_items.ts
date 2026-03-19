@@ -1,4 +1,4 @@
-import { Item } from "../../types/inventory";
+import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
 
 export const SMALL_CHEST: Item = {

@@ -1,4 +1,4 @@
-import { TraitType } from "./traits";
+import { TraitType } from "@shared";
 import { RarityType, ElementType, PixegotchiGender } from "@shared";
 
 interface GenomeInfo {

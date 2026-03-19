@@ -65,7 +65,7 @@ export class PixegotchiService {
     const pixegotchi = await this.findActive(userId);
     if (!pixegotchi) throw new Error("You don't have active pixegotchi");
 
-    await this.addExp(userId, ITEM_EXP);
+    await this.addExp(userId, ITEM_EXP * quantity);
 
     return await prisma.pixegotchi.update({
       where: {

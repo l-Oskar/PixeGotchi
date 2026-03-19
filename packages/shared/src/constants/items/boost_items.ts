@@ -1,4 +1,4 @@
-import { Item } from "../../types/inventory";
+import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
 import { ItemBuffsType } from "../../types/item_buffs";
 
@@ -30,4 +30,27 @@ export const EXP_BOOSTER: Item = {
   maxStack: 10,
 };
 
-export const BOOST_ITEMS: Item[] = [EXP_BOOSTER];
+export const ENERGY_BOOSTER: Item = {
+  id: 10,
+  itemId: "energy_booster",
+  name: "Energy Booster",
+  description: "Temporarily energy gain.",
+  itemType: ItemType.boost,
+  rarity: RarityType.epic,
+  effects: {
+    hunger: 0,
+    happiness: 0,
+    health: 0,
+    cleanliness: 0,
+    energy: 50,
+    buffs: [],
+  },
+  cooldownMinutes: 120,
+  maxPerDay: 2,
+  minLevel: 1,
+  iconUrl: null,
+  isStackable: false,
+  maxStack: 10,
+};
+
+export const BOOST_ITEMS: Item[] = [EXP_BOOSTER, ENERGY_BOOSTER];
