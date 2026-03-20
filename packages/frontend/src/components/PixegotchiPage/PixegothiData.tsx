@@ -1,39 +1,46 @@
 import React from "react";
-import { Pixegotchi, RARITY_COLORS, TRAIT_EFFECTS, TraitType } from "@shared";
+import {
+  ELEMENT_COLORS,
+  Pixegotchi,
+  RARITY_COLORS,
+  TRAIT_EFFECTS,
+  TraitType,
+} from "@shared";
+import { Mars, Venus } from "lucide-react";
 
 interface PixegothiDataProps {
   pixegotchi: Pixegotchi | null;
 }
 
-// const StatBar: React.FC<{
-//   label: string;
-//   value: number | string;
-//   color: string;
-// }> = ({ label, value, color }) => {
-//   const numericValue = typeof value === "number" ? value : 0;
-//   const percentage = Math.min(100, Math.max(0, numericValue));
+const StatBar: React.FC<{
+  label: string;
+  value: number | string;
+  color: string;
+}> = ({ label, value, color }) => {
+  const numericValue = typeof value === "number" ? value : 0;
+  const percentage = Math.min(100, Math.max(0, numericValue));
 
-//   return (
-//     <div className="space-y-1">
-//       <div className="flex justify-between text-sm">
-//         <span className="text-white/80">{label}</span>
-//         <span className="text-white font-medium">{numericValue}</span>
-//       </div>
-//       <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
-//         <div
-//           className={`h-full ${color} transition-all duration-500 ease-out`}
-//           style={{ width: `${percentage}%` }}
-//         />
-//       </div>
-//     </div>
-//   );
-// };
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between text-sm">
+        <span className="text-white/80">{label}</span>
+        <span className="text-white font-medium">{numericValue}</span>
+      </div>
+      <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+        <div
+          className={`h-full ${color} transition-all duration-500 ease-out`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+    </div>
+  );
+};
 
-const InfoBadge: React.FC<{ label: string; value: string; color?: string }> = ({
-  label,
-  value,
-  color = "bg-white/10 border-white/50 text-white",
-}) => (
+const InfoBadge: React.FC<{
+  label: string;
+  value: any;
+  color?: string;
+}> = ({ label, value, color = "bg-white/10 border-white/50 text-white" }) => (
   <div className={`${color} border px-3 py-2 rounded-xl text-center`}>
     <div className="text-xs text-white/60 uppercase tracking-wider">
       {label}
@@ -89,8 +96,43 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
         </div>
       </div>
 
+      {/* Info Grid */}
+      <div className="grid grid-cols-3 gap-3">
+        <InfoBadge
+          label="Element"
+          value={pixegotchi.element.toUpperCase()}
+          color={`${ELEMENT_COLORS[pixegotchi.element]}`}
+        />
+        <InfoBadge
+          label="Rarity"
+          value={pixegotchi.rarity.toUpperCase()}
+          color={`${RARITY_COLORS[pixegotchi.rarity]}`}
+        />
+        <InfoBadge
+          label="Gender"
+          value={
+            pixegotchi.gender === "male" ? (
+              <div className="flex justify-center">
+                <Mars size={20} />
+                <span>MALE</span>
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                <Venus size={20} />
+                <span>FEMALE</span>
+              </div>
+            )
+          }
+          color={
+            pixegotchi.gender === "male"
+              ? "text-blue-500 bg-blue-500/15 border-blue-500/90"
+              : "text-pink-400 bg-pink-500/20 border-pink-500/80"
+          }
+        />
+      </div>
+
       {/* Stats */}
-      {/* <div className="bg-white/5 rounded-3xl p-6 border border-white/10 backdrop-blur-sm space-y-4">
+      <div className="bg-white/5 rounded-3xl p-6 border border-white/10 backdrop-blur-sm space-y-4">
         <h3 className="text-lg font-semibold text-white mb-3">Stats</h3>
         <StatBar
           label="❤️ Health"
@@ -117,29 +159,6 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           value={pixegotchi.cleanliness}
           color="bg-gradient-to-r from-cyan-400 to-cyan-600"
         />
-      </div> */}
-
-      {/* Info Grid */}
-      <div className="grid grid-cols-3 gap-3">
-        <InfoBadge
-          label="Element"
-          value={pixegotchi.element.toUpperCase()}
-          color=""
-        />
-        <InfoBadge
-          label="Rarity"
-          value={pixegotchi.rarity.toUpperCase()}
-          color={`${RARITY_COLORS[pixegotchi.rarity]}`}
-        />
-        <InfoBadge
-          label="Gender"
-          value={pixegotchi.gender === "male" ? "♂️ Male" : "♀️ Female"}
-          color={
-            pixegotchi.gender === "male"
-              ? "bg-blue-500/15 border-blue-500/90"
-              : "bg-pink-500/20 border-pink-500/80"
-          }
-        />
       </div>
 
       {/* Traits */}
@@ -148,10 +167,8 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           <h3 className="text-lg font-semibold text-white mb-3">Traits</h3>
           <div className="grid gap-2">
             {pixegotchi.traits.map((trait, index) => (
-              <div className="flex items-baseline gap-1">
-                <span
-                  key={index}
-                  className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded-full text-sm text-blue-300 font-medium">
+              <div key={index} className="flex items-baseline gap-1">
+                <span className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded-full text-sm text-blue-300 font-medium">
                   {trait.toUpperCase()}
                 </span>
                 <p>- {TRAIT_EFFECTS[trait as TraitType].description}</p>

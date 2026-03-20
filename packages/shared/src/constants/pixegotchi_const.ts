@@ -1,3 +1,4 @@
+import { ElementType } from "../enums";
 import { RarityStats } from "../types/pixegotchi";
 
 export const RARITY_STATS: RarityStats = {
@@ -74,6 +75,23 @@ export const RARITY_COLORS: Record<string, string> = {
   mythic: "text-pink-400",
   legendary: "text-yellow-400",
   unique: "text-orange-400",
+};
+
+export const ELEMENT_COLORS: Record<string, string> = {
+  fire: "text-red-400",
+  water: "text-blue-400",
+  earth: "text-amber-700",
+  air: "text-sky-300",
+  electric: "text-yellow-300",
+  ice: "text-cyan-300",
+  grass: "text-green-400",
+  metal: "text-slate-400",
+  ghost: "text-purple-400",
+  poison: "text-violet-500",
+  psychic: "text-pink-400",
+  light: "text-yellow-200",
+  dark: "text-gray-600",
+  rainbow: "text-fuchsia-400",
 };
 
 export const CREATE_STATS: Record<string, number> = {

@@ -191,8 +191,19 @@ export class EggService {
     const genome = GenomeGenerator.generate();
     assertValidGenomeHash(genome.genome_hash);
 
-    const data = await prisma.$transaction([
-      prisma.pixegotchi.create({
+    const data = await prisma.$transaction(async (prisma) => {
+      const currentEgg = await prisma.egg.findFirst({
+        where: {
+          id,
+          userId,
+        },
+      });
+
+      if (!currentEgg) throw new Error("Egg not found");
+      if (currentEgg.isHatched) throw new Error("Egg was already hatched");
+      if (!currentEgg.isHatching) throw new Error("Egg is not hatching");
+
+      const pixegotchi = await prisma.pixegotchi.create({
         data: {
           userId,
           name,
@@ -212,18 +223,21 @@ export class EggService {
 
           hatchedAt: new Date(),
         },
-      }),
-      prisma.egg.update({
+      });
+
+      await prisma.egg.update({
         where: { userId, id },
         data: {
           isHatched: true,
           hatchedAt: new Date(),
           isHatching: false,
         },
-      }),
-    ]);
+      });
 
-    return data[0];
+      return pixegotchi;
+    });
+
+    return data;
   }
 
   async proccessTapBatch(userId: number, eggId: number, tapCount: number) {
@@ -239,7 +253,7 @@ export class EggService {
 
     if (lastBatchTime) {
       const timeSinceLastBatch = Date.now() - parseInt(lastBatchTime);
-      // Мінімум 1 секунда між батчами (захист від ботів)
+
       if (timeSinceLastBatch < 500) {
         throw new Error("Too many requests. Please wait.");
       }
@@ -252,7 +266,6 @@ export class EggService {
     const elapsedTime = currentTime - startTime;
     const remainingTime = Math.max(0, egg.hatchingTimeMs - elapsedTime);
 
-    // Зменшити час: 1 тап = -1000 мс (1 секунда)
     const tapReduction = 1000 * actualTaps;
     const newRemainingTime = Math.max(0, remainingTime - tapReduction);
 
