@@ -26,6 +26,8 @@ export type { InventoryItem, InventoryWithDetails } from "./types/inventory";
 export type {
   Item,
   ItemEffects,
+} from "./types/item";
+export {
   parseItem,
   parseItemEffects,
 } from "./types/item";

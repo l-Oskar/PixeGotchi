@@ -1,5 +1,5 @@
-import type { ItemType, RarityType } from "../enums";
-import type { Item, ItemEffects } from "./item";
+import type { ItemType } from "../enums";
+import type { Item } from "./item";
 
 export interface InventoryItem {
   id: number;

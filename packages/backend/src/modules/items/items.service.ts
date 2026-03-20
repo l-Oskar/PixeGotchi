@@ -1,5 +1,6 @@
 import { prisma } from "@/database/prisma";
-import { Pixegotchi, ItemType, RarityType, Item, parseItem } from "@shared";
+import type { Pixegotchi, Item } from "@shared";
+import { ItemType, RarityType, parseItem } from "@shared";
 
 export class ItemsService {
   async getItemDetails(itemId: string) {

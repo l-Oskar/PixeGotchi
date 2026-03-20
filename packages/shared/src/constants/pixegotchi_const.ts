@@ -1,4 +1,3 @@
-import { ElementType } from "../enums";
 import { RarityStats } from "../types/pixegotchi";
 
 export const RARITY_STATS: RarityStats = {
