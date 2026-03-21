@@ -94,6 +94,7 @@ model User {
   eggs         Egg[]
   pixegotchis  Pixegotchi[]
   inventory    Inventory[]
+  chests       Chest[]
   vault        Vault[]
   listings     MarketplaceListing[] @relation("SellerListings")
   purchases    MarketplaceListing[] @relation("BuyerPurchases")
@@ -234,6 +235,27 @@ model Inventory {
   @@unique([userId, itemId])
   @@index([userId])
   @@map("inventory")
+}
+
+model Chest {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  chestHash  String   @map("chest_hash") @db.VarChar(100)
+  chestType  String   @map("chest_type") @db.VarChar(20) // wooden, silver, golden, etc.
+  rarity     RarityType
+  isOpened   Boolean  @default(false) @map("is_opened")
+  
+  // Rewards (після відкриття)
+  rewards    Json?    // ChestReward
+  
+  createdAt  DateTime @default(now()) @map("created_at")
+  openedAt   DateTime? @map("opened_at")
+  
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([isOpened])
+  @@map("chests")
 }
 
 model Item {

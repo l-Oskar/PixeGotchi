@@ -24,4 +24,27 @@ export const APPLE: Item = {
   maxStack: 99,
 };
 
-export const FOOD_ITEMS: Item[] = [APPLE];
+export const CHERRY: Item = {
+  id: 11,
+  itemId: "cherry",
+  name: "Cherry",
+  description: "A juicy cherry that restores hunger.",
+  itemType: ItemType.food,
+  rarity: RarityType.uncommon,
+  effects: {
+    hunger: 20,
+    happiness: 5,
+    health: 0,
+    cleanliness: 0,
+    energy: 0,
+    buffs: [],
+  },
+  cooldownMinutes: 6,
+  maxPerDay: null,
+  minLevel: 1,
+  iconUrl: null,
+  isStackable: true,
+  maxStack: 99,
+};
+
+export const FOOD_ITEMS: Item[] = [APPLE, CHERRY];

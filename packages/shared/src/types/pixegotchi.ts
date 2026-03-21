@@ -64,13 +64,3 @@ export interface RarityStatsType {
   };
   goldEarn: number;
 }
-
-export interface RarityStats {
-  common: RarityStatsType;
-  uncommon: RarityStatsType;
-  rare: RarityStatsType;
-  epic: RarityStatsType;
-  mythic: RarityStatsType;
-  legendary: RarityStatsType;
-  unique: RarityStatsType;
-}

@@ -1,6 +1,7 @@
-import { RarityStats } from "../types/pixegotchi";
+import { RarityStatsType } from "../types/pixegotchi";
+import { RarityType } from "../enums";
 
-export const RARITY_STATS: RarityStats = {
+export const RARITY_STATS: Record<RarityType, RarityStatsType> = {
   common: {
     maxStat: 100,
     degradationReduce: 0,
