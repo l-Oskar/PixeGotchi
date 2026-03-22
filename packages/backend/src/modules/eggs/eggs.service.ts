@@ -16,6 +16,7 @@ export class EggService {
     const eggs = await prisma.egg.findMany({
       where: {
         userId,
+        isHatched: false,
       },
       orderBy: {
         createdAt: "desc",
@@ -42,6 +43,7 @@ export class EggService {
       where: {
         userId,
         isHatching: true,
+        isHatched: false,
       },
     });
 
@@ -93,6 +95,7 @@ export class EggService {
     if (egg.isListed)
       throw new Error("You can't hatch egg listed in the market");
     if (egg.isHatching) throw new Error("Your egg is hatching");
+    if (egg.isHatched) throw new Error("Egg is hatched");
 
     const updatedEgg = await prisma.egg.update({
       where: { id },
@@ -116,6 +119,7 @@ export class EggService {
     });
 
     if (!egg) throw new Error("Egg not found");
+    if (egg.isHatched) throw new Error("Egg is hatched");
 
     const updatedEgg = await prisma.egg.update({
       where: { id },
