@@ -8,7 +8,7 @@ export interface EggStore {
   setAllEggs: (list: Egg[]) => void;
   setChosenEgg: (egg: Egg) => void;
   setHatchingEgg: (egg: Egg) => void;
-  hatchEgg: () => void;
+  clearEgg: () => void;
 }
 
 export const useEggStore = create<EggStore>((set) => ({
@@ -19,7 +19,7 @@ export const useEggStore = create<EggStore>((set) => ({
     set({ allEggs: list.sort((a, b) => a.id - b.id) }),
   setChosenEgg: (egg: Egg) => set({ chosenEgg: egg }),
   setHatchingEgg: (egg: Egg) => set({ hatchingEgg: egg }),
-  hatchEgg: () =>
+  clearEgg: () =>
     set({
       hatchingEgg: null,
     }),

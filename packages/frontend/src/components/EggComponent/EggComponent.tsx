@@ -5,6 +5,7 @@ import {
   useGetHatchingStatus,
   useHatchEgg,
   useBatchTap,
+  useCancelHatchingEgg,
 } from "@/services/queries/egg.queries";
 import { useEggStore } from "@/store/egg.store";
 import ActionButton from "@/components/MainPage/ActionButton";
@@ -25,6 +26,7 @@ const EggComponent: React.FC<EggPageProps> = ({
 }) => {
   const egg = useEggStore((s) => s.hatchingEgg);
   const hatchEgg = useHatchEgg();
+  const cancelHatching = useCancelHatchingEgg();
   const batchTapMutation = useBatchTap();
 
   // Реф для доступу до мутації без перевизначення інтервалу
@@ -80,6 +82,17 @@ const EggComponent: React.FC<EggPageProps> = ({
         onNavigate?.("home");
       } catch (error) {
         console.error("Failed to hatch egg:", error);
+      }
+    }
+  };
+
+  const handleCancelHatching = async () => {
+    if (eggStatus?.isHatching) {
+      try {
+        await cancelHatching.mutateAsync(egg.id);
+        onNavigate?.("start");
+      } catch (error) {
+        console.error("Fail to cancel", error);
       }
     }
   };
@@ -179,8 +192,8 @@ const EggComponent: React.FC<EggPageProps> = ({
           <ActionButton
             icon={CircleX}
             label="Cancel"
-            onClick={() => {}}
-            disabled={true}
+            onClick={handleCancelHatching}
+            disabled={false}
             gradient="from-blue-500 to-indigo-500"
           />
         </div>

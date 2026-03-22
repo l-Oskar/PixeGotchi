@@ -7,7 +7,7 @@ import {
   Moon,
   Apple,
   Pill,
-  Trash2,
+  Vault,
   Zap,
   Smile,
   Droplets,
@@ -184,8 +184,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             gradient="from-green-500 to-emerald-500"
           />
           <ActionButton
-            icon={Trash2}
-            label="Clean"
+            icon={Vault}
+            label="Vault"
             onClick={() => {
               pixegotchiApi.setInActive(),
                 clearPixegotchi(),

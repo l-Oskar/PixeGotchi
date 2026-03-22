@@ -89,7 +89,7 @@ export const useGetHatchingStatus = (eggId: number | null) => {
 
 export const useHatchEgg = () => {
   const setActivePixegotchi = usePixegotchiStore((s) => s.setActive);
-  const hatchEgg = useEggStore((s) => s.hatchEgg);
+  const clearEgg = useEggStore((s) => s.clearEgg);
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -97,8 +97,23 @@ export const useHatchEgg = () => {
       return eggApi.hatchEgg(eggId!);
     },
     onSuccess: (data) => {
-      hatchEgg();
+      clearEgg();
       setActivePixegotchi(data);
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: EGG_KEYS.hatching });
+    },
+  });
+};
+
+export const useCancelHatchingEgg = () => {
+  const clearEgg = useEggStore((s) => s.clearEgg);
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (eggId: number) => {
+      return eggApi.cancelHatching(eggId);
+    },
+    onSuccess: () => {
+      clearEgg();
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.hatching });
     },

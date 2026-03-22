@@ -248,6 +248,7 @@ export class EggService {
     const egg = await this.getHatchingEgg(userId);
 
     if (!egg) throw new Error("Egg not found or not hatching");
+    if (egg.isHatched) return;
 
     const maxTapPerBatch = EGG_CONSTANTS.EGG_MAX_BATCH_TAP;
     const actualTaps = Math.min(tapCount, maxTapPerBatch);

@@ -40,8 +40,8 @@ const InfoBadge: React.FC<{
   label: string;
   value: any;
   color?: string;
-}> = ({ label, value, color = "bg-white/10 border-white/50 text-white" }) => (
-  <div className={`${color} border px-3 py-2 rounded-xl text-center`}>
+}> = ({ label, value, color }) => (
+  <div className={`border px-3 py-2 rounded-xl text-center ${color}`}>
     <div className="text-xs text-white/60 uppercase tracking-wider">
       {label}
     </div>
@@ -112,13 +112,13 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           label="Gender"
           value={
             pixegotchi.gender === "male" ? (
-              <div className="flex justify-center">
-                <Mars size={20} />
+              <div className="flex gap-1 justify-center">
+                <Mars size={19} />
                 <span>MALE</span>
               </div>
             ) : (
               <div className="flex justify-center">
-                <Venus size={20} />
+                <Venus size={19} />
                 <span>FEMALE</span>
               </div>
             )

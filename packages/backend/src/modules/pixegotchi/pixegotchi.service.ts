@@ -117,13 +117,16 @@ export class PixegotchiService {
       });
     }
 
+    const addLvl = Math.floor((pixegotchi.experience + exp) / 1000);
+    const addExp = (pixegotchi.experience + exp) % 1000;
+
     return await prisma.pixegotchi.update({
       where: {
         id: pixegotchi.id,
       },
       data: {
-        experience: pixegotchi.experience + exp - MAX_EXP,
-        level: { increment: 1 },
+        experience: addExp,
+        level: { increment: addLvl },
       },
     });
   }
