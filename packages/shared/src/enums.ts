@@ -64,10 +64,22 @@ export const ItemType = {
 
 export type ItemType = (typeof ItemType)[keyof typeof ItemType];
 
+export const ChestType = {
+  wooden: "wooden", // common items
+  silver: "silver", // uncommon items
+  golden: "golden", // rare items
+  crystal: "crystal", // epic items
+  mythic: "mythic", // mythic items
+  legendary: "legendary", // legendary items
+};
+
+export type ChestType = (typeof ChestType)[keyof typeof ChestType];
+
 export const ListingType = {
   egg: "egg",
   pixegotchi: "pixegotchi",
   item: "item",
+  chest: "chest",
 } as const;
 
 export type ListingType = (typeof ListingType)[keyof typeof ListingType];

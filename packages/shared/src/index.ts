@@ -14,6 +14,7 @@ export * from "./constants/egg_const";
 export * from "./constants/user_const";
 export * from "./constants/item_const";
 export * from "./constants/traits";
+export * from "./constants/chest_const";
 
 // Domain types
 export type {
@@ -23,14 +24,8 @@ export type {
 } from "./types/pixegotchi";
 export type { User, UserProfile } from "./types/user";
 export type { InventoryItem, InventoryWithDetails } from "./types/inventory";
-export type {
-  Item,
-  ItemEffects,
-} from "./types/item";
-export {
-  parseItem,
-  parseItemEffects,
-} from "./types/item";
+export type { Item, ItemEffects } from "./types/item";
+export { parseItem, parseItemEffects } from "./types/item";
 export {} from "./types/inventory";
 export type { ApiSuccess, ApiError, ApiResponse } from "./types/api";
 export type { HomePageProps } from "./types/pages";

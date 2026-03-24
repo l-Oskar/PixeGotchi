@@ -67,7 +67,7 @@ export const RARITY_STATS: Record<RarityType, RarityStatsType> = {
   },
 };
 
-export const RARITY_COLORS: Record<RarityType, string> = {
+export const RARITY_COLORS: Record<string, string> = {
   common: "text-gray-400",
   uncommon: "text-green-400",
   rare: "text-blue-400",
@@ -77,7 +77,7 @@ export const RARITY_COLORS: Record<RarityType, string> = {
   unique: "text-orange-400",
 };
 
-export const ELEMENT_COLORS: Record<ElementType, string> = {
+export const ELEMENT_COLORS: Record<string, string> = {
   fire: "bg-red-500/15 border-red-400/50 text-red-400",
   water: "bg-blue-500/15 border-blue-400/50 text-blue-400",
   earth: "bg-amber-700/15 border-amber-700/50 text-amber-700",

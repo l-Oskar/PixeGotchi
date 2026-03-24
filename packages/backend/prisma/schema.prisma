@@ -15,7 +15,7 @@ datasource db {
 
 enum PixegotchiStatus {
   active
-  critical  // health = 0, є 10-30 днів щоб врятувати
+  critical
   vault
   dead
 }
@@ -62,9 +62,19 @@ enum ItemType {
   boost
 }
 
+enum ChestType {
+  wooden
+  silver
+  golden
+  crystal
+  mythic
+  legendary
+}
+
 enum ListingType {
   egg
-  pixegotchi  // тільки vault (lvl 100)
+  pixegotchi
+  chest
   item
 }
 
@@ -149,7 +159,7 @@ model Pixegotchi {
   element      ElementType
   rarity       RarityType
   gender       PixegotchiGender
-  traits       String[]          // ["lazy", "playful", "glutton"]
+  traits       String[]
   
   // Basic info
   name         String            @default("Unnamed") @db.VarChar(50)
@@ -163,8 +173,6 @@ model Pixegotchi {
   energy       Int               @default(100)
   happiness    Int               @default(50)
   cleanliness  Int               @default(100)
-
-  // ВИДАЛЕНО: hungerRate, energyRate, etc. (розраховуються динамічно)
   
   // Critical state tracking
   healthZeroAt  DateTime?        @map("health_zero_at")
@@ -180,7 +188,6 @@ model Pixegotchi {
   
   hatchedAt    DateTime          @default(now()) @map("hatched_at")
 
-  // Relations
   user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   egg          Egg?              @relation(fields: [eggId], references: [id])
   vault        Vault[]
@@ -203,7 +210,7 @@ model ActiveEffect {
   id           Int        @id @default(autoincrement())
   pixegotchiId Int        @map("pixegotchi_id")
   
-  effectType   String     @db.VarChar(50)  // 'gold_boost', 'energy_regen', 'luck', etc.
+  effectType   String     @db.VarChar(50)
   value        Decimal    @db.Decimal(10, 2)
   
   expiresAt    DateTime   @map("expires_at")
@@ -238,23 +245,20 @@ model Inventory {
 }
 
 model Chest {
-  id         Int      @id @default(autoincrement())
-  userId     Int      @map("user_id")
-  chestHash  String   @map("chest_hash") @db.VarChar(100)
-  chestType  String   @map("chest_type") @db.VarChar(20) // wooden, silver, golden, etc.
-  rarity     RarityType
-  isOpened   Boolean  @default(false) @map("is_opened")
+  id         Int         @id @default(autoincrement())
+  userId     Int         @map("user_id")
+  chestType  ChestType   @map("chest_type")
+  isOpened   Boolean     @default(false) @map("is_opened")
   
-  // Rewards (після відкриття)
-  rewards    Json?    // ChestReward
+  rewards    Json?
   
   createdAt  DateTime @default(now()) @map("created_at")
   openedAt   DateTime? @map("opened_at")
   
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  @@index([userId])
-  @@index([isOpened])
+  @@index([userId, isOpened])
+  @@index([chestType])
   @@map("chests")
 }
 
@@ -266,7 +270,6 @@ model Item {
   itemType    ItemType @map("item_type")
   rarity      RarityType @default(common)
 
-  // Effects: { health: 50, hunger: 30, buffs: [...] }
   effects     Json
 
   cooldownMinutes Int? @map("cooldown_minutes")
@@ -373,14 +376,14 @@ model GameSession {
   gameId           String     @map("game_id") @db.VarChar(50)
   
   score            Int        @default(0)
-  duration         Int        @default(0) // seconds
+  duration         Int        @default(0)
   
   pgcEarned        Decimal    @default(0) @map("pgc_earned") @db.Decimal(20, 8)  // ВИПРАВЛЕНО: tmcEarned → pgcEarned
   experienceGained Int        @default(0) @map("experience_gained")
   energySpent      Int        @default(0) @map("energy_spent")
   
   chestDropped     Boolean    @default(false) @map("chest_dropped")
-  itemsDropped     Json?      @map("items_dropped")  // [{ itemId: "apple", quantity: 1 }]
+  itemsDropped     Json?      @map("items_dropped")
   
   completed        Boolean    @default(false)
   createdAt        DateTime   @default(now()) @map("created_at")
@@ -403,8 +406,8 @@ model Quest {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(100)
   description String   @db.Text
-  requirement String   @db.Text // JSON string with requirements
-  reward      String   @db.Text // JSON string with rewards
+  requirement String   @db.Text
+  reward      String   @db.Text
   isActive    Boolean  @default(true) @map("is_active")
   startDate   DateTime @default(now()) @map("start_date")
   endDate     DateTime? @map("end_date")
