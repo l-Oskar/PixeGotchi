@@ -47,7 +47,7 @@ export const RarityType = {
   epic: "epic",
   mythic: "mythic",
   legendary: "legendary",
-  unique: "unique",
+  //unique: "unique",
 } as const;
 
 export type RarityType = (typeof RarityType)[keyof typeof RarityType];
@@ -57,7 +57,6 @@ export const ItemType = {
   medicine: "medicine",
   toy: "toy",
   cleaning: "cleaning",
-  chest: "chest",
   special: "special",
   boost: "boost",
 } as const;

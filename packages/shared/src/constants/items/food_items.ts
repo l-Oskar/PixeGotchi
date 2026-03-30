@@ -2,7 +2,6 @@ import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
 
 export const APPLE: Item = {
-  id: 1,
   itemId: "apple",
   name: "Apple",
   description: "A juicy apple that slightly restores hunger.",
@@ -25,7 +24,6 @@ export const APPLE: Item = {
 };
 
 export const CHERRY: Item = {
-  id: 11,
   itemId: "cherry",
   name: "Cherry",
   description: "A juicy cherry that restores hunger.",

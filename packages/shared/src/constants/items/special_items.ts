@@ -3,7 +3,6 @@ import { ItemType, RarityType } from "../../enums";
 import { ItemBuffsType } from "../../types/item_buffs";
 
 export const RENAME_TAG: Item = {
-  id: 6,
   itemId: "rename_tag",
   name: "Rename Tag",
   description: "Allows you to rename your Pixegotchi.",
@@ -26,7 +25,6 @@ export const RENAME_TAG: Item = {
 };
 
 export const REVIVE_STONE: Item = {
-  id: 8,
   itemId: "revive_stone",
   name: "Revive Stone",
   description: "Revives a dead Pixegotchi.",
@@ -54,7 +52,6 @@ export const REVIVE_STONE: Item = {
 };
 
 export const LUCKY_CHARM: Item = {
-  id: 9,
   itemId: "lucky_charm",
   name: "Lucky Charm",
   description: "Slightly increases all stats and gold gain for a while.",

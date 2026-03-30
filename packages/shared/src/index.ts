@@ -13,6 +13,7 @@ export * from "./constants/pixegotchi_const";
 export * from "./constants/egg_const";
 export * from "./constants/user_const";
 export * from "./constants/item_const";
+export * from "./constants/items/item_pool";
 export * from "./constants/traits";
 export * from "./constants/chest_const";
 
@@ -26,6 +27,12 @@ export type { User, UserProfile } from "./types/user";
 export type { InventoryItem, InventoryWithDetails } from "./types/inventory";
 export type { Item, ItemEffects } from "./types/item";
 export { parseItem, parseItemEffects } from "./types/item";
+export type {
+  ChestInfo,
+  ChestRewardItem,
+  ChestRewards,
+  ChestConfig,
+} from "./types/chest";
 export {} from "./types/inventory";
 export type { ApiSuccess, ApiError, ApiResponse } from "./types/api";
 export type { HomePageProps } from "./types/pages";

@@ -19,7 +19,6 @@ export interface RarityChestType {
 }
 
 export interface Item {
-  id: number;
   itemId: string;
   name: string;
   description: string | null;
@@ -57,7 +56,6 @@ export function parseItemEffects(rawEffects: unknown): ItemEffects | null {
  * Конвертує Prisma Item у тип Item
  */
 export function parseItem(prismaItem: {
-  id: number;
   itemId: string;
   name: string;
   description: string | null;

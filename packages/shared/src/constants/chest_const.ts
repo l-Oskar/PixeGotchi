@@ -1,4 +1,4 @@
-import { ChestType, RarityType } from "../enums";
+import { ChestType, RarityType, ItemType } from "../enums";
 
 export const CHEST_DROP_RATES = {
   COMMON_RARE_CHANCE: 70, // 70% шанс дропу після гри
@@ -13,6 +13,8 @@ export const CHEST_RARITY_WEIGHTS: Record<ChestType, number> = {
   legendary: 1,
 } as const;
 
+export interface ChestRewards {}
+
 export const CHEST_REWARDS = {
   BOOST_BONUS_CHANCE: {
     wooden: 10,
@@ -21,20 +23,20 @@ export const CHEST_REWARDS = {
     crystal: 40,
     mythic: 60,
     legendary: 80,
-  },
+  } as Record<ChestType, number>,
 
   EGG_DROP_CHANCE: {
     crystal: 5,
     mythic: 10,
     legendary: 20,
-  },
+  } as Record<Partial<ChestType>, number>,
 
   // Поки не активно
   SPECIAL_ITEM_CHANCE: {
     crystal: 15,
     mythic: 25,
     legendary: 40,
-  },
+  } as Record<Partial<ChestType>, number>,
 } as const;
 
 export const CHEST_CONFIG: Record<
@@ -53,71 +55,81 @@ export const CHEST_CONFIG: Record<
       epic: 0,
       mythic: 0,
       legendary: 0,
-      unique: 0,
     },
   },
-  solver: {
+  silver: {
     guaranteed_items: 2,
     item_rarity_distribution: {
-      common: 80,
-      uncommon: 20,
-      rare: 0,
+      common: 50,
+      uncommon: 40,
+      rare: 10,
       epic: 0,
       mythic: 0,
       legendary: 0,
-      unique: 0,
     },
   },
   golden: {
     guaranteed_items: 2,
     item_rarity_distribution: {
-      common: 80,
-      uncommon: 20,
-      rare: 0,
-      epic: 0,
+      common: 30,
+      uncommon: 40,
+      rare: 25,
+      epic: 5,
       mythic: 0,
       legendary: 0,
-      unique: 0,
     },
   },
   crystal: {
     guaranteed_items: 2,
     item_rarity_distribution: {
-      common: 80,
-      uncommon: 20,
-      rare: 0,
-      epic: 0,
-      mythic: 0,
+      common: 20,
+      uncommon: 30,
+      rare: 25,
+      epic: 20,
+      mythic: 5,
       legendary: 0,
-      unique: 0,
     },
   },
   mythic: {
     guaranteed_items: 2,
     item_rarity_distribution: {
-      common: 80,
+      common: 0,
       uncommon: 20,
-      rare: 0,
-      epic: 0,
-      mythic: 0,
-      legendary: 0,
-      unique: 0,
+      rare: 25,
+      epic: 25,
+      mythic: 25,
+      legendary: 5,
     },
   },
   legendary: {
     guaranteed_items: 2,
     item_rarity_distribution: {
-      common: 80,
-      uncommon: 20,
-      rare: 0,
-      epic: 0,
-      mythic: 0,
-      legendary: 0,
-      unique: 0,
+      common: 0,
+      uncommon: 0,
+      rare: 15,
+      epic: 25,
+      mythic: 25,
+      legendary: 35,
     },
   },
+} as const;
+
+export const CHEST_TYPE_TO_RARITY: Record<ChestType, RarityType> = {
+  wooden: "common",
+  silver: "uncommon",
+  golden: "rare",
+  crystal: "epic",
+  mythic: "mythic",
+  legendary: "legendary",
 } as const;
 
 export const MARKETPLACE_CONFIG = {
   SELLABLE_CHESTS: ["mythic", "legendary"] as ChestType[],
 } as const;
+
+export const GUARANTEED_ITEM_TYPES: ItemType[] = [
+  "food",
+  "medicine",
+  "cleaning",
+  "toy",
+];

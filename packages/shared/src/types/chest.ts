@@ -1,18 +1,24 @@
-import { RarityType, ChestType } from "../enums";
+import { RarityType, ChestType, ItemType } from "../enums";
 
 export interface ChestInfo {
-  chest_type: ChestType;
-  guaranteed_items: number;
-  bonus_chance: number;
+  chestType: ChestType;
+  rarity: Exclude<RarityType, "unique">;
 }
 
-export interface ChestItem {
-  item_id: string;
+export interface ChestRewardItem {
+  itemId: string;
+  type: ItemType;
   quantity: number;
   rarity: RarityType;
 }
 
-export interface ChestReward {
-  items: ChestItem[];
-  total_value: number;
+export interface ChestRewards {
+  items: ChestRewardItem[];
+  egg: boolean;
+  totalValue: number;
+}
+
+export interface ChestConfig {
+  guaranteed_items: number;
+  item_rarity_distribution: Record<RarityType, number>;
 }
