@@ -56,6 +56,7 @@ export const ModelName = {
   Pixegotchi: 'Pixegotchi',
   ActiveEffect: 'ActiveEffect',
   Inventory: 'Inventory',
+  Chest: 'Chest',
   Item: 'Item',
   ItemUsageHistory: 'ItemUsageHistory',
   Vault: 'Vault',
@@ -166,6 +167,19 @@ export const InventoryScalarFieldEnum = {
 } as const
 
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
+
+
+export const ChestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chestType: 'chestType',
+  isOpened: 'isOpened',
+  rewards: 'rewards',
+  createdAt: 'createdAt',
+  openedAt: 'openedAt'
+} as const
+
+export type ChestScalarFieldEnum = (typeof ChestScalarFieldEnum)[keyof typeof ChestScalarFieldEnum]
 
 
 export const ItemScalarFieldEnum = {
@@ -287,19 +301,19 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
 export const NullableJsonNullValueInput = {
   DbNull: DbNull,
   JsonNull: JsonNull
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

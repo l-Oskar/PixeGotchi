@@ -389,6 +389,7 @@ export const ModelName = {
   Pixegotchi: 'Pixegotchi',
   ActiveEffect: 'ActiveEffect',
   Inventory: 'Inventory',
+  Chest: 'Chest',
   Item: 'Item',
   ItemUsageHistory: 'ItemUsageHistory',
   Vault: 'Vault',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "egg" | "pixegotchi" | "activeEffect" | "inventory" | "item" | "itemUsageHistory" | "vault" | "marketplaceListing" | "gameSession" | "quest" | "userQuest"
+    modelProps: "user" | "egg" | "pixegotchi" | "activeEffect" | "inventory" | "chest" | "item" | "itemUsageHistory" | "vault" | "marketplaceListing" | "gameSession" | "quest" | "userQuest"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -782,6 +783,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.InventoryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.InventoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    Chest: {
+      payload: Prisma.$ChestPayload<ExtArgs>
+      fields: Prisma.ChestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>
+        }
+        findFirst: {
+          args: Prisma.ChestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>
+        }
+        findMany: {
+          args: Prisma.ChestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>[]
+        }
+        create: {
+          args: Prisma.ChestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>
+        }
+        createMany: {
+          args: Prisma.ChestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ChestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>[]
+        }
+        delete: {
+          args: Prisma.ChestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>
+        }
+        update: {
+          args: Prisma.ChestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>
+        }
+        deleteMany: {
+          args: Prisma.ChestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ChestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>[]
+        }
+        upsert: {
+          args: Prisma.ChestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChestPayload>
+        }
+        aggregate: {
+          args: Prisma.ChestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChest>
+        }
+        groupBy: {
+          args: Prisma.ChestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChestCountAggregateOutputType> | number
         }
       }
     }
@@ -1429,6 +1504,19 @@ export const InventoryScalarFieldEnum = {
 export type InventoryScalarFieldEnum = (typeof InventoryScalarFieldEnum)[keyof typeof InventoryScalarFieldEnum]
 
 
+export const ChestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chestType: 'chestType',
+  isOpened: 'isOpened',
+  rewards: 'rewards',
+  createdAt: 'createdAt',
+  openedAt: 'openedAt'
+} as const
+
+export type ChestScalarFieldEnum = (typeof ChestScalarFieldEnum)[keyof typeof ChestScalarFieldEnum]
+
+
 export const ItemScalarFieldEnum = {
   id: 'id',
   itemId: 'itemId',
@@ -1548,19 +1636,19 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
 export const NullableJsonNullValueInput = {
   DbNull: DbNull,
   JsonNull: JsonNull
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1742,6 +1830,20 @@ export type ListEnumItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'ChestType'
+ */
+export type EnumChestTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChestType'>
+    
+
+
+/**
+ * Reference to a field of type 'ChestType[]'
+ */
+export type ListEnumChestTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChestType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1896,6 +1998,7 @@ export type GlobalOmitConfig = {
   pixegotchi?: Prisma.PixegotchiOmit
   activeEffect?: Prisma.ActiveEffectOmit
   inventory?: Prisma.InventoryOmit
+  chest?: Prisma.ChestOmit
   item?: Prisma.ItemOmit
   itemUsageHistory?: Prisma.ItemUsageHistoryOmit
   vault?: Prisma.VaultOmit

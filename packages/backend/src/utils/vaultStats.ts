@@ -9,7 +9,6 @@ const RARITY_ORDER: Record<string, number> = {
   [RarityType.epic]: 4,
   [RarityType.mythic]: 5,
   [RarityType.legendary]: 6,
-  [RarityType.unique]: 7,
 };
 
 export function getVaultStats(pixegotchiList: any[]): ElementStats[] {

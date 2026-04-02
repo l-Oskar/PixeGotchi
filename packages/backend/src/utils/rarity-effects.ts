@@ -80,18 +80,6 @@ export const RARITY_EFFECTS: Record<RarityType, RarityEffects> = {
     passive_income: 10, // 10 PGC/год
     special_abilities: ["legendary_aura", "auto_heal"],
   },
-
-  unique: {
-    max_status: 200,
-    degradation: -75,
-    trait_count: {
-      min: 4,
-      max: 5,
-    },
-    gold_earn_multiplier: 3.0,
-    passive_income: 50, // 50 PGC/год
-    special_abilities: ["unique_power", "time_manipulation", "resource_magnet"],
-  },
 };
 
 // Утилітарні функції для роботи з rarity effects

@@ -49,7 +49,6 @@ enum RarityType {
   epic
   mythic
   legendary
-  unique
 }
 
 enum ItemType {

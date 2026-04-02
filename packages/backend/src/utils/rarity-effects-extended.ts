@@ -35,9 +35,5 @@ export const ELEMENT_RARITY_BONUSES: Partial<
       bonus: "prismatic_power",
       value: 2.5, // x2.5 до всіх заробітків
     },
-    unique: {
-      bonus: "ultimate_spectrum",
-      value: 5.0, // x5 до всього
-    },
   },
 };

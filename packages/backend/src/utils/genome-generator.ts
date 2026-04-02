@@ -40,7 +40,6 @@ export class GenomeGenerator {
     epic: 10, // 10%
     mythic: 4, // 4%
     legendary: 0.9, // 0.9%
-    unique: 0, // 0%
   };
 
   // Базові ваги для трейтів (БЕЗ immortal - він додається окремо)
@@ -103,7 +102,6 @@ export class GenomeGenerator {
     epic: { min: 2, max: 2 },
     mythic: { min: 2, max: 3 },
     legendary: { min: 4, max: 4 },
-    unique: { min: 5, max: 5 },
   };
 
   static generate(): GenomeInfo {
@@ -359,7 +357,6 @@ export class GenomeGenerator {
       epic: 4,
       mythic: 5,
       legendary: 6,
-      unique: 10,
     };
 
     const elementScores: Record<ElementType, number> = {
@@ -478,7 +475,6 @@ export class GenomeGenerator {
       "epic",
       "mythic",
       "legendary",
-      "unique",
     ];
     return order.indexOf(rarity);
   }
@@ -616,7 +612,6 @@ export class GenomeGenerator {
     // 5. Порівняння рідкостей
     const rarityComparison = {
       commonVsLegendary: GenomeGenerator.compareRarity("common", "legendary"),
-      legendaryVsUnique: GenomeGenerator.compareRarity("legendary", "unique"),
       epicVsRare: GenomeGenerator.compareRarity("epic", "rare"),
     };
 

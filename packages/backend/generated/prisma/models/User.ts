@@ -251,6 +251,7 @@ export type UserWhereInput = {
   eggs?: Prisma.EggListRelationFilter
   pixegotchis?: Prisma.PixegotchiListRelationFilter
   inventory?: Prisma.InventoryListRelationFilter
+  chests?: Prisma.ChestListRelationFilter
   vault?: Prisma.VaultListRelationFilter
   listings?: Prisma.MarketplaceListingListRelationFilter
   purchases?: Prisma.MarketplaceListingListRelationFilter
@@ -268,6 +269,7 @@ export type UserOrderByWithRelationInput = {
   eggs?: Prisma.EggOrderByRelationAggregateInput
   pixegotchis?: Prisma.PixegotchiOrderByRelationAggregateInput
   inventory?: Prisma.InventoryOrderByRelationAggregateInput
+  chests?: Prisma.ChestOrderByRelationAggregateInput
   vault?: Prisma.VaultOrderByRelationAggregateInput
   listings?: Prisma.MarketplaceListingOrderByRelationAggregateInput
   purchases?: Prisma.MarketplaceListingOrderByRelationAggregateInput
@@ -288,6 +290,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   eggs?: Prisma.EggListRelationFilter
   pixegotchis?: Prisma.PixegotchiListRelationFilter
   inventory?: Prisma.InventoryListRelationFilter
+  chests?: Prisma.ChestListRelationFilter
   vault?: Prisma.VaultListRelationFilter
   listings?: Prisma.MarketplaceListingListRelationFilter
   purchases?: Prisma.MarketplaceListingListRelationFilter
@@ -334,6 +337,7 @@ export type UserCreateInput = {
   eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
@@ -351,6 +355,7 @@ export type UserUncheckedCreateInput = {
   eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
@@ -367,6 +372,7 @@ export type UserUpdateInput = {
   eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
@@ -384,6 +390,7 @@ export type UserUncheckedUpdateInput = {
   eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
@@ -554,6 +561,20 @@ export type UserUpdateOneRequiredWithoutInventoryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInventoryInput, Prisma.UserUpdateWithoutInventoryInput>, Prisma.UserUncheckedUpdateWithoutInventoryInput>
 }
 
+export type UserCreateNestedOneWithoutChestsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChestsInput, Prisma.UserUncheckedCreateWithoutChestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChestsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutChestsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChestsInput, Prisma.UserUncheckedCreateWithoutChestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChestsInput
+  upsert?: Prisma.UserUpsertWithoutChestsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChestsInput, Prisma.UserUpdateWithoutChestsInput>, Prisma.UserUncheckedUpdateWithoutChestsInput>
+}
+
 export type UserCreateNestedOneWithoutVaultInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutVaultInput, Prisma.UserUncheckedCreateWithoutVaultInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutVaultInput
@@ -608,6 +629,7 @@ export type UserCreateWithoutEggsInput = {
   updatedAt?: Date | string
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
@@ -624,6 +646,7 @@ export type UserUncheckedCreateWithoutEggsInput = {
   updatedAt?: Date | string
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
@@ -655,6 +678,7 @@ export type UserUpdateWithoutEggsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
@@ -671,6 +695,7 @@ export type UserUncheckedUpdateWithoutEggsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
@@ -686,6 +711,7 @@ export type UserCreateWithoutPixegotchisInput = {
   updatedAt?: Date | string
   eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
@@ -702,6 +728,7 @@ export type UserUncheckedCreateWithoutPixegotchisInput = {
   updatedAt?: Date | string
   eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
@@ -733,6 +760,7 @@ export type UserUpdateWithoutPixegotchisInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
@@ -749,6 +777,7 @@ export type UserUncheckedUpdateWithoutPixegotchisInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
@@ -764,6 +793,7 @@ export type UserCreateWithoutInventoryInput = {
   updatedAt?: Date | string
   eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
@@ -780,6 +810,7 @@ export type UserUncheckedCreateWithoutInventoryInput = {
   updatedAt?: Date | string
   eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
@@ -811,6 +842,7 @@ export type UserUpdateWithoutInventoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
@@ -827,6 +859,89 @@ export type UserUncheckedUpdateWithoutInventoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUncheckedUpdateManyWithoutUserNestedInput
+  vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
+  listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
+  purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutChestsInput = {
+  telegramId: bigint | number
+  walletAddress?: string | null
+  username?: string | null
+  pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  eggs?: Prisma.EggCreateNestedManyWithoutUserInput
+  pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
+  inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  vault?: Prisma.VaultCreateNestedManyWithoutUserInput
+  listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
+  purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutChestsInput = {
+  id?: number
+  telegramId: bigint | number
+  walletAddress?: string | null
+  username?: string | null
+  pgcBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
+  pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
+  inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
+  listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
+  purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutChestsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutChestsInput, Prisma.UserUncheckedCreateWithoutChestsInput>
+}
+
+export type UserUpsertWithoutChestsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutChestsInput, Prisma.UserUncheckedUpdateWithoutChestsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutChestsInput, Prisma.UserUncheckedCreateWithoutChestsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutChestsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutChestsInput, Prisma.UserUncheckedUpdateWithoutChestsInput>
+}
+
+export type UserUpdateWithoutChestsInput = {
+  telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
+  pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
+  inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
+  listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
+  purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutChestsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pgcBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
+  pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
+  inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
@@ -843,6 +958,7 @@ export type UserCreateWithoutVaultInput = {
   eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
 }
@@ -859,6 +975,7 @@ export type UserUncheckedCreateWithoutVaultInput = {
   eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
   purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
 }
@@ -890,6 +1007,7 @@ export type UserUpdateWithoutVaultInput = {
   eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
 }
@@ -906,6 +1024,7 @@ export type UserUncheckedUpdateWithoutVaultInput = {
   eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
   purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
 }
@@ -921,6 +1040,7 @@ export type UserCreateWithoutListingsInput = {
   eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   purchases?: Prisma.MarketplaceListingCreateNestedManyWithoutBuyerInput
 }
@@ -937,6 +1057,7 @@ export type UserUncheckedCreateWithoutListingsInput = {
   eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   purchases?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutBuyerInput
 }
@@ -957,6 +1078,7 @@ export type UserCreateWithoutPurchasesInput = {
   eggs?: Prisma.EggCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingCreateNestedManyWithoutSellerInput
 }
@@ -973,6 +1095,7 @@ export type UserUncheckedCreateWithoutPurchasesInput = {
   eggs?: Prisma.EggUncheckedCreateNestedManyWithoutUserInput
   pixegotchis?: Prisma.PixegotchiUncheckedCreateNestedManyWithoutUserInput
   inventory?: Prisma.InventoryUncheckedCreateNestedManyWithoutUserInput
+  chests?: Prisma.ChestUncheckedCreateNestedManyWithoutUserInput
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutUserInput
   listings?: Prisma.MarketplaceListingUncheckedCreateNestedManyWithoutSellerInput
 }
@@ -1004,6 +1127,7 @@ export type UserUpdateWithoutListingsInput = {
   eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   purchases?: Prisma.MarketplaceListingUpdateManyWithoutBuyerNestedInput
 }
@@ -1020,6 +1144,7 @@ export type UserUncheckedUpdateWithoutListingsInput = {
   eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   purchases?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutBuyerNestedInput
 }
@@ -1046,6 +1171,7 @@ export type UserUpdateWithoutPurchasesInput = {
   eggs?: Prisma.EggUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUpdateManyWithoutSellerNestedInput
 }
@@ -1062,6 +1188,7 @@ export type UserUncheckedUpdateWithoutPurchasesInput = {
   eggs?: Prisma.EggUncheckedUpdateManyWithoutUserNestedInput
   pixegotchis?: Prisma.PixegotchiUncheckedUpdateManyWithoutUserNestedInput
   inventory?: Prisma.InventoryUncheckedUpdateManyWithoutUserNestedInput
+  chests?: Prisma.ChestUncheckedUpdateManyWithoutUserNestedInput
   vault?: Prisma.VaultUncheckedUpdateManyWithoutUserNestedInput
   listings?: Prisma.MarketplaceListingUncheckedUpdateManyWithoutSellerNestedInput
 }
@@ -1075,6 +1202,7 @@ export type UserCountOutputType = {
   eggs: number
   pixegotchis: number
   inventory: number
+  chests: number
   vault: number
   listings: number
   purchases: number
@@ -1084,6 +1212,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   eggs?: boolean | UserCountOutputTypeCountEggsArgs
   pixegotchis?: boolean | UserCountOutputTypeCountPixegotchisArgs
   inventory?: boolean | UserCountOutputTypeCountInventoryArgs
+  chests?: boolean | UserCountOutputTypeCountChestsArgs
   vault?: boolean | UserCountOutputTypeCountVaultArgs
   listings?: boolean | UserCountOutputTypeCountListingsArgs
   purchases?: boolean | UserCountOutputTypeCountPurchasesArgs
@@ -1123,6 +1252,13 @@ export type UserCountOutputTypeCountInventoryArgs<ExtArgs extends runtime.Types.
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountChestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountVaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.VaultWhereInput
 }
@@ -1154,6 +1290,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   eggs?: boolean | Prisma.User$eggsArgs<ExtArgs>
   pixegotchis?: boolean | Prisma.User$pixegotchisArgs<ExtArgs>
   inventory?: boolean | Prisma.User$inventoryArgs<ExtArgs>
+  chests?: boolean | Prisma.User$chestsArgs<ExtArgs>
   vault?: boolean | Prisma.User$vaultArgs<ExtArgs>
   listings?: boolean | Prisma.User$listingsArgs<ExtArgs>
   purchases?: boolean | Prisma.User$purchasesArgs<ExtArgs>
@@ -1198,6 +1335,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   eggs?: boolean | Prisma.User$eggsArgs<ExtArgs>
   pixegotchis?: boolean | Prisma.User$pixegotchisArgs<ExtArgs>
   inventory?: boolean | Prisma.User$inventoryArgs<ExtArgs>
+  chests?: boolean | Prisma.User$chestsArgs<ExtArgs>
   vault?: boolean | Prisma.User$vaultArgs<ExtArgs>
   listings?: boolean | Prisma.User$listingsArgs<ExtArgs>
   purchases?: boolean | Prisma.User$purchasesArgs<ExtArgs>
@@ -1212,6 +1350,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     eggs: Prisma.$EggPayload<ExtArgs>[]
     pixegotchis: Prisma.$PixegotchiPayload<ExtArgs>[]
     inventory: Prisma.$InventoryPayload<ExtArgs>[]
+    chests: Prisma.$ChestPayload<ExtArgs>[]
     vault: Prisma.$VaultPayload<ExtArgs>[]
     listings: Prisma.$MarketplaceListingPayload<ExtArgs>[]
     purchases: Prisma.$MarketplaceListingPayload<ExtArgs>[]
@@ -1622,6 +1761,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   eggs<T extends Prisma.User$eggsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eggsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EggPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pixegotchis<T extends Prisma.User$pixegotchisArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pixegotchisArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PixegotchiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inventory<T extends Prisma.User$inventoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inventoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chests<T extends Prisma.User$chestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vault<T extends Prisma.User$vaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vaultArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VaultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   listings<T extends Prisma.User$listingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$listingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketplaceListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   purchases<T extends Prisma.User$purchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketplaceListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2119,6 +2259,30 @@ export type User$inventoryArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.InventoryScalarFieldEnum | Prisma.InventoryScalarFieldEnum[]
+}
+
+/**
+ * User.chests
+ */
+export type User$chestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Chest
+   */
+  select?: Prisma.ChestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Chest
+   */
+  omit?: Prisma.ChestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChestInclude<ExtArgs> | null
+  where?: Prisma.ChestWhereInput
+  orderBy?: Prisma.ChestOrderByWithRelationInput | Prisma.ChestOrderByWithRelationInput[]
+  cursor?: Prisma.ChestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChestScalarFieldEnum | Prisma.ChestScalarFieldEnum[]
 }
 
 /**

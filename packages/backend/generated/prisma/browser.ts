@@ -43,6 +43,11 @@ export type ActiveEffect = Prisma.ActiveEffectModel
  */
 export type Inventory = Prisma.InventoryModel
 /**
+ * Model Chest
+ * 
+ */
+export type Chest = Prisma.ChestModel
+/**
  * Model Item
  * 
  */

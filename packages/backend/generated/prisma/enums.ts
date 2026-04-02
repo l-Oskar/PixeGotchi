@@ -53,8 +53,7 @@ export const RarityType = {
   rare: 'rare',
   epic: 'epic',
   mythic: 'mythic',
-  legendary: 'legendary',
-  unique: 'unique'
+  legendary: 'legendary'
 } as const
 
 export type RarityType = (typeof RarityType)[keyof typeof RarityType]
@@ -73,9 +72,22 @@ export const ItemType = {
 export type ItemType = (typeof ItemType)[keyof typeof ItemType]
 
 
+export const ChestType = {
+  wooden: 'wooden',
+  silver: 'silver',
+  golden: 'golden',
+  crystal: 'crystal',
+  mythic: 'mythic',
+  legendary: 'legendary'
+} as const
+
+export type ChestType = (typeof ChestType)[keyof typeof ChestType]
+
+
 export const ListingType = {
   egg: 'egg',
   pixegotchi: 'pixegotchi',
+  chest: 'chest',
   item: 'item'
 } as const
 
