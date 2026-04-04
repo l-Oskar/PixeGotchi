@@ -2,7 +2,7 @@ import { RarityType, ChestType, ItemType } from "../enums";
 
 export interface ChestInfo {
   chestType: ChestType;
-  rarity: Exclude<RarityType, "unique">;
+  rarity: RarityType;
 }
 
 export interface ChestRewardItem {

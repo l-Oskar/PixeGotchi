@@ -2,10 +2,7 @@
 
 import { ItemType, RarityType } from "../../index";
 
-export const ITEM_POOLS: Record<
-  ItemType,
-  Record<Exclude<RarityType, "unique">, string[]>
-> = {
+export const ITEM_POOLS: Record<ItemType, Record<RarityType, string[]>> = {
   food: {
     common: ["apple", "cherry", "water"],
     uncommon: ["pizza", "burger", "sandwich"],

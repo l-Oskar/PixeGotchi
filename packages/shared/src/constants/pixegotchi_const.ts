@@ -56,15 +56,6 @@ export const RARITY_STATS: Record<RarityType, RarityStatsType> = {
     },
     goldEarn: 1.5,
   },
-  unique: {
-    maxStat: 150,
-    degradationReduce: 25,
-    traits: {
-      min: 4,
-      max: 4,
-    },
-    goldEarn: 1.5,
-  },
 };
 
 export const RARITY_COLORS: Record<string, string> = {
@@ -74,7 +65,6 @@ export const RARITY_COLORS: Record<string, string> = {
   epic: "text-purple-400",
   mythic: "text-pink-400",
   legendary: "text-yellow-400",
-  unique: "text-orange-400",
 };
 
 export const ELEMENT_COLORS: Record<string, string> = {
