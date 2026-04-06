@@ -4,6 +4,7 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
+    "rootDir": "./src",
     "outDir": "./dist",
 
     "strict": true,
@@ -25,7 +26,6 @@
     "removeComments": false,
     "isolatedModules": true,
 
-    "baseUrl": ".",
     "paths": {
       "@shared": ["../shared/src/index.ts"],
       "@shared/*": ["../shared/src/*"],

@@ -102,6 +102,7 @@ export class Inventory {
 
   async useItem(userId: number, itemId: string, quantity?: number) {
     const pixegotchi = await this.pixegotchiService.findActive(userId);
+
     if (!pixegotchi) throw new Error("No active pixegotchi");
 
     const item = await this.itemService.getItemDetails(itemId);

@@ -346,7 +346,7 @@ export type PixegotchiGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type PixegotchiGroupByOutputType = {
   id: number
   userId: number
-  eggId: number | null
+  eggId: number
   nftAddress: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -399,7 +399,7 @@ export type PixegotchiWhereInput = {
   NOT?: Prisma.PixegotchiWhereInput | Prisma.PixegotchiWhereInput[]
   id?: Prisma.IntFilter<"Pixegotchi"> | number
   userId?: Prisma.IntFilter<"Pixegotchi"> | number
-  eggId?: Prisma.IntNullableFilter<"Pixegotchi"> | number | null
+  eggId?: Prisma.IntFilter<"Pixegotchi"> | number
   nftAddress?: Prisma.StringNullableFilter<"Pixegotchi"> | string | null
   genomeHash?: Prisma.StringFilter<"Pixegotchi"> | string
   element?: Prisma.EnumElementTypeFilter<"Pixegotchi"> | $Enums.ElementType
@@ -434,7 +434,7 @@ export type PixegotchiWhereInput = {
 export type PixegotchiOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  eggId?: Prisma.SortOrderInput | Prisma.SortOrder
+  eggId?: Prisma.SortOrder
   nftAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   genomeHash?: Prisma.SortOrder
   element?: Prisma.SortOrder
@@ -507,7 +507,7 @@ export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
 export type PixegotchiOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  eggId?: Prisma.SortOrderInput | Prisma.SortOrder
+  eggId?: Prisma.SortOrder
   nftAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   genomeHash?: Prisma.SortOrder
   element?: Prisma.SortOrder
@@ -545,7 +545,7 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PixegotchiScalarWhereWithAggregatesInput | Prisma.PixegotchiScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   userId?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
-  eggId?: Prisma.IntNullableWithAggregatesFilter<"Pixegotchi"> | number | null
+  eggId?: Prisma.IntWithAggregatesFilter<"Pixegotchi"> | number
   nftAddress?: Prisma.StringNullableWithAggregatesFilter<"Pixegotchi"> | string | null
   genomeHash?: Prisma.StringWithAggregatesFilter<"Pixegotchi"> | string
   element?: Prisma.EnumElementTypeWithAggregatesFilter<"Pixegotchi"> | $Enums.ElementType
@@ -607,7 +607,7 @@ export type PixegotchiCreateInput = {
 export type PixegotchiUncheckedCreateInput = {
   id?: number
   userId: number
-  eggId?: number | null
+  eggId: number
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -672,7 +672,7 @@ export type PixegotchiUpdateInput = {
 export type PixegotchiUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eggId?: Prisma.IntFieldUpdateOperationsInput | number
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -705,7 +705,7 @@ export type PixegotchiUncheckedUpdateInput = {
 export type PixegotchiCreateManyInput = {
   id?: number
   userId: number
-  eggId?: number | null
+  eggId: number
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -762,7 +762,7 @@ export type PixegotchiUpdateManyMutationInput = {
 export type PixegotchiUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eggId?: Prisma.IntFieldUpdateOperationsInput | number
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1034,14 +1034,6 @@ export type EnumPixegotchiStatusFieldUpdateOperationsInput = {
   set?: $Enums.PixegotchiStatus
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type PixegotchiCreateNestedOneWithoutActiveEffectsInput = {
   create?: Prisma.XOR<Prisma.PixegotchiCreateWithoutActiveEffectsInput, Prisma.PixegotchiUncheckedCreateWithoutActiveEffectsInput>
   connectOrCreate?: Prisma.PixegotchiCreateOrConnectWithoutActiveEffectsInput
@@ -1117,7 +1109,7 @@ export type PixegotchiCreateWithoutUserInput = {
 
 export type PixegotchiUncheckedCreateWithoutUserInput = {
   id?: number
-  eggId?: number | null
+  eggId: number
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1179,7 +1171,7 @@ export type PixegotchiScalarWhereInput = {
   NOT?: Prisma.PixegotchiScalarWhereInput | Prisma.PixegotchiScalarWhereInput[]
   id?: Prisma.IntFilter<"Pixegotchi"> | number
   userId?: Prisma.IntFilter<"Pixegotchi"> | number
-  eggId?: Prisma.IntNullableFilter<"Pixegotchi"> | number | null
+  eggId?: Prisma.IntFilter<"Pixegotchi"> | number
   nftAddress?: Prisma.StringNullableFilter<"Pixegotchi"> | string | null
   genomeHash?: Prisma.StringFilter<"Pixegotchi"> | string
   element?: Prisma.EnumElementTypeFilter<"Pixegotchi"> | $Enums.ElementType
@@ -1382,7 +1374,7 @@ export type PixegotchiCreateWithoutActiveEffectsInput = {
 export type PixegotchiUncheckedCreateWithoutActiveEffectsInput = {
   id?: number
   userId: number
-  eggId?: number | null
+  eggId: number
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1461,7 +1453,7 @@ export type PixegotchiUpdateWithoutActiveEffectsInput = {
 export type PixegotchiUncheckedUpdateWithoutActiveEffectsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eggId?: Prisma.IntFieldUpdateOperationsInput | number
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1524,7 +1516,7 @@ export type PixegotchiCreateWithoutVaultInput = {
 export type PixegotchiUncheckedCreateWithoutVaultInput = {
   id?: number
   userId: number
-  eggId?: number | null
+  eggId: number
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1603,7 +1595,7 @@ export type PixegotchiUpdateWithoutVaultInput = {
 export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eggId?: Prisma.IntFieldUpdateOperationsInput | number
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1666,7 +1658,7 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
 export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   id?: number
   userId: number
-  eggId?: number | null
+  eggId: number
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1745,7 +1737,7 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
 export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eggId?: Prisma.IntFieldUpdateOperationsInput | number
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1776,7 +1768,7 @@ export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
 
 export type PixegotchiCreateManyUserInput = {
   id?: number
-  eggId?: number | null
+  eggId: number
   nftAddress?: string | null
   genomeHash: string
   element: $Enums.ElementType
@@ -1836,7 +1828,7 @@ export type PixegotchiUpdateWithoutUserInput = {
 
 export type PixegotchiUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eggId?: Prisma.IntFieldUpdateOperationsInput | number
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -1868,7 +1860,7 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
 
 export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  eggId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eggId?: Prisma.IntFieldUpdateOperationsInput | number
   nftAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   genomeHash?: Prisma.StringFieldUpdateOperationsInput | string
   element?: Prisma.EnumElementTypeFieldUpdateOperationsInput | $Enums.ElementType
@@ -2104,7 +2096,7 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     userId: number
-    eggId: number | null
+    eggId: number
     nftAddress: string | null
     genomeHash: string
     element: $Enums.ElementType

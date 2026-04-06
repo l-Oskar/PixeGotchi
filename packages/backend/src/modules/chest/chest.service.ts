@@ -1,8 +1,11 @@
 import { prisma } from "@/database/prisma";
+import { Inventory } from "../inventory/inventory.service";
 import { ChestGenerator } from "@/utils/chest-generator";
-import { ChestType } from "@shared";
+import { ChestType, EGG_CONSTANTS } from "@shared";
 
 export class ChestService {
+  private inventory = new Inventory();
+
   async getAllChests(userId: number) {
     return await prisma.chest.findMany({
       where: {
@@ -30,6 +33,24 @@ export class ChestService {
         isOpened: false,
       },
     });
-    return chest;
+
+    if (!chest) throw new Error("Chest no found");
+
+    const rewards = ChestGenerator.openChest(chest.chestType);
+
+    if (rewards.egg) {
+      await prisma.egg.create({
+        data: {
+          userId,
+          createdAt: new Date(),
+          hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
+        },
+      });
+    }
+
+    rewards.items.forEach(
+      async (item) =>
+        await this.inventory.addItem(userId, item.itemId, item.quantity),
+    );
   }
 }
