@@ -17,6 +17,7 @@ import { vaultRoutes } from "@/modules/vault/vault.routes";
 import { eggsRoutes } from "./modules/eggs/eggs.routes";
 import { GenomeGenerator } from "./utils/genome-generator";
 import { itemsRoutes } from "./modules/items/items.routes";
+import { chestRoutes } from "./modules/chest/chest.routes";
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -94,6 +95,7 @@ export async function buildApp(): Promise<FastifyInstance> {
         prefix: "/marketplace",
       });
       await apiInstance.register(vaultRoutes, { prefix: "/vault" });
+      await apiInstance.register(chestRoutes, { prefix: "/chest" });
     },
     { prefix: "/api" },
   );
