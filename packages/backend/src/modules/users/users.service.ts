@@ -29,6 +29,7 @@ export class UserService {
       create: {
         telegramId: data.telegramId,
         username: data.username,
+        pgcBalance: USER_CONST.START_BALANCE,
       },
     });
   }
