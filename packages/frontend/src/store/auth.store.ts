@@ -10,11 +10,13 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
   isAuthenticated: false,
-  setAuth: (token) =>
+  setAuth: (token) => {
     set({
       accessToken: token,
       isAuthenticated: true,
     }),
+      console.log(token);
+  },
 
   logout: () =>
     set({

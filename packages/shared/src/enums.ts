@@ -58,6 +58,7 @@ export const ItemType = {
   cleaning: "cleaning",
   special: "special",
   boost: "boost",
+  chest: "chest",
 } as const;
 
 export type ItemType = (typeof ItemType)[keyof typeof ItemType];

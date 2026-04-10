@@ -25,6 +25,17 @@ export class ChestService {
     });
   }
 
+  async getSpecificChest(userId: number, type: string) {
+    const specificChest = ChestGenerator.generateSpecificChest(type);
+
+    return await prisma.chest.create({
+      data: {
+        userId,
+        chestType: specificChest.chestType as ChestType as any,
+      },
+    });
+  }
+
   async openChest(userId: number, chestId: number) {
     const chest = await prisma.chest.findFirst({
       where: {

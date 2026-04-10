@@ -13,8 +13,6 @@ export const CHEST_RARITY_WEIGHTS: Record<ChestType, number> = {
   legendary: 1,
 } as const;
 
-export interface ChestRewards {}
-
 export const CHEST_REWARDS = {
   BOOST_BONUS_CHANCE: {
     wooden: 10,
