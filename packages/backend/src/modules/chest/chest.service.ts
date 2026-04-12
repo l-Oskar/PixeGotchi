@@ -20,28 +20,31 @@ export class ChestService {
     return await prisma.chest.create({
       data: {
         userId,
-        chestType: randomChest.chestType as ChestType as any,
+        chestType: randomChest.chestType,
       },
     });
   }
 
-  async getSpecificChest(userId: number, type: string) {
-    const specificChest = ChestGenerator.generateSpecificChest(type);
+  async getSpecificChest(userId: number, chestType: ChestType) {
+    const specificChest = ChestGenerator.generateSpecificChest(chestType);
 
     return await prisma.chest.create({
       data: {
         userId,
-        chestType: specificChest.chestType as ChestType as any,
+        chestType: specificChest.chestType,
       },
     });
   }
 
-  async openChest(userId: number, chestId: number) {
+  async openChest(userId: number, chestType: ChestType) {
     const chest = await prisma.chest.findFirst({
       where: {
         userId,
-        id: chestId,
+        chestType: chestType,
         isOpened: false,
+      },
+      orderBy: {
+        createdAt: "asc",
       },
     });
 
@@ -63,5 +66,17 @@ export class ChestService {
       async (item) =>
         await this.inventory.addItem(userId, item.itemId, item.quantity),
     );
+
+    await prisma.chest.update({
+      where: {
+        id: chest.id,
+      },
+      data: {
+        isOpened: true,
+        openedAt: new Date(),
+        rewards: chest.rewards!,
+      },
+    });
+    return rewards;
   }
 }

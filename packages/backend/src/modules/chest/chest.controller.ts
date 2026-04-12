@@ -1,9 +1,10 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ChestService } from "./chest.service";
 import { z } from "zod";
+import { ChestType } from "@shared";
 
 const specificChestSchema = z.object({
-  type: z.string(),
+  chestType: z.enum(Object.values(ChestType) as [string, ...string[]]),
 });
 
 export class ChestController {
@@ -27,21 +28,24 @@ export class ChestController {
 
   async getSpecificChest(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
-    const { type } = specificChestSchema.parse(request.body);
+    const { chestType } = specificChestSchema.parse(request.body);
 
-    const specificChest = this.chestService.getSpecificChest(userId, type);
+    const specificChest = await this.chestService.getSpecificChest(
+      userId,
+      chestType as ChestType,
+    );
 
     return reply.send(specificChest);
   }
 
-  async openChest(
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-  ) {
+  async openChest(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
-    const chestId = parseInt(request.params.id);
+    const { chestType } = specificChestSchema.parse(request.body);
 
-    const reward = await this.chestService.openChest(userId, chestId);
+    const reward = await this.chestService.openChest(
+      userId,
+      chestType as ChestType,
+    );
 
     return reply.send(reward);
   }

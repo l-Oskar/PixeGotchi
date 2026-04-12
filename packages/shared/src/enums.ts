@@ -70,7 +70,7 @@ export const ChestType = {
   crystal: "crystal", // epic items
   mythic: "mythic", // mythic items
   legendary: "legendary", // legendary items
-};
+} as const;
 
 export type ChestType = (typeof ChestType)[keyof typeof ChestType];
 

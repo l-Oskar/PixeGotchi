@@ -1,10 +1,7 @@
 import { prisma } from "@/database/prisma";
 import { getVaultStats } from "@/utils/vaultStats";
-import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 
 export class VaultService {
-  private pixegotchi = new PixegotchiService();
-
   async getStatsVault(userId: number) {
     const vaultPixe = await prisma.pixegotchi.findMany({
       where: {

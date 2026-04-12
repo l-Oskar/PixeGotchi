@@ -2,9 +2,11 @@ import { prisma } from "@/database/prisma";
 import { ITEMS_BY_ID, InventoryWithDetails } from "@shared";
 import { ItemsService } from "../items/items.service";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
+import { ChestService } from "../chest/chest.service";
 
 export class Inventory {
   private itemService = new ItemsService();
+  private chestService = new ChestService();
   private pixegotchiService = new PixegotchiService();
 
   async getInventory(userId: number) {
@@ -21,6 +23,8 @@ export class Inventory {
       where: { userId },
       orderBy: { createdAt: "desc" },
     });
+
+    const chests = await this.chestService.getAllChests(userId);
 
     const inventoryWithDetails = await Promise.all(
       inventory.map(async (item) => {
