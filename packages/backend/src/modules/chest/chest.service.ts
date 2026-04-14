@@ -1,5 +1,4 @@
 import { prisma } from "@/database/prisma";
-import { Inventory } from "../inventory/inventory.service";
 import { ChestGenerator } from "@/utils/chest-generator";
 import { ChestType } from "@shared";
 

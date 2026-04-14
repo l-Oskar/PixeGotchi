@@ -7,7 +7,8 @@ export async function inventoryRoutes(app: FastifyInstance) {
   app.addHook("onRequest", app.authenticate);
 
   app.get("/", controller.getInventory.bind(controller));
-  app.get("/detailed", controller.getDetailedInventory.bind(controller))
-  app.post("/add", controller.addItem.bind(controller))
-  app.post("/use", controller.useItem.bind(controller))
+  app.get("/detailed", controller.getDetailedInventory.bind(controller));
+  app.post("/add", controller.addItem.bind(controller));
+  app.post("/use", controller.useItem.bind(controller));
+  app.post("/open", controller.openChest.bind(controller));
 }

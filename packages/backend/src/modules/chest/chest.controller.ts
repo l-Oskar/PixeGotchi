@@ -37,16 +37,4 @@ export class ChestController {
 
     return reply.send(specificChest);
   }
-
-  async openChest(request: FastifyRequest, reply: FastifyReply) {
-    const userId = (request.user as any).userId;
-    const { chestType } = specificChestSchema.parse(request.body);
-
-    const reward = await this.chestService.openChest(
-      userId,
-      chestType as ChestType,
-    );
-
-    return reply.send(reward);
-  }
 }
