@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { Inventory } from "./inventory.service";
-import { ITEMS_BY_ID } from "@shared";
+import { ITEMS_BY_ID, ChestType } from "@shared";
 import { z } from "zod";
 
 const addItemScema = z.object({
@@ -11,6 +11,10 @@ const addItemScema = z.object({
 const useItemScheme = z.object({
   itemId: z.enum(Object.keys(ITEMS_BY_ID) as [string, ...string[]]),
   quantity: z.number().optional(),
+});
+
+const specificChestSchema = z.object({
+  chestType: z.enum(Object.values(ChestType) as [string, ...string[]]),
 });
 
 export class InventoryController {
@@ -58,5 +62,17 @@ export class InventoryController {
     );
 
     return reply.send(useItem);
+  }
+
+  async openChest(request: FastifyRequest, reply: FastifyReply) {
+    const userId = (request.user as any).userId;
+    const { chestType } = specificChestSchema.parse(request.body);
+
+    const reward = await this.inventoryService.openChest(
+      userId,
+      chestType as ChestType,
+    );
+
+    return reply.send(reward);
   }
 }

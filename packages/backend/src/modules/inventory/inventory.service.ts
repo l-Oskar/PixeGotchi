@@ -1,8 +1,14 @@
 import { prisma } from "@/database/prisma";
-import { ITEMS_BY_ID, InventoryWithDetails } from "@shared";
+import {
+  ITEMS_BY_ID,
+  InventoryWithDetails,
+  EGG_CONSTANTS,
+  ChestType,
+} from "@shared";
 import { ItemsService } from "../items/items.service";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 import { ChestService } from "../chest/chest.service";
+import { ChestGenerator } from "@/utils/chest-generator";
 
 export class Inventory {
   private itemService = new ItemsService();
@@ -119,5 +125,49 @@ export class Inventory {
       await this.pixegotchiService.applyStats(userId, item, quantity);
     }
     return await this.consumeItem(userId, itemId, quantity);
+  }
+
+  async openChest(userId: number, chestType: ChestType) {
+    const chest = await prisma.chest.findFirst({
+      where: {
+        userId,
+        chestType: chestType,
+        isOpened: false,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
+    if (!chest) throw new Error("Chest no found");
+
+    return await prisma.$transaction(async (prisma) => {
+      const rewards = ChestGenerator.openChest(chest.chestType);
+
+      if (rewards.egg) {
+        await prisma.egg.create({
+          data: {
+            userId,
+            createdAt: new Date(),
+            hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
+          },
+        });
+      }
+
+      rewards.items.forEach(
+        async (item) => await this.addItem(userId, item.itemId, item.quantity),
+      );
+
+      await prisma.chest.update({
+        where: {
+          id: chest.id,
+        },
+        data: {
+          isOpened: true,
+          openedAt: new Date(),
+          rewards: chest.rewards!,
+        },
+      });
+    });
   }
 }

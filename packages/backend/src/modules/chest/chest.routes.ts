@@ -9,5 +9,4 @@ export async function chestRoutes(app: FastifyInstance) {
   app.get("/", controller.getAllChest.bind(controller));
   app.post("/random_chest", controller.getRandomChest.bind(controller));
   app.post("/specific_chest", controller.getSpecificChest.bind(controller));
-  app.post("/:id/open", controller.openChest.bind(controller));
 }
