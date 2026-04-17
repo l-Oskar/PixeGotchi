@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import { InventoryItem, InventoryWithDetails } from "@shared";
+import { ChestType, InventoryItem, InventoryWithDetails } from "@shared";
 
 const INVENTORY_URL = "/inventory";
 const INVENTORY_KEYS = {
@@ -7,6 +7,7 @@ const INVENTORY_KEYS = {
   getDetailed: `${INVENTORY_URL}/detailed` as const,
   addItem: `${INVENTORY_URL}/add` as const,
   useItem: `${INVENTORY_URL}/use` as const,
+  openChest: `${INVENTORY_URL}/open` as const,
 };
 
 export const inventoryApi = {
@@ -32,6 +33,12 @@ export const inventoryApi = {
     const { data } = await apiClient.post(INVENTORY_KEYS.useItem, {
       itemId,
       quantity,
+    });
+    return data;
+  },
+  openChest: async (chestType: ChestType) => {
+    const { data } = await apiClient.post(INVENTORY_KEYS.openChest, {
+      chestType,
     });
     return data;
   },

@@ -18,6 +18,14 @@ export class ChestController {
     return reply.send(allChests);
   }
 
+  async getSortedChest(request: FastifyRequest, reply: FastifyReply) {
+    const userId = (request.user as any).userId;
+
+    const sortedChests = await this.chestService.getSortedChests(userId);
+
+    return sortedChests;
+  }
+
   async getRandomChest(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
 

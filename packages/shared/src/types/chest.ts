@@ -1,5 +1,20 @@
 import { RarityType, ChestType, ItemType } from "../enums";
 
+export interface Chest {
+  id: number;
+  itemType: "chest";
+  chestType: ChestType;
+  rarity: RarityType;
+  rewards: ChestRewards;
+  iconUrl: string | null;
+  createdAt: Date | null;
+}
+
+export interface ChestInventory {
+  chestType: ChestType;
+  count: number;
+}
+
 export interface ChestInfo {
   chestType: ChestType;
   rarity: RarityType;

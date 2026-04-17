@@ -1,6 +1,6 @@
 import { prisma } from "@/database/prisma";
 import { ChestGenerator } from "@/utils/chest-generator";
-import { ChestType } from "@shared";
+import { ChestType, ChestInventory } from "@shared";
 
 export class ChestService {
   async getAllChests(userId: number) {
@@ -10,6 +10,23 @@ export class ChestService {
         isOpened: false,
       },
     });
+  }
+
+  async getSortedChests(userId: number) {
+    const chests = await this.getAllChests(userId);
+
+    const result: ChestInventory[] = Object.values(
+      chests.reduce(
+        (acc, { chestType }) => {
+          acc[chestType] = acc[chestType] || { chestType, count: 1 };
+          acc[chestType].count += 1;
+          return acc;
+        },
+        {} as Record<ChestType, ChestInventory>,
+      ),
+    );
+
+    return result;
   }
 
   async getRandomChest(userId: number) {

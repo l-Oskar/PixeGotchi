@@ -30,8 +30,6 @@ export class Inventory {
       orderBy: { createdAt: "desc" },
     });
 
-    const chests = await this.chestService.getAllChests(userId);
-
     const inventoryWithDetails = await Promise.all(
       inventory.map(async (item) => {
         try {
@@ -44,6 +42,12 @@ export class Inventory {
     );
 
     return inventoryWithDetails;
+  }
+
+  async getChestWithDetails(userId: number) {
+    const chests = await this.chestService.getSortedChests(userId);
+
+    return chests;
   }
 
   async addItem(
