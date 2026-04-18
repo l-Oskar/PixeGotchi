@@ -26,7 +26,12 @@ export class ChestService {
       ),
     );
 
-    return result;
+    const sorted = [...result].sort((a, b) => {
+      const order = Object.values(ChestType);
+      return order.indexOf(a.chestType) - order.indexOf(b.chestType);
+    });
+
+    return sorted;
   }
 
   async getRandomChest(userId: number) {
