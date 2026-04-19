@@ -169,7 +169,7 @@ export class Inventory {
         data: {
           isOpened: true,
           openedAt: new Date(),
-          rewards: chest.rewards!,
+          rewards: { items: rewards.items, egg: rewards.egg } as any,
         },
       });
     });
