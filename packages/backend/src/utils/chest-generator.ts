@@ -7,15 +7,15 @@ import {
   ChestRewardItem,
   type ItemType,
   type RarityType,
-} from '/Users/User/Documents/Prog/Block/PixeGotchi/packages/shared/src/index.ts';
+} from '@shared';
 import {
   CHEST_RARITY_WEIGHTS,
   CHEST_TYPE_TO_RARITY,
   CHEST_CONFIG,
   CHEST_REWARDS,
   GUARANTEED_ITEM_TYPES,
-} from '/Users/User/Documents/Prog/Block/PixeGotchi/packages/shared/src/index.ts';
-import { ITEM_POOLS } from '/Users/User/Documents/Prog/Block/PixeGotchi/packages/shared/src/index.ts';
+} from '@shared';
+import { ITEM_POOLS } from '@shared';
 
 export class ChestGenerator {
   /**
