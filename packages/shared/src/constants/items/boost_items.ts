@@ -1,6 +1,7 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
 import { ItemBuffsType } from "../../types/item_buffs";
+import {BOOST_IMG} from './items_img'
 
 export const EXP_BOOSTER: Item = {
   itemId: "exp_booster",

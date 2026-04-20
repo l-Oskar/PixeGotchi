@@ -296,10 +296,7 @@ export class ChestGenerator {
   }
 }
 
-
-
-
-const func = () => {
+const statistic = () => {
   const chests = {
     wooden: 0,
     silver: 0,
@@ -314,4 +311,3 @@ const func = () => {
   }
   return chests;
 }
-console.log(func())

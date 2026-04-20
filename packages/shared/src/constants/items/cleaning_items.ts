@@ -1,5 +1,6 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
+import {CLEANING_IMG} from './items_img'
 
 export const WATER: Item = {
   itemId: "water",

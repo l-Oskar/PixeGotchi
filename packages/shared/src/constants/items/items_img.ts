@@ -5,12 +5,12 @@ export const FOOD_IMG = {
 
 export const CLEANING_IMG = {
     water: '💧',
-    soap: '🧼'
+    soap: '🧼',
 }
 
 export const MEDICINE_IMG = {
     pill: '💊',
-    small_medicine: '💉'
+    small_medicine: '💉',
 }
 
 export const TOY_IMG = {
@@ -20,8 +20,8 @@ export const TOY_IMG = {
 
 export const BOOST_IMG = {
     exp_booster: '📈',
-    energy_drink: '🧋'
-    energy_booster: '⚡️'
+    energy_drink: '🧋',
+    energy_booster: '⚡️',
 }
 
 export const SPECIAL_IMG = {
