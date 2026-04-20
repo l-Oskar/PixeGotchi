@@ -172,6 +172,8 @@ export class Inventory {
           rewards: { items: rewards.items, egg: rewards.egg } as any,
         },
       });
+
+      return rewards;
     });
   }
 }

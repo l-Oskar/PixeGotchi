@@ -18,7 +18,7 @@ export const WATER: Item = {
   cooldownMinutes: 30,
   maxPerDay: 5,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: CLEANING_IMG.water,
   isStackable: true,
   maxStack: 50,
 };
@@ -40,7 +40,7 @@ export const SOAP: Item = {
   cooldownMinutes: 30,
   maxPerDay: 5,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: CLEANING_IMG.soap,
   isStackable: true,
   maxStack: 50,
 };

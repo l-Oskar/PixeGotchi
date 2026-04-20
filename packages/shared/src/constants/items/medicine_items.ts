@@ -18,7 +18,7 @@ export const PILL: Item = {
   cooldownMinutes: 60,
   maxPerDay: 3,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: MEDICINE_IMG.pill,
   isStackable: true,
   maxStack: 20,
 };
@@ -40,7 +40,7 @@ export const SMALL_MEDICINE: Item = {
   cooldownMinutes: 60,
   maxPerDay: 3,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: MEDICINE_IMG.small_medicine,
   isStackable: true,
   maxStack: 20,
 };

@@ -19,7 +19,7 @@ export const RENAME_TAG: Item = {
   cooldownMinutes: null,
   maxPerDay: 1,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: SPECIAL_IMG.rename_tag,
   isStackable: false,
   maxStack: null,
 };
@@ -46,7 +46,7 @@ export const REVIVE_STONE: Item = {
   cooldownMinutes: null,
   maxPerDay: 1,
   minLevel: 10,
-  iconUrl: null,
+  iconUrl: SPECIAL_IMG.revive_stone,
   isStackable: false,
   maxStack: null,
 };
@@ -73,7 +73,7 @@ export const LUCKY_CHARM: Item = {
   cooldownMinutes: 180,
   maxPerDay: 1,
   minLevel: 10,
-  iconUrl: null,
+  iconUrl: SPECIAL_IMG.lucky_charm,
   isStackable: false,
   maxStack: null,
 };

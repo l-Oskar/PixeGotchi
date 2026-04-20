@@ -18,7 +18,7 @@ export const SMALL_TOY: Item = {
   cooldownMinutes: 15,
   maxPerDay: 10,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: TOY_IMG.small_toy,
   isStackable: false,
   maxStack: null,
 };
@@ -40,7 +40,7 @@ export const RUBBER_BALL: Item = {
   cooldownMinutes: 15,
   maxPerDay: 10,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: TOY_IMG.rubber_ball,
   isStackable: false,
   maxStack: null,
 };

@@ -7,15 +7,15 @@ import {
   ChestRewardItem,
   type ItemType,
   type RarityType,
-} from "@shared";
+} from '/Users/User/Documents/Prog/Block/PixeGotchi/packages/shared/src/index.ts';
 import {
   CHEST_RARITY_WEIGHTS,
   CHEST_TYPE_TO_RARITY,
   CHEST_CONFIG,
   CHEST_REWARDS,
   GUARANTEED_ITEM_TYPES,
-} from "@shared";
-import { ITEM_POOLS } from "@shared";
+} from '/Users/User/Documents/Prog/Block/PixeGotchi/packages/shared/src/index.ts';
+import { ITEM_POOLS } from '/Users/User/Documents/Prog/Block/PixeGotchi/packages/shared/src/index.ts';
 
 export class ChestGenerator {
   /**
@@ -194,9 +194,9 @@ export class ChestGenerator {
    */
   private static determineQuantity(rarity: RarityType): number {
     const quantityRanges: Record<RarityType, { min: number; max: number }> = {
-      common: { min: 2, max: 5 },
-      uncommon: { min: 1, max: 3 },
-      rare: { min: 1, max: 2 },
+      common: { min: 1, max: 1 },
+      uncommon: { min: 1, max: 1 },
+      rare: { min: 1, max: 1 },
       epic: { min: 1, max: 1 },
       mythic: { min: 1, max: 1 },
       legendary: { min: 1, max: 1 },
@@ -295,3 +295,23 @@ export class ChestGenerator {
     );
   }
 }
+
+
+
+
+const func = () => {
+  const chests = {
+    wooden: 0,
+    silver: 0,
+    golden: 0,
+    crystal: 0,
+    mythic: 0,
+    legendary: 0,
+  }
+  for(let i = 0; i < 10000; i++){
+    const chest = ChestGenerator.generateRandomChest()
+    chests[chest.chestType] += 1
+  }
+  return chests;
+}
+console.log(func())

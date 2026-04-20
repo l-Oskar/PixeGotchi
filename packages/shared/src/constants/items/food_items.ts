@@ -18,7 +18,7 @@ export const APPLE: Item = {
   cooldownMinutes: 0,
   maxPerDay: null,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: FOOD_IMG.apple,
   isStackable: true,
   maxStack: 99,
 };
@@ -40,7 +40,7 @@ export const CHERRY: Item = {
   cooldownMinutes: 6,
   maxPerDay: null,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: FOOD_IMG.cherry,
   isStackable: true,
   maxStack: 99,
 };

@@ -24,7 +24,7 @@ export const EXP_BOOSTER: Item = {
   cooldownMinutes: 120,
   maxPerDay: 2,
   minLevel: 5,
-  iconUrl: null,
+  iconUrl: BOOST_IMG.exp_booster,
   isStackable: true,
   maxStack: 10,
 };
@@ -46,7 +46,7 @@ export const ENERGY_DRINK: Item = {
   cooldownMinutes: 120,
   maxPerDay: 2,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: BOOST_IMG.energy_drink,
   isStackable: false,
   maxStack: 10,
 };
@@ -68,7 +68,7 @@ export const ENERGY_BOOSTER: Item = {
   cooldownMinutes: 120,
   maxPerDay: 2,
   minLevel: 1,
-  iconUrl: null,
+  iconUrl: BOOST_IMG.energy_booster,
   isStackable: false,
   maxStack: 10,
 };
