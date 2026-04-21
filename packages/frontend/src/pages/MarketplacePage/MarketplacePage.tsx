@@ -1,5 +1,6 @@
 import { useCreateEgg, useGetAllEggs } from "@/services/queries/egg.queries";
 import { useAddItem } from "@/services/queries/inventory.queries";
+import { useGetRandomChest } from "@/services/queries/chest.queries";
 import { useEggStore } from "@/store/egg.store";
 import {
   PageType,
@@ -16,6 +17,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const createEgg = useCreateEgg();
   const getAllEggs = useGetAllEggs();
   const addItem = useAddItem();
+  const getRandomChest = useGetRandomChest();
   const setAllEggs = useEggStore((s) => s.setAllEggs);
 
   const handleCreateEgg = () => {
@@ -42,6 +44,14 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
         },
       },
     );
+  };
+
+  const handleGetRandomChest = () => {
+    getRandomChest.mutate(undefined, {
+      onSuccess: () => {
+        console.log("New chest");
+      },
+    });
   };
 
   const listings: MarketplaceListing[] = [
@@ -90,6 +100,15 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       seller: "Pixegotchi",
       icon: "☄️",
     },
+    {
+      id: 6,
+      item: "Random Chest",
+      itemId: "chest",
+      price: 0,
+      currency: "PGC" as CurrencyType,
+      seller: "Pixegotchi",
+      icon: "🎁",
+    },
   ];
 
   return (
@@ -117,7 +136,9 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                   onClick={() => {
                     listing.itemId === "egg"
                       ? handleCreateEgg()
-                      : handleAddItem(listing.itemId, 1);
+                      : listing.itemId === "chest"
+                        ? handleGetRandomChest()
+                        : handleAddItem(listing.itemId, 1);
                   }}
                   className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
                   BUY
