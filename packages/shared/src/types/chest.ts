@@ -1,7 +1,7 @@
 import { RarityType, ChestType, ItemType } from "../enums";
 
 export interface Chest {
-  id: number;
+  id: string;
   itemType: "chest";
   chestType: ChestType;
   rarity: RarityType;

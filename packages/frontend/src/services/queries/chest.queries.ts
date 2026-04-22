@@ -1,11 +1,16 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { chestApi } from "../api/chest.api";
 import { useInventoryStore } from "@/store/inventory.store";
 
 export const useGetAllChests = () => {
+  const updateChests = useInventoryStore((s) => s.updateChests);
   return useQuery({
     queryKey: ["chests"],
-    queryFn: chestApi.getAllChests,
+    queryFn: async () => {
+      const chests = await chestApi.getAllChests();
+      updateChests(chests);
+      return chests;
+    },
   });
 };
 
@@ -17,10 +22,11 @@ export const useGetSortedChests = () => {
 };
 
 export const useGetRandomChest = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: chestApi.getRandomChest,
     onSuccess: (data) => {
-      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["chests"] });
       return data;
     },
   });

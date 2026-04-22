@@ -48,10 +48,24 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
 
   const handleGetRandomChest = () => {
     getRandomChest.mutate(undefined, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        alert(`You received ${data.chestType} chest`);
         console.log("New chest");
       },
     });
+  };
+
+  const handleBuy = (listing: MarketplaceListing) => {
+    switch (listing.itemId) {
+      case "egg":
+        handleCreateEgg();
+        break;
+      case "chest":
+        handleGetRandomChest();
+        break;
+      default:
+        handleAddItem(listing.itemId, 1);
+    }
   };
 
   const listings: MarketplaceListing[] = [
@@ -134,11 +148,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                 </div>
                 <button
                   onClick={() => {
-                    listing.itemId === "egg"
-                      ? handleCreateEgg()
-                      : listing.itemId === "chest"
-                        ? handleGetRandomChest()
-                        : handleAddItem(listing.itemId, 1);
+                    handleBuy(listing);
                   }}
                   className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
                   BUY
