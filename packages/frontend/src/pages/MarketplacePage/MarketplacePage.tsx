@@ -50,6 +50,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
     getRandomChest.mutate(undefined, {
       onSuccess: (data) => {
         alert(`You received ${data.chestType} chest`);
+
         console.log("New chest");
       },
     });

@@ -15,9 +15,14 @@ export const useGetAllChests = () => {
 };
 
 export const useGetSortedChests = () => {
+  const updateSortedChests = useInventoryStore((s) => s.updateSortedChests);
   return useQuery({
     queryKey: ["sorted_chests"],
-    queryFn: chestApi.getSortedChests,
+    queryFn: async () => {
+      const sortedChests = await chestApi.getSortedChests();
+      updateSortedChests(sortedChests);
+      return sortedChests;
+    },
   });
 };
 
@@ -26,7 +31,7 @@ export const useGetRandomChest = () => {
   return useMutation({
     mutationFn: chestApi.getRandomChest,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["chests"] });
+      queryClient.invalidateQueries({ queryKey: ["chests", "sorted_chests"] });
       return data;
     },
   });
