@@ -25,10 +25,10 @@ export const useInventoryStore = create<InventoryStore>((set) => ({
     set({ detailedInventory: inventory }),
   updateChests: (chests: Chest[] | []) =>
     set({
-      chests,
+      chests: chests,
     }),
   updateSortedChests: (sortedChests: ChestInventory[]) =>
     set({
-      sortedChests,
+      sortedChests: sortedChests,
     }),
 }));

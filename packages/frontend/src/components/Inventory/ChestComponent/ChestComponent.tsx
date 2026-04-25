@@ -1,13 +1,8 @@
-import {
-  useGetAllChests,
-  useGetSortedChests,
-} from "@/services/queries/chest.queries";
-import { useInventoryStore } from "@/store/inventory.store";
+import { useGetSortedChests } from "@/services/queries/chest.queries";
 import { ChestInventory } from "@shared";
 import React from "react";
 
 const ChestComponent: React.FC = () => {
-  const { data: chests } = useGetAllChests();
   const { data: sortedChests } = useGetSortedChests();
   return (
     <>

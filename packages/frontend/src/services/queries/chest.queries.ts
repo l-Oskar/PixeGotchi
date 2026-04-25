@@ -31,7 +31,8 @@ export const useGetRandomChest = () => {
   return useMutation({
     mutationFn: chestApi.getRandomChest,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["chests", "sorted_chests"] });
+      queryClient.invalidateQueries({ queryKey: ["chests"] });
+      queryClient.invalidateQueries({ queryKey: ["sorted_chests"] });
       return data;
     },
   });

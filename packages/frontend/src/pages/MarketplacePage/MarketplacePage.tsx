@@ -1,6 +1,10 @@
 import { useCreateEgg, useGetAllEggs } from "@/services/queries/egg.queries";
 import { useAddItem } from "@/services/queries/inventory.queries";
-import { useGetRandomChest } from "@/services/queries/chest.queries";
+import {
+  useGetAllChests,
+  useGetRandomChest,
+  useGetSortedChests,
+} from "@/services/queries/chest.queries";
 import { useEggStore } from "@/store/egg.store";
 import {
   PageType,
@@ -8,6 +12,7 @@ import {
   CurrencyType,
   EGG_CONSTANTS,
 } from "@shared";
+import { useInventoryStore } from "@/store/inventory.store";
 
 export interface MarketplacePageProps {
   onNavigate?: (page: PageType) => void;
@@ -18,6 +23,8 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const getAllEggs = useGetAllEggs();
   const addItem = useAddItem();
   const getRandomChest = useGetRandomChest();
+  const getAllChest = useGetAllChests();
+  const getSortedChests = useGetSortedChests();
   const setAllEggs = useEggStore((s) => s.setAllEggs);
 
   const handleCreateEgg = () => {
@@ -50,8 +57,6 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
     getRandomChest.mutate(undefined, {
       onSuccess: (data) => {
         alert(`You received ${data.chestType} chest`);
-
-        console.log("New chest");
       },
     });
   };
