@@ -65,6 +65,13 @@ export async function buildApp(): Promise<FastifyInstance> {
     }
   });
 
+  app.get("/", async () => {
+    return {
+      status: "ok",
+      message: "Welcome to api",
+    };
+  });
+
   app.get("/health", async () => {
     return {
       status: "ok",

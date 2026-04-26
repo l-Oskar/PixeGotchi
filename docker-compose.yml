@@ -30,10 +30,8 @@ services:
       context: ./packages/backend
       dockerfile: Dockerfile
     # image: fediukv/pixegotchi-backend:latest
-    ports:
-      - "3000:3000"
-    # expose:
-    #   - "3000"
+    expose:
+      - "3000"
     environment:
       DATABASE_URL: postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
       JWT_SECRET: your-super-secret-jwt-key-change-in-production

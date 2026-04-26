@@ -10,7 +10,7 @@ const ChestComponent: React.FC = () => {
         <div key={sortedChest.chestType}>
           <div>
             <p>{sortedChest.chestType}</p>
-            <p>{sortedChest.count}</p>
+            <span>{sortedChest.count}</span>
           </div>
         </div>
       ))}
