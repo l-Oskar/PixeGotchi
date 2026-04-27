@@ -43,7 +43,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   await app.register(cors, {
-    origin: true,
+    origin: ["https://l-oskar.github.io", "https://pixegotchi.run.place"],
     credentials: false,
   });
 
@@ -61,7 +61,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     try {
       await request.jwtVerify();
     } catch (err) {
-      reply.code(401).send({ error: "Unauthorized" });
+      return reply.code(401).send({ error: "Unauthorized" });
     }
   });
 
