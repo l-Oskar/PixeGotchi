@@ -46,7 +46,7 @@ const ItemComponent: React.FC = () => {
               <div className="text-xs font-medium text-center">
                 {item.details!.name}
               </div>
-              <div className="text-xs text-white/60">×{item.quantity}</div>
+              <div className="text-xs text-white/60">{item.quantity}</div>
             </button>
           ))}
         </div>

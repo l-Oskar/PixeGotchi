@@ -1,18 +1,27 @@
-import { Chest } from "@shared";
+import { ChestType, ChestInventory } from "@shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
 
+const chestIMG: Record<ChestType, string> = {
+  wooden: "🪵",
+  silver: "🪙",
+  golden: "⚜️",
+  crystal: "🔮",
+  mythic: "🎁",
+  legendary: "💠",
+};
+
 export interface ChestModalProps {
-  chest: Chest | null;
+  chest: ChestInventory | null;
   quantity: number;
   isOpen: boolean;
   onClose: () => void;
-  onUse: (itemId: string, quantity: number) => Promise<void>;
+  onUse: (chestType: ChestType, quantity: number) => Promise<void>;
 }
 
-const ItemModal: React.FC<ChestModalProps> = ({
-  item,
+const ChestModal: React.FC<ChestModalProps> = ({
+  chest,
   quantity,
   isOpen,
   onClose,
@@ -21,7 +30,7 @@ const ItemModal: React.FC<ChestModalProps> = ({
   const [useQuantity, setUseQuantity] = useState(1);
   const [isUsing, setIsUsing] = useState(false);
 
-  if (!item) return null;
+  if (!chest) return null;
 
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
   const canUse = useQuantity >= 1 && useQuantity <= quantity && !isUsing;
@@ -30,7 +39,7 @@ const ItemModal: React.FC<ChestModalProps> = ({
     if (!canUse) return;
     setIsUsing(true);
     try {
-      await onUse(item.itemId, useQuantity);
+      await onUse(chest.chestType, useQuantity);
       onClose();
     } catch (error) {
       console.error("Failed to use item:", error);
@@ -63,13 +72,13 @@ const ItemModal: React.FC<ChestModalProps> = ({
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="text-5xl">{item.iconUrl}</div>
+                  <div className="text-5xl">{chestIMG[chest.chestType]}</div>
                   <div>
                     <h2 className="text-xl font-bold text-white">
-                      {item.name}
+                      {chest.chestType}
                     </h2>
                     <div className="text-sm text-white/60">
-                      {item.rarity} • {item.itemType}
+                      • {chest.chestType}
                     </div>
                   </div>
                 </div>
@@ -81,12 +90,12 @@ const ItemModal: React.FC<ChestModalProps> = ({
               </div>
 
               {/* Description */}
-              {item.description && (
-                <p className="text-white/80 text-sm mb-4">{item.description}</p>
-              )}
+              {/* {chest.description && (
+                <p className="text-white/80 text-sm mb-4">{chest.description}</p>
+              )} */}
 
               {/* Effects */}
-              {item.effects && (
+              {/* {chest.effects && (
                 <div className="bg-white/5 rounded-2xl p-4 mb-4">
                   <h3 className="text-sm font-semibold text-white/80 mb-2">
                     Effects:
@@ -169,18 +178,18 @@ const ItemModal: React.FC<ChestModalProps> = ({
                     )}
                   </div>
                 </div>
-              )}
+              )} */}
 
               {/* Info */}
-              <div className="flex items-center justify-between text-sm text-white/60 mb-4">
+              {/* <div className="flex items-center justify-between text-sm text-white/60 mb-4">
                 <span>Quantity: ×{quantity}</span>
                 {item.cooldownMinutes && (
                   <span>Cooldown: {item.cooldownMinutes} min.</span>
                 )}
-              </div>
+              </div> */}
 
               {/* Quantity Selector */}
-              {item.isStackable && quantity > 1 && (
+              {/* {item.isStackable && quantity > 1 && (
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-white/80 text-sm">Amount:</span>
                   <button
@@ -201,7 +210,7 @@ const ItemModal: React.FC<ChestModalProps> = ({
                     +
                   </button>
                 </div>
-              )}
+              )} */}
 
               {/* Use Button */}
               <button
@@ -218,4 +227,4 @@ const ItemModal: React.FC<ChestModalProps> = ({
   );
 };
 
-export default ItemModal;
+export default ChestModal;
