@@ -4,19 +4,35 @@ import { ChestInventory } from "@shared";
 import React from "react";
 
 const ChestComponent: React.FC = () => {
-  // const { data: sortedChests } = useGetSortedChests();
+  const { data } = useGetSortedChests();
   const sortedChests = useInventoryStore((s) => s.sortedChests);
   const chestStore = useInventoryStore((s) => s.chests);
+
+  const handleChestClick = (chestType: string, chestQuantity: number) => {
+    alert(`${chestType}: ${chestQuantity}`);
+  };
+
+  {
+    if (!data) return <>Loading</>;
+  }
   return (
     <>
-      {sortedChests?.map((sortedChest: ChestInventory) => (
-        <div key={sortedChest.chestType}>
-          <div>
-            <p>{sortedChest.chestType}</p>
-            <span>{sortedChest.count}</span>
-          </div>
-        </div>
-      ))}
+      <div className="grid grid-cols-3 gap-3">
+        {sortedChests?.map((sortedChest: ChestInventory) => (
+          <button
+            key={sortedChest.chestType}
+            onClick={() =>
+              handleChestClick(sortedChest.chestType, sortedChest.quantity)
+            }>
+            <div>
+              <div>
+                <p>{sortedChest.chestType}</p>
+                <span>{sortedChest.quantity}</span>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
     </>
   );
 };

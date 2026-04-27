@@ -12,7 +12,7 @@ export interface Chest {
 
 export interface ChestInventory {
   chestType: ChestType;
-  count: number;
+  quantity: number;
 }
 
 export interface ChestInfo {

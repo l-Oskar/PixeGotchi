@@ -18,8 +18,8 @@ export class ChestService {
     const result: ChestInventory[] = Object.values(
       chests.reduce(
         (acc, { chestType }) => {
-          acc[chestType] = acc[chestType] || { chestType, count: 1 };
-          acc[chestType].count += 1;
+          acc[chestType] = acc[chestType] || { chestType, quantity: 1 };
+          acc[chestType].quantity += 1;
           return acc;
         },
         {} as Record<ChestType, ChestInventory>,
