@@ -11,7 +11,6 @@ async function start() {
     });
 
     app.log.info(`🚀 Server running on http://localhost:${config.port}`);
-    app.log.info(`📊 Prisma Studio: npx prisma studio`);
     app.log.info(`🔥 Environment: ${config.nodeEnv}`);
   } catch (err) {
     console.error(err);

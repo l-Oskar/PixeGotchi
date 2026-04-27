@@ -43,7 +43,11 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   await app.register(cors, {
-    origin: ["https://l-oskar.github.io", "https://pixegotchi.run.place"],
+    origin: [
+      "https://l-oskar.github.io",
+      "https://pixegotchi.run.place",
+      "http://localhost",
+    ],
     credentials: false,
   });
 
