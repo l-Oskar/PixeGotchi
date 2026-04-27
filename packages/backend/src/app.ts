@@ -46,7 +46,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     origin: [
       "https://l-oskar.github.io",
       "https://pixegotchi.run.place",
-      "http://localhost",
+      "http://localhost:5173",
     ],
     credentials: false,
   });
