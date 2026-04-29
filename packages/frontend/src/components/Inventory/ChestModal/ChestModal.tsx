@@ -1,7 +1,8 @@
-import { ChestType, ChestInventory } from "@shared";
+import { ChestType, ChestInventory, ChestDescription } from "@shared";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const chestIMG: Record<ChestType, string> = {
   wooden: "🪵",
@@ -27,8 +28,15 @@ const ChestModal: React.FC<ChestModalProps> = ({
   onClose,
   onUse,
 }) => {
-  const [useQuantity, setUseQuantity] = useState(1);
+  const [useQuantity] = useState(1);
   const [isUsing, setIsUsing] = useState(false);
+  const [chestDescription, setChestDescription] =
+    useState<ChestDescription | null>(null);
+
+  useEffect(() => {
+    if (chest)
+      setChestDescription(ChestGenerator.getChestDescription(chest.chestType));
+  }, []);
 
   if (!chest) return null;
 
@@ -75,10 +83,10 @@ const ChestModal: React.FC<ChestModalProps> = ({
                   <div className="text-5xl">{chestIMG[chest.chestType]}</div>
                   <div>
                     <h2 className="text-xl font-bold text-white">
-                      {chest.chestType}
+                      {`${chest.chestType.toUpperCase()} Chest`}
                     </h2>
                     <div className="text-sm text-white/60">
-                      • {chest.chestType}
+                      • {chestDescription?.rarity}
                     </div>
                   </div>
                 </div>
@@ -90,9 +98,19 @@ const ChestModal: React.FC<ChestModalProps> = ({
               </div>
 
               {/* Description */}
-              {/* {chest.description && (
-                <p className="text-white/80 text-sm mb-4">{chest.description}</p>
-              )} */}
+              {chestDescription && (
+                <div>
+                  <p className="text-white/80 text-sm mb-4">
+                    Guaranteed items: {chestDescription.guaranteed_items}
+                  </p>
+                  <p className="text-white/80 text-sm mb-4">
+                    Boost item chance: {chestDescription.boostChance}%
+                  </p>
+                  <p className="text-white/80 text-sm mb-4">
+                    Egg chance: {chestDescription.eggChance}%
+                  </p>
+                </div>
+              )}
 
               {/* Effects */}
               {/* {chest.effects && (

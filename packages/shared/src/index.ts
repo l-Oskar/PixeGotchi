@@ -30,6 +30,7 @@ export type {
   Chest,
   ChestInventory,
   ChestInfo,
+  ChestDescription,
   ChestRewardItem,
   ChestRewards,
   ChestConfig,

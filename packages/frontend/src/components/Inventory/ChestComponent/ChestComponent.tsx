@@ -36,7 +36,7 @@ const ChestComponent: React.FC = () => {
   };
 
   const handleUseItem = async (chestType: ChestType, quantity: number) => {
-    alert("Open");
+    alert(`${chestType}: ${quantity}`);
   };
 
   {

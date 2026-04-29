@@ -1,5 +1,5 @@
 import { RarityStatsType } from "../types/pixegotchi";
-import { ElementType, RarityType } from "../enums";
+import { RarityType } from "../enums";
 
 export const RARITY_STATS: Record<RarityType, RarityStatsType> = {
   common: {

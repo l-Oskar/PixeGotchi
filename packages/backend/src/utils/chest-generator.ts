@@ -3,19 +3,20 @@
 import {
   type ChestType,
   ChestInfo,
+  ChestDescription,
   ChestRewards,
   ChestRewardItem,
   type ItemType,
   type RarityType,
-} from '@shared';
+} from "@shared";
 import {
   CHEST_RARITY_WEIGHTS,
   CHEST_TYPE_TO_RARITY,
   CHEST_CONFIG,
   CHEST_REWARDS,
   GUARANTEED_ITEM_TYPES,
-} from '@shared';
-import { ITEM_POOLS } from '@shared';
+} from "@shared";
+import { ITEM_POOLS } from "@shared";
 
 export class ChestGenerator {
   /**
@@ -278,7 +279,7 @@ export class ChestGenerator {
   /**
    * Отримати опис chest
    */
-  static getChestDescription(chestType: ChestType): string {
+  static getChestDescription(chestType: ChestType): ChestDescription {
     const config = CHEST_CONFIG[chestType]!;
     const rarity = CHEST_TYPE_TO_RARITY[chestType];
     const boostChance = CHEST_REWARDS.BOOST_BONUS_CHANCE[chestType];
@@ -287,12 +288,17 @@ export class ChestGenerator {
         chestType as "crystal" | "mythic" | "legendary"
       ] || 0;
 
-    return (
-      `${chestType.toUpperCase()} Chest (${rarity})\n` +
-      `Guaranteed: ${config.guaranteed_items} items\n` +
-      `Boost chance: ${boostChance}%\n` +
-      (eggChance > 0 ? `Egg chance: ${eggChance}%\n` : "")
-    );
+    return {
+      chestType,
+      guaranteed_items: config.guaranteed_items,
+      rarity,
+      boostChance,
+      eggChance,
+    };
+    // `${chestType.toUpperCase()} Chest (${rarity})\n` +
+    // `Guaranteed: ${config.guaranteed_items} items\n` +
+    // `Boost chance: ${boostChance}%\n` +
+    // (eggChance > 0 ? `Egg chance: ${eggChance}%\n` : "")
   }
 }
 
@@ -304,10 +310,10 @@ const statistic = () => {
     crystal: 0,
     mythic: 0,
     legendary: 0,
-  }
-  for(let i = 0; i < 10000; i++){
-    const chest = ChestGenerator.generateRandomChest()
-    chests[chest.chestType] += 1
+  };
+  for (let i = 0; i < 10000; i++) {
+    const chest = ChestGenerator.generateRandomChest();
+    chests[chest.chestType] += 1;
   }
   return chests;
-}
+};

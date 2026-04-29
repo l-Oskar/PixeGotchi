@@ -1,4 +1,5 @@
 import { RarityType, ChestType, ItemType } from "../enums";
+import { CHEST_CONFIG } from "../constants/chest_const";
 
 export interface Chest {
   id: string;
@@ -18,6 +19,14 @@ export interface ChestInventory {
 export interface ChestInfo {
   chestType: ChestType;
   rarity: RarityType;
+}
+
+export interface ChestDescription {
+  chestType: ChestType;
+  guaranteed_items: number;
+  rarity: RarityType;
+  boostChance: number;
+  eggChance: number;
 }
 
 export interface ChestRewardItem {

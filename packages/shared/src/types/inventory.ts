@@ -1,5 +1,4 @@
 import type { ItemType } from "../enums";
-import { ChestInfo } from "./chest";
 import type { Item } from "./item";
 
 export interface InventoryItem {
