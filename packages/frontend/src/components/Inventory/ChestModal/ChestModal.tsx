@@ -1,6 +1,12 @@
-import { ChestType, ChestInventory, ChestDescription } from "@shared";
+import {
+  ChestType,
+  ChestInventory,
+  ChestDescription,
+  RARITY_COLORS,
+} from "@shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
+import ChestItems from "./ChestItems";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -36,10 +42,9 @@ const ChestModal: React.FC<ChestModalProps> = ({
   useEffect(() => {
     if (chest)
       setChestDescription(ChestGenerator.getChestDescription(chest.chestType));
-  }, []);
+  }, [chest]);
 
-  if (!chest) return null;
-
+  if (!chest || !chestDescription) return null;
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
   const canUse = useQuantity >= 1 && useQuantity <= quantity && !isUsing;
 
@@ -85,8 +90,12 @@ const ChestModal: React.FC<ChestModalProps> = ({
                     <h2 className="text-xl font-bold text-white">
                       {`${chest.chestType.toUpperCase()} Chest`}
                     </h2>
-                    <div className="text-sm text-white/60">
-                      • {chestDescription?.rarity}
+                    <div className={`text-sm `}>
+                      Rarity •{" "}
+                      <span
+                        className={`text-sm ${RARITY_COLORS[chestDescription.rarity]}`}>
+                        {chestDescription?.rarity.toUpperCase()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -109,6 +118,9 @@ const ChestModal: React.FC<ChestModalProps> = ({
                   <p className="text-white/80 text-sm mb-4">
                     Egg chance: {chestDescription.eggChance}%
                   </p>
+                  <ChestItems
+                    chestItems={ChestGenerator.getChestPreview(chest.chestType)}
+                  />
                 </div>
               )}
 

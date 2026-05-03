@@ -29,6 +29,13 @@ export interface ChestDescription {
   eggChance: number;
 }
 
+export interface ChestPreview {
+  itemId: string;
+  type: ItemType;
+  rarity: RarityType;
+  probability: number | string;
+}
+
 export interface ChestRewardItem {
   itemId: string;
   type: ItemType;

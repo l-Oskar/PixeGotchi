@@ -4,6 +4,7 @@ import {
   type ChestType,
   ChestInfo,
   ChestDescription,
+  ChestPreview,
   ChestRewards,
   ChestRewardItem,
   type ItemType,
@@ -299,6 +300,74 @@ export class ChestGenerator {
     // `Guaranteed: ${config.guaranteed_items} items\n` +
     // `Boost chance: ${boostChance}%\n` +
     // (eggChance > 0 ? `Egg chance: ${eggChance}%\n` : "")
+  }
+
+  static getItemsWithProbabilities(chestType: ChestType): ChestPreview[] {
+    const config = CHEST_CONFIG[chestType];
+    const items: Array<{
+      itemId: string;
+      type: ItemType;
+      rarity: RarityType;
+      probability: number;
+    }> = [];
+
+    // Розрахувати total weight
+    const totalWeight = Object.values(config.item_rarity_distribution).reduce(
+      (sum, weight) => sum + weight,
+      0,
+    );
+
+    // Для кожного типу items
+    const allTypes: ItemType[] = [...GUARANTEED_ITEM_TYPES, "boost", "special"];
+
+    allTypes.forEach((itemType) => {
+      Object.entries(config.item_rarity_distribution).forEach(
+        ([rarity, weight]) => {
+          if (weight > 0) {
+            const pool = ITEM_POOLS[itemType][rarity as RarityType];
+
+            if (pool && pool.length > 0) {
+              // Ймовірність цієї rarity
+              const rarityProbability = (weight / totalWeight) * 100;
+
+              // Ймовірність конкретного item в pool
+              const itemProbability = rarityProbability / pool.length;
+
+              pool.forEach((itemId) => {
+                items.push({
+                  itemId,
+                  type: itemType,
+                  rarity: rarity as RarityType,
+                  probability: itemProbability,
+                });
+              });
+            }
+          }
+        },
+      );
+    });
+
+    // Сортувати за ймовірністю (від найбільш ймовірних)
+    return items.sort((a, b) => b.probability - a.probability);
+  }
+
+  static getChestPreview(
+    chestType: ChestType,
+    topCount: number = 10,
+  ): {
+    itemId: string;
+    type: ItemType;
+    rarity: RarityType;
+    probability: string; // formatted "15.5%"
+  }[] {
+    const itemsWithProb = this.getItemsWithProbabilities(chestType);
+
+    return itemsWithProb.slice(0, topCount).map((item) => ({
+      itemId: item.itemId,
+      type: item.type,
+      rarity: item.rarity,
+      probability: `${Number(item.probability).toFixed(2)}%`,
+    }));
   }
 }
 
