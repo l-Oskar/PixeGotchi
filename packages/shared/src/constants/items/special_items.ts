@@ -1,7 +1,7 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
 import { ItemBuffsType } from "../../types/item_buffs";
-import {SPECIAL_IMG} from './items_img'
+import { ITEMS_IMG } from "./items_img";
 
 export const RENAME_TAG: Item = {
   itemId: "rename_tag",
@@ -20,7 +20,7 @@ export const RENAME_TAG: Item = {
   cooldownMinutes: null,
   maxPerDay: 1,
   minLevel: 1,
-  iconUrl: SPECIAL_IMG.rename_tag,
+  iconUrl: ITEMS_IMG.special.rename_tag,
   isStackable: false,
   maxStack: null,
 };
@@ -47,7 +47,7 @@ export const REVIVE_STONE: Item = {
   cooldownMinutes: null,
   maxPerDay: 1,
   minLevel: 10,
-  iconUrl: SPECIAL_IMG.revive_stone,
+  iconUrl: ITEMS_IMG.special.revive_stone,
   isStackable: false,
   maxStack: null,
 };
@@ -74,7 +74,7 @@ export const LUCKY_CHARM: Item = {
   cooldownMinutes: 180,
   maxPerDay: 1,
   minLevel: 10,
-  iconUrl: SPECIAL_IMG.lucky_charm,
+  iconUrl: ITEMS_IMG.special.lucky_charm,
   isStackable: false,
   maxStack: null,
 };

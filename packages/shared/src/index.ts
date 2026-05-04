@@ -12,6 +12,7 @@ export * from "./constants/pixegotchi_const";
 export * from "./constants/egg_const";
 export * from "./constants/user_const";
 export * from "./constants/item_const";
+export * from "./constants/items/items_img";
 export * from "./constants/items/item_pool";
 export * from "./constants/traits";
 export * from "./constants/chest_const";

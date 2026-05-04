@@ -1,5 +1,5 @@
 import React from "react";
-import { ChestPreview, RarityType } from "@shared";
+import { ChestPreview, ITEMS_IMG, RARITY_BORDER_COLORS } from "@shared";
 
 export interface ChestPreviewProps {
   chestItems: ChestPreview[];
@@ -8,47 +8,40 @@ export interface ChestPreviewProps {
 const ChestItems: React.FC<ChestPreviewProps> = ({ chestItems }) => {
   if (!chestItems || chestItems.length === 0) return null;
 
-  const getRarityEmoji = (rarity: RarityType) => {
-    const emojis = {
-      common: "⚪️",
-      uncommon: "🟢",
-      rare: "🔵",
-      epic: "🟣",
-      mythic: "🟠",
-      legendary: "🟡",
-    };
-    return emojis[rarity] || "⚪";
-  };
-
   return (
-    <div className="space-y-2 max-h-96 overflow-y-auto custom-scrollbar">
-      {chestItems.map((item) => (
-        <div
-          key={item.itemId}
-          className="group bg-white/5 hover:bg-white/10 rounded-lg p-3 transition-all duration-200 cursor-pointer">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-xl">
-                {getRarityEmoji(item.rarity)}
+    <div className="max-h-96 overflow-y-auto custom-scrollbar">
+      <div className="grid grid-cols-3 gap-2">
+        {chestItems.map((item) => (
+          <div
+            key={item.itemId}
+            className={`border bg-white/5 hover:bg-white/10 rounded-lg p-2 transition-all duration-200 cursor-pointer ${RARITY_BORDER_COLORS[item.rarity]}`}>
+            {/* Центруємо контент вертикально */}
+            <div className="flex flex-col items-center text-center gap-1">
+              {/* Іконка */}
+              <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
+                {ITEMS_IMG[item.type]?.[item.itemId] || "📦"}
               </div>
 
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-medium text-sm truncate">
-                  {item.itemId.charAt(0).toUpperCase() + item.itemId.slice(1)}
-                </p>
-                <p className="text-white/40 text-xs capitalize">{item.type}</p>
-              </div>
-            </div>
-
-            <div className="text-right">
-              <p className="text-white/80 text-sm font-mono">
-                {item.probability}
+              {/* Назва */}
+              <p className="text-white font-medium text-xs truncate w-full">
+                {item.itemId.charAt(0).toUpperCase() + item.itemId.slice(1)}
               </p>
-              <p className="text-white/40 text-xs capitalize">{item.rarity}</p>
+
+              {/* Тип */}
+              <p className="text-white/40 text-[10px] capitalize">
+                {item.type}
+              </p>
+
+              {/* Рідкість та шанс в один рядок */}
+              <div className="flex items-center justify-center">
+                <span className="text-white/60 text-[9px] font-mono">
+                  {item.probability}%
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

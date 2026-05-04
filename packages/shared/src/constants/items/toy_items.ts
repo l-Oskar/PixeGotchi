@@ -1,6 +1,6 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
-import {TOY_IMG} from './items_img'
+import { ITEMS_IMG } from "./items_img";
 
 export const SMALL_TOY: Item = {
   itemId: "small_toy",
@@ -19,7 +19,7 @@ export const SMALL_TOY: Item = {
   cooldownMinutes: 15,
   maxPerDay: 10,
   minLevel: 1,
-  iconUrl: TOY_IMG.small_toy,
+  iconUrl: ITEMS_IMG.toy.small_toy,
   isStackable: false,
   maxStack: null,
 };
@@ -41,7 +41,7 @@ export const RUBBER_BALL: Item = {
   cooldownMinutes: 15,
   maxPerDay: 10,
   minLevel: 1,
-  iconUrl: TOY_IMG.rubber_ball,
+  iconUrl: ITEMS_IMG.toy.rubber_ball,
   isStackable: false,
   maxStack: null,
 };

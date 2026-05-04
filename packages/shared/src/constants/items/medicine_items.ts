@@ -1,6 +1,6 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
-import {MEDICINE_IMG} from './items_img'
+import { ITEMS_IMG } from "./items_img";
 
 export const PILL: Item = {
   itemId: "pill",
@@ -19,7 +19,7 @@ export const PILL: Item = {
   cooldownMinutes: 60,
   maxPerDay: 3,
   minLevel: 1,
-  iconUrl: MEDICINE_IMG.pill,
+  iconUrl: ITEMS_IMG.medicine.pill,
   isStackable: true,
   maxStack: 20,
 };
@@ -41,7 +41,7 @@ export const SMALL_MEDICINE: Item = {
   cooldownMinutes: 60,
   maxPerDay: 3,
   minLevel: 1,
-  iconUrl: MEDICINE_IMG.small_medicine,
+  iconUrl: ITEMS_IMG.medicine.small_medicine,
   isStackable: true,
   maxStack: 20,
 };

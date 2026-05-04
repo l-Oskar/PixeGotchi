@@ -1,31 +1,38 @@
-export const FOOD_IMG = {
-    apple: '🍎',
-    cherry: '🍒',
-}
+import { ChestType, ItemType } from "../../enums";
 
-export const CLEANING_IMG = {
-    water: '💧',
-    soap: '🧼',
-}
-
-export const MEDICINE_IMG = {
-    pill: '💊',
-    small_medicine: '💉',
-}
-
-export const TOY_IMG = {
-    small_toy: '🪀',
-    rubber_ball: '☄️',
-}
-
-export const BOOST_IMG = {
-    exp_booster: '📈',
-    energy_drink: '🧋',
-    energy_booster: '⚡️',
-}
-
-export const SPECIAL_IMG = {
-    rename_tag: '🏷',
-    revive_stone: '💎',
-    lucky_charm: '🍀',
-}
+export const ITEMS_IMG: Record<ItemType, Record<string | ChestType, string>> = {
+  food: {
+    apple: "🍎",
+    cherry: "🍒",
+  },
+  cleaning: {
+    water: "💧",
+    soap: "🧼",
+  },
+  medicine: {
+    pill: "💊",
+    small_medicine: "💉",
+  },
+  toy: {
+    small_toy: "🪀",
+    rubber_ball: "☄️",
+  },
+  boost: {
+    exp_booster: "📈",
+    energy_drink: "🧋",
+    energy_booster: "⚡️",
+  },
+  special: {
+    rename_tag: "🏷",
+    revive_stone: "💎",
+    lucky_charm: "🍀",
+  },
+  chest: {
+    wooden: "🪵",
+    silver: "🪙",
+    golden: "⚜️",
+    crystal: "🔮",
+    mythic: "🎁",
+    legendary: "💠",
+  },
+};

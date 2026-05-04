@@ -1,6 +1,6 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
-import {CLEANING_IMG} from './items_img'
+import { ITEMS_IMG } from "./items_img";
 
 export const WATER: Item = {
   itemId: "water",
@@ -19,7 +19,7 @@ export const WATER: Item = {
   cooldownMinutes: 30,
   maxPerDay: 5,
   minLevel: 1,
-  iconUrl: CLEANING_IMG.water,
+  iconUrl: ITEMS_IMG.cleaning.water,
   isStackable: true,
   maxStack: 50,
 };
@@ -41,7 +41,7 @@ export const SOAP: Item = {
   cooldownMinutes: 30,
   maxPerDay: 5,
   minLevel: 1,
-  iconUrl: CLEANING_IMG.soap,
+  iconUrl: ITEMS_IMG.cleaning.soap,
   isStackable: true,
   maxStack: 50,
 };

@@ -3,21 +3,13 @@ import {
   ChestInventory,
   ChestDescription,
   RARITY_COLORS,
+  ITEMS_IMG,
 } from "@shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
 import ChestItems from "./ChestItems";
-import { X } from "lucide-react";
+import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const chestIMG: Record<ChestType, string> = {
-  wooden: "🪵",
-  silver: "🪙",
-  golden: "⚜️",
-  crystal: "🔮",
-  mythic: "🎁",
-  legendary: "💠",
-};
 
 export interface ChestModalProps {
   chest: ChestInventory | null;
@@ -38,6 +30,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
   const [isUsing, setIsUsing] = useState(false);
   const [chestDescription, setChestDescription] =
     useState<ChestDescription | null>(null);
+  const [isItemPoolOpen, setIsItemPoolOpen] = useState(false);
 
   useEffect(() => {
     if (chest)
@@ -85,7 +78,9 @@ const ChestModal: React.FC<ChestModalProps> = ({
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="text-5xl">{chestIMG[chest.chestType]}</div>
+                  <div className="text-5xl">
+                    {ITEMS_IMG.chest[chest.chestType]}
+                  </div>
                   <div>
                     <h2 className="text-xl font-bold text-white">
                       {`${chest.chestType.toUpperCase()} Chest`}
@@ -108,19 +103,54 @@ const ChestModal: React.FC<ChestModalProps> = ({
 
               {/* Description */}
               {chestDescription && (
-                <div>
-                  <p className="text-white/80 text-sm mb-4">
-                    Guaranteed items: {chestDescription.guaranteed_items}
-                  </p>
-                  <p className="text-white/80 text-sm mb-4">
-                    Boost item chance: {chestDescription.boostChance}%
-                  </p>
-                  <p className="text-white/80 text-sm mb-4">
+                <div className="grid gap-2 mb-4">
+                  <p className="text-white/80 text-sm">
                     Egg chance: {chestDescription.eggChance}%
                   </p>
-                  <ChestItems
-                    chestItems={ChestGenerator.getChestPreview(chest.chestType)}
-                  />
+                  <p className="text-white/80 text-sm">
+                    Boost item chance: {chestDescription.boostChance}%
+                  </p>
+                  <p className="text-white/80 text-sm">
+                    Guaranteed items: {chestDescription.guaranteed_items}
+                  </p>
+
+                  {/* Згортаний ItemPool */}
+                  <div className="mt-2">
+                    <button
+                      onClick={() => setIsItemPoolOpen(!isItemPoolOpen)}
+                      className="flex items-center justify-between w-full p-2 rounded-lg bg-white/5 hover:bg-white/10 transition group">
+                      <span className="text-white/80 text-sm font-medium">
+                        Item Pool (
+                        {ChestGenerator.getChestPreview(chest.chestType).length}{" "}
+                        items)
+                      </span>
+                      <motion.div
+                        animate={{ rotate: isItemPoolOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}>
+                        <ChevronDown
+                          size={18}
+                          className="text-white/60 group-hover:text-white/80"
+                        />
+                      </motion.div>
+                    </button>
+
+                    <AnimatePresence>
+                      {isItemPoolOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="overflow-hidden mt-2">
+                          <ChestItems
+                            chestItems={ChestGenerator.getChestPreview(
+                              chest.chestType,
+                            )}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               )}
 

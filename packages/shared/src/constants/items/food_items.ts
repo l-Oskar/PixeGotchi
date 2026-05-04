@@ -1,6 +1,6 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
-import {FOOD_IMG} from './items_img'
+import { ITEMS_IMG } from "./items_img";
 
 export const APPLE: Item = {
   itemId: "apple",
@@ -19,7 +19,7 @@ export const APPLE: Item = {
   cooldownMinutes: 0,
   maxPerDay: null,
   minLevel: 1,
-  iconUrl: FOOD_IMG.apple,
+  iconUrl: ITEMS_IMG.food.apple,
   isStackable: true,
   maxStack: 99,
 };
@@ -41,7 +41,7 @@ export const CHERRY: Item = {
   cooldownMinutes: 6,
   maxPerDay: null,
   minLevel: 1,
-  iconUrl: FOOD_IMG.cherry,
+  iconUrl: ITEMS_IMG.food.cherry,
   isStackable: true,
   maxStack: 99,
 };

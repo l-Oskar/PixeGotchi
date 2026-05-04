@@ -62,7 +62,16 @@ export const RARITY_COLORS: Record<string, string> = {
   common: "text-gray-400",
   uncommon: "text-green-400",
   rare: "text-blue-400",
-  epic: "text-violet-400!",
+  epic: "text-violet-400",
+  mythic: "text-pink-400",
+  legendary: "text-yellow-400",
+};
+
+export const RARITY_BORDER_COLORS: Record<string, string> = {
+  common: "text-gray-400",
+  uncommon: "text-green-400",
+  rare: "text-blue-400",
+  epic: "text-violet-400",
   mythic: "text-pink-400",
   legendary: "text-yellow-400",
 };

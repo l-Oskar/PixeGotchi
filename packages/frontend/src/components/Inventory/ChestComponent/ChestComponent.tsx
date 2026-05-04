@@ -4,17 +4,8 @@ import {
 } from "@/services/queries/chest.queries";
 import { useInventoryStore } from "@/store/inventory.store";
 import ChestModal from "../ChestModal/ChestModal";
-import { ChestInventory, ChestType } from "@shared";
+import { ChestInventory, ChestType, ITEMS_IMG } from "@shared";
 import React, { useEffect, useState } from "react";
-
-const chestIMG: Record<ChestType, string> = {
-  wooden: "🪵",
-  silver: "🪙",
-  golden: "⚜️",
-  crystal: "🔮",
-  mythic: "🎁",
-  legendary: "💠",
-};
 
 const ChestComponent: React.FC = () => {
   const { data: sortedChestData } = useGetSortedChests();
@@ -56,7 +47,7 @@ const ChestComponent: React.FC = () => {
                 "bg-white/5 hover:bg-white/10 rounded-2xl p-4 border border-white/10 transition flex flex-col items-center gap-2 group"
               }>
               <div className="text-4xl group-hover:scale-110 transition">
-                {chestIMG[sortedChest.chestType]}
+                {ITEMS_IMG.chest[sortedChest.chestType]}
               </div>
               <div className="text-xs font-medium text-center">
                 {sortedChest.chestType}
