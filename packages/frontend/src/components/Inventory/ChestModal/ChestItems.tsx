@@ -1,15 +1,21 @@
 import React from "react";
-import { ChestPreview, ITEMS_IMG, RARITY_BORDER_COLORS } from "@shared";
+import {
+  ChestPreview,
+  ChestInventory,
+  ITEMS_IMG,
+  RARITY_BORDER_COLORS,
+} from "@shared";
 
 export interface ChestPreviewProps {
   chestItems: ChestPreview[];
+  chest: ChestInventory | null;
 }
 
-const ChestItems: React.FC<ChestPreviewProps> = ({ chestItems }) => {
+const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
   if (!chestItems || chestItems.length === 0) return null;
 
   return (
-    <div className="max-h-96 overflow-y-auto custom-scrollbar">
+    <div className="max-h-65 overflow-y-auto custom-scrollbar">
       <div className="grid grid-cols-3 gap-2">
         {chestItems.map((item) => (
           <div
@@ -24,7 +30,8 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chestItems }) => {
 
               {/* Назва */}
               <p className="text-white font-medium text-xs truncate w-full">
-                {item.itemId.charAt(0).toUpperCase() + item.itemId.slice(1)}
+                {item.itemId.charAt(0).toUpperCase() +
+                  item.itemId.slice(1).split("_").join(" ")}
               </p>
 
               {/* Тип */}

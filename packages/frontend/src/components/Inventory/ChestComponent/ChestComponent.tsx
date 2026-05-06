@@ -4,12 +4,13 @@ import {
 } from "@/services/queries/chest.queries";
 import { useInventoryStore } from "@/store/inventory.store";
 import ChestModal from "../ChestModal/ChestModal";
-import { ChestInventory, ChestType, ITEMS_IMG } from "@shared";
+import { ChestInventory, ChestRewards, ChestType, ITEMS_IMG } from "@shared";
 import React, { useEffect, useState } from "react";
 import { useOpenChest } from "@/services/queries/inventory.queries";
+import RewardModal from "../RewardsModal/RewardModal";
 
 const ChestComponent: React.FC = () => {
-  const [rewards, setRewards] = useState();
+  const [rewards, setRewards] = useState<ChestRewards | null>(null);
   const { data: sortedChestData } = useGetSortedChests();
   const { data: chestData } = useGetAllChests();
   const openChest = useOpenChest();
@@ -18,6 +19,7 @@ const ChestComponent: React.FC = () => {
     null,
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRewardsModalOpen, setIsRewardsModalOpen] = useState(false);
   const currentChest = selectedChest
     ? sortedChests?.find((chest) => chest.chestType === selectedChest.chestType)
     : null;
@@ -33,6 +35,7 @@ const ChestComponent: React.FC = () => {
     try {
       const reawards = await openChest.mutateAsync({ chestType, quantity });
       setRewards(reawards);
+      setIsRewardsModalOpen(true);
     } catch (error) {
       console.log(error);
     }
@@ -73,6 +76,12 @@ const ChestComponent: React.FC = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onUse={handleOpenChest}
+        />
+
+        <RewardModal
+          rewards={rewards}
+          isOpen={isRewardsModalOpen}
+          onClose={() => setIsRewardsModalOpen(false)}
         />
       </div>
     </>

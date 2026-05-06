@@ -121,7 +121,11 @@ const ChestModal: React.FC<ChestModalProps> = ({
                       className="flex items-center justify-between w-full p-2 rounded-lg bg-white/5 hover:bg-white/10 transition group">
                       <span className="text-white/80 text-sm font-medium">
                         Item Pool (
-                        {ChestGenerator.getChestPreview(chest.chestType).length}{" "}
+                        {
+                          ChestGenerator.getItemsWithProbabilities(
+                            chest.chestType,
+                          ).length
+                        }{" "}
                         items)
                       </span>
                       <motion.div
@@ -143,7 +147,8 @@ const ChestModal: React.FC<ChestModalProps> = ({
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="overflow-hidden mt-2">
                           <ChestItems
-                            chestItems={ChestGenerator.getChestPreview(
+                            chest={chest}
+                            chestItems={ChestGenerator.getItemsWithProbabilities(
                               chest.chestType,
                             )}
                           />

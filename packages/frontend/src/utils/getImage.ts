@@ -63,8 +63,8 @@ export function getEggEvolution(status: EggHatchingStatus) {
   return EggEvolutionStage.HATCHED;
 }
 
-export function getEggImg(status: EggHatchingStatus) {
-  if (!status) return "/eggs/egg-1.png";
+export function getEggImg(status?: EggHatchingStatus) {
+  if (!status) return "eggs/egg-1.png";
   return `eggs/egg-${getEggEvolution(status)}.png`;
 }
 
