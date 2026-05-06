@@ -6,10 +6,13 @@ import { useInventoryStore } from "@/store/inventory.store";
 import ChestModal from "../ChestModal/ChestModal";
 import { ChestInventory, ChestType, ITEMS_IMG } from "@shared";
 import React, { useEffect, useState } from "react";
+import { useOpenChest } from "@/services/queries/inventory.queries";
 
 const ChestComponent: React.FC = () => {
+  const [rewards, setRewards] = useState();
   const { data: sortedChestData } = useGetSortedChests();
   const { data: chestData } = useGetAllChests();
+  const openChest = useOpenChest();
   const sortedChests = useInventoryStore((s) => s.sortedChests);
   const [selectedChest, setSelectedChest] = useState<ChestInventory | null>(
     null,
@@ -26,8 +29,13 @@ const ChestComponent: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleUseItem = async (chestType: ChestType, quantity: number) => {
-    alert(`${chestType}: ${quantity}`);
+  const handleOpenChest = async (chestType: ChestType, quantity?: number) => {
+    try {
+      const reawards = await openChest.mutateAsync({ chestType, quantity });
+      setRewards(reawards);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   {
@@ -64,7 +72,7 @@ const ChestComponent: React.FC = () => {
           quantity={currentChest?.quantity ?? 0}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onUse={handleUseItem}
+          onUse={handleOpenChest}
         />
       </div>
     </>

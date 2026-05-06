@@ -67,7 +67,7 @@ export class ChestGenerator {
     let eggDropped = false;
     const eggChance =
       CHEST_REWARDS.EGG_DROP_CHANCE[
-        chestType as "crystal" | "mythic" | "legendary"
+        chestType as "golden" | "crystal" | "mythic" | "legendary"
       ];
     if (eggChance && Math.random() * 100 < eggChance) {
       eggDropped = true;

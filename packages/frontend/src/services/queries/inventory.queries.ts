@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { inventoryApi } from "../api/inventory.api";
 import { useInventoryStore } from "@/store/inventory.store";
+import { ChestType } from "@shared";
 
 export const useGetInventory = () => {
   return useQuery({
@@ -58,6 +59,27 @@ export const useUseItem = () => {
         queryClient.invalidateQueries({
           queryKey: ["activePixegotchi"],
         });
+    },
+  });
+};
+
+export const useOpenChest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      chestType,
+      quantity,
+    }: {
+      chestType: ChestType;
+      quantity?: number;
+    }) => {
+      return await inventoryApi.openChest(chestType, quantity);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["detailed"] }),
+        queryClient.invalidateQueries({ queryKey: ["inventory"] }),
+        queryClient.invalidateQueries({ queryKey: ["chests"] }),
+        queryClient.invalidateQueries({ queryKey: ["sorted_chests"] });
     },
   });
 };

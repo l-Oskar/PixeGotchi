@@ -24,6 +24,7 @@ export const CHEST_REWARDS = {
   } as Record<ChestType, number>,
 
   EGG_DROP_CHANCE: {
+    golden: 1,
     crystal: 5,
     mythic: 10,
     legendary: 20,

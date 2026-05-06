@@ -36,9 +36,10 @@ export const inventoryApi = {
     });
     return data;
   },
-  openChest: async (chestType: ChestType) => {
+  openChest: async (chestType: ChestType, quantity: number = 1) => {
     const { data } = await apiClient.post(INVENTORY_KEYS.openChest, {
       chestType,
+      quantity,
     });
     return data;
   },
