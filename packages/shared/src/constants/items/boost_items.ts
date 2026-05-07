@@ -1,6 +1,5 @@
 import { Item } from "../../types/item";
 import { ItemType, RarityType } from "../../enums";
-import { ItemBuffsType } from "../../types/item_buffs";
 import { ITEMS_IMG } from "./items_img";
 
 export const COFFEE: Item = {

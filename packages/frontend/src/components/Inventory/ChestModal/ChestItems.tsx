@@ -13,7 +13,7 @@ export interface ChestPreviewProps {
 
 const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
   if (!chestItems || chestItems.length === 0) return null;
-
+  console.log(chest);
   return (
     <div className="max-h-65 overflow-y-auto custom-scrollbar">
       <div className="grid grid-cols-3 gap-2">

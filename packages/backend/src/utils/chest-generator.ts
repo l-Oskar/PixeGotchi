@@ -53,13 +53,15 @@ export class ChestGenerator {
     const items: ChestRewardItem[] = [];
 
     // 1. Генеруємо 2 гарантовані items (різні типи)
-    const guaranteedItems = this.generateGuaranteedItems(chestType, config);
+    // const guaranteedItems = this.generateGuaranteedItems(chestType, config);
+    const guaranteedItems = this.generateGuaranteedItems(config);
     items.push(...guaranteedItems);
 
     // 2. Bonus: Boost (з шансом)
     const boostChance = CHEST_REWARDS.BOOST_BONUS_CHANCE[chestType];
     if (Math.random() * 100 < boostChance!) {
-      const boostItem = this.generateBoostItem(chestType, config);
+      // const boostItem = this.generateBoostItem(chestType, config);
+      const boostItem = this.generateBoostItem(config);
       items.push(boostItem);
     }
 
@@ -94,7 +96,7 @@ export class ChestGenerator {
    * Генерація 2 гарантованих items (різні типи)
    */
   private static generateGuaranteedItems(
-    chestType: ChestType,
+    // chestType: ChestType,
     config: (typeof CHEST_CONFIG)[ChestType],
   ): ChestRewardItem[] {
     const items: ChestRewardItem[] = [];
@@ -128,7 +130,7 @@ export class ChestGenerator {
    * Генерація boost item
    */
   private static generateBoostItem(
-    chestType: ChestType,
+    // chestType: ChestType,
     config: (typeof CHEST_CONFIG)[ChestType],
   ): ChestRewardItem {
     return this.generateItem("boost", config);
@@ -137,12 +139,12 @@ export class ChestGenerator {
   /**
    * Генерація special item (поки не активно)
    */
-  private static generateSpecialItem(
-    chestType: ChestType,
-    config: (typeof CHEST_CONFIG)[ChestType],
-  ): ChestRewardItem {
-    return this.generateItem("special", config);
-  }
+  // private static generateSpecialItem(
+  //   chestType: ChestType,
+  //   config: (typeof CHEST_CONFIG)[ChestType],
+  // ): ChestRewardItem {
+  //   return this.generateItem("special", config);
+  // }
 
   /**
    * Генерація одного item
@@ -369,20 +371,319 @@ export class ChestGenerator {
       probability: `${Number(item.probability).toFixed(2)}%`,
     }));
   }
-}
+  static statistic = () => {
+    // Генеруємо 10000 випадкових скринь
+    const generatedChests = {
+      wooden: 0,
+      silver: 0,
+      golden: 0,
+      crystal: 0,
+      mythic: 0,
+      legendary: 0,
+    };
 
-const statistic = () => {
-  const chests = {
-    wooden: 0,
-    silver: 0,
-    golden: 0,
-    crystal: 0,
-    mythic: 0,
-    legendary: 0,
+    for (let i = 0; i < 10000; i++) {
+      const chest = ChestGenerator.generateRandomChest();
+      generatedChests[chest.chestType] += 1;
+    }
+
+    // Відкриваємо 1000 скринь кожної рідкісності
+    const chestTypes: ChestType[] = [
+      "wooden",
+      "silver",
+      "golden",
+      "crystal",
+      "mythic",
+      "legendary",
+    ];
+    const openedResults: Record<
+      ChestType,
+      {
+        totalValue: number;
+        averageValue: number;
+        eggDrops: number;
+        eggChance: number;
+        itemsByType: Record<
+          ItemType,
+          {
+            totalQuantity: number;
+            items: Record<
+              string,
+              {
+                itemId: string;
+                quantity: number;
+                rarity: RarityType;
+                occurrences: number;
+              }
+            >;
+            rarityDistribution: Record<RarityType, number>;
+          }
+        >;
+        totalItems: number;
+        allItemsList: Record<
+          string,
+          {
+            itemId: string;
+            type: ItemType;
+            quantity: number;
+            rarity: RarityType;
+            occurrences: number;
+          }
+        >;
+      }
+    > = {} as any;
+
+    // Ініціалізація результатів
+    chestTypes.forEach((type) => {
+      openedResults[type] = {
+        totalValue: 0,
+        averageValue: 0,
+        eggDrops: 0,
+        eggChance: 0,
+        itemsByType: {
+          food: {
+            totalQuantity: 0,
+            items: {},
+            rarityDistribution: {
+              common: 0,
+              uncommon: 0,
+              rare: 0,
+              epic: 0,
+              mythic: 0,
+              legendary: 0,
+            },
+          },
+          medicine: {
+            totalQuantity: 0,
+            items: {},
+            rarityDistribution: {
+              common: 0,
+              uncommon: 0,
+              rare: 0,
+              epic: 0,
+              mythic: 0,
+              legendary: 0,
+            },
+          },
+          cleaning: {
+            totalQuantity: 0,
+            items: {},
+            rarityDistribution: {
+              common: 0,
+              uncommon: 0,
+              rare: 0,
+              epic: 0,
+              mythic: 0,
+              legendary: 0,
+            },
+          },
+          toy: {
+            totalQuantity: 0,
+            items: {},
+            rarityDistribution: {
+              common: 0,
+              uncommon: 0,
+              rare: 0,
+              epic: 0,
+              mythic: 0,
+              legendary: 0,
+            },
+          },
+          boost: {
+            totalQuantity: 0,
+            items: {},
+            rarityDistribution: {
+              common: 0,
+              uncommon: 0,
+              rare: 0,
+              epic: 0,
+              mythic: 0,
+              legendary: 0,
+            },
+          },
+          special: {
+            totalQuantity: 0,
+            items: {},
+            rarityDistribution: {
+              common: 0,
+              uncommon: 0,
+              rare: 0,
+              epic: 0,
+              mythic: 0,
+              legendary: 0,
+            },
+          },
+          chest: {
+            totalQuantity: 0,
+            items: {},
+            rarityDistribution: {
+              common: 0,
+              uncommon: 0,
+              rare: 0,
+              epic: 0,
+              mythic: 0,
+              legendary: 0,
+            },
+          },
+        },
+        totalItems: 0,
+        allItemsList: {},
+      };
+    });
+
+    // Відкриваємо по 1000 скринь кожного типу
+    for (const chestType of chestTypes) {
+      for (let i = 0; i < 1000; i++) {
+        const rewards = ChestGenerator.openChest(chestType);
+
+        openedResults[chestType].totalValue += rewards.totalValue;
+
+        if (rewards.egg) {
+          openedResults[chestType].eggDrops += 1;
+        }
+
+        // Підрахунок itemів
+        for (const item of rewards.items) {
+          const itemKey = `${item.itemId}_${item.type}`;
+
+          // Загальний список всіх предметів
+          if (!openedResults[chestType].allItemsList[itemKey]) {
+            openedResults[chestType].allItemsList[itemKey] = {
+              itemId: item.itemId,
+              type: item.type,
+              quantity: 0,
+              rarity: item.rarity,
+              occurrences: 0,
+            };
+          }
+          openedResults[chestType].allItemsList[itemKey].quantity +=
+            item.quantity;
+          openedResults[chestType].allItemsList[itemKey].occurrences += 1;
+
+          // Деталізація по типу предметів
+          const typeData = openedResults[chestType].itemsByType[item.type];
+          if (typeData) {
+            typeData.totalQuantity += item.quantity;
+
+            if (!typeData.items[item.itemId]) {
+              typeData.items[item.itemId] = {
+                itemId: item.itemId,
+                quantity: 0,
+                rarity: item.rarity,
+                occurrences: 0,
+              };
+            }
+
+            // Безпечне додавання з перевіркою
+            const targetItem = typeData.items[item.itemId];
+            if (targetItem) {
+              targetItem.quantity += item.quantity;
+              targetItem.occurrences += 1;
+            }
+
+            // Розподіл рідкісностей по типах
+            if (typeData.rarityDistribution[item.rarity] !== undefined) {
+              typeData.rarityDistribution[item.rarity] += item.quantity;
+            }
+          }
+        }
+
+        // Розрахунок середніх значень
+        openedResults[chestType].averageValue =
+          openedResults[chestType].totalValue / 1000;
+        openedResults[chestType].eggChance =
+          (openedResults[chestType].eggDrops / 1000) * 100;
+        openedResults[chestType].totalItems = Object.values(
+          openedResults[chestType].allItemsList,
+        ).reduce((sum, item) => sum + item.quantity, 0);
+      }
+
+      // Розрахунок відсотків для generatedChests
+      const generatedPercentages: Record<ChestType, number> = {} as any;
+      for (const [type, count] of Object.entries(generatedChests)) {
+        generatedPercentages[type as ChestType] = (count / 10000) * 100;
+      }
+
+      // Форматуємо результати для кращої читабельності
+      const formattedResults: any = {
+        generatedChests: {
+          counts: generatedChests,
+          percentages: generatedPercentages,
+          total: 10000,
+        },
+        openedResults: {},
+        summary: {
+          bestValueChest: chestTypes.reduce((best, type) =>
+            openedResults[type].averageValue > openedResults[best].averageValue
+              ? type
+              : best,
+          ),
+          bestEggChanceChest: chestTypes.reduce((best, type) =>
+            openedResults[type].eggChance > openedResults[best].eggChance
+              ? type
+              : best,
+          ),
+          worstValueChest: chestTypes.reduce((worst, type) =>
+            openedResults[type].averageValue < openedResults[worst].averageValue
+              ? type
+              : worst,
+          ),
+          mostItemsChest: chestTypes.reduce((most, type) =>
+            openedResults[type].totalItems > openedResults[most].totalItems
+              ? type
+              : most,
+          ),
+        },
+      };
+
+      // Форматуємо кожен тип скрині
+      for (const chestType of chestTypes) {
+        const stats = openedResults[chestType];
+
+        // Сортуємо предмети за кількістю (від більшої до меншої)
+        const sortedItems = Object.values(stats.allItemsList).sort(
+          (a, b) => b.quantity - a.quantity,
+        );
+
+        // Створюємо детальний звіт по кожному типу предметів
+        const itemsByTypeDetailed: any = {};
+        for (const [type, typeData] of Object.entries(stats.itemsByType)) {
+          if (typeData.totalQuantity > 0) {
+            itemsByTypeDetailed[type] = {
+              totalQuantity: typeData.totalQuantity,
+              averagePerChest: typeData.totalQuantity / 1000,
+              rarityDistribution: typeData.rarityDistribution,
+              items: Object.values(typeData.items).sort(
+                (a, b) => b.quantity - a.quantity,
+              ),
+            };
+          }
+        }
+
+        formattedResults.openedResults[chestType] = {
+          summary: {
+            totalValue: stats.totalValue,
+            averageValue: stats.averageValue,
+            eggDrops: stats.eggDrops,
+            eggChance: `${stats.eggChance.toFixed(2)}%`,
+            totalItems: stats.totalItems,
+            averageItemsPerChest: stats.totalItems / 1000,
+          },
+          itemsByType: itemsByTypeDetailed,
+          topItems: sortedItems.slice(0, 20).map((item) => ({
+            ...item,
+            chanceToDrop: `${((item.occurrences / 1000) * 100).toFixed(2)}%`,
+            averagePerChest: (item.quantity / 1000).toFixed(2),
+          })),
+          allItems: sortedItems.map((item) => ({
+            ...item,
+            chanceToDrop: `${((item.occurrences / 1000) * 100).toFixed(2)}%`,
+            averagePerChest: (item.quantity / 1000).toFixed(2),
+          })),
+        };
+      }
+
+      return formattedResults;
+    }
   };
-  for (let i = 0; i < 10000; i++) {
-    const chest = ChestGenerator.generateRandomChest();
-    chests[chest.chestType] += 1;
-  }
-  return chests;
-};
+}

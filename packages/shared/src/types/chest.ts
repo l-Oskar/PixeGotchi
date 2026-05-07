@@ -1,5 +1,4 @@
 import { RarityType, ChestType, ItemType } from "../enums";
-import { CHEST_CONFIG } from "../constants/chest_const";
 
 export interface Chest {
   id: string;

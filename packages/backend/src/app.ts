@@ -18,6 +18,7 @@ import { eggsRoutes } from "./modules/eggs/eggs.routes";
 import { GenomeGenerator } from "./utils/genome-generator";
 import { itemsRoutes } from "./modules/items/items.routes";
 import { chestRoutes } from "./modules/chest/chest.routes";
+import { ChestGenerator } from "./utils/chest-generator";
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -89,6 +90,10 @@ export async function buildApp(): Promise<FastifyInstance> {
       title: "Pixegotchi generator Statistic",
       statistic: await GenomeGenerator.getStats(),
     };
+  });
+
+  app.get("/chests", async () => {
+    return ChestGenerator.statistic();
   });
 
   await app.register(
