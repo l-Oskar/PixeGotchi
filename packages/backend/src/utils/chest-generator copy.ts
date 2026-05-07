@@ -736,4 +736,4 @@ export class ChestGenerator {
   };
 }
 
-ChestGenerator.statistic();
+console.log(ChestGenerator.statistic());

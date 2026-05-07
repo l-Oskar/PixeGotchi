@@ -430,6 +430,7 @@ export class ChestGenerator {
             occurrences: number;
           }
         >;
+        errors: string[];
       }
     > = {} as any;
 
@@ -528,162 +529,209 @@ export class ChestGenerator {
         },
         totalItems: 0,
         allItemsList: {},
+        errors: [],
       };
     });
 
     // Відкриваємо по 1000 скринь кожного типу
     for (const chestType of chestTypes) {
+      console.log(`\n📦 Відкриваємо ${chestType} chests...`);
+
       for (let i = 0; i < 1000; i++) {
-        const rewards = ChestGenerator.openChest(chestType);
+        try {
+          const rewards = ChestGenerator.openChest(chestType);
 
-        openedResults[chestType].totalValue += rewards.totalValue;
-
-        if (rewards.egg) {
-          openedResults[chestType].eggDrops += 1;
-        }
-
-        // Підрахунок itemів
-        for (const item of rewards.items) {
-          const itemKey = `${item.itemId}_${item.type}`;
-
-          // Загальний список всіх предметів
-          if (!openedResults[chestType].allItemsList[itemKey]) {
-            openedResults[chestType].allItemsList[itemKey] = {
-              itemId: item.itemId,
-              type: item.type,
-              quantity: 0,
-              rarity: item.rarity,
-              occurrences: 0,
-            };
+          // Логуємо першу скриню для перевірки
+          if (i === 0) {
+            console.log(
+              `  Перша ${chestType} скриня:`,
+              JSON.stringify(rewards, null, 2),
+            );
           }
-          openedResults[chestType].allItemsList[itemKey].quantity +=
-            item.quantity;
-          openedResults[chestType].allItemsList[itemKey].occurrences += 1;
 
-          // Деталізація по типу предметів
-          const typeData = openedResults[chestType].itemsByType[item.type];
-          if (typeData) {
-            typeData.totalQuantity += item.quantity;
+          openedResults[chestType].totalValue += rewards.totalValue;
 
-            if (!typeData.items[item.itemId]) {
-              typeData.items[item.itemId] = {
+          if (rewards.egg) {
+            openedResults[chestType].eggDrops += 1;
+          }
+
+          // Перевіряємо чи є items
+          if (!rewards.items || rewards.items.length === 0) {
+            openedResults[chestType].errors.push(
+              `Скриня #${i} не має предметів`,
+            );
+            if (openedResults[chestType].errors.length <= 5) {
+              console.log(`  ⚠️ ${chestType} скриня #${i} не має предметів!`);
+            }
+            continue;
+          }
+
+          // Підрахунок itemів
+          for (const item of rewards.items) {
+            const itemKey = `${item.itemId}_${item.type}`;
+
+            // Загальний список всіх предметів
+            if (!openedResults[chestType].allItemsList[itemKey]) {
+              openedResults[chestType].allItemsList[itemKey] = {
                 itemId: item.itemId,
+                type: item.type,
                 quantity: 0,
                 rarity: item.rarity,
                 occurrences: 0,
               };
             }
+            openedResults[chestType].allItemsList[itemKey].quantity +=
+              item.quantity;
+            openedResults[chestType].allItemsList[itemKey].occurrences += 1;
 
-            // Безпечне додавання з перевіркою
-            const targetItem = typeData.items[item.itemId];
-            if (targetItem) {
-              targetItem.quantity += item.quantity;
-              targetItem.occurrences += 1;
-            }
+            // Деталізація по типу предметів
+            const typeData = openedResults[chestType].itemsByType[item.type];
+            if (typeData) {
+              typeData.totalQuantity += item.quantity;
 
-            // Розподіл рідкісностей по типах
-            if (typeData.rarityDistribution[item.rarity] !== undefined) {
-              typeData.rarityDistribution[item.rarity] += item.quantity;
+              if (!typeData.items[item.itemId]) {
+                typeData.items[item.itemId] = {
+                  itemId: item.itemId,
+                  quantity: 0,
+                  rarity: item.rarity,
+                  occurrences: 0,
+                };
+              }
+
+              const targetItem = typeData.items[item.itemId];
+              if (targetItem) {
+                targetItem.quantity += item.quantity;
+                targetItem.occurrences += 1;
+              }
+
+              if (typeData.rarityDistribution[item.rarity] !== undefined) {
+                typeData.rarityDistribution[item.rarity] += item.quantity;
+              }
             }
           }
+        } catch (error) {
+          console.error(
+            `  ❌ Помилка при відкритті ${chestType} скрині #${i}:`,
+            error,
+          );
+          openedResults[chestType].errors.push(`Помилка: ${error}`);
         }
-
-        // Розрахунок середніх значень
-        openedResults[chestType].averageValue =
-          openedResults[chestType].totalValue / 1000;
-        openedResults[chestType].eggChance =
-          (openedResults[chestType].eggDrops / 1000) * 100;
-        openedResults[chestType].totalItems = Object.values(
-          openedResults[chestType].allItemsList,
-        ).reduce((sum, item) => sum + item.quantity, 0);
       }
 
-      // Розрахунок відсотків для generatedChests
-      const generatedPercentages: Record<ChestType, number> = {} as any;
-      for (const [type, count] of Object.entries(generatedChests)) {
-        generatedPercentages[type as ChestType] = (count / 10000) * 100;
-      }
+      // Розрахунок середніх значень
+      openedResults[chestType].averageValue =
+        openedResults[chestType].totalValue / 1000;
+      openedResults[chestType].eggChance =
+        (openedResults[chestType].eggDrops / 1000) * 100;
+      openedResults[chestType].totalItems = Object.values(
+        openedResults[chestType].allItemsList,
+      ).reduce((sum, item) => sum + item.quantity, 0);
 
-      // Форматуємо результати для кращої читабельності
-      const formattedResults: any = {
-        generatedChests: {
-          counts: generatedChests,
-          percentages: generatedPercentages,
-          total: 10000,
-        },
-        openedResults: {},
-        summary: {
-          bestValueChest: chestTypes.reduce((best, type) =>
-            openedResults[type].averageValue > openedResults[best].averageValue
-              ? type
-              : best,
-          ),
-          bestEggChanceChest: chestTypes.reduce((best, type) =>
-            openedResults[type].eggChance > openedResults[best].eggChance
-              ? type
-              : best,
-          ),
-          worstValueChest: chestTypes.reduce((worst, type) =>
-            openedResults[type].averageValue < openedResults[worst].averageValue
-              ? type
-              : worst,
-          ),
-          mostItemsChest: chestTypes.reduce((most, type) =>
-            openedResults[type].totalItems > openedResults[most].totalItems
-              ? type
-              : most,
-          ),
-        },
-      };
-
-      // Форматуємо кожен тип скрині
-      for (const chestType of chestTypes) {
-        const stats = openedResults[chestType];
-
-        // Сортуємо предмети за кількістю (від більшої до меншої)
-        const sortedItems = Object.values(stats.allItemsList).sort(
-          (a, b) => b.quantity - a.quantity,
+      console.log(
+        `  ✅ ${chestType}: отримано ${openedResults[chestType].totalItems} предметів, середня цінність: ${openedResults[chestType].averageValue}`,
+      );
+      if (openedResults[chestType].errors.length > 0) {
+        console.log(
+          `  ⚠️ ${openedResults[chestType].errors.length} помилок/попереджень`,
         );
+      }
+    }
 
-        // Створюємо детальний звіт по кожному типу предметів
-        const itemsByTypeDetailed: any = {};
-        for (const [type, typeData] of Object.entries(stats.itemsByType)) {
-          if (typeData.totalQuantity > 0) {
-            itemsByTypeDetailed[type] = {
-              totalQuantity: typeData.totalQuantity,
-              averagePerChest: typeData.totalQuantity / 1000,
-              rarityDistribution: typeData.rarityDistribution,
-              items: Object.values(typeData.items).sort(
-                (a, b) => b.quantity - a.quantity,
-              ),
-            };
-          }
+    // Розрахунок відсотків для generatedChests
+    const generatedPercentages: Record<ChestType, number> = {} as any;
+    for (const [type, count] of Object.entries(generatedChests)) {
+      generatedPercentages[type as ChestType] = (count / 10000) * 100;
+    }
+
+    // Форматуємо результати
+    const formattedResults: any = {
+      generatedChests: {
+        counts: generatedChests,
+        percentages: generatedPercentages,
+        total: 10000,
+      },
+      openedResults: {},
+      summary: {
+        bestValueChest: chestTypes.reduce((best, type) =>
+          openedResults[type].averageValue > openedResults[best].averageValue
+            ? type
+            : best,
+        ),
+        bestEggChanceChest: chestTypes.reduce((best, type) =>
+          openedResults[type].eggChance > openedResults[best].eggChance
+            ? type
+            : best,
+        ),
+        worstValueChest: chestTypes.reduce((worst, type) =>
+          openedResults[type].averageValue < openedResults[worst].averageValue
+            ? type
+            : worst,
+        ),
+        mostItemsChest: chestTypes.reduce((most, type) =>
+          openedResults[type].totalItems > openedResults[most].totalItems
+            ? type
+            : most,
+        ),
+      },
+    };
+
+    // Форматуємо кожен тип скрині
+    for (const chestType of chestTypes) {
+      const stats = openedResults[chestType];
+
+      const sortedItems = Object.values(stats.allItemsList).sort(
+        (a, b) => b.quantity - a.quantity,
+      );
+
+      const itemsByTypeDetailed: any = {};
+      for (const [type, typeData] of Object.entries(stats.itemsByType)) {
+        if (typeData && typeData.totalQuantity > 0) {
+          itemsByTypeDetailed[type] = {
+            totalQuantity: typeData.totalQuantity,
+            averagePerChest: typeData.totalQuantity / 1000,
+            rarityDistribution: typeData.rarityDistribution,
+            items: Object.values(typeData.items).sort(
+              (a, b) => b.quantity - a.quantity,
+            ),
+          };
         }
-
-        formattedResults.openedResults[chestType] = {
-          summary: {
-            totalValue: stats.totalValue,
-            averageValue: stats.averageValue,
-            eggDrops: stats.eggDrops,
-            eggChance: `${stats.eggChance.toFixed(2)}%`,
-            totalItems: stats.totalItems,
-            averageItemsPerChest: stats.totalItems / 1000,
-          },
-          itemsByType: itemsByTypeDetailed,
-          topItems: sortedItems.slice(0, 20).map((item) => ({
-            ...item,
-            chanceToDrop: `${((item.occurrences / 1000) * 100).toFixed(2)}%`,
-            averagePerChest: (item.quantity / 1000).toFixed(2),
-          })),
-          allItems: sortedItems.map((item) => ({
-            ...item,
-            chanceToDrop: `${((item.occurrences / 1000) * 100).toFixed(2)}%`,
-            averagePerChest: (item.quantity / 1000).toFixed(2),
-          })),
-        };
       }
 
-      return formattedResults;
+      formattedResults.openedResults[chestType] = {
+        summary: {
+          totalValue: stats.totalValue,
+          averageValue: parseFloat(stats.averageValue.toFixed(2)),
+          eggDrops: stats.eggDrops,
+          eggChance: `${stats.eggChance.toFixed(2)}%`,
+          totalItems: stats.totalItems,
+          averageItemsPerChest: parseFloat(
+            (stats.totalItems / 1000).toFixed(2),
+          ),
+          errors:
+            stats.errors.length > 0 ? stats.errors.slice(0, 10) : undefined,
+        },
+        itemsByType: itemsByTypeDetailed,
+        topItems: sortedItems.slice(0, 20).map((item) => ({
+          itemId: item.itemId,
+          type: item.type,
+          rarity: item.rarity,
+          quantity: item.quantity,
+          occurrences: item.occurrences,
+          chanceToDrop: `${((item.occurrences / 1000) * 100).toFixed(2)}%`,
+          averagePerChest: parseFloat((item.quantity / 1000).toFixed(2)),
+        })),
+        allItems: sortedItems.map((item) => ({
+          itemId: item.itemId,
+          type: item.type,
+          rarity: item.rarity,
+          quantity: item.quantity,
+          occurrences: item.occurrences,
+          chanceToDrop: `${((item.occurrences / 1000) * 100).toFixed(2)}%`,
+          averagePerChest: parseFloat((item.quantity / 1000).toFixed(2)),
+        })),
+      };
     }
+
+    return formattedResults;
   };
 }
