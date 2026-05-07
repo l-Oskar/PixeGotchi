@@ -8,7 +8,7 @@ import { CLEANING_ITEMS } from "./items/cleaning_items";
 import { BOOST_ITEMS } from "./items/boost_items";
 import { SPECIAL_ITEMS } from "./items/special_items";
 
-export const ITEM_EXP: number = 250;
+export const ITEM_EXP: number = 133;
 
 export const ALL_ITEMS: Item[] = [
   ...FOOD_ITEMS,

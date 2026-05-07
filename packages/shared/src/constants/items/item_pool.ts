@@ -1,62 +1,23 @@
 // item-pools.ts
 
 import { ItemType, RarityType } from "../../index";
+import { createRarityPool } from "../../utils/items_rarity_pool";
+import { BOOST_ITEMS } from "./boost_items";
+import { CLEANING_ITEMS } from "./cleaning_items";
+import { FOOD_ITEMS } from "./food_items";
+import { MEDICINE_ITEMS } from "./medicine_items";
+import { SPECIAL_ITEMS } from "./special_items";
+import { TOY_ITEMS } from "./toy_items";
 
 export const ITEM_POOLS: Record<ItemType, Record<RarityType, string[]>> = {
-  food: {
-    common: ["apple"],
-    uncommon: ["apple"],
-    rare: ["apple"],
-    epic: ["apple"],
-    mythic: ["apple"],
-    legendary: ["apple"],
-  },
-
-  medicine: {
-    common: ["pill"],
-    uncommon: ["pill"],
-    rare: ["pill"],
-    epic: ["pill"],
-    mythic: ["pill"],
-    legendary: ["pill"],
-  },
-
-  cleaning: {
-    common: ["water"],
-    uncommon: ["water"],
-    rare: ["water"],
-    epic: ["water"],
-    mythic: ["water"],
-    legendary: ["water"],
-  },
-
-  toy: {
-    common: ["small_toy"],
-    uncommon: ["small_toy"],
-    rare: ["small_toy"],
-    epic: ["small_toy"],
-    mythic: ["small_toy"],
-    legendary: ["small_toy"],
-  },
-
-  boost: {
-    common: ["energy_drink"],
-    uncommon: ["energy_drink"],
-    rare: ["energy_drink"],
-    epic: ["energy_drink"],
-    mythic: ["energy_drink"],
-    legendary: ["energy_drink"],
-  },
+  food: createRarityPool(FOOD_ITEMS),
+  medicine: createRarityPool(MEDICINE_ITEMS),
+  cleaning: createRarityPool(CLEANING_ITEMS),
+  toy: createRarityPool(TOY_ITEMS),
+  boost: createRarityPool(BOOST_ITEMS),
 
   // Special items (поки не активно, але готово)
-  special: {
-    common: ["rename_tag"],
-    uncommon: ["rename_tag"],
-    rare: ["rename_tag"],
-    epic: ["rename_tag"],
-    mythic: ["rename_tag"],
-    legendary: ["rename_tag"],
-  },
+  special: createRarityPool(SPECIAL_ITEMS),
 
   chest: {
     common: [],

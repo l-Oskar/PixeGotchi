@@ -8,7 +8,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
 import ChestItems from "./ChestItems";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export interface ChestModalProps {
