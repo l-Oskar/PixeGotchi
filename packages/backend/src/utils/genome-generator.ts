@@ -1,13 +1,5 @@
 import { TraitType, TRAIT_RARITY, RARITY_TRAIT_POOL } from "@shared";
-import { RarityType, ElementType, PixegotchiGender } from "@shared";
-
-interface GenomeInfo {
-  genome_hash: string;
-  element: ElementType;
-  rarity: RarityType;
-  gender: PixegotchiGender;
-  traits: TraitType[];
-}
+import { RarityType, ElementType, PixegotchiGender, GenomeInfo } from "@shared";
 
 export class GenomeGenerator {
   private static GENDER_WEIGHTS: Record<PixegotchiGender, number> = {

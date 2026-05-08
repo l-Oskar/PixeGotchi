@@ -232,6 +232,7 @@ model Inventory {
   userId    Int      @map("user_id")
   itemId    String   @map("item_id") @db.VarChar(50)
   itemType  ItemType @map("item_type")
+  rarity    RarityType @default(common)
   quantity  Int      @default(1)
   createdAt DateTime @default(now()) @map("created_at")
 

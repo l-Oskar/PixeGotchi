@@ -1,4 +1,4 @@
-import type { ItemType } from "../enums";
+import type { ItemType, RarityType } from "../enums";
 import type { Item } from "./item";
 
 export interface InventoryItem {
@@ -6,6 +6,7 @@ export interface InventoryItem {
   userId: number;
   itemId: string;
   itemType: ItemType;
+  rarity: RarityType;
   quantity: number;
   createdAt: string | Date;
 }
@@ -14,6 +15,7 @@ export interface InventoryWithDetails {
   userId: number;
   itemId: string;
   itemType: ItemType;
+  rarity: RarityType;
   quantity: number;
   createdAt: string | Date;
   details: Item | null;

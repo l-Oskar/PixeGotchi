@@ -1,3 +1,4 @@
+import { TraitType } from "./traits";
 import type {
   ElementType,
   RarityType,
@@ -63,4 +64,11 @@ export interface RarityStatsType {
     max: number;
   };
   goldEarn: number;
+}
+export interface GenomeInfo {
+  genome_hash: string;
+  element: ElementType;
+  rarity: RarityType;
+  gender: PixegotchiGender;
+  traits: TraitType[];
 }

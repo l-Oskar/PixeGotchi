@@ -14,7 +14,7 @@ export * from "./constants/user_const";
 export * from "./constants/item_const";
 export * from "./constants/items/items_img";
 export * from "./constants/items/item_pool";
-export * from "./constants/traits";
+export * from "./constants/traits_const";
 export * from "./constants/chest_const";
 
 // Domain types
@@ -22,6 +22,8 @@ export type {
   Pixegotchi,
   PixegotchiStats,
   Cooldowns,
+  RarityStatsType,
+  GenomeInfo,
 } from "./types/pixegotchi";
 export type { User, UserProfile } from "./types/user";
 export type { InventoryItem, InventoryWithDetails } from "./types/inventory";
@@ -37,7 +39,7 @@ export type {
   ChestRewards,
   ChestConfig,
 } from "./types/chest";
-export {} from "./types/inventory";
+export { TraitType, TraitEffect } from "./types/traits";
 export type { ApiSuccess, ApiError, ApiResponse } from "./types/api";
 export type { HomePageProps } from "./types/pages";
 export type { GameStruct } from "./types/game";

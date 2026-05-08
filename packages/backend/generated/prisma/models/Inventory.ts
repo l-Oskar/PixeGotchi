@@ -43,6 +43,7 @@ export type InventoryMinAggregateOutputType = {
   userId: number | null
   itemId: string | null
   itemType: $Enums.ItemType | null
+  rarity: $Enums.RarityType | null
   quantity: number | null
   createdAt: Date | null
 }
@@ -52,6 +53,7 @@ export type InventoryMaxAggregateOutputType = {
   userId: number | null
   itemId: string | null
   itemType: $Enums.ItemType | null
+  rarity: $Enums.RarityType | null
   quantity: number | null
   createdAt: Date | null
 }
@@ -61,6 +63,7 @@ export type InventoryCountAggregateOutputType = {
   userId: number
   itemId: number
   itemType: number
+  rarity: number
   quantity: number
   createdAt: number
   _all: number
@@ -84,6 +87,7 @@ export type InventoryMinAggregateInputType = {
   userId?: true
   itemId?: true
   itemType?: true
+  rarity?: true
   quantity?: true
   createdAt?: true
 }
@@ -93,6 +97,7 @@ export type InventoryMaxAggregateInputType = {
   userId?: true
   itemId?: true
   itemType?: true
+  rarity?: true
   quantity?: true
   createdAt?: true
 }
@@ -102,6 +107,7 @@ export type InventoryCountAggregateInputType = {
   userId?: true
   itemId?: true
   itemType?: true
+  rarity?: true
   quantity?: true
   createdAt?: true
   _all?: true
@@ -198,6 +204,7 @@ export type InventoryGroupByOutputType = {
   userId: number
   itemId: string
   itemType: $Enums.ItemType
+  rarity: $Enums.RarityType
   quantity: number
   createdAt: Date
   _count: InventoryCountAggregateOutputType | null
@@ -230,6 +237,7 @@ export type InventoryWhereInput = {
   userId?: Prisma.IntFilter<"Inventory"> | number
   itemId?: Prisma.StringFilter<"Inventory"> | string
   itemType?: Prisma.EnumItemTypeFilter<"Inventory"> | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFilter<"Inventory"> | $Enums.RarityType
   quantity?: Prisma.IntFilter<"Inventory"> | number
   createdAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -240,6 +248,7 @@ export type InventoryOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
   itemType?: Prisma.SortOrder
+  rarity?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -254,6 +263,7 @@ export type InventoryWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.IntFilter<"Inventory"> | number
   itemId?: Prisma.StringFilter<"Inventory"> | string
   itemType?: Prisma.EnumItemTypeFilter<"Inventory"> | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFilter<"Inventory"> | $Enums.RarityType
   quantity?: Prisma.IntFilter<"Inventory"> | number
   createdAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -264,6 +274,7 @@ export type InventoryOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
   itemType?: Prisma.SortOrder
+  rarity?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.InventoryCountOrderByAggregateInput
@@ -281,6 +292,7 @@ export type InventoryScalarWhereWithAggregatesInput = {
   userId?: Prisma.IntWithAggregatesFilter<"Inventory"> | number
   itemId?: Prisma.StringWithAggregatesFilter<"Inventory"> | string
   itemType?: Prisma.EnumItemTypeWithAggregatesFilter<"Inventory"> | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeWithAggregatesFilter<"Inventory"> | $Enums.RarityType
   quantity?: Prisma.IntWithAggregatesFilter<"Inventory"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Inventory"> | Date | string
 }
@@ -288,6 +300,7 @@ export type InventoryScalarWhereWithAggregatesInput = {
 export type InventoryCreateInput = {
   itemId: string
   itemType: $Enums.ItemType
+  rarity?: $Enums.RarityType
   quantity?: number
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutInventoryInput
@@ -298,6 +311,7 @@ export type InventoryUncheckedCreateInput = {
   userId: number
   itemId: string
   itemType: $Enums.ItemType
+  rarity?: $Enums.RarityType
   quantity?: number
   createdAt?: Date | string
 }
@@ -305,6 +319,7 @@ export type InventoryUncheckedCreateInput = {
 export type InventoryUpdateInput = {
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   itemType?: Prisma.EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutInventoryNestedInput
@@ -315,6 +330,7 @@ export type InventoryUncheckedUpdateInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   itemType?: Prisma.EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -324,6 +340,7 @@ export type InventoryCreateManyInput = {
   userId: number
   itemId: string
   itemType: $Enums.ItemType
+  rarity?: $Enums.RarityType
   quantity?: number
   createdAt?: Date | string
 }
@@ -331,6 +348,7 @@ export type InventoryCreateManyInput = {
 export type InventoryUpdateManyMutationInput = {
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   itemType?: Prisma.EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -340,6 +358,7 @@ export type InventoryUncheckedUpdateManyInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   itemType?: Prisma.EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -364,6 +383,7 @@ export type InventoryCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
   itemType?: Prisma.SortOrder
+  rarity?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -379,6 +399,7 @@ export type InventoryMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
   itemType?: Prisma.SortOrder
+  rarity?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -388,6 +409,7 @@ export type InventoryMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
   itemType?: Prisma.SortOrder
+  rarity?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -447,6 +469,7 @@ export type EnumItemTypeFieldUpdateOperationsInput = {
 export type InventoryCreateWithoutUserInput = {
   itemId: string
   itemType: $Enums.ItemType
+  rarity?: $Enums.RarityType
   quantity?: number
   createdAt?: Date | string
 }
@@ -455,6 +478,7 @@ export type InventoryUncheckedCreateWithoutUserInput = {
   id?: number
   itemId: string
   itemType: $Enums.ItemType
+  rarity?: $Enums.RarityType
   quantity?: number
   createdAt?: Date | string
 }
@@ -493,6 +517,7 @@ export type InventoryScalarWhereInput = {
   userId?: Prisma.IntFilter<"Inventory"> | number
   itemId?: Prisma.StringFilter<"Inventory"> | string
   itemType?: Prisma.EnumItemTypeFilter<"Inventory"> | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFilter<"Inventory"> | $Enums.RarityType
   quantity?: Prisma.IntFilter<"Inventory"> | number
   createdAt?: Prisma.DateTimeFilter<"Inventory"> | Date | string
 }
@@ -501,6 +526,7 @@ export type InventoryCreateManyUserInput = {
   id?: number
   itemId: string
   itemType: $Enums.ItemType
+  rarity?: $Enums.RarityType
   quantity?: number
   createdAt?: Date | string
 }
@@ -508,6 +534,7 @@ export type InventoryCreateManyUserInput = {
 export type InventoryUpdateWithoutUserInput = {
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   itemType?: Prisma.EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -516,6 +543,7 @@ export type InventoryUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   itemType?: Prisma.EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -524,6 +552,7 @@ export type InventoryUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   itemType?: Prisma.EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+  rarity?: Prisma.EnumRarityTypeFieldUpdateOperationsInput | $Enums.RarityType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -535,6 +564,7 @@ export type InventorySelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   userId?: boolean
   itemId?: boolean
   itemType?: boolean
+  rarity?: boolean
   quantity?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -545,6 +575,7 @@ export type InventorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   userId?: boolean
   itemId?: boolean
   itemType?: boolean
+  rarity?: boolean
   quantity?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -555,6 +586,7 @@ export type InventorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   userId?: boolean
   itemId?: boolean
   itemType?: boolean
+  rarity?: boolean
   quantity?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -565,11 +597,12 @@ export type InventorySelectScalar = {
   userId?: boolean
   itemId?: boolean
   itemType?: boolean
+  rarity?: boolean
   quantity?: boolean
   createdAt?: boolean
 }
 
-export type InventoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "itemId" | "itemType" | "quantity" | "createdAt", ExtArgs["result"]["inventory"]>
+export type InventoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "itemId" | "itemType" | "rarity" | "quantity" | "createdAt", ExtArgs["result"]["inventory"]>
 export type InventoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -590,6 +623,7 @@ export type $InventoryPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     userId: number
     itemId: string
     itemType: $Enums.ItemType
+    rarity: $Enums.RarityType
     quantity: number
     createdAt: Date
   }, ExtArgs["result"]["inventory"]>
@@ -1020,6 +1054,7 @@ export interface InventoryFieldRefs {
   readonly userId: Prisma.FieldRef<"Inventory", 'Int'>
   readonly itemId: Prisma.FieldRef<"Inventory", 'String'>
   readonly itemType: Prisma.FieldRef<"Inventory", 'ItemType'>
+  readonly rarity: Prisma.FieldRef<"Inventory", 'RarityType'>
   readonly quantity: Prisma.FieldRef<"Inventory", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Inventory", 'DateTime'>
 }
