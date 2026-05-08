@@ -8,7 +8,7 @@
     "start": "node dist/src/server.js",
     "dev:docker": "npm install && npx prisma generate && npx prisma migrate dev && npm run dev",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate": "prisma migrate dev --name auto_migration",
     "prisma:studio": "prisma studio",
     "prisma:server": "BROWSER=none npx prisma studio --port 51212",
     "prisma:seed": "tsx src/database/seed.ts",
