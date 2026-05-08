@@ -1,414 +1,421 @@
-export type TraitType =
-  // Активність
-  | "lazy" // ледачий
-  | "energetic" // енергійний
-  | "hyperactive" // гіперактивний
-  | "sleepy" // сонний
+import { RarityType } from "../enums";
 
-  // Характер
-  | "playful" // грайливий
-  | "serious" // серйозний
+export type TraitType =
+  // Common (5) — прості, часто зустрічаються
+  | "lazy" // ледачий
+  | "glutton" // ненажера
+  | "messy" // неохайний
   | "shy" // сором'язливий
-  | "brave" // хоробрий
+  | "energetic" // енергійний
+
+  // Uncommon (4) — трохи рідші, більш виражені ефекти
+  | "playful" // грайливий
   | "curious" // цікавий
   | "stubborn" // впертий
-
-  // Їжа
-  | "glutton" // ненажера
-  | "picky" // вибагливий
-  | "vegetarian" // вегетаріанець
-  | "carnivore" // м'ясоїд
-  | "foodie" // гурман
-
-  // Чистота
-  | "cleanfreak" // чистюля
-  | "messy" // неохайний
-  | "perfectionist" // перфекціоніст
-
-  // Соціальність
-  | "friendly" // дружелюбний
-  | "antisocial" // нетовариський
-  | "loyal" // вірний
-  | "independent" // незалежний
-
-  // Здоров'я
-  | "hardy" // витривалий
   | "fragile" // крихкий
-  | "immortal" // безсмертний (рідкісний)
-  | "sickly" // хворобливий
 
-  // Особливі
-  | "nocturnal" // нічний
-  | "diurnal" // денний
-  | "greedy" // жадібний
-  | "generous" // щедрий
-  | "wise" // мудрий
+  // Rare (4) — рідкісні, сильніший вплив
+  | "hyperactive" // гіперактивний
+  | "antisocial" // нетовариський
+  | "hardy" // витривалий
+  | "wild" // дикий
+
+  // Epic (4) — епічні, яскраві ефекти
+  | "brave" // хоробрий
+  | "loyal" // вірний
   | "childish" // дитячий
-  | "royal" // королівський
-  | "wild"; // дикий;
+  | "pessimist" // песиміст
 
-interface TraitEffect {
+  // Mythic (2) — дуже рідкісні, потужні чи небезпечні
+  | "optimist" // оптиміст
+  | "athlete" // атлет
+
+  // Legendary (1) — унікальний, визначний
+  | "immortal_soul"; // безсмертна душа
+
+export const TRAIT_RARITY: Record<TraitType, RarityType> = {
+  // Common
+  lazy: "common",
+  glutton: "common",
+  messy: "common",
+  shy: "common",
+  energetic: "common",
+
+  // Uncommon
+  playful: "uncommon",
+  curious: "uncommon",
+  stubborn: "uncommon",
+  fragile: "uncommon",
+
+  // Rare
+  hyperactive: "rare",
+  antisocial: "rare",
+  hardy: "rare",
+  wild: "rare",
+
+  // Epic
+  brave: "epic",
+  loyal: "epic",
+  childish: "epic",
+  pessimist: "epic",
+
+  // Mythic
+  optimist: "mythic",
+  athlete: "mythic",
+
+  // Legendary
+  immortal_soul: "legendary",
+};
+
+// ─────────────────────────────────────────────
+// Скільки трейтів може мати істота за rarity
+// Чим вища rarity — тим більше трейтів і доступ
+// до рідкісніших пулів. Негативні трейти можливі
+// на будь-якому рівні, але рідше на вищих.
+// ─────────────────────────────────────────────
+export const RARITY_TRAIT_COUNT: Record<RarityType, number> = {
+  common: 1,
+  uncommon: 2,
+  rare: 2,
+  epic: 3,
+  mythic: 3,
+  legendary: 4,
+};
+
+// Який пул трейтів доступний для кожної rarity
+// (включає всі нижчі + свій рівень)
+export const RARITY_TRAIT_POOL: Record<RarityType, RarityType[]> = {
+  common: ["common"],
+  uncommon: ["common", "uncommon"],
+  rare: ["common", "uncommon", "rare"],
+  epic: ["common", "uncommon", "rare", "epic"],
+  mythic: ["common", "uncommon", "rare", "epic", "mythic"],
+  legendary: ["common", "uncommon", "rare", "epic", "mythic", "legendary"],
+};
+
+// ─────────────────────────────────────────────
+// Trait effect types
+// ─────────────────────────────────────────────
+export interface TraitEffect {
   trait: TraitType;
+  rarity: RarityType;
+  isNegative: boolean; // чи трейт загалом шкідливий
   description: string;
   effects: {
-    hunger_rate?: number; // швидкість голоду (множник)
-    energy_drain?: number; // витрата енергії
-    happiness_gain?: number; // приріст щастя від дій
-    cleanliness_decay?: number; // швидкість забруднення
-    health_modifier?: number; // базове здоров'я
-    play_requirement?: number; // потреба в іграх
-    sleep_requirement?: number; // потреба в сні
-    food_preference?: string[]; // улюблена їжа
-    special_needs?: string[]; // особливі потреби
+    hunger_rate?: number; // множник швидкості голоду (>1 = швидше голодніє)
+    energy_drain?: number; // множник витрати енергії  (>1 = швидше втомлюється)
+    happiness_gain?: number; // множник приросту щастя   (<1 = важче радіє)
+    cleanliness_decay?: number; // множник забруднення      (>1 = швидше бруднішає)
+    health_modifier?: number; // множник базового здоров'я (>1 = міцніший)
+    sleep_requirement?: number; // множник потреби в сні
+    play_requirement?: number; // множник потреби в іграх
   };
 }
 
+// ─────────────────────────────────────────────
+// TRAIT EFFECTS — 20 трейтів
+// Кожен впливає на різні стати по-своєму
+// ─────────────────────────────────────────────
 export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
-  // === ACTIVITY ===
+  // ═══════════════════════════════════════════
+  // COMMON — прості, часто зустрічаються
+  // ═══════════════════════════════════════════
+
   lazy: {
     trait: "lazy",
-    description: "Loves to sleep and avoids activities",
+    rarity: "common",
+    isNegative: true,
+    description: "Loves to lie around and does the bare minimum",
     effects: {
-      energy_drain: 0.5,
-      sleep_requirement: 1.5,
-      play_requirement: 0.5,
-      happiness_gain: 0.7,
+      energy_drain: 0.5, // ↓ повільніше витрачає енергію
+      sleep_requirement: 1.4, // ↑ потребує більше сну
+      play_requirement: 0.5, // ↓ не любить гратись
+      happiness_gain: 0.7, // ↓ важче зробити щасливим
     },
   },
 
-  energetic: {
-    trait: "energetic",
-    description: "Always ready for adventure",
-    effects: {
-      energy_drain: 1.3,
-      play_requirement: 1.5,
-      happiness_gain: 1.3,
-      hunger_rate: 1.2,
-    },
-  },
-
-  hyperactive: {
-    trait: "hyperactive",
-    description: "Can't sit still",
-    effects: {
-      energy_drain: 1.8,
-      play_requirement: 2.0,
-      hunger_rate: 1.5,
-      happiness_gain: 1.5,
-      special_needs: ["constant_attention"],
-    },
-  },
-
-  sleepy: {
-    trait: "sleepy",
-    description: "Always wants to sleep",
-    effects: {
-      sleep_requirement: 2.0,
-      energy_drain: 0.3,
-      play_requirement: 0.3,
-      happiness_gain: 0.8,
-    },
-  },
-
-  // === CHARACTER ===
-  playful: {
-    trait: "playful",
-    description: "Loves to play",
-    effects: {
-      play_requirement: 1.8,
-      happiness_gain: 1.5,
-      energy_drain: 1.2,
-    },
-  },
-
-  serious: {
-    trait: "serious",
-    description: "Serious and focused",
-    effects: {
-      play_requirement: 0.5,
-      happiness_gain: 0.8,
-      health_modifier: 1.1,
-    },
-  },
-
-  shy: {
-    trait: "shy",
-    description: "Afraid of strangers",
-    effects: {
-      happiness_gain: 0.7,
-      special_needs: ["quiet_environment", "slow_approach"],
-    },
-  },
-
-  brave: {
-    trait: "brave",
-    description: "Afraid of nothing",
-    effects: {
-      health_modifier: 1.2,
-      happiness_gain: 1.1,
-    },
-  },
-
-  curious: {
-    trait: "curious",
-    description: "Curious about everything",
-    effects: {
-      play_requirement: 1.3,
-      happiness_gain: 1.2,
-      energy_drain: 1.1,
-      special_needs: ["new_toys", "exploration"],
-    },
-  },
-
-  stubborn: {
-    trait: "stubborn",
-    description: "Does only what it wants",
-    effects: {
-      happiness_gain: 0.6,
-      special_needs: ["patience", "specific_food"],
-    },
-  },
-
-  // === FOOD ===
   glutton: {
     trait: "glutton",
-    description: "Always hungry",
+    rarity: "common",
+    isNegative: true,
+    description: "Always hungry, eats everything in sight",
     effects: {
-      hunger_rate: 2.0,
-      happiness_gain: 1.5,
-      health_modifier: 0.9,
-      special_needs: ["frequent_feeding"],
-    },
-  },
-
-  picky: {
-    trait: "picky",
-    description: "Eats only selected dishes",
-    effects: {
-      hunger_rate: 0.8,
-      happiness_gain: 0.5,
-      food_preference: ["premium_food", "specific_type"],
-      special_needs: ["variety"],
-    },
-  },
-
-  vegetarian: {
-    trait: "vegetarian",
-    description: "Eats only plant-based food",
-    effects: {
-      hunger_rate: 1.1,
-      food_preference: ["vegetables", "fruits", "grass"],
-      health_modifier: 1.05,
-    },
-  },
-
-  carnivore: {
-    trait: "carnivore",
-    description: "Eats only meat",
-    effects: {
-      hunger_rate: 1.2,
-      food_preference: ["meat", "fish"],
-      health_modifier: 1.1,
-    },
-  },
-
-  foodie: {
-    trait: "foodie",
-    description: "A true gourmet",
-    effects: {
-      hunger_rate: 1.0,
-      happiness_gain: 2.0,
-      food_preference: ["gourmet", "exotic"],
-      special_needs: ["high_quality_food"],
-    },
-  },
-
-  // === CLEANLINESS ===
-  cleanfreak: {
-    trait: "cleanfreak",
-    description: "Obsessed with cleanliness",
-    effects: {
-      cleanliness_decay: 2.0,
-      happiness_gain: 0.5,
-      special_needs: ["frequent_cleaning", "pristine_environment"],
+      hunger_rate: 2.0, // ↑↑ дуже швидко голодніє
+      happiness_gain: 1.3, // ↑ їжа дає більше щастя
+      health_modifier: 0.9, // ↓ трохи слабше здоров'я
     },
   },
 
   messy: {
     trait: "messy",
-    description: "Doesn't care about dirt",
+    rarity: "common",
+    isNegative: true,
+    description: "Leaves chaos everywhere it goes",
     effects: {
-      cleanliness_decay: 0.3,
-      happiness_gain: 1.2,
-      health_modifier: 0.9,
+      cleanliness_decay: 2.2, // ↑↑ дуже швидко бруднішає
+      happiness_gain: 1.1, // ↑ не переймається брудом — щасливий
+      health_modifier: 0.85, // ↓ бруд впливає на здоров'я
     },
   },
 
-  perfectionist: {
-    trait: "perfectionist",
-    description: "Everything must be perfect",
+  shy: {
+    trait: "shy",
+    rarity: "common",
+    isNegative: false,
+    description: "Timid and easily startled, warms up slowly",
     effects: {
-      cleanliness_decay: 1.5,
-      happiness_gain: 0.4,
-      special_needs: ["perfect_order", "routine"],
+      happiness_gain: 0.65, // ↓↓ важко розвеселити
+      play_requirement: 0.8, // ↓ не прагне до ігор
+      energy_drain: 0.9, // ↓ тихо сидить, майже не витрачає енергію
     },
   },
 
-  // === SOCIAL ===
-  friendly: {
-    trait: "friendly",
-    description: "Loves everyone",
+  energetic: {
+    trait: "energetic",
+    rarity: "common",
+    isNegative: false,
+    description: "Full of life and always ready to move",
     effects: {
-      happiness_gain: 1.3,
-      play_requirement: 1.2,
+      energy_drain: 1.3, // ↑ активніше витрачає енергію
+      hunger_rate: 1.25, // ↑ активність = більший апетит
+      happiness_gain: 1.3, // ↑ легко радіє
+      play_requirement: 1.3, // ↑ потребує більше ігор
     },
   },
 
-  antisocial: {
-    trait: "antisocial",
-    description: "Prefers solitude",
+  // ═══════════════════════════════════════════
+  // UNCOMMON — трохи рідші, виразніші ефекти
+  // ═══════════════════════════════════════════
+
+  playful: {
+    trait: "playful",
+    rarity: "uncommon",
+    isNegative: false,
+    description: "Turns everything into a game",
     effects: {
-      happiness_gain: 0.6,
-      play_requirement: 0.5,
-      special_needs: ["alone_time"],
+      play_requirement: 1.8, // ↑↑ постійно потребує ігор
+      happiness_gain: 1.6, // ↑↑ гра дає багато щастя
+      energy_drain: 1.2, // ↑ гра витрачає енергію
     },
   },
 
-  loyal: {
-    trait: "loyal",
-    description: "Devoted to its owner",
+  curious: {
+    trait: "curious",
+    rarity: "uncommon",
+    isNegative: false,
+    description: "Explores everything with wide eyes",
     effects: {
-      happiness_gain: 1.5,
-      health_modifier: 1.1,
+      play_requirement: 1.4, // ↑ потребує нових вражень
+      happiness_gain: 1.2, // ↑ нові речі приносять щастя
+      energy_drain: 1.15, // ↑ дослідження забирає енергію
+      hunger_rate: 1.1, // ↑ активний мозок — більший апетит
     },
   },
 
-  independent: {
-    trait: "independent",
-    description: "Doesn't need much attention",
+  stubborn: {
+    trait: "stubborn",
+    rarity: "uncommon",
+    isNegative: true,
+    description: "Does only what it wants, when it wants",
     effects: {
-      play_requirement: 0.7,
-      happiness_gain: 0.9,
-      health_modifier: 1.05,
-    },
-  },
-
-  // === HEALTH ===
-  hardy: {
-    trait: "hardy",
-    description: "Very strong health",
-    effects: {
-      health_modifier: 1.5,
-      hunger_rate: 0.9,
+      happiness_gain: 0.55, // ↓↓ важко догодити
+      hunger_rate: 0.85, // ↓ їсть лише коли само хоче
+      health_modifier: 1.05, // ↑ впертість = стійкість
     },
   },
 
   fragile: {
     trait: "fragile",
-    description: "Gets sick easily",
+    rarity: "uncommon",
+    isNegative: true,
+    description: "Delicate constitution, needs extra care",
     effects: {
-      health_modifier: 0.6,
-      special_needs: ["gentle_care", "medicine"],
+      health_modifier: 0.55, // ↓↓ значно менше здоров'я
+      energy_drain: 1.2, // ↑ швидше втомлюється
+      cleanliness_decay: 1.3, // ↑ чистота впливає на самопочуття
     },
   },
 
-  immortal: {
-    trait: "immortal",
-    description: "Cannot die",
+  // ═══════════════════════════════════════════
+  // RARE — рідкісні, сильніший вплив
+  // ═══════════════════════════════════════════
+
+  hyperactive: {
+    trait: "hyperactive",
+    rarity: "rare",
+    isNegative: false,
+    description: "Boundless energy that never stops",
     effects: {
-      health_modifier: 999,
-      special_needs: ["legendary_care"],
+      energy_drain: 1.9, // ↑↑ дуже швидко витрачає енергію
+      play_requirement: 2.0, // ↑↑ постійно хоче рухатись
+      hunger_rate: 1.6, // ↑↑ величезний апетит
+      happiness_gain: 1.5, // ↑↑ але дуже радісний
     },
   },
 
-  sickly: {
-    trait: "sickly",
-    description: "Often sick",
+  antisocial: {
+    trait: "antisocial",
+    rarity: "rare",
+    isNegative: true,
+    description: "Prefers its own company above all else",
     effects: {
-      health_modifier: 0.7,
-      hunger_rate: 0.8,
-      special_needs: ["regular_medicine"],
+      happiness_gain: 0.5, // ↓↓ взаємодія не радує
+      play_requirement: 0.4, // ↓↓ майже не потребує ігор
+      energy_drain: 0.8, // ↓ спокійний, економить енергію
+      health_modifier: 1.05, // ↑ самотність = стабільність
     },
   },
 
-  // === SPECIAL ===
-  nocturnal: {
-    trait: "nocturnal",
-    description: "Active at night",
+  hardy: {
+    trait: "hardy",
+    rarity: "rare",
+    isNegative: false,
+    description: "Iron constitution, rarely gets sick",
     effects: {
-      sleep_requirement: 1.0,
-      special_needs: ["night_activity"],
-      happiness_gain: 1.2,
-    },
-  },
-
-  diurnal: {
-    trait: "diurnal",
-    description: "Active during the day",
-    effects: {
-      sleep_requirement: 1.0,
-      energy_drain: 1.1,
-      happiness_gain: 1.1,
-    },
-  },
-
-  greedy: {
-    trait: "greedy",
-    description: "Wants more of everything",
-    effects: {
-      hunger_rate: 1.5,
-      happiness_gain: 0.7,
-      special_needs: ["extra_resources"],
-    },
-  },
-
-  generous: {
-    trait: "generous",
-    description: "Ready to share",
-    effects: {
-      happiness_gain: 1.4,
-      hunger_rate: 0.9,
-    },
-  },
-
-  wise: {
-    trait: "wise",
-    description: "Wise and experienced",
-    effects: {
-      health_modifier: 1.2,
-      happiness_gain: 1.1,
-      special_needs: ["meditation", "knowledge"],
-    },
-  },
-
-  childish: {
-    trait: "childish",
-    description: "Behaves like a child",
-    effects: {
-      play_requirement: 2.0,
-      happiness_gain: 1.5,
-      energy_drain: 1.4,
-    },
-  },
-
-  royal: {
-    trait: "royal",
-    description: "Has royal manners",
-    effects: {
-      happiness_gain: 0.6,
-      food_preference: ["premium", "gourmet"],
-      special_needs: ["luxury_treatment", "royal_items"],
+      health_modifier: 1.6, // ↑↑ дуже міцне здоров'я
+      hunger_rate: 0.85, // ↓ ефективний обмін речовин
+      cleanliness_decay: 0.85, // ↓ менш схильний до брудного шкоди
     },
   },
 
   wild: {
     trait: "wild",
-    description: "Wild and untamed",
+    rarity: "rare",
+    isNegative: false,
+    description: "Untamed spirit, thrives on freedom",
     effects: {
-      health_modifier: 1.3,
-      happiness_gain: 0.5,
-      play_requirement: 1.5,
-      special_needs: ["freedom", "outdoor_time"],
+      health_modifier: 1.3, // ↑ природна витривалість
+      happiness_gain: 0.6, // ↓ важко зробити щасливим в неволі
+      play_requirement: 1.6, // ↑↑ потребує активного руху
+      cleanliness_decay: 1.5, // ↑ дика природа = бруд
+    },
+  },
+
+  // ═══════════════════════════════════════════
+  // EPIC — яскраві ефекти, сильний характер
+  // ═══════════════════════════════════════════
+
+  brave: {
+    trait: "brave",
+    rarity: "epic",
+    isNegative: false,
+    description: "Fearless and resilient in any situation",
+    effects: {
+      health_modifier: 1.35, // ↑↑ сміливість = міцність
+      happiness_gain: 1.25, // ↑ не боїться — радіє більше
+      energy_drain: 0.9, // ↓ не витрачає енергію на страх
+    },
+  },
+
+  loyal: {
+    trait: "loyal",
+    rarity: "epic",
+    isNegative: false,
+    description: "Deeply devoted, bonds strengthen everything",
+    effects: {
+      happiness_gain: 1.7, // ↑↑ прив'язаність = щастя
+      health_modifier: 1.2, // ↑ любов зміцнює здоров'я
+      hunger_rate: 0.9, // ↓ задоволений — менше потреби в їжі
+    },
+  },
+
+  childish: {
+    trait: "childish",
+    rarity: "epic",
+    isNegative: false,
+    description: "Forever young at heart, pure joy in everything",
+    effects: {
+      play_requirement: 2.1, // ↑↑ обожнює гратись
+      happiness_gain: 1.6, // ↑↑ радіє всьому
+      energy_drain: 1.5, // ↑↑ невичерпна дитяча енергія
+      hunger_rate: 1.2, // ↑ постійно в русі = апетит
+    },
+  },
+
+  pessimist: {
+    trait: "pessimist",
+    rarity: "epic",
+    isNegative: true,
+    description: "Always expects the worst, hard to cheer up",
+    effects: {
+      happiness_gain: 0.4, // ↓↓↓ дуже важко зробити щасливим
+      energy_drain: 0.75, // ↓ апатія зберігає енергію
+      sleep_requirement: 1.3, // ↑ депресивний сон
+      health_modifier: 0.9, // ↓ негатив впливає на здоров'я
+    },
+  },
+
+  // ═══════════════════════════════════════════
+  // MYTHIC — дуже рідкісні, потужні
+  // ═══════════════════════════════════════════
+
+  optimist: {
+    trait: "optimist",
+    rarity: "mythic",
+    isNegative: false,
+    description: "Radiates joy, everything is wonderful",
+    effects: {
+      happiness_gain: 2.0, // ↑↑↑ щастя росте вдвічі швидше
+      health_modifier: 1.3, // ↑↑ позитив зміцнює здоров'я
+      energy_drain: 0.85, // ↓ оптимізм зберігає енергію
+      hunger_rate: 0.9, // ↓ задоволений собою — менш голодний
+    },
+  },
+
+  athlete: {
+    trait: "athlete",
+    rarity: "mythic",
+    isNegative: false,
+    description: "Peak physical form, body is a temple",
+    effects: {
+      health_modifier: 1.5, // ↑↑↑ максимальне здоров'я
+      energy_drain: 1.4, // ↑ тренування забирають енергію
+      hunger_rate: 1.5, // ↑↑ спортсмен їсть багато
+      happiness_gain: 1.4, // ↑↑ тренування = ендорфіни = щастя
+      cleanliness_decay: 1.2, // ↑ піт і активність = бруд
+    },
+  },
+
+  // ═══════════════════════════════════════════
+  // LEGENDARY — унікальний трейт
+  // ═══════════════════════════════════════════
+
+  immortal_soul: {
+    trait: "immortal_soul",
+    rarity: "legendary",
+    isNegative: false,
+    description:
+      "Ancient soul that transcends mortality — health never drops below 1",
+    effects: {
+      health_modifier: 2.0, // ↑↑↑↑ подвійне здоров'я
+      happiness_gain: 1.5, // ↑↑ мудрість приносить спокій
+      hunger_rate: 0.7, // ↓↓ потребує мало їжі
+      energy_drain: 0.7, // ↓↓ невичерпна душа
+      cleanliness_decay: 0.8, // ↓ ефірна природа — майже не бруднить
     },
   },
 };
+
+// ─────────────────────────────────────────────
+// Утиліти
+// ─────────────────────────────────────────────
+
+/** Отримати всі трейти певної rarity */
+export function getTraitsByRarity(rarity: RarityType): TraitType[] {
+  return (Object.keys(TRAIT_RARITY) as TraitType[]).filter(
+    (t) => TRAIT_RARITY[t] === rarity,
+  );
+}
+
+/** Отримати доступний пул трейтів для rarity істоти */
+export function getTraitPool(rarity: RarityType): TraitType[] {
+  const allowedRarities = RARITY_TRAIT_POOL[rarity];
+  return (Object.keys(TRAIT_RARITY) as TraitType[]).filter((t) =>
+    allowedRarities.includes(TRAIT_RARITY[t]),
+  );
+}
+
+/** Перевірити чи трейт є негативним */
+export function isNegativeTrait(trait: TraitType): boolean {
+  return TRAIT_EFFECTS[trait].isNegative;
+}

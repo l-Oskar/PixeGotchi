@@ -1,4 +1,4 @@
-import { TraitType } from "@shared";
+import { TraitType, TRAIT_RARITY, RARITY_TRAIT_POOL } from "@shared";
 import { RarityType, ElementType, PixegotchiGender } from "@shared";
 
 interface GenomeInfo {
@@ -14,7 +14,7 @@ export class GenomeGenerator {
     male: 50,
     female: 50,
   };
-  // Ваги для елементів
+
   private static ELEMENT_WEIGHTS: Record<ElementType, number> = {
     fire: 10,
     water: 10,
@@ -32,63 +32,49 @@ export class GenomeGenerator {
     rainbow: 1,
   };
 
-  // Ваги для рідкості (від найпростіших до найрідкісніших)
   private static RARITY_WEIGHTS: Record<RarityType, number> = {
     common: 45, // 45%
     uncommon: 25, // 25%
     rare: 15, // 15%
     epic: 10, // 10%
     mythic: 4, // 4%
-    legendary: 0.9, // 0.9%
+    legendary: 1, // 1%
   };
 
-  // Базові ваги для трейтів (БЕЗ immortal - він додається окремо)
-  private static BASE_TRAIT_WEIGHTS: Record<
-    Exclude<TraitType, "immortal">,
-    number
-  > = {
-    // Common traits (високі шанси)
-    lazy: 10,
-    energetic: 10,
-    playful: 10,
-    friendly: 10,
-    messy: 10,
-    diurnal: 10,
+  // Ваги для трейтів всередині свого rarity-пулу
+  // Негативні трейти мають трохи вищу вагу — частіше випадають як "прокляття"
+  private static TRAIT_WEIGHTS: Record<TraitType, number> = {
+    // Common
+    lazy: 12, // негативний — частіше
+    glutton: 12, // негативний — частіше
+    messy: 12, // негативний — частіше
+    shy: 8,
+    energetic: 8,
 
-    // Uncommon traits
-    sleepy: 7,
-    serious: 7,
-    shy: 7,
-    curious: 7,
-    glutton: 7,
-    cleanfreak: 7,
-    independent: 7,
+    // Uncommon
+    playful: 8,
+    curious: 8,
+    stubborn: 10, // негативний — частіше
+    fragile: 10, // негативний — частіше
 
-    // Rare traits
-    hyperactive: 5,
-    brave: 5,
-    picky: 5,
-    vegetarian: 5,
-    carnivore: 5,
-    antisocial: 5,
+    // Rare
+    hyperactive: 6,
+    antisocial: 8, // негативний — частіше
     hardy: 5,
-    nocturnal: 5,
-    greedy: 5,
+    wild: 6,
+
+    // Epic
+    brave: 4,
+    loyal: 4,
     childish: 5,
+    pessimist: 6, // негативний — частіше
 
-    // Epic traits
-    stubborn: 3,
-    foodie: 3,
-    perfectionist: 3,
-    loyal: 3,
-    fragile: 3,
-    sickly: 3,
-    generous: 3,
-    wild: 3,
+    // Mythic
+    optimist: 3,
+    athlete: 3,
 
-    // Mythic/Legendary traits
-    wise: 1,
-    royal: 1,
+    // Legendary
+    immortal_soul: 1,
   };
 
   // Кількість трейтів за рідкістю
@@ -97,12 +83,64 @@ export class GenomeGenerator {
     { min: number; max: number }
   > = {
     common: { min: 0, max: 1 },
-    uncommon: { min: 1, max: 1 },
+    uncommon: { min: 1, max: 2 },
     rare: { min: 1, max: 2 },
-    epic: { min: 2, max: 2 },
+    epic: { min: 2, max: 3 },
     mythic: { min: 2, max: 3 },
-    legendary: { min: 4, max: 4 },
+    legendary: { min: 3, max: 4 },
   };
+
+  // Шанс отримати негативний трейт залежно від rarity
+  // Вища рідкість = менший шанс на негативний трейт
+  private static NEGATIVE_TRAIT_CHANCE: Record<RarityType, number> = {
+    common: 0.7, // 70% — commons часто мають негативний трейт
+    uncommon: 0.55, // 55%
+    rare: 0.4, // 40%
+    epic: 0.3, // 30%
+    mythic: 0.2, // 20%
+    legendary: 0.1, // 10% — рідко, але можливо
+  };
+
+  // Конфліктуючі пари трейтів (несумісні між собою)
+  private static CONFLICTS: Partial<Record<TraitType, TraitType[]>> = {
+    lazy: ["energetic", "hyperactive", "athlete"],
+    energetic: ["lazy"],
+    hyperactive: ["lazy"],
+    glutton: ["athlete"],
+    messy: ["athlete"],
+    shy: ["brave", "loyal"],
+    fragile: ["hardy", "immortal_soul", "athlete"],
+    hardy: ["fragile"],
+    antisocial: ["loyal"],
+    pessimist: ["optimist"],
+    optimist: ["pessimist"],
+    immortal_soul: ["fragile"],
+    athlete: ["lazy", "glutton", "messy", "fragile"],
+  };
+
+  // Бонусні ваги трейтів залежно від елементу
+  private static ELEMENT_TRAIT_AFFINITY: Partial<
+    Record<ElementType, Partial<Record<TraitType, number>>>
+  > = {
+    fire: { energetic: 1.8, hyperactive: 1.5, brave: 1.5 },
+    water: { shy: 1.5, curious: 1.4, optimist: 1.3 },
+    earth: { hardy: 1.8, stubborn: 1.5, loyal: 1.4 },
+    air: { wild: 1.6, curious: 1.5, antisocial: 1.3 },
+    grass: { playful: 1.5, curious: 1.4, childish: 1.3 },
+    electric: { hyperactive: 1.8, energetic: 1.5, athlete: 1.4 },
+    ice: { antisocial: 1.5, pessimist: 1.4, fragile: 1.3 },
+    metal: { hardy: 1.6, stubborn: 1.5, brave: 1.4 },
+    poison: { messy: 1.6, glutton: 1.4, pessimist: 1.3 },
+    psychic: { curious: 1.7, optimist: 1.5, loyal: 1.4 },
+    ghost: { shy: 1.6, antisocial: 1.5, pessimist: 1.4 },
+    light: { optimist: 1.8, loyal: 1.6, brave: 1.4 },
+    dark: { pessimist: 1.6, antisocial: 1.5, wild: 1.4 },
+    rainbow: { immortal_soul: 3.0, optimist: 2.0, athlete: 1.8 },
+  };
+
+  // ─────────────────────────────────────────────
+  // Публічні методи
+  // ─────────────────────────────────────────────
 
   static generate(): GenomeInfo {
     const hash = this.generateHash();
@@ -111,14 +149,26 @@ export class GenomeGenerator {
     const element = this.determineElement(hash);
     const traits = this.generateTraits(hash, rarity, element);
 
-    return {
-      genome_hash: hash,
-      element,
-      rarity,
-      gender,
-      traits,
-    };
+    return { genome_hash: hash, element, rarity, gender, traits };
   }
+
+  static generateWithTraitCount(traitCount: number): GenomeInfo {
+    const hash = this.generateHash();
+    const gender = this.determineGender(hash);
+    const element = this.determineElement(hash);
+    const rarity = this.determineRarity(hash);
+
+    const original = this.TRAIT_COUNT_BY_RARITY[rarity];
+    this.TRAIT_COUNT_BY_RARITY[rarity] = { min: traitCount, max: traitCount };
+    const traits = this.generateTraits(hash, rarity, element);
+    this.TRAIT_COUNT_BY_RARITY[rarity] = original;
+
+    return { genome_hash: hash, element, rarity, gender, traits };
+  }
+
+  // ─────────────────────────────────────────────
+  // Генерація геному
+  // ─────────────────────────────────────────────
 
   private static generateHash(): string {
     const timestamp = Date.now();
@@ -127,18 +177,12 @@ export class GenomeGenerator {
     const hexString = Array.from(randomBytes)
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
-
     return `${timestamp}-${random}-${hexString}`;
   }
 
   private static determineGender(hash: string): PixegotchiGender {
-    const genderSeed = this.hashToNumber(hash.split("-")[0] || hash);
-    return this.weightedRandom(this.GENDER_WEIGHTS, genderSeed);
-  }
-
-  private static determineElement(hash: string): ElementType {
-    const seed = this.hashToNumber(hash);
-    return this.weightedRandom(this.ELEMENT_WEIGHTS, seed);
+    const seed = this.hashToNumber(hash.split("-")[0] || hash);
+    return this.weightedRandom(this.GENDER_WEIGHTS, seed);
   }
 
   private static determineRarity(hash: string): RarityType {
@@ -146,137 +190,219 @@ export class GenomeGenerator {
     return this.weightedRandom(this.RARITY_WEIGHTS, seed);
   }
 
+  private static determineElement(hash: string): ElementType {
+    const seed = this.hashToNumber(hash);
+    return this.weightedRandom(this.ELEMENT_WEIGHTS, seed);
+  }
+
   private static generateTraits(
     hash: string,
     rarity: RarityType,
     element: ElementType,
   ): TraitType[] {
-    const traitConfig = this.TRAIT_COUNT_BY_RARITY[rarity];
+    const config = this.TRAIT_COUNT_BY_RARITY[rarity];
     const traitCount = this.randomInRange(
-      traitConfig.min,
-      traitConfig.max,
+      config.min,
+      config.max,
       this.hashToNumber(hash.split("-")[1] || hash),
     );
 
-    const selectedTraits: TraitType[] = [];
-
-    // Створюємо копію хешу для кожного трейту
+    const selected: TraitType[] = [];
     let currentHash = hash;
 
     for (let i = 0; i < traitCount; i++) {
-      // Генеруємо новий seed для кожного трейту
       currentHash = this.rehash(currentHash, i);
       const seed = this.hashToNumber(currentHash);
 
-      // Отримуємо доступні ваги для поточної рідкості
-      const availableWeights = this.getAvailableTraitWeights(
+      // Вирішуємо чи цей трейт буде негативним
+      const negativeChance = this.NEGATIVE_TRAIT_CHANCE[rarity];
+      const forceNegative = seed < negativeChance && selected.length === 0;
+
+      const weights = this.buildTraitWeights(
         rarity,
-        selectedTraits,
         element,
+        selected,
+        forceNegative,
       );
 
-      if (Object.keys(availableWeights).length === 0) break;
+      if (Object.keys(weights).length === 0) break;
 
-      const trait = this.weightedRandom(availableWeights, seed);
-      selectedTraits.push(trait);
+      const trait = this.weightedRandom(weights, seed);
+      selected.push(trait);
     }
 
-    return selectedTraits;
+    return selected;
   }
 
-  // Отримує доступні трейти з урахуванням рідкості
-  private static getAvailableTraitWeights(
+  // ─────────────────────────────────────────────
+  // Побудова пулу трейтів
+  // ─────────────────────────────────────────────
+
+  private static buildTraitWeights(
     rarity: RarityType,
-    selectedTraits: TraitType[],
     element: ElementType,
+    selected: TraitType[],
+    forceNegative: boolean,
   ): Record<TraitType, number> {
-    // Починаємо з базових трейтів
-    let weights: Record<string, number> = { ...this.BASE_TRAIT_WEIGHTS };
-
-    // Додаємо immortal ТІЛЬКИ для legendary
-    if (rarity === "legendary") {
-      weights.immortal = 100;
-    }
-
-    // Фільтруємо конфліктуючі трейти
-    const filtered = this.filterConflictingTraits(
-      selectedTraits,
-      element,
-      weights as Record<TraitType, number>,
+    // 1. Отримуємо доступний пул rarity
+    const allowedRarities = RARITY_TRAIT_POOL[rarity as RarityType];
+    const pool = (Object.keys(TRAIT_RARITY) as TraitType[]).filter((t) =>
+      allowedRarities.includes(TRAIT_RARITY[t]),
     );
 
-    return filtered;
+    // 2. Базові ваги з пулу
+    const weights: Record<string, number> = {};
+    for (const trait of pool) {
+      weights[trait] = this.TRAIT_WEIGHTS[trait] ?? 1;
+    }
+
+    // 3. Застосовуємо афінітет елементу
+    const affinity = this.ELEMENT_TRAIT_AFFINITY[element] ?? {};
+    for (const [trait, multiplier] of Object.entries(affinity)) {
+      if (weights[trait] !== undefined) {
+        weights[trait]! *= multiplier!;
+      }
+    }
+
+    // 4. Видаляємо вже обрані та конфліктуючі
+    for (const s of selected) {
+      delete weights[s];
+      for (const conflict of this.CONFLICTS[s] ?? []) {
+        delete weights[conflict];
+      }
+    }
+
+    // 5. Якщо forceNegative — залишаємо лише негативні
+    if (forceNegative) {
+      const { isNegativeTrait } = require("@shared");
+      for (const trait of Object.keys(weights) as TraitType[]) {
+        if (!isNegativeTrait(trait)) {
+          delete weights[trait];
+        }
+      }
+    }
+
+    return weights as Record<TraitType, number>;
   }
 
-  // Фільтрує трейти що конфліктують
-  private static filterConflictingTraits(
-    selectedTraits: TraitType[],
-    element: ElementType,
-    availableWeights: Record<TraitType, number>,
-  ): Record<TraitType, number> {
-    const filtered = { ...availableWeights };
+  // ─────────────────────────────────────────────
+  // Статистика
+  // ─────────────────────────────────────────────
 
-    // Видаляємо вже обрані
-    selectedTraits.forEach((trait) => {
-      delete filtered[trait];
-    });
-
-    // Конфліктуючі пари
-    const conflicts: Partial<Record<TraitType, TraitType[]>> = {
-      lazy: ["energetic", "hyperactive"],
-      energetic: ["lazy", "sleepy"],
-      hyperactive: ["lazy", "sleepy"],
-      sleepy: ["energetic", "hyperactive"],
-
-      glutton: ["picky"],
-      picky: ["glutton"],
-
-      cleanfreak: ["messy"],
-      messy: ["cleanfreak", "perfectionist"],
-      perfectionist: ["messy"],
-
-      friendly: ["antisocial"],
-      antisocial: ["friendly"],
-
-      hardy: ["fragile", "sickly", "immortal"],
-      fragile: ["hardy", "immortal"],
-      sickly: ["hardy", "immortal"],
-      immortal: ["fragile", "sickly", "hardy"], // immortal конфліктує з health traits
-
-      nocturnal: ["diurnal"],
-      diurnal: ["nocturnal"],
-
-      greedy: ["generous"],
-      generous: ["greedy"],
-
-      wise: ["childish"],
-      childish: ["wise"],
-
-      wild: ["royal"],
-      royal: ["wild"],
+  static getGenomeStats(genome: GenomeInfo): {
+    rarityScore: number;
+    traitScore: number;
+    totalScore: number;
+    hasImmortalSoul: boolean;
+    negativeTraitCount: number;
+  } {
+    const rarityScores: Record<RarityType, number> = {
+      common: 1,
+      uncommon: 2,
+      rare: 4,
+      epic: 8,
+      mythic: 16,
+      legendary: 32,
     };
 
-    // Видаляємо конфліктуючі
-    selectedTraits.forEach((trait) => {
-      const conflicting = conflicts[trait] || [];
-      conflicting.forEach((conflictTrait) => {
-        delete filtered[conflictTrait];
-      });
-    });
+    const elementScores: Record<ElementType, number> = {
+      fire: 1,
+      water: 1,
+      earth: 1,
+      air: 1,
+      grass: 1,
+      electric: 2,
+      ice: 2,
+      metal: 3,
+      poison: 3,
+      psychic: 4,
+      ghost: 5,
+      light: 6,
+      dark: 6,
+      rainbow: 12,
+    };
 
-    if (element === "ice" && filtered.nocturnal) {
-      // Ice петам більше підходить nocturnal
-      filtered.nocturnal *= 2;
+    // Очки за трейти: rarity рівень → очки (негативні дають менше)
+    const traitRarityScore: Record<RarityType, number> = {
+      common: 1,
+      uncommon: 2,
+      rare: 4,
+      epic: 8,
+      mythic: 16,
+      legendary: 32,
+    };
+
+    const { isNegativeTrait } = require("@shared");
+
+    let traitScore = 0;
+    let negativeTraitCount = 0;
+
+    for (const trait of genome.traits) {
+      const traitRarity = TRAIT_RARITY[trait];
+      const base = traitRarityScore[traitRarity];
+      const isNeg = isNegativeTrait(trait);
+
+      traitScore += isNeg ? base * 0.5 : base; // негативні дають менше очок
+      if (isNeg) negativeTraitCount++;
     }
 
-    if (element === "fire" && filtered.energetic) {
-      filtered.energetic *= 1.5;
-    }
+    const rarityScore =
+      rarityScores[genome.rarity] * elementScores[genome.element];
 
-    return filtered;
+    return {
+      rarityScore,
+      traitScore,
+      totalScore: rarityScore + traitScore,
+      hasImmortalSoul: genome.traits.includes("immortal_soul"),
+      negativeTraitCount,
+    };
   }
 
-  // Генерує новий хеш на основі попереднього
+  static getGenderStats(genomes: GenomeInfo[]): {
+    male: number;
+    female: number;
+    malePercentage: number;
+    femalePercentage: number;
+  } {
+    const males = genomes.filter((g) => g.gender === "male").length;
+    const females = genomes.filter((g) => g.gender === "female").length;
+    const total = genomes.length;
+    return {
+      male: males,
+      female: females,
+      malePercentage: (males / total) * 100,
+      femalePercentage: (females / total) * 100,
+    };
+  }
+
+  // ─────────────────────────────────────────────
+  // Утиліти rarity
+  // ─────────────────────────────────────────────
+
+  static canHaveImmortalSoul(rarity: RarityType): boolean {
+    return rarity === "legendary";
+  }
+
+  static getRarityIndex(rarity: RarityType): number {
+    const order: RarityType[] = [
+      "common",
+      "uncommon",
+      "rare",
+      "epic",
+      "mythic",
+      "legendary",
+    ];
+    return order.indexOf(rarity);
+  }
+
+  static compareRarity(r1: RarityType, r2: RarityType): number {
+    return this.getRarityIndex(r1) - this.getRarityIndex(r2);
+  }
+
+  // ─────────────────────────────────────────────
+  // Хешування
+  // ─────────────────────────────────────────────
+
   private static rehash(hash: string, iteration: number): string {
     const combined = hash + iteration.toString();
     let newHash = 0;
@@ -300,17 +426,12 @@ export class GenomeGenerator {
     seed: number,
   ): T {
     const entries = Object.entries(weights) as [T, number][];
-    const total = entries.reduce((sum, [, weight]) => sum + weight, 0);
-
+    const total = entries.reduce((sum, [, w]) => sum + w, 0);
     let random = seed * total;
-
     for (const [key, weight] of entries) {
       random -= weight;
-      if (random <= 0) {
-        return key;
-      }
+      if (random <= 0) return key;
     }
-
     return entries[0]![0];
   }
 
@@ -318,204 +439,37 @@ export class GenomeGenerator {
     return Math.floor(min + seed * (max - min + 1));
   }
 
-  // Додаткова функція: генерація з фіксованою кількістю трейтів
-  static generateWithTraitCount(traitCount: number): GenomeInfo {
-    const hash = this.generateHash();
-    const gender = this.determineGender(hash);
-    const element = this.determineElement(hash);
-    const rarity = this.determineRarity(hash);
-
-    // Перевизначаємо кількість трейтів
-    const originalConfig = this.TRAIT_COUNT_BY_RARITY[rarity];
-    this.TRAIT_COUNT_BY_RARITY[rarity] = { min: traitCount, max: traitCount };
-
-    const traits = this.generateTraits(hash, rarity, element);
-
-    // Відновлюємо оригінальну конфігурацію
-    this.TRAIT_COUNT_BY_RARITY[rarity] = originalConfig;
-
-    return {
-      genome_hash: hash,
-      element,
-      rarity,
-      gender,
-      traits,
-    };
-  }
-
-  // Статистика геному
-  static getGenomeStats(genome: GenomeInfo): {
-    rarityScore: number;
-    traitRarityScore: number;
-    totalScore: number;
-    hasImmortal: boolean;
-  } {
-    const rarityScores: Record<RarityType, number> = {
-      common: 1,
-      uncommon: 2,
-      rare: 3,
-      epic: 4,
-      mythic: 5,
-      legendary: 6,
-    };
-
-    const elementScores: Record<ElementType, number> = {
-      fire: 1,
-      water: 1,
-      earth: 1,
-      air: 1,
-      grass: 1,
-      electric: 2,
-      ice: 2,
-      metal: 3,
-      poison: 3,
-      psychic: 4,
-      ghost: 5,
-      light: 6,
-      dark: 6,
-      rainbow: 10,
-    };
-
-    // Рахуємо рідкість трейтів
-    const traitScores: Record<TraitType, number> = {
-      // Common = 1
-      lazy: 1,
-      energetic: 1,
-      playful: 1,
-      friendly: 1,
-      messy: 1,
-      diurnal: 1,
-      // Uncommon = 2
-      sleepy: 2,
-      serious: 2,
-      shy: 2,
-      curious: 2,
-      glutton: 2,
-      cleanfreak: 2,
-      independent: 2,
-      // Rare = 3
-      hyperactive: 3,
-      brave: 3,
-      picky: 3,
-      vegetarian: 3,
-      carnivore: 3,
-      antisocial: 3,
-      hardy: 3,
-      nocturnal: 3,
-      greedy: 3,
-      childish: 3,
-      // Epic = 4
-      stubborn: 4,
-      foodie: 4,
-      perfectionist: 4,
-      loyal: 4,
-      fragile: 4,
-      sickly: 4,
-      generous: 4,
-      wild: 4,
-      // Mythic/Legendary = 5
-      wise: 5,
-      royal: 5,
-      // Immortal = 20 (НАЙРІДКІСНІШИЙ - тільки legendary)
-      immortal: 20,
-    };
-
-    const rarityScore =
-      rarityScores[genome.rarity] * elementScores[genome.element];
-    const traitRarityScore = genome.traits.reduce(
-      (sum, trait) => sum + traitScores[trait],
-      0,
-    );
-    const totalScore = rarityScore + traitRarityScore;
-    const hasImmortal = genome.traits.includes("immortal");
-
-    return {
-      rarityScore,
-      traitRarityScore,
-      totalScore,
-      hasImmortal,
-    };
-  }
-
-  static getGenderStats(genomes: GenomeInfo[]): {
-    male: number;
-    female: number;
-    malePercentage: number;
-    femalePercentage: number;
-  } {
-    const males = genomes.filter((g) => g.gender === "male").length;
-    const females = genomes.filter((g) => g.gender === "female").length;
-    const total = genomes.length;
-
-    return {
-      male: males,
-      female: females,
-      malePercentage: (males / total) * 100,
-      femalePercentage: (females / total) * 100,
-    };
-  }
-
-  // Утиліта: перевірка чи може рідкість мати immortal
-  static canHaveImmortal(rarity: RarityType): boolean {
-    return rarity === "legendary";
-  }
-
-  // Утиліта: шанс отримати immortal для рідкості
-  static getImmortalChance(rarity: RarityType): number {
-    if (rarity === "legendary") return 100; // 10% для legendary
-    return 0; // Інші рідкості не можуть мати immortal
-  }
-
-  // Утиліта: отримати індекс рідкості (для порівняння)
-  static getRarityIndex(rarity: RarityType): number {
-    const order: RarityType[] = [
-      "common",
-      "uncommon",
-      "rare",
-      "epic",
-      "mythic",
-      "legendary",
-    ];
-    return order.indexOf(rarity);
-  }
-
-  // Утиліта: порівняти дві рідкості
-  static compareRarity(rarity1: RarityType, rarity2: RarityType): number {
-    return this.getRarityIndex(rarity1) - this.getRarityIndex(rarity2);
-  }
+  // ─────────────────────────────────────────────
+  // Масова статистика (dev / аналітика)
+  // ─────────────────────────────────────────────
 
   static async getStats() {
-    // Генерація 10000 петів для статистики
-    const pets = Array.from({ length: 10000 }, () =>
-      GenomeGenerator.generate(),
-    );
+    const pets = Array.from({ length: 10000 }, () => this.generate());
 
-    // 1. Статистика по рідкості
+    // Rarity distribution
     const rarityStats = pets.reduce(
-      (acc, pet) => {
-        acc[pet.rarity] = (acc[pet.rarity] || 0) + 1;
+      (acc, p) => {
+        acc[p.rarity] = (acc[p.rarity] || 0) + 1;
         return acc;
       },
       {} as Record<RarityType, number>,
     );
-
-    // Розрахунок відсотків для рідкості
     const rarityDistribution = Object.entries(rarityStats)
       .map(([rarity, count]) => ({
         rarity,
         count,
-        percentage: (count / 100).toFixed(1) + "%",
+        percentage: ((count / pets.length) * 100).toFixed(2) + "%",
       }))
       .sort((a, b) => b.count - a.count);
 
+    // Element distribution
     const elementStats = pets.reduce(
-      (acc, pet) => {
-        acc[pet.element] = (acc[pet.element] || 0) + 1;
+      (acc, p) => {
+        acc[p.element] = (acc[p.element] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>,
     );
-
     const elementDistribution = Object.entries(elementStats)
       .map(([element, count]) => ({
         element,
@@ -524,156 +478,113 @@ export class GenomeGenerator {
       }))
       .sort((a, b) => b.count - a.count);
 
-    const rarityElementStats = pets.reduce(
-      (acc, pet) => {
-        const key = `${pet.rarity}_${pet.element}`;
-        acc[key] = (acc[key] || 0) + 1;
+    // Trait distribution
+    const traitStats = pets.reduce(
+      (acc, p) => {
+        p.traits.forEach((t) => {
+          acc[t] = (acc[t] || 0) + 1;
+        });
         return acc;
       },
       {} as Record<string, number>,
     );
-
-    const rarityElementDistribution = Object.entries(rarityElementStats)
-      .map(([key, count]) => {
-        const [rarity, element] = key.split("_");
-        return {
-          rarity,
-          element,
-          count,
-          percentage: ((count / pets.length) * 100).toFixed(3) + "%",
-        };
-      })
+    const traitDistribution = Object.entries(traitStats)
+      .map(([trait, count]) => ({
+        trait,
+        count,
+        percentage: ((count / pets.length) * 100).toFixed(2) + "%",
+      }))
       .sort((a, b) => b.count - a.count);
 
-    // 2. Статистика по immortal
-    const immortalPets = pets.filter((p) => p.traits.includes("immortal"));
+    // Immortal soul stats
+    const immortalPets = pets.filter((p) => p.traits.includes("immortal_soul"));
     const legendaryPets = pets.filter((p) => p.rarity === "legendary");
-
     const immortalStats = {
-      totalImmortal: immortalPets.length,
+      totalImmortalSoul: immortalPets.length,
       totalLegendary: legendaryPets.length,
-      legendaryWithImmortal: immortalPets.length,
-      legendaryWithImmortalPercentage:
+      legendaryWithImmortalSoul: immortalPets.length,
+      immortalSoulRate:
         (
           (immortalPets.length / Math.max(legendaryPets.length, 1)) *
           100
         ).toFixed(1) + "%",
-      immortalRarities: [...new Set(immortalPets.map((p) => p.rarity))],
     };
 
-    // 3. Топ-10 найрідкісніших петів
-    const topPets = pets
-      .map((pet) => ({
-        pet: {
-          rarity: pet.rarity,
-          element: pet.element,
-          traits: pet.traits,
-          gender: pet.gender,
-          // Додайте інші поля які потрібні
-        },
-        stats: GenomeGenerator.getGenomeStats(pet),
-      }))
-      .sort((a, b) => b.stats.totalScore - a.stats.totalScore)
-      .slice(0, 10);
+    // Negative trait stats
+    const { isNegativeTrait } = require("@shared");
+    const negativeStats = pets.reduce(
+      (acc, p) => {
+        const negCount = p.traits.filter((t) => isNegativeTrait(t)).length;
+        acc[negCount] = (acc[negCount] || 0) + 1;
+        return acc;
+      },
+      {} as Record<number, number>,
+    );
 
-    // 4. Пошук святого грааля
+    // Top-10 pets by score
+    const topPets = pets
+      .map((pet) => ({ pet, stats: this.getGenomeStats(pet) }))
+      .sort((a, b) => b.stats.totalScore - a.stats.totalScore)
+      .slice(0, 10)
+      .map(({ pet, stats }) => ({
+        rarity: pet.rarity,
+        element: pet.element,
+        gender: pet.gender,
+        traits: pet.traits,
+        ...stats,
+      }));
+
+    // Holy grail: legendary + rainbow + immortal_soul
     let holyGrail = null;
     let attempts = 0;
-    const maxAttempts = 100000;
-
+    const maxAttempts = 100_000;
     while (!holyGrail && attempts < maxAttempts) {
-      const pet = GenomeGenerator.generate();
+      const pet = this.generate();
       if (
         pet.rarity === "legendary" &&
         pet.element === "rainbow" &&
-        pet.traits.includes("immortal")
+        pet.traits.includes("immortal_soul")
       ) {
-        holyGrail = {
-          pet,
-          stats: GenomeGenerator.getGenomeStats(pet),
-        };
+        holyGrail = { pet, stats: this.getGenomeStats(pet) };
       }
       attempts++;
     }
 
-    const holyGrailStats = {
-      found: !!holyGrail,
-      attempts,
-      maxAttempts,
-      estimatedProbability: holyGrail
-        ? ((1 / attempts) * 100).toFixed(6) + "%"
-        : "0%",
-      ...(holyGrail && {
-        pet: holyGrail.pet,
-        score: holyGrail.stats.totalScore,
-      }),
-    };
+    // Gender stats
+    const genderStats = this.getGenderStats(pets);
 
-    // 5. Порівняння рідкостей
-    const rarityComparison = {
-      commonVsLegendary: GenomeGenerator.compareRarity("common", "legendary"),
-      epicVsRare: GenomeGenerator.compareRarity("epic", "rare"),
-    };
-
-    // 6. Статистика по гендеру
-    const genderStats = GenomeGenerator.getGenderStats(pets);
-
-    const genderDistribution = {
-      male: genderStats.male,
-      female: genderStats.female,
-      malePercentage: genderStats.malePercentage.toFixed(1) + "%",
-      femalePercentage: genderStats.femalePercentage.toFixed(1) + "%",
-    };
-
-    // 7. Статистика рідкості по гендеру
-    const femalePets = pets.filter((p) => p.gender === "female");
-    const malePets = pets.filter((p) => p.gender === "male");
-
-    const maleRarities = malePets.reduce(
-      (acc, p) => {
-        acc[p.rarity] = (acc[p.rarity] || 0) + 1;
-        return acc;
-      },
-      {} as Record<RarityType, number>,
-    );
-
-    const femaleRarities = femalePets.reduce(
-      (acc, p) => {
-        acc[p.rarity] = (acc[p.rarity] || 0) + 1;
-        return acc;
-      },
-      {} as Record<RarityType, number>,
-    );
-
-    // Повертаємо всі дані у структурованому форматі
     return {
       timestamp: new Date().toISOString(),
       totalPetsGenerated: pets.length,
       data: {
         rarityDistribution,
         elementDistribution,
-        rarityElementDistribution,
+        traitDistribution,
+        negativeTraitDistribution: negativeStats,
         immortalStats,
         topPets,
-        holyGrail: holyGrailStats,
-        rarityComparison,
-        genderDistribution,
-        rarityByGender: {
-          male: maleRarities,
-          female: femaleRarities,
+        holyGrail: {
+          found: !!holyGrail,
+          attempts,
+          maxAttempts,
+          estimatedProbability: holyGrail
+            ? ((1 / attempts) * 100).toFixed(6) + "%"
+            : "< 0.001%",
+          ...(holyGrail && {
+            pet: holyGrail.pet,
+            score: holyGrail.stats.totalScore,
+          }),
         },
-        summary: {
-          mostCommonElement: elementDistribution.sort(
-            (a, b) => b.count - a.count,
-          )[0],
-          rarestElement: elementDistribution.sort(
-            (a, b) => a.count - b.count,
-          )[0],
+        genderDistribution: {
+          male: genderStats.male,
+          female: genderStats.female,
+          malePercentage: genderStats.malePercentage.toFixed(1) + "%",
+          femalePercentage: genderStats.femalePercentage.toFixed(1) + "%",
         },
       },
       metadata: {
         generationTime: Date.now(),
-        version: "1.0.1",
+        version: "2.0.0",
       },
     };
   }
