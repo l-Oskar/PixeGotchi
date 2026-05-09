@@ -23,7 +23,7 @@ export class ChestController {
 
     const sortedChests = await this.chestService.getSortedChests(userId);
 
-    return sortedChests;
+    return reply.send(sortedChests);
   }
 
   async getRandomChest(request: FastifyRequest, reply: FastifyReply) {

@@ -4,6 +4,11 @@ set -e
 
 echo "🚀 Starting deployment..."
 
+# Скидаємо всі локальні зміни та отримуємо чисту версію з GitHub
+echo "🔄 Resetting local changes..."
+git reset --hard HEAD
+git clean -fd
+
 # Pull latest code
 echo "📥 Pulling latest code..."
 git pull origin main

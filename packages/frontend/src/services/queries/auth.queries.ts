@@ -12,6 +12,7 @@ export const useTelegramLogin = () => {
     onSuccess: (data) => {
       setAuth(data.token);
       setUser(data.user);
+      // console.log(data.token);
     },
   });
 };

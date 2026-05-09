@@ -18,8 +18,12 @@ export class ChestService {
     const result: ChestInventory[] = Object.values(
       chests.reduce(
         (acc, { chestType }) => {
-          acc[chestType] = acc[chestType] || { chestType, quantity: 1 };
-          acc[chestType].quantity += 1;
+          if (!acc[chestType]) {
+            acc[chestType] = { chestType, quantity: 1 };
+          } else {
+            acc[chestType].quantity += 1;
+          }
+
           return acc;
         },
         {} as Record<ChestType, ChestInventory>,
@@ -43,7 +47,6 @@ export class ChestService {
       },
     });
   }
-
   async getSpecificChest(userId: number, chestType: ChestType) {
     const specificChest = ChestGenerator.generateSpecificChest(chestType);
 

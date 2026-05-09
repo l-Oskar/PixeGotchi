@@ -4,7 +4,14 @@ import {
 } from "@/services/queries/chest.queries";
 import { useInventoryStore } from "@/store/inventory.store";
 import ChestModal from "../ChestModal/ChestModal";
-import { ChestInventory, ChestRewards, ChestType, ITEMS_IMG } from "@shared";
+import {
+  CHEST_TYPE_TO_RARITY,
+  ChestInventory,
+  ChestRewards,
+  ChestType,
+  ITEMS_IMG,
+  RARITY_BORDER_COLORS,
+} from "@shared";
 import React, { useEffect, useState } from "react";
 import { useOpenChest } from "@/services/queries/inventory.queries";
 import RewardModal from "../RewardsModal/RewardModal";
@@ -54,9 +61,7 @@ const ChestComponent: React.FC = () => {
               onClick={() =>
                 handleChestClick(sortedChest.chestType, sortedChest.quantity)
               }
-              className={
-                "bg-white/5 hover:bg-white/10 rounded-2xl p-4 border border-white/10 transition flex flex-col items-center gap-2 group"
-              }>
+              className={`bg-white/5 hover:bg-white/10 rounded-2xl p-4 border ${RARITY_BORDER_COLORS[CHEST_TYPE_TO_RARITY[sortedChest.chestType]]} transition flex flex-col items-center gap-2 group`}>
               <div className="text-4xl group-hover:scale-110 transition">
                 {ITEMS_IMG.chest[sortedChest.chestType]}
               </div>
