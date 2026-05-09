@@ -20,5 +20,11 @@ module.exports = {
     "text-violet-400",
     "text-pink-400",
     "text-yellow-400",
+    "border-gray-400",
+    "border-green-400",
+    "border-blue-400",
+    "border-violet-400",
+    "border-pink-400",
+    "border-yellow-400",
   ],
 };

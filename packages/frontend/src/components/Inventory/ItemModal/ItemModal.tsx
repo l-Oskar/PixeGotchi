@@ -1,4 +1,4 @@
-import { Item } from "@shared";
+import { Item, RARITY_COLORS } from "@shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
@@ -69,7 +69,10 @@ const ItemModal: React.FC<ItemModalProps> = ({
                       {item.name}
                     </h2>
                     <div className="text-sm text-white/60">
-                      {item.rarity} • {item.itemType}
+                      <span className={`${RARITY_COLORS[item.rarity]}`}>
+                        {item.rarity}
+                      </span>{" "}
+                      • {item.itemType}
                     </div>
                   </div>
                 </div>

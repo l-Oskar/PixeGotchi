@@ -4,7 +4,7 @@ import {
   useUseItem,
 } from "@/services/queries/inventory.queries";
 import { useInventoryStore } from "@/store/inventory.store";
-import { RARITY_BORDER_COLORS } from "@shared";
+import { RARITY_BORDER_COLORS, RarityType } from "@shared";
 import { useEffect, useState } from "react";
 
 const ItemComponent: React.FC = () => {
@@ -39,8 +39,11 @@ const ItemComponent: React.FC = () => {
           {inventory.map((item) => (
             <button
               key={item.id}
-              onClick={() => handleItemClick(item.itemId, item.quantity)}
-              className={`bg-white/5 hover:bg-white/10 rounded-2xl p-4 border ${RARITY_BORDER_COLORS[item.rarity]} transition flex flex-col items-center gap-2 group`}>
+              onClick={() => {
+                handleItemClick(item.itemId, item.quantity),
+                  console.log(item.itemId, item.rarity);
+              }}
+              className={`border ${RARITY_BORDER_COLORS[item.rarity]} bg-white/5 hover:bg-white/10 rounded-2xl p-4 transition flex flex-col items-center gap-2 group`}>
               <div className="text-4xl group-hover:scale-110 transition">
                 {item.details?.iconUrl}
               </div>

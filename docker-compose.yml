@@ -30,7 +30,7 @@ services:
       context: ./packages/backend
       dockerfile: Dockerfile
     # image: fediukv/pixegotchi-backend:latest
-    expose:
+    ports:
       - "127.0.0.1:3000:3000"
     environment:
       DATABASE_URL: postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
@@ -51,10 +51,10 @@ services:
       - redis
     networks:
       - pixegotchi-network
-    command: sh -c 'sleep infinity'
+    # command: sh -c 'sleep infinity'
     # command: sh -c "npm run dev:docker"
     # command: sh -c "npm install && npm run dev"
-    # command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run dev"
+    command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run dev"
     restart: unless-stopped
 
   prisma-studio:

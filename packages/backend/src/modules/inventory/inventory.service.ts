@@ -82,6 +82,7 @@ export class Inventory {
       data: {
         userId,
         itemId,
+        rarity: item.rarity,
         itemType: item.itemType,
         quantity,
       },
