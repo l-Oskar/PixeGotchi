@@ -44,30 +44,34 @@ export class ItemsService {
 
   async validateItemUsage(pixegotchi: Pixegotchi, item: Item) {
     // Перевірка рівня
-    if (item.minLevel && pixegotchi.level < item.minLevel) {
-      throw new Error(
-        `Pixegotchi must be level ${item.minLevel} to use this item`,
-      );
-    }
+    try {
+      if (item.minLevel && pixegotchi.level < item.minLevel) {
+        throw new Error(
+          `Pixegotchi must be level ${item.minLevel} to use this item`,
+        );
+      }
 
-    // Перевірка кулдауну
-    if (item.cooldownMinutes) {
-      await this.checkCooldown(
-        pixegotchi.userId,
-        pixegotchi.id,
-        item.itemId,
-        item.cooldownMinutes,
-      );
-    }
+      // Перевірка кулдауну
+      if (item.cooldownMinutes) {
+        await this.checkCooldown(
+          pixegotchi.userId,
+          pixegotchi.id,
+          item.itemId,
+          item.cooldownMinutes,
+        );
+      }
 
-    // Перевірка ліміту на день
-    if (item.maxPerDay) {
-      await this.checkDailyLimit(
-        pixegotchi.userId,
-        pixegotchi.id,
-        item.itemId,
-        item.maxPerDay,
-      );
+      // Перевірка ліміту на день
+      if (item.maxPerDay) {
+        await this.checkDailyLimit(
+          pixegotchi.userId,
+          pixegotchi.id,
+          item.itemId,
+          item.maxPerDay,
+        );
+      }
+    } catch (error) {
+      return error;
     }
   }
 

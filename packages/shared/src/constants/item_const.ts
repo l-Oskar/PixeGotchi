@@ -1,5 +1,5 @@
 import { Item } from "../types/item";
-import { ItemType } from "../enums";
+import { ItemType, RarityType } from "../enums";
 
 import { FOOD_ITEMS } from "./items/food_items";
 import { MEDICINE_ITEMS } from "./items/medicine_items";
@@ -8,7 +8,14 @@ import { CLEANING_ITEMS } from "./items/cleaning_items";
 import { BOOST_ITEMS } from "./items/boost_items";
 import { SPECIAL_ITEMS } from "./items/special_items";
 
-export const ITEM_EXP: number = 133;
+export const ITEM_EXP: Record<RarityType, number> = {
+  common: 50,
+  uncommon: 80,
+  rare: 100,
+  epic: 140,
+  mythic: 180,
+  legendary: 200,
+};
 
 export const ALL_ITEMS: Item[] = [
   ...FOOD_ITEMS,

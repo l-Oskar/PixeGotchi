@@ -122,14 +122,22 @@ export class Inventory {
 
     const item = await this.itemService.getItemDetails(itemId);
 
-    const valid = this.itemService.validateItemUsage(pixegotchi, item);
+    try {
+      const valid = this.itemService.validateItemUsage(pixegotchi, item);
+      if (!valid) throw new Error("You can't use this item now!");
 
-    if (!valid) throw new Error("You can't use this item now!");
-
-    if (item.itemType === "food" || "medicine" || "toy" || "cleaning") {
-      await this.pixegotchiService.applyStats(userId, item, quantity);
+      if (
+        item.itemType === "food" ||
+        item.itemType === "medicine" ||
+        item.itemType === "toy" ||
+        item.itemType === "cleaning"
+      ) {
+        await this.pixegotchiService.applyStats(userId, item, quantity);
+      }
+      return await this.consumeItem(userId, itemId, quantity);
+    } catch (error) {
+      return null;
     }
-    return await this.consumeItem(userId, itemId, quantity);
   }
 
   async openChest(userId: number, chestType: ChestType) {
