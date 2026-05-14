@@ -225,6 +225,14 @@ export class EggService {
           happiness: CREATE_STATS.happiness,
           cleanliness: CREATE_STATS.cleanliness,
 
+          lastFedAt: new Date(),
+          lastHealedAt: new Date(),
+          lastPlayedAt: new Date(),
+          lastCleanedAt: new Date(),
+          lastBoostedAt: new Date(),
+          lastSleptAt: new Date(),
+          lastUpdateAt: new Date(),
+
           hatchedAt: new Date(),
         },
       });

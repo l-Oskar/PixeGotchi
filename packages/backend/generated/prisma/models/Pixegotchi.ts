@@ -77,6 +77,7 @@ export type PixegotchiMinAggregateOutputType = {
   lastSleptAt: Date | null
   lastCleanedAt: Date | null
   lastHealedAt: Date | null
+  lastBoostedAt: Date | null
   lastUpdateAt: Date | null
   hatchedAt: Date | null
 }
@@ -106,6 +107,7 @@ export type PixegotchiMaxAggregateOutputType = {
   lastSleptAt: Date | null
   lastCleanedAt: Date | null
   lastHealedAt: Date | null
+  lastBoostedAt: Date | null
   lastUpdateAt: Date | null
   hatchedAt: Date | null
 }
@@ -136,6 +138,7 @@ export type PixegotchiCountAggregateOutputType = {
   lastSleptAt: number
   lastCleanedAt: number
   lastHealedAt: number
+  lastBoostedAt: number
   lastUpdateAt: number
   hatchedAt: number
   _all: number
@@ -193,6 +196,7 @@ export type PixegotchiMinAggregateInputType = {
   lastSleptAt?: true
   lastCleanedAt?: true
   lastHealedAt?: true
+  lastBoostedAt?: true
   lastUpdateAt?: true
   hatchedAt?: true
 }
@@ -222,6 +226,7 @@ export type PixegotchiMaxAggregateInputType = {
   lastSleptAt?: true
   lastCleanedAt?: true
   lastHealedAt?: true
+  lastBoostedAt?: true
   lastUpdateAt?: true
   hatchedAt?: true
 }
@@ -252,6 +257,7 @@ export type PixegotchiCountAggregateInputType = {
   lastSleptAt?: true
   lastCleanedAt?: true
   lastHealedAt?: true
+  lastBoostedAt?: true
   lastUpdateAt?: true
   hatchedAt?: true
   _all?: true
@@ -369,6 +375,7 @@ export type PixegotchiGroupByOutputType = {
   lastSleptAt: Date | null
   lastCleanedAt: Date | null
   lastHealedAt: Date | null
+  lastBoostedAt: Date | null
   lastUpdateAt: Date
   hatchedAt: Date
   _count: PixegotchiCountAggregateOutputType | null
@@ -422,6 +429,7 @@ export type PixegotchiWhereInput = {
   lastSleptAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastCleanedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
+  lastBoostedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
   hatchedAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -457,6 +465,7 @@ export type PixegotchiOrderByWithRelationInput = {
   lastSleptAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastCleanedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastBoostedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
   hatchedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -495,6 +504,7 @@ export type PixegotchiWhereUniqueInput = Prisma.AtLeast<{
   lastSleptAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastCleanedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
+  lastBoostedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
   hatchedAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -530,6 +540,7 @@ export type PixegotchiOrderByWithAggregationInput = {
   lastSleptAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastCleanedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastBoostedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
   hatchedAt?: Prisma.SortOrder
   _count?: Prisma.PixegotchiCountOrderByAggregateInput
@@ -568,6 +579,7 @@ export type PixegotchiScalarWhereWithAggregatesInput = {
   lastSleptAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastCleanedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
+  lastBoostedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeWithAggregatesFilter<"Pixegotchi"> | Date | string
   hatchedAt?: Prisma.DateTimeWithAggregatesFilter<"Pixegotchi"> | Date | string
 }
@@ -595,6 +607,7 @@ export type PixegotchiCreateInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
@@ -630,6 +643,7 @@ export type PixegotchiUncheckedCreateInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -660,6 +674,7 @@ export type PixegotchiUpdateInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
@@ -695,6 +710,7 @@ export type PixegotchiUncheckedUpdateInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -728,6 +744,7 @@ export type PixegotchiCreateManyInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
 }
@@ -755,6 +772,7 @@ export type PixegotchiUpdateManyMutationInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -785,6 +803,7 @@ export type PixegotchiUncheckedUpdateManyInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -838,6 +857,7 @@ export type PixegotchiCountOrderByAggregateInput = {
   lastSleptAt?: Prisma.SortOrder
   lastCleanedAt?: Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrder
+  lastBoostedAt?: Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
   hatchedAt?: Prisma.SortOrder
 }
@@ -880,6 +900,7 @@ export type PixegotchiMaxOrderByAggregateInput = {
   lastSleptAt?: Prisma.SortOrder
   lastCleanedAt?: Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrder
+  lastBoostedAt?: Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
   hatchedAt?: Prisma.SortOrder
 }
@@ -909,6 +930,7 @@ export type PixegotchiMinOrderByAggregateInput = {
   lastSleptAt?: Prisma.SortOrder
   lastCleanedAt?: Prisma.SortOrder
   lastHealedAt?: Prisma.SortOrder
+  lastBoostedAt?: Prisma.SortOrder
   lastUpdateAt?: Prisma.SortOrder
   hatchedAt?: Prisma.SortOrder
 }
@@ -1099,6 +1121,7 @@ export type PixegotchiCreateWithoutUserInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   egg?: Prisma.EggCreateNestedOneWithoutPixegotchiInput
@@ -1132,6 +1155,7 @@ export type PixegotchiUncheckedCreateWithoutUserInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -1194,6 +1218,7 @@ export type PixegotchiScalarWhereInput = {
   lastSleptAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastCleanedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastHealedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
+  lastBoostedAt?: Prisma.DateTimeNullableFilter<"Pixegotchi"> | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
   hatchedAt?: Prisma.DateTimeFilter<"Pixegotchi"> | Date | string
 }
@@ -1221,6 +1246,7 @@ export type PixegotchiCreateWithoutEggInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
@@ -1254,6 +1280,7 @@ export type PixegotchiUncheckedCreateWithoutEggInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -1300,6 +1327,7 @@ export type PixegotchiUpdateWithoutEggInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
@@ -1333,6 +1361,7 @@ export type PixegotchiUncheckedUpdateWithoutEggInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -1363,6 +1392,7 @@ export type PixegotchiCreateWithoutActiveEffectsInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
@@ -1397,6 +1427,7 @@ export type PixegotchiUncheckedCreateWithoutActiveEffectsInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -1442,6 +1473,7 @@ export type PixegotchiUpdateWithoutActiveEffectsInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
@@ -1476,6 +1508,7 @@ export type PixegotchiUncheckedUpdateWithoutActiveEffectsInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -1505,6 +1538,7 @@ export type PixegotchiCreateWithoutVaultInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
@@ -1539,6 +1573,7 @@ export type PixegotchiUncheckedCreateWithoutVaultInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   gameSessions?: Prisma.GameSessionUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -1584,6 +1619,7 @@ export type PixegotchiUpdateWithoutVaultInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
@@ -1618,6 +1654,7 @@ export type PixegotchiUncheckedUpdateWithoutVaultInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameSessions?: Prisma.GameSessionUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -1647,6 +1684,7 @@ export type PixegotchiCreateWithoutGameSessionsInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPixegotchisInput
@@ -1681,6 +1719,7 @@ export type PixegotchiUncheckedCreateWithoutGameSessionsInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
   vault?: Prisma.VaultUncheckedCreateNestedManyWithoutPixegotchiInput
@@ -1726,6 +1765,7 @@ export type PixegotchiUpdateWithoutGameSessionsInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPixegotchisNestedInput
@@ -1760,6 +1800,7 @@ export type PixegotchiUncheckedUpdateWithoutGameSessionsInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -1791,6 +1832,7 @@ export type PixegotchiCreateManyUserInput = {
   lastSleptAt?: Date | string | null
   lastCleanedAt?: Date | string | null
   lastHealedAt?: Date | string | null
+  lastBoostedAt?: Date | string | null
   lastUpdateAt?: Date | string
   hatchedAt?: Date | string
 }
@@ -1818,6 +1860,7 @@ export type PixegotchiUpdateWithoutUserInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   egg?: Prisma.EggUpdateOneWithoutPixegotchiNestedInput
@@ -1851,6 +1894,7 @@ export type PixegotchiUncheckedUpdateWithoutUserInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vault?: Prisma.VaultUncheckedUpdateManyWithoutPixegotchiNestedInput
@@ -1883,6 +1927,7 @@ export type PixegotchiUncheckedUpdateManyWithoutUserInput = {
   lastSleptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastCleanedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHealedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastBoostedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUpdateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hatchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1962,6 +2007,7 @@ export type PixegotchiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   lastSleptAt?: boolean
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
+  lastBoostedAt?: boolean
   lastUpdateAt?: boolean
   hatchedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1998,6 +2044,7 @@ export type PixegotchiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   lastSleptAt?: boolean
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
+  lastBoostedAt?: boolean
   lastUpdateAt?: boolean
   hatchedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2030,6 +2077,7 @@ export type PixegotchiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   lastSleptAt?: boolean
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
+  lastBoostedAt?: boolean
   lastUpdateAt?: boolean
   hatchedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2062,11 +2110,12 @@ export type PixegotchiSelectScalar = {
   lastSleptAt?: boolean
   lastCleanedAt?: boolean
   lastHealedAt?: boolean
+  lastBoostedAt?: boolean
   lastUpdateAt?: boolean
   hatchedAt?: boolean
 }
 
-export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eggId" | "nftAddress" | "genomeHash" | "element" | "rarity" | "gender" | "traits" | "name" | "status" | "level" | "experience" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "healthZeroAt" | "criticalSince" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastUpdateAt" | "hatchedAt", ExtArgs["result"]["pixegotchi"]>
+export type PixegotchiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eggId" | "nftAddress" | "genomeHash" | "element" | "rarity" | "gender" | "traits" | "name" | "status" | "level" | "experience" | "health" | "hunger" | "energy" | "happiness" | "cleanliness" | "healthZeroAt" | "criticalSince" | "lastFedAt" | "lastPlayedAt" | "lastSleptAt" | "lastCleanedAt" | "lastHealedAt" | "lastBoostedAt" | "lastUpdateAt" | "hatchedAt", ExtArgs["result"]["pixegotchi"]>
 export type PixegotchiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   egg?: boolean | Prisma.Pixegotchi$eggArgs<ExtArgs>
@@ -2119,6 +2168,7 @@ export type $PixegotchiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     lastSleptAt: Date | null
     lastCleanedAt: Date | null
     lastHealedAt: Date | null
+    lastBoostedAt: Date | null
     lastUpdateAt: Date
     hatchedAt: Date
   }, ExtArgs["result"]["pixegotchi"]>
@@ -2574,6 +2624,7 @@ export interface PixegotchiFieldRefs {
   readonly lastSleptAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastCleanedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastHealedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
+  readonly lastBoostedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly lastUpdateAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
   readonly hatchedAt: Prisma.FieldRef<"Pixegotchi", 'DateTime'>
 }

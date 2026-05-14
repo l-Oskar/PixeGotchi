@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { pixegotchiApi } from "@/services/api/pixegotchi.api";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
@@ -30,6 +30,19 @@ export const useActivePixegotchi = () => {
       const activePixegotchi = await pixegotchiApi.getActive();
       if (activePixegotchi) setActive(activePixegotchi);
       return activePixegotchi;
+    },
+  });
+};
+
+export const usePixegotchiToVault = () => {
+  const clearPixegotchi = usePixegotchiStore((s) => s.setToVault);
+  const useQuery = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      await pixegotchiApi.setInActive(),
+        clearPixegotchi(),
+        useQuery.invalidateQueries({ queryKey: ["vault"] }),
+        useQuery.invalidateQueries({ queryKey: ["stats"] });
     },
   });
 };

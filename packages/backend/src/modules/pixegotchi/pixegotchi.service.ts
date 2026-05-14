@@ -67,38 +67,62 @@ export class PixegotchiService {
 
     await this.addExp(userId, ITEM_EXP[item.rarity] * quantity);
 
+    let data = {};
+
+    switch (item.itemType) {
+      case "food":
+        data = {
+          hunger: Math.min(
+            RARITY_STATS[pixegotchi.rarity].maxStat,
+            pixegotchi.hunger + (item.effects?.hunger ?? 0) * quantity,
+          ),
+          lastFedAt: Date.now(),
+        };
+        break;
+      case "medicine":
+        data = {
+          health: Math.min(
+            RARITY_STATS[pixegotchi.rarity].maxStat,
+            pixegotchi.health + (item.effects?.health ?? 0) * quantity,
+          ),
+          lastHealedAt: Date.now(),
+        };
+        break;
+      case "toy":
+        data = {
+          happines: Math.min(
+            RARITY_STATS[pixegotchi.rarity].maxStat,
+            pixegotchi.happiness + (item.effects?.happiness ?? 0) * quantity,
+          ),
+          lastPlayedAt: Date.now(),
+        };
+        break;
+      case "cleaning":
+        data = {
+          cleanliness: Math.min(
+            RARITY_STATS[pixegotchi.rarity].maxStat,
+            pixegotchi.cleanliness +
+              (item.effects?.cleanliness ?? 0) * quantity,
+          ),
+          lastCleanedAt: Date.now(),
+        };
+        break;
+      case "boost":
+        data = {
+          energy: Math.min(
+            RARITY_STATS[pixegotchi.rarity].maxStat,
+            pixegotchi.energy + (item.effects?.energy ?? 0) * quantity,
+          ),
+          lastBoostedAt: Date.now(),
+        };
+        break;
+    }
+
     return await prisma.pixegotchi.update({
       where: {
         id: pixegotchi.id,
       },
-      data: {
-        health: Math.min(
-          RARITY_STATS[pixegotchi.rarity].maxStat,
-          pixegotchi.health + (item.effects?.health ?? 0) * quantity,
-        ),
-        hunger: Math.min(
-          RARITY_STATS[pixegotchi.rarity].maxStat,
-          pixegotchi.hunger + (item.effects?.hunger ?? 0) * quantity,
-        ),
-        energy: Math.min(
-          RARITY_STATS[pixegotchi.rarity].maxStat,
-          pixegotchi.energy + (item.effects?.energy ?? 0) * quantity,
-        ),
-        cleanliness: Math.min(
-          RARITY_STATS[pixegotchi.rarity].maxStat,
-          pixegotchi.cleanliness + (item.effects?.cleanliness ?? 0) * quantity,
-        ),
-        happiness: Math.min(
-          RARITY_STATS[pixegotchi.rarity].maxStat,
-          pixegotchi.happiness + (item.effects?.happiness ?? 0) * quantity,
-        ),
-        lastUpdateAt: new Date(),
-        // health: { increment: (item.effects?.hunger ?? 0) * quantity },
-        // hunger: { increment: (item.effects?.hunger ?? 0) * quantity },
-        // energy: { increment: (item.effects?.energy ?? 0) * quantity },
-        // cleanliness: { increment: (item.effects?.cleanliness ?? 0) * quantity },
-        // happiness: { increment: (item.effects?.happiness ?? 0) * quantity },
-      },
+      data,
     });
   }
 
@@ -129,5 +153,23 @@ export class PixegotchiService {
         level: { increment: addLvl },
       },
     });
+  }
+
+  async checkStatus(userId: number) {
+    const time = Date.now();
+    const activePixegotchi = await this.findActive(userId);
+
+    if (!activePixegotchi) return null;
+
+    const lastUpdates = {
+      lastFedDiff: time - activePixegotchi.lastFedAt!.getTime(),
+      lastHealedDiff: time - activePixegotchi.lastHealedAt!.getTime(),
+      lastCleanedDIff: activePixegotchi.lastCleanedAt!.getTime(),
+      lastPlayseDiff: activePixegotchi.lastPlayedAt!.getTime(),
+      lastBoostedDiff: activePixegotchi.lastBoostedAt!.getTime(),
+      lastUpdatedDiff: activePixegotchi.lastUpdateAt.getTime(),
+    };
+
+    return lastUpdates;
   }
 }

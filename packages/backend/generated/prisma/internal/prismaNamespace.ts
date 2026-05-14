@@ -1473,6 +1473,7 @@ export const PixegotchiScalarFieldEnum = {
   lastSleptAt: 'lastSleptAt',
   lastCleanedAt: 'lastCleanedAt',
   lastHealedAt: 'lastHealedAt',
+  lastBoostedAt: 'lastBoostedAt',
   lastUpdateAt: 'lastUpdateAt',
   hatchedAt: 'hatchedAt'
 } as const

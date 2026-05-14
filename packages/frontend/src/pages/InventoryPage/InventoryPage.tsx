@@ -1,5 +1,6 @@
 import ChestComponent from "@/components/Inventory/ChestComponent/ChestComponent";
 import ItemComponent from "@/components/Inventory/ItemComponent/ItemComponent";
+import { HeartPlus, Gift } from "lucide-react";
 import { PageType } from "@shared";
 import { useState } from "react";
 
@@ -9,9 +10,27 @@ export interface InventoryPageProps {
 
 type TabType = "items" | "chests";
 
-const TABS: { id: TabType; label: string }[] = [
-  { id: "items", label: "Items" },
-  { id: "chests", label: "Chests" },
+const TABS: { id: TabType; label: any }[] = [
+  {
+    id: "items",
+    label: (
+      <>
+        <div className="flex gap-1">
+          <HeartPlus height={19} />
+          <p>Items</p>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: "chests",
+    label: (
+      <div className="flex gap-1">
+        <Gift height={19} />
+        <p>Chests</p>
+      </div>
+    ),
+  },
 ];
 
 const InventoryPage: React.FC<InventoryPageProps> = () => {
@@ -32,10 +51,10 @@ const InventoryPage: React.FC<InventoryPageProps> = () => {
               key={tab.id}
               onClick={() => handleChangeTab(tab.id)}
               className={`
-                px-4 py-2 text-sm font-medium rounded-t-lg transition-all
+                px-4 py-2 text-sm font-medium rounded-t-lg transition-all border border-transparent
                 ${
                   activeTab === tab.id
-                    ? "bg-purple-600 text-white"
+                    ? "bg-purple-600 text-white border-white"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }
               `}>

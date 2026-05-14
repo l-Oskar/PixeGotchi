@@ -18,9 +18,11 @@ import {
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
-import { pixegotchiApi } from "@/services/api/pixegotchi.api";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
-import { useActivePixegotchi } from "@/services/queries/pixegotchi.queries";
+import {
+  useActivePixegotchi,
+  usePixegotchiToVault,
+} from "@/services/queries/pixegotchi.queries";
 import QuickInfo from "../Other/QuickInfo";
 import Loader from "../Other/Loader";
 
@@ -30,6 +32,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   setActive,
 }) => {
   const getActive = useActivePixegotchi();
+  const setPixegotchiToVault = usePixegotchiToVault();
 
   useEffect(() => {}, [getActive.data]);
 
@@ -50,6 +53,13 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   // };
   const handleAction = (action: string) => {
     console.log(action);
+  };
+
+  const handleSetToVault = () => {
+    setPixegotchiToVault.mutateAsync();
+    clearPixegotchi();
+    setActive(null);
+    onNavigate("start");
   };
 
   if (getActive.isLoading) return <Loader title={"Pixegotchi is loading..."} />;
@@ -186,12 +196,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <ActionButton
             icon={Vault}
             label="Vault"
-            onClick={() => {
-              pixegotchiApi.setInActive(),
-                clearPixegotchi(),
-                setActive(null),
-                onNavigate("start");
-            }}
+            onClick={() => handleSetToVault()}
             disabled={cooldowns.clean}
             gradient="from-cyan-500 to-blue-500"
           />
