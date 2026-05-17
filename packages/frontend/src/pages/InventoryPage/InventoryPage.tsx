@@ -54,8 +54,8 @@ const InventoryPage: React.FC<InventoryPageProps> = () => {
                 px-4 py-2 text-sm font-medium rounded-t-lg transition-all border border-transparent
                 ${
                   activeTab === tab.id
-                    ? "bg-purple-600 text-white border-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "text-white border-white"
                 }
               `}>
               {tab.label}

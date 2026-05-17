@@ -40,17 +40,17 @@ const ChestComponent: React.FC = () => {
 
   const handleOpenChest = async (chestType: ChestType, quantity?: number) => {
     try {
-      const reawards = await openChest.mutateAsync({ chestType, quantity });
-      setRewards(reawards);
+      const rewards = await openChest.mutateAsync({ chestType, quantity });
+      setRewards(rewards);
       setIsRewardsModalOpen(true);
     } catch (error) {
       console.log(error);
     }
   };
 
-  {
-    if (!sortedChestData) return <>Loading</>;
-  }
+  // {
+  //   if (!sortedChestData) return <>Loading</>;
+  // }
   return (
     <>
       <div>

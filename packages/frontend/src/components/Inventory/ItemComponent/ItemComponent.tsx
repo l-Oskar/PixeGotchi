@@ -4,13 +4,19 @@ import {
   useUseItem,
 } from "@/services/queries/inventory.queries";
 import { useInventoryStore } from "@/store/inventory.store";
-import { RARITY_BORDER_COLORS, RarityType } from "@shared";
+import {
+  InventoryWithDetails,
+  RARITY_BORDER_COLORS,
+  RarityOrder,
+} from "@shared";
 import { useEffect, useState } from "react";
+import SortedButtons from "./SortedButtons";
 
 const ItemComponent: React.FC = () => {
   const getInventory = useDetailedInventory();
   const useItem = useUseItem();
   const inventory = useInventoryStore((s) => s.detailedInventory);
+  const [sortedList, setSortedList] = useState<string>("any");
 
   const [selectedItem, setSelectedItem] = useState<{
     itemId: string;
@@ -32,11 +38,65 @@ const ItemComponent: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleSortItems = (
+    items: InventoryWithDetails[] | [],
+    sortCase: string,
+  ) => {
+    let sortedItems;
+    switch (sortCase) {
+      case "rarity":
+        sortedItems = items.sort((a, b) => {
+          return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+        });
+        break;
+      case "food":
+        sortedItems = items
+          .filter((item) => item.itemType === "food")
+          .sort((a, b) => {
+            return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+          });
+        break;
+      case "medicine":
+        sortedItems = items
+          .filter((item) => item.itemType === "medicine")
+          .sort((a, b) => {
+            return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+          });
+        break;
+      case "toy":
+        sortedItems = items
+          .filter((item) => item.itemType === "toy")
+          .sort((a, b) => {
+            return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+          });
+        break;
+      case "cleaning":
+        sortedItems = items
+          .filter((item) => item.itemType === "cleaning")
+          .sort((a, b) => {
+            return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+          });
+        break;
+      case "boost":
+        sortedItems = items
+          .filter((item) => item.itemType === "boost")
+          .sort((a, b) => {
+            return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+          });
+        break;
+      default:
+        sortedItems = [...items];
+        break;
+    }
+    return sortedItems;
+  };
+
   return (
     <>
       <div>
+        <SortedButtons setFilter={setSortedList} />
         <div className="grid grid-cols-3 gap-3">
-          {inventory.map((item) => (
+          {handleSortItems(inventory, sortedList).map((item) => (
             <button
               key={item.id}
               onClick={() => handleItemClick(item.itemId, item.quantity)}

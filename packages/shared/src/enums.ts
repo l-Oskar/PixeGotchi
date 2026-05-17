@@ -51,6 +51,17 @@ export const RarityType = {
 
 export type RarityType = (typeof RarityType)[keyof typeof RarityType];
 
+export const RarityOrder: Record<RarityType, number> = {
+  common: 1,
+  uncommon: 2,
+  rare: 3,
+  epic: 4,
+  mythic: 5,
+  legendary: 6,
+};
+
+export type RarityOrder = (typeof RarityOrder)[keyof typeof RarityOrder];
+
 export const ItemType = {
   food: "food",
   medicine: "medicine",
@@ -62,6 +73,18 @@ export const ItemType = {
 } as const;
 
 export type ItemType = (typeof ItemType)[keyof typeof ItemType];
+
+export const ItemTypeOrder: Record<ItemType, number> = {
+  food: 1,
+  medicine: 2,
+  toy: 3,
+  cleaning: 4,
+  special: 5,
+  boost: 6,
+  chest: 7,
+};
+
+export type ItemTypeOrder = (typeof ItemTypeOrder)[keyof typeof ItemTypeOrder];
 
 export const ChestType = {
   wooden: "wooden", // common items
