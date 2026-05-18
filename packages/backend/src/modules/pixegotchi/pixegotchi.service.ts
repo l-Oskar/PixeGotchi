@@ -90,7 +90,7 @@ export class PixegotchiService {
         break;
       case "toy":
         data = {
-          happines: Math.min(
+          happiness: Math.min(
             RARITY_STATS[pixegotchi.rarity].maxStat,
             pixegotchi.happiness + (item.effects?.happiness ?? 0) * quantity,
           ),
