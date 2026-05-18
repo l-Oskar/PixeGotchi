@@ -76,7 +76,7 @@ export class PixegotchiService {
             RARITY_STATS[pixegotchi.rarity].maxStat,
             pixegotchi.hunger + (item.effects?.hunger ?? 0) * quantity,
           ),
-          lastFedAt: Date.now(),
+          lastFedAt: new Date(),
         };
         break;
       case "medicine":
@@ -85,7 +85,7 @@ export class PixegotchiService {
             RARITY_STATS[pixegotchi.rarity].maxStat,
             pixegotchi.health + (item.effects?.health ?? 0) * quantity,
           ),
-          lastHealedAt: Date.now(),
+          lastHealedAt: new Date(),
         };
         break;
       case "toy":
@@ -94,7 +94,7 @@ export class PixegotchiService {
             RARITY_STATS[pixegotchi.rarity].maxStat,
             pixegotchi.happiness + (item.effects?.happiness ?? 0) * quantity,
           ),
-          lastPlayedAt: Date.now(),
+          lastPlayedAt: new Date(),
         };
         break;
       case "cleaning":
@@ -104,7 +104,7 @@ export class PixegotchiService {
             pixegotchi.cleanliness +
               (item.effects?.cleanliness ?? 0) * quantity,
           ),
-          lastCleanedAt: Date.now(),
+          lastCleanedAt: new Date(),
         };
         break;
       case "boost":
@@ -113,7 +113,7 @@ export class PixegotchiService {
             RARITY_STATS[pixegotchi.rarity].maxStat,
             pixegotchi.energy + (item.effects?.energy ?? 0) * quantity,
           ),
-          lastBoostedAt: Date.now(),
+          lastBoostedAt: new Date(),
         };
         break;
     }
