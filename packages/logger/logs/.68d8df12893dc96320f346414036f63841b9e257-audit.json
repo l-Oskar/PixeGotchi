@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "/Users/User/Documents/Prog/Block/PixeGotchi/packages/logger/logs/.68d8df12893dc96320f346414036f63841b9e257-audit.json",
+    "files": [
+        {
+            "date": 1779122391917,
+            "name": "/Users/User/Documents/Prog/Block/PixeGotchi/packages/logger/logs/exceptions-2026-05-18.log",
+            "hash": "448acaeb45038fb1555c73c02bc813d6d9baa0c51754d92afd65d14ce1f7c594"
+        }
+    ],
+    "hashType": "sha256"
+}

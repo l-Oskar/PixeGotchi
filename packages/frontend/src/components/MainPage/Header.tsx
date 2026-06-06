@@ -2,15 +2,24 @@ import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { User } from "@shared";
 import { Crown, Wallet, Coins } from "lucide-react";
+import { useSignal } from "@tma.js/sdk-react";
+import { viewport } from "@tma.js/sdk";
 
 export interface HeaderProps {
   user: User | null;
 }
 
 const Header: React.FC<HeaderProps> = ({ user }) => {
+  const safeAreaInsetTop = useSignal(viewport.safeAreaInsetTop);
+  const contentSafeAreaInsetTop = useSignal(viewport.contentSafeAreaInsetTop);
+
+  const topInset = (safeAreaInsetTop ?? 0) + (contentSafeAreaInsetTop ?? 0);
+
   return (
-    <header className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
-      <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+    <header
+      style={{ paddingTop: `${topInset}px` }}
+      className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+      <div className="max-w-md mx-auto px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-linear-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
             <Crown size={16} />

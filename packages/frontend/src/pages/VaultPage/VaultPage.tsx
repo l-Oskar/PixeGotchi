@@ -4,16 +4,29 @@ import Loader from "@/components/Other/Loader";
 import { useStatsVault } from "@/services/queries/vault.queries";
 import { useVaultStore } from "@/store/vault.store";
 import { getPixegotchiImg } from "@/utils/getImage";
+import { SquareArrowRight } from "lucide-react";
+import ActionButton from "@/components/MainPage/ActionButton";
 import { useEffect, useState } from "react";
+import { usePixegotchiToVault } from "@/services/queries/pixegotchi.queries";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 interface VaultPageProps {
-  onNavigate?: (page: PageType) => void;
+  onNavigate: (page: PageType) => void;
+  setActive: (x: null) => void;
 }
 
-const VaultPage: React.FC<VaultPageProps> = () => {
+const VaultPage: React.FC<VaultPageProps> = ({ onNavigate, setActive }) => {
   const { isLoading, data } = useStatsVault();
   const statsVault = useVaultStore((s) => s.statsVault);
   const [vaultStats, setVaultStats] = useState<ElementStats[] | []>([]);
+  const setPixegotchiToVault = usePixegotchiToVault();
+  const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
+
+  const handleSetToVault = () => {
+    setPixegotchiToVault.mutateAsync();
+    setActive(null);
+    onNavigate("start");
+  };
 
   useEffect(() => {
     if (data) {
@@ -33,7 +46,15 @@ const VaultPage: React.FC<VaultPageProps> = () => {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Vault Collection</h1>
-
+      {activePixegotchi && (
+        <ActionButton
+          icon={SquareArrowRight}
+          label="Send to Vault"
+          onClick={() => handleSetToVault()}
+          disabled={false}
+          gradient="w-full from-violer-500 to-purple-500"
+        />
+      )}
       {/* Прогрес колекції */}
       <div className="bg-linear-to-r from-yellow-500/20 to-orange-500/20 rounded-2xl p-4 border border-yellow-500/30">
         <div className="flex items-center gap-2 mb-2">

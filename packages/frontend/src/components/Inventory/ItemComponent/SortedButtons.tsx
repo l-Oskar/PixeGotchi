@@ -1,55 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Drumstick,
   Pill,
   Bubbles,
   Dices,
   Zap,
-  ArrowDownAZ,
+  Clover,
+  ArrowDown01,
 } from "lucide-react";
-
+import SortedButton from "./SortedButton";
+import { ITEM_COLORS, ITEM_BG_COLORS } from "@shared";
 export interface SortedButtonsProps {
-  setFilter: (string: string) => void;
+  setFilter: (filter: string) => void;
 }
 
 const SortedButtons: React.FC<SortedButtonsProps> = ({ setFilter }) => {
+  const [active, setActive] = useState<string>("rarity");
+  const handleFilter = (filterValue: string) => {
+    setFilter(filterValue);
+    setActive(filterValue);
+  };
+
   return (
     <div className="mb-2 flex justify-between">
-      <button
-        onClick={() => setFilter("rarity")}
-        className="p-0.5 flex items-center border rounded-2xl">
-        <ArrowDownAZ height={16} />
-      </button>
-      <button
-        onClick={() => setFilter("food")}
-        className="p-0.5 flex items-center border rounded-2xl bg-orange-500/20 text-orange-500">
-        <Drumstick height={16} />
-        <span className="pr-1.5">food</span>
-      </button>
-      <button
-        onClick={() => setFilter("medicine")}
-        className="p-0.5 flex items-center border rounded-2xl  bg-red-500/20 text-red-500">
-        <Pill height={16} />
-        <span className="pr-1.5">med</span>
-      </button>
-      <button
-        onClick={() => setFilter("cleaning")}
-        className="p-0.5 flex items-center border rounded-2xl bg-blue-500/20 text-blue-500">
-        <Bubbles height={16} />
-        <span className="pr-1.5">clean</span>
-      </button>
-      <button
-        onClick={() => setFilter("toy")}
-        className="p-0.5 flex items-center border rounded-2xl bg-pink-500/20 text-pink-500">
-        <Dices height={16} />
-        <span className="pr-1.5">toy</span>
-      </button>
-      <button
-        onClick={() => setFilter("boost")}
-        className="p-0.5 flex items-center border rounded-2xl bg-yellow-500/20 text-yellow-500">
-        <Zap height={16} />
-        <span className="pr-1.5">boost</span>
-      </button>
+      <SortedButton
+        active={active === "rarity"}
+        filter="rarity"
+        setFilter={handleFilter}
+        icon={ArrowDown01}
+        bgColor="bg-gray-50/15"
+      />
+      <SortedButton
+        active={active === "food"}
+        filter="food"
+        setFilter={handleFilter}
+        icon={Drumstick}
+        color={ITEM_COLORS["food"]}
+        bgColor={ITEM_BG_COLORS["food"]}
+      />
+      <SortedButton
+        active={active === "medicine"}
+        filter="medicine"
+        setFilter={handleFilter}
+        icon={Pill}
+        color={ITEM_COLORS["medicine"]}
+        bgColor={ITEM_BG_COLORS["medicine"]}
+      />
+      <SortedButton
+        active={active === "cleaning"}
+        filter="cleaning"
+        setFilter={handleFilter}
+        icon={Bubbles}
+        color={ITEM_COLORS["cleaning"]}
+        bgColor={ITEM_BG_COLORS["cleaning"]}
+      />
+      <SortedButton
+        active={active === "toy"}
+        filter="toy"
+        setFilter={handleFilter}
+        icon={Dices}
+        color={ITEM_COLORS["toy"]}
+        bgColor={ITEM_BG_COLORS["toy"]}
+      />
+      <SortedButton
+        active={active === "boost"}
+        filter="boost"
+        setFilter={handleFilter}
+        icon={Zap}
+        color={ITEM_COLORS["boost"]}
+        bgColor={ITEM_BG_COLORS["boost"]}
+      />
+      <SortedButton
+        active={active === "special"}
+        filter="special"
+        setFilter={handleFilter}
+        icon={Clover}
+        color={ITEM_COLORS["special"]}
+        bgColor={ITEM_BG_COLORS["special"]}
+      />
     </div>
   );
 };

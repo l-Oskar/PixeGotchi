@@ -1,4 +1,5 @@
-import { Item, RARITY_COLORS } from "@shared";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
+import { Item, ITEM_COLORS, RARITY_COLORS } from "@shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
@@ -20,11 +21,13 @@ const ItemModal: React.FC<ItemModalProps> = ({
 }) => {
   const [useQuantity, setUseQuantity] = useState(1);
   const [isUsing, setIsUsing] = useState(false);
+  const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
 
   if (!item) return null;
 
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
-  const canUse = useQuantity >= 1 && useQuantity <= quantity && !isUsing;
+  const canUse =
+    useQuantity >= 1 && useQuantity <= quantity && !isUsing && activePixegotchi;
 
   const handleUse = async () => {
     if (!canUse) return;
@@ -72,7 +75,10 @@ const ItemModal: React.FC<ItemModalProps> = ({
                       <span className={`${RARITY_COLORS[item.rarity]}`}>
                         {item.rarity}
                       </span>{" "}
-                      • {item.itemType}
+                      •{" "}
+                      <span className={`${ITEM_COLORS[item.itemType]}`}>
+                        {item.itemType}
+                      </span>
                     </div>
                   </div>
                 </div>

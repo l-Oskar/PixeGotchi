@@ -1,42 +1,35 @@
 import { useEffect, useState } from "react";
-import { Cooldowns, HomePageProps, PageType } from "@shared";
+import { Cooldowns, HomePageProps } from "@shared";
 import {
   Heart,
-  ShoppingBag,
   Gamepad2,
-  Moon,
+  Bubbles,
   Apple,
   Pill,
-  Vault,
+  Moon,
   Zap,
   Smile,
   Droplets,
   Menu,
   Mars,
   Venus,
+  Rocket,
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
-import { usePixegotchiStore } from "@/store/pixegotchi.store";
-import {
-  useActivePixegotchi,
-  usePixegotchiToVault,
-} from "@/services/queries/pixegotchi.queries";
+import { useActivePixegotchi } from "@/services/queries/pixegotchi.queries";
 import QuickInfo from "../Other/QuickInfo";
 import Loader from "../Other/Loader";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,
   onNavigate,
-  setActive,
 }) => {
   const getActive = useActivePixegotchi();
-  const setPixegotchiToVault = usePixegotchiToVault();
 
   useEffect(() => {}, [getActive.data]);
 
-  const clearPixegotchi = usePixegotchiStore((s) => s.setToVault);
   const [cooldowns] = useState<Cooldowns>({
     feed: false,
     play: false,
@@ -55,12 +48,12 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     console.log(action);
   };
 
-  const handleSetToVault = () => {
-    setPixegotchiToVault.mutateAsync();
-    clearPixegotchi();
-    setActive(null);
-    onNavigate("start");
-  };
+  // const handleSetToVault = () => {
+  //   setPixegotchiToVault.mutateAsync();
+  //   clearPixegotchi();
+  //   setActive(null);
+  //   onNavigate("start");
+  // };
 
   if (getActive.isLoading) return <Loader title={"Pixegotchi is loading..."} />;
 
@@ -168,16 +161,36 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <ActionButton
             icon={Apple}
             label="Feed"
-            onClick={() => handleAction("feed")}
-            disabled={true}
+            onClick={() => onNavigate("inventory", "food")}
+            disabled={false}
             gradient="from-orange-500 to-red-500"
+          />
+          <ActionButton
+            icon={Pill}
+            label="Heal"
+            onClick={() => onNavigate("inventory", "medicine")}
+            disabled={false}
+            gradient="from-green-500 to-emerald-500"
+          />
+          <ActionButton
+            icon={Bubbles}
+            label="Clean"
+            onClick={() => onNavigate("inventory", "cleaning")}
+            disabled={cooldowns.clean}
+            gradient="from-cyan-500 to-blue-500"
           />
           <ActionButton
             icon={Gamepad2}
             label="Play"
-            onClick={() => handleAction("play")}
-            disabled={true}
+            onClick={() => onNavigate("inventory", "toy")}
+            disabled={false}
             gradient="from-purple-500 to-pink-500"
+          />
+          <ActionButton
+            icon={Rocket}
+            label="Boost"
+            onClick={() => onNavigate("inventory", "boost")}
+            gradient="from-yellow-500 to-orange-500"
           />
           <ActionButton
             icon={Moon}
@@ -186,26 +199,13 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             disabled={true}
             gradient="from-blue-500 to-indigo-500"
           />
-          <ActionButton
-            icon={Pill}
-            label="Heal"
-            onClick={() => handleAction("heal")}
-            disabled={true}
-            gradient="from-green-500 to-emerald-500"
-          />
-          <ActionButton
+          {/* <ActionButton
             icon={Vault}
             label="Vault"
             onClick={() => handleSetToVault()}
             disabled={cooldowns.clean}
-            gradient="from-cyan-500 to-blue-500"
-          />
-          <ActionButton
-            icon={ShoppingBag}
-            label="Items"
-            onClick={() => onNavigate("inventory" as PageType)}
-            gradient="from-yellow-500 to-orange-500"
-          />
+            gradient="from-violer-500 to-purple-500"
+          /> */}
         </div>
 
         {/* Quick Stats */}

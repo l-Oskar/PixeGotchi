@@ -16,6 +16,7 @@ export * from "./constants/items/items_img";
 export * from "./constants/items/item_pool";
 export * from "./constants/traits_const";
 export * from "./constants/chest_const";
+export * from "./constants/colors_const";
 
 // Domain types
 export type {

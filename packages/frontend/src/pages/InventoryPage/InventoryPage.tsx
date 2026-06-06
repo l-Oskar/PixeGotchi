@@ -5,6 +5,7 @@ import { PageType } from "@shared";
 import { useState } from "react";
 
 export interface InventoryPageProps {
+  initialSort?: string;
   onNavigate?: (page: PageType) => void;
 }
 
@@ -33,7 +34,7 @@ const TABS: { id: TabType; label: any }[] = [
   },
 ];
 
-const InventoryPage: React.FC<InventoryPageProps> = () => {
+const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
   const [activeTab, setActiveTab] = useState<TabType>("items");
 
   const handleChangeTab = (tab: TabType) => {
@@ -64,7 +65,11 @@ const InventoryPage: React.FC<InventoryPageProps> = () => {
         </div>
       </div>
 
-      {activeTab === "items" ? <ItemComponent /> : <ChestComponent />}
+      {activeTab === "items" ? (
+        <ItemComponent sorted={initialSort} />
+      ) : (
+        <ChestComponent />
+      )}
     </div>
   );
 };

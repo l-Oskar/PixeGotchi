@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { type Pixegotchi, type PageType } from "@shared";
 import VaultPage from "../VaultPage/VaultPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
@@ -21,7 +21,25 @@ const MainPage: React.FC = () => {
   const pixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
 
   const [currentPage, setCurrentPage] = useState<PageType>("start");
-  const [activePixegotchi, setActivePixegotchi] = useState<Pixegotchi | null>(null);
+  const [activePixegotchi, setActivePixegotchi] = useState<Pixegotchi | null>(
+    null,
+  );
+  const [sortParam, setSortParam] = useState<string | undefined>(undefined);
+
+  const handleNavigate = (page: PageType, sortBy?: string) => {
+    setCurrentPage(page);
+    if (page !== "inventory") {
+      setSortParam(undefined);
+    } else {
+      setSortParam(sortBy);
+    }
+  };
+
+  useEffect(() => {
+    if (currentPage === "inventory") {
+      setSortParam(undefined);
+    }
+  }, [currentPage]);
 
   // Compute effective pixegotchi: use active override if set, otherwise use store value
   const effectivePixegotchi = activePixegotchi ?? pixegotchi;
@@ -34,26 +52,35 @@ const MainPage: React.FC = () => {
   }, [effectivePixegotchi, egg]);
 
   // Use derived page for rendering, but allow manual override via setCurrentPage
-  const resolvedPage = currentPage === "start" && derivedPage !== "start"
-    ? derivedPage
-    : currentPage;
+  const resolvedPage =
+    currentPage === "start" && derivedPage !== "start"
+      ? derivedPage
+      : currentPage;
 
   const pages: Record<PageType, React.ReactNode> = {
     data: <PixegothiData pixegotchi={effectivePixegotchi} />,
     loader: <Loader />,
-    start: <Empty onNavigate={setCurrentPage} />,
+    start: <Empty onNavigate={handleNavigate} />,
     home: effectivePixegotchi ? (
       <ShowPixeGotchi
         pixegotchi={effectivePixegotchi}
-        setActive={setActivePixegotchi}
-        onNavigate={setCurrentPage}
+        onNavigate={handleNavigate}
       />
     ) : null,
-    egg: egg ? <EggComponent setActivePixegotchi={setActivePixegotchi} onNavigate={setCurrentPage} /> : null,
-    inventory: <InventoryPage onNavigate={setCurrentPage} />,
-    games: <GamesPage onNavigate={setCurrentPage} />,
-    marketplace: <MarketplacePage onNavigate={setCurrentPage} />,
-    vault: <VaultPage onNavigate={setCurrentPage} />,
+    egg: egg ? (
+      <EggComponent
+        setActivePixegotchi={setActivePixegotchi}
+        onNavigate={handleNavigate}
+      />
+    ) : null,
+    inventory: (
+      <InventoryPage onNavigate={handleNavigate} initialSort={sortParam} />
+    ),
+    games: <GamesPage onNavigate={handleNavigate} />,
+    marketplace: <MarketplacePage onNavigate={handleNavigate} />,
+    vault: (
+      <VaultPage onNavigate={handleNavigate} setActive={setActivePixegotchi} />
+    ),
   };
 
   return (

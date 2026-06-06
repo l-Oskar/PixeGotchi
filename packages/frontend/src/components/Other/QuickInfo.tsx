@@ -5,7 +5,6 @@ import { useUserStore } from "@/store/user.store";
 const QuickInfo = () => {
   const vault = useVaultStore((s) => s.allVault);
   const user = useUserStore((s) => s.user);
-  console.log(user?.createdAt);
 
   const userAge = (user: User) => {
     if (!user) return "0";

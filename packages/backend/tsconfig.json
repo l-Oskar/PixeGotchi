@@ -32,7 +32,8 @@
       "@/modules/*": ["./src/modules/*"],
       "@/config/*": ["./src/config/*"],
       "@/utils/*": ["./src/utils/*"],
-      "@/types/*": ["./src/types/*"]
+      "@/types/*": ["./src/types/*"],
+      "@logger": ["../logger/src/index.ts"]
     },
 
     "pretty": true,

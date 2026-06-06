@@ -44,6 +44,7 @@ services:
     volumes:
       - ./packages/backend/src:/app/src
       - ./packages/shared:/shared
+      - ./packages/logger:/logger
       - ./packages/backend/prisma:/app/prisma
       - ./packages/backend/.env:/app/.env
     depends_on:

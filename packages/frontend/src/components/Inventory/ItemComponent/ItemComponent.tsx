@@ -12,11 +12,15 @@ import {
 import { useEffect, useState } from "react";
 import SortedButtons from "./SortedButtons";
 
-const ItemComponent: React.FC = () => {
+export interface ItemComponentProps {
+  sorted?: string;
+}
+
+const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   const getInventory = useDetailedInventory();
   const useItem = useUseItem();
   const inventory = useInventoryStore((s) => s.detailedInventory);
-  const [sortedList, setSortedList] = useState<string>("any");
+  const [sortedList, setSortedList] = useState<string>(sorted || "rarity");
 
   const [selectedItem, setSelectedItem] = useState<{
     itemId: string;
@@ -47,6 +51,11 @@ const ItemComponent: React.FC = () => {
       case "rarity":
         sortedItems = items.sort((a, b) => {
           return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+        });
+        break;
+      case "rarity_r":
+        sortedItems = items.sort((a, b) => {
+          return RarityOrder[b.rarity] - RarityOrder[a.rarity];
         });
         break;
       case "food":
@@ -80,6 +89,13 @@ const ItemComponent: React.FC = () => {
       case "boost":
         sortedItems = items
           .filter((item) => item.itemType === "boost")
+          .sort((a, b) => {
+            return RarityOrder[a.rarity] - RarityOrder[b.rarity];
+          });
+        break;
+      case "special":
+        sortedItems = items
+          .filter((item) => item.itemType === "special")
           .sort((a, b) => {
             return RarityOrder[a.rarity] - RarityOrder[b.rarity];
           });
