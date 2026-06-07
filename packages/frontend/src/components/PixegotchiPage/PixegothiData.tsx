@@ -3,6 +3,8 @@ import {
   ELEMENT_COLORS,
   Pixegotchi,
   RARITY_COLORS,
+  RARITY_STATS,
+  RarityType,
   TRAIT_EFFECTS,
   TraitType,
 } from "@shared";
@@ -16,15 +18,28 @@ const StatBar: React.FC<{
   label: string;
   value: number | string;
   color: string;
-}> = ({ label, value, color }) => {
+  rarity: RarityType;
+}> = ({ label, value, color, rarity }) => {
   const numericValue = typeof value === "number" ? value : 0;
-  const percentage = Math.min(100, Math.max(0, numericValue));
+  const currentValue = Math.min(
+    RARITY_STATS[rarity].maxStat,
+    Math.max(0, numericValue),
+  );
+  const maxValue = RARITY_STATS[rarity].maxStat;
+  const percentage = (currentValue / maxValue) * 100;
 
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-sm">
         <span className="text-white/80">{label}</span>
-        <span className="text-white font-medium">{numericValue}</span>
+        <div>
+          <span
+            className={`${numericValue === maxValue ? "text-green-500" : "text-yellow-500"}  font-medium`}>
+            {numericValue}
+          </span>
+          {" / "}
+          <span className="text-green-500 font-medium">{maxValue}</span>
+        </div>
       </div>
       <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
         <div
@@ -138,26 +153,31 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           label="❤️ Health"
           value={pixegotchi.health}
           color="bg-gradient-to-r from-red-400 to-red-600"
+          rarity={pixegotchi.rarity}
         />
         <StatBar
           label="🍖 Hunger"
           value={pixegotchi.hunger}
           color="bg-gradient-to-r from-orange-400 to-orange-600"
+          rarity={pixegotchi.rarity}
         />
         <StatBar
           label="⚡ Energy"
           value={pixegotchi.energy}
           color="bg-gradient-to-r from-yellow-400 to-yellow-600"
+          rarity={pixegotchi.rarity}
         />
         <StatBar
           label="😊 Happiness"
           value={pixegotchi.happiness}
           color="bg-gradient-to-r from-pink-400 to-pink-600"
+          rarity={pixegotchi.rarity}
         />
         <StatBar
           label="✨ Cleanliness"
           value={pixegotchi.cleanliness}
           color="bg-gradient-to-r from-cyan-400 to-cyan-600"
+          rarity={pixegotchi.rarity}
         />
       </div>
 

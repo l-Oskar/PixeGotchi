@@ -130,7 +130,8 @@ export class Inventory {
         item.itemType === "food" ||
         item.itemType === "medicine" ||
         item.itemType === "toy" ||
-        item.itemType === "cleaning"
+        item.itemType === "cleaning" ||
+        item.itemType === "boost"
       ) {
         await this.pixegotchiService.applyStats(userId, item, quantity);
       }

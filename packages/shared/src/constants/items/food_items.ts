@@ -70,9 +70,9 @@ export const CHICKEN: Item = {
   maxStack: 50,
 };
 
-export const BAKON: Item = {
-  itemId: "bakon",
-  name: "Bakon",
+export const BACON: Item = {
+  itemId: "bacon",
+  name: "Bacon",
   description:
     "Cured bacon sizzling with otherworldly flavour. Surges energy and happiness to new heights.",
   itemType: ItemType.food,
@@ -88,7 +88,7 @@ export const BAKON: Item = {
   cooldownMinutes: 60,
   maxPerDay: 2,
   minLevel: 1,
-  iconUrl: ITEMS_IMG.food.bakon,
+  iconUrl: ITEMS_IMG.food.bacon,
   isStackable: true,
   maxStack: 20,
 };
@@ -143,7 +143,7 @@ export const FOOD_ITEMS: Item[] = [
   APPLE,
   PEACH,
   CHICKEN,
-  BAKON,
+  BACON,
   BURGER,
   LOBSTER,
 ];

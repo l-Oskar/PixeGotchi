@@ -5,7 +5,7 @@ export const ITEMS_IMG: Record<ItemType, Record<string | ChestType, string>> = {
     apple: "🍎",
     peach: "🍑",
     chicken: "🍗",
-    bakon: "🥓",
+    bacon: "🥓",
     burger: "🍔",
     lobster: "🦞",
   },

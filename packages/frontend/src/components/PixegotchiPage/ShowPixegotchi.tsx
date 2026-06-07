@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Cooldowns, HomePageProps } from "@shared";
+import {
+  Cooldowns,
+  ELEMENT_COLORS,
+  HomePageProps,
+  RARITY_COLORS,
+} from "@shared";
 import {
   Heart,
   Gamepad2,
@@ -61,8 +66,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     return (
       <div className="p-4 space-y-4">
         {/* Pixegotchi Card */}
-        <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-          <div className="flex flex-col gap-1 mb-4">
+        <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-5 border border-white/10 backdrop-blur-sm">
+          <div className="flex flex-col gap-1 mb-3">
             <div className="flex justify-between">
               <h2 className="text-2xl font-bold flex items-center gap-2">
                 {pixegotchi.name ?? "Unknown"}
@@ -73,48 +78,57 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 <Menu size={20} />
               </button>
             </div>
-            <div className="flex gap-2 mt-1">
+            <div className="flex gap-2 py-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs px-2 py-0.5 bg-orange-500/30 rounded-full border border-orange-400/50 capitalize">
+                <span
+                  className={`text-xs px-2 py-0.5 ${RARITY_COLORS[pixegotchi.rarity]} rounded-full border capitalize`}>
                   {pixegotchi.rarity}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-blue-500/30 rounded-full border border-blue-400/50 capitalize">
+                <span
+                  className={`text-xs px-2 py-0.5 ${ELEMENT_COLORS[pixegotchi.element]} rounded-full border capitalize`}>
                   {pixegotchi.element}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-amber-300/30 rounded-full border border-amber-300">
-                  {pixegotchi.gender == "male" ? (
-                    <Mars size={16} className="text-blue-400" />
+                <span
+                  className={`text-xs px-2 py-0.5 bg-amber-200/20 rounded-full border ${pixegotchi.gender === "male" ? "border-blue-500" : "border-pink-400"}`}>
+                  {pixegotchi.gender === "male" ? (
+                    <div className="flex gap-1 text-blue-400 ">
+                      <Mars size={16} />
+                      <span>Male</span>
+                    </div>
                   ) : (
-                    <Venus size={16} className="text-pink-400" />
+                    <div className="flex gap-1 text-pink-400">
+                      <Venus size={16} />
+                      <span>Female</span>
+                    </div>
                   )}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
-                  Lvl {pixegotchi.level}
+                <span className="text-xs px-2 py-0.5 bg-lime-500/30 rounded-full border border-lime-400/50 text-lime-500">
+                  Level {pixegotchi.level}
                 </span>
               </div>
 
               {/* Compact Experience Bar */}
-              <div className="mb-1 flex-1 min-w-0">
-                <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
-                  <span>EXP</span>
-                  <span>
-                    {pixegotchi.experience} / {1000}
-                  </span>
-                </div>
-                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
-                    style={{
-                      width: `${(pixegotchi.experience * 100) / 1000}%`,
-                    }}
-                  />
-                </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
+                <span className="">EXP</span>
+                <span>
+                  {pixegotchi.experience} / {1000}
+                </span>
+              </div>
+              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(pixegotchi.experience * 100) / 1000}%`,
+                  }}
+                />
               </div>
             </div>
           </div>
 
           {/* Compact Stats Grid */}
-          <div className="grid grid-cols-5 gap-2 mb-3">
+          <div className="grid grid-cols-5 gap-2 mb-2">
             <CompactStat
               icon={Heart}
               value={Number(pixegotchi.health)}

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pixegotchi, Egg, EggHatchingStatus } from "@shared";
 import { isEgg, isPixegotchi, getImage } from "@/utils/getImage";
+import { MessageCircleHeart } from "lucide-react";
 
 interface VisualProps {
   pet: Pixegotchi | Egg;
@@ -29,15 +30,39 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
 };
 
 const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showHeart, setShowHeart] = useState(false);
+
+  const handleClick = () => {
+    // Запускаємо анімацію
+    setIsAnimating(true);
+    setShowHeart(true);
+
+    // Через 2 секунди повертаємо все назад
+    setTimeout(() => {
+      setIsAnimating(false);
+      setShowHeart(false);
+    }, 2100);
+  };
+
   return (
     <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
-      <div className="-mb-15 text-9xl animate-bounce">
+      <div
+        className={`-mb-15 text-9xl ${isAnimating ? "animate-egg-wobble" : "animate-bounce"}`}>
         <img
-          className="w-50 h-50"
+          className="w-50 h-50 cursor-pointer hover:scale-105 transition-transform"
           src={`./${getImage(pixe)}`}
           alt={`Pixegotchi-${pixe.id}`}
+          onClick={handleClick}
         />
       </div>
+
+      {/* Сердечко */}
+      {showHeart && (
+        <div className="absolute inset-0 flex mb-10 ml-30 items-center justify-center pointer-events-none">
+          <MessageCircleHeart size={30} className="animate-ping text-red-500" />
+        </div>
+      )}
     </div>
   );
 };
