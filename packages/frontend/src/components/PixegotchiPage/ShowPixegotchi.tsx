@@ -79,7 +79,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               </button>
             </div>
             <div className="flex gap-2 py-1">
-              <div className="flex items-center gap-2">
+              <div className="flex justify-between flex-1">
                 <span
                   className={`text-xs px-2 py-0.5 ${RARITY_COLORS[pixegotchi.rarity]} rounded-full border capitalize`}>
                   {pixegotchi.rarity}
@@ -102,13 +102,13 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                     </div>
                   )}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-lime-500/30 rounded-full border border-lime-400/50 text-lime-500">
+                <span className="text-xs px-2 py-0.5 bg-blue-400/30 rounded-full border border-blue-400/50 text-blue-400">
                   Level {pixegotchi.level}
                 </span>
               </div>
-
-              {/* Compact Experience Bar */}
             </div>
+
+            {/* Compact Experience Bar */}
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
                 <span className="">EXP</span>

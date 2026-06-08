@@ -48,6 +48,7 @@ export const ITEMS_IMG: Record<ItemType, Record<string | ChestType, string>> = {
     double_xp: "🌟",
     revive_stone: "💎",
     wish_scroll: "📜",
+    rare_candy: "🍬",
   },
   chest: {
     wooden: "🪵",

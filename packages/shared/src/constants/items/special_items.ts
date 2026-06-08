@@ -79,4 +79,31 @@ export const LUCKY_CHARM: Item = {
   maxStack: null,
 };
 
-export const SPECIAL_ITEMS: Item[] = [RENAME_TAG, REVIVE_STONE, LUCKY_CHARM];
+export const RARE_CANDY: Item = {
+  itemId: "rare_candy",
+  name: "Rare Candy",
+  description: "Gives 1000 EXP (1 LVL)",
+  itemType: ItemType.special,
+  rarity: RarityType.legendary,
+  effects: {
+    hunger: 0,
+    happiness: 0,
+    health: 0,
+    cleanliness: 0,
+    energy: 0,
+    buffs: [],
+  },
+  cooldownMinutes: null,
+  maxPerDay: 100,
+  minLevel: 1,
+  iconUrl: ITEMS_IMG.special.rare_candy,
+  isStackable: true,
+  maxStack: null,
+};
+
+export const SPECIAL_ITEMS: Item[] = [
+  RENAME_TAG,
+  REVIVE_STONE,
+  LUCKY_CHARM,
+  RARE_CANDY,
+];

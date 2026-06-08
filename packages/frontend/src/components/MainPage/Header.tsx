@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
 
   return (
     <header
-      style={{ paddingTop: `${topInset}px` }}
+      style={{ paddingTop: `${topInset - 5}px` }}
       className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
       <div className="max-w-md mx-auto px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">

@@ -105,13 +105,22 @@ const ChestModal: React.FC<ChestModalProps> = ({
               {chestDescription && (
                 <div className="grid gap-2 mb-4">
                   <p className="text-white/80 text-sm">
-                    Egg chance: {chestDescription.eggChance}%
+                    Egg chance:{" "}
+                    <span className="text-white text-xl">
+                      {chestDescription.eggChance}%
+                    </span>
                   </p>
                   <p className="text-white/80 text-sm">
-                    Boost item chance: {chestDescription.boostChance}%
+                    Boost item chance:{" "}
+                    <span className="text-white text-xl">
+                      {chestDescription.boostChance}%
+                    </span>
                   </p>
                   <p className="text-white/80 text-sm">
-                    Guaranteed items: {chestDescription.guaranteed_items}
+                    Guaranteed items:{" "}
+                    <span className="text-white text-xl">
+                      {chestDescription.guaranteed_items}
+                    </span>
                   </p>
 
                   {/* Згортаний ItemPool */}

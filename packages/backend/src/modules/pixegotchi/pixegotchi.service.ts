@@ -65,57 +65,39 @@ export class PixegotchiService {
     const pixegotchi = await this.findActive(userId);
     if (!pixegotchi) throw new Error("You don't have active pixegotchi");
 
-    await this.addExp(userId, ITEM_EXP[item.rarity] * quantity);
+    await this.addExp(userId, item, quantity);
 
-    let data = {};
+    const maxStat = RARITY_STATS[pixegotchi.rarity].maxStat;
 
-    switch (item.itemType) {
-      case "food":
-        data = {
-          hunger: Math.min(
-            RARITY_STATS[pixegotchi.rarity].maxStat,
-            pixegotchi.hunger + (item.effects?.hunger ?? 0) * quantity,
-          ),
-          lastFedAt: new Date(),
-        };
-        break;
-      case "medicine":
-        data = {
-          health: Math.min(
-            RARITY_STATS[pixegotchi.rarity].maxStat,
-            pixegotchi.health + (item.effects?.health ?? 0) * quantity,
-          ),
-          lastHealedAt: new Date(),
-        };
-        break;
-      case "toy":
-        data = {
-          happiness: Math.min(
-            RARITY_STATS[pixegotchi.rarity].maxStat,
-            pixegotchi.happiness + (item.effects?.happiness ?? 0) * quantity,
-          ),
-          lastPlayedAt: new Date(),
-        };
-        break;
-      case "cleaning":
-        data = {
-          cleanliness: Math.min(
-            RARITY_STATS[pixegotchi.rarity].maxStat,
-            pixegotchi.cleanliness +
-              (item.effects?.cleanliness ?? 0) * quantity,
-          ),
-          lastCleanedAt: new Date(),
-        };
-        break;
-      case "boost":
-        data = {
-          energy: Math.min(
-            RARITY_STATS[pixegotchi.rarity].maxStat,
-            pixegotchi.energy + (item.effects?.energy ?? 0) * quantity,
-          ),
-          lastBoostedAt: new Date(),
-        };
-        break;
+    const TIMESTAMP_MAP: Partial<
+      Record<keyof NonNullable<Item["effects"]>, string>
+    > = {
+      hunger: "lastFedAt",
+      health: "lastHealedAt",
+      happiness: "lastPlayedAt",
+      cleanliness: "lastCleanedAt",
+      energy: "lastBoostedAt",
+    };
+
+    const statKeys = Object.keys(TIMESTAMP_MAP) as Array<
+      keyof NonNullable<Item["effects"]>
+    >;
+
+    const data: Record<string, unknown> = {};
+
+    for (const stat of statKeys) {
+      const effectValue = Number(item.effects?.[stat]);
+      if (effectValue === undefined || effectValue === null) continue;
+
+      data[stat as string] = Math.min(
+        maxStat,
+        Math.max(
+          0,
+          (pixegotchi[stat as keyof typeof pixegotchi] as number) +
+            effectValue * quantity,
+        ),
+      );
+      data[TIMESTAMP_MAP[stat]!] = new Date();
     }
 
     return await prisma.pixegotchi.update({
@@ -126,9 +108,17 @@ export class PixegotchiService {
     });
   }
 
-  async addExp(userId: number, exp: number) {
+  async addExp(userId: number, item: Item, quantity: number = 1) {
     const pixegotchi = await this.findActive(userId);
     if (!pixegotchi) throw new Error("Not active pixegotchi");
+
+    let exp = 0;
+
+    if (item.itemId === "rare_candy") {
+      exp = 1000 * quantity;
+    } else {
+      exp = ITEM_EXP[item.rarity] * quantity;
+    }
 
     if (pixegotchi.experience + exp < MAX_EXP) {
       return await prisma.pixegotchi.update({
