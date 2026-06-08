@@ -86,8 +86,8 @@ export class PixegotchiService {
     const data: Record<string, unknown> = {};
 
     for (const stat of statKeys) {
-      const effectValue = Number(item.effects?.[stat]);
-      if (effectValue === undefined || effectValue === null) continue;
+      const effectValue = item.effects?.[stat];
+      if (!effectValue || typeof effectValue !== "number") continue;
 
       data[stat as string] = Math.min(
         maxStat,
