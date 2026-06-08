@@ -126,15 +126,7 @@ export class Inventory {
       const valid = this.itemService.validateItemUsage(pixegotchi, item);
       if (!valid) throw new Error("You can't use this item now!");
 
-      if (
-        item.itemType === "food" ||
-        item.itemType === "medicine" ||
-        item.itemType === "toy" ||
-        item.itemType === "cleaning" ||
-        item.itemType === "boost"
-      ) {
-        await this.pixegotchiService.applyStats(userId, item, quantity);
-      }
+      await this.pixegotchiService.applyStats(userId, item, quantity);
       return await this.consumeItem(userId, itemId, quantity);
     } catch (error) {
       return null;
