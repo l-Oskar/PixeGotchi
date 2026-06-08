@@ -124,6 +124,15 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
     },
     {
       id: 7,
+      item: "Rare Candy",
+      itemId: "rare_candy",
+      price: 0,
+      currency: "PGC" as CurrencyType,
+      seller: "Pixegotchi",
+      icon: "🍬",
+    },
+    {
+      id: 8,
       item: "Random Chest",
       itemId: "chest",
       price: 0,
