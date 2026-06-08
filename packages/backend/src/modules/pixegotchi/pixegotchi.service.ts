@@ -113,12 +113,24 @@ export class PixegotchiService {
     if (!pixegotchi) throw new Error("Not active pixegotchi");
 
     let exp = 0;
+    console.log(
+      "------itemId:",
+      item.itemId,
+      "| match:",
+      item.itemId === "rare_candy",
+    );
 
     if (item.itemId === "rare_candy") {
       exp = 1000 * quantity;
     } else {
       exp = ITEM_EXP[item.rarity] * quantity;
     }
+    console.log(
+      "-----exp to add:",
+      exp,
+      "| current exp:",
+      pixegotchi.experience,
+    );
 
     if (pixegotchi.experience + exp < MAX_EXP) {
       return await prisma.pixegotchi.update({
