@@ -13,6 +13,17 @@ export const PixegotchiStatus = {
 export type PixegotchiStatus =
   (typeof PixegotchiStatus)[keyof typeof PixegotchiStatus];
 
+export const PixegotchiStatsType = {
+  health: "health",
+  hunger: "hunger",
+  energy: "energy",
+  happiness: "happiness",
+  cleanliness: "cleanliness",
+};
+
+export type PixegotchiStatsType =
+  (typeof PixegotchiStatsType)[keyof typeof PixegotchiStatsType];
+
 export const PixegotchiGender = {
   male: "male",
   female: "female",
