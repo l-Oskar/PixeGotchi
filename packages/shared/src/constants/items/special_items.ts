@@ -82,7 +82,7 @@ export const LUCKY_CHARM: Item = {
 export const RARE_CANDY: Item = {
   itemId: "rare_candy",
   name: "Rare Candy",
-  description: "Gives 1000 EXP (1 LVL)",
+  description: "Gives 10000 EXP (10 LVL)",
   itemType: ItemType.special,
   rarity: RarityType.legendary,
   effects: {
@@ -91,7 +91,11 @@ export const RARE_CANDY: Item = {
     health: 0,
     cleanliness: 0,
     energy: 0,
-    buffs: [],
+    buffs: [
+      {
+        [ItemBuffsType.ADD_EXPERIENCE]: 10000,
+      },
+    ],
   },
   cooldownMinutes: null,
   maxPerDay: 100,

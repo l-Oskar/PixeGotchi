@@ -122,15 +122,11 @@ export class Inventory {
 
     const item = await this.itemService.getItemDetails(itemId);
 
-    try {
-      const valid = this.itemService.validateItemUsage(pixegotchi, item);
-      if (!valid) throw new Error("You can't use this item now!");
+    const valid = this.itemService.validateItemUsage(pixegotchi, item);
+    if (!valid) throw new Error("You can't use this item now!");
 
-      await this.pixegotchiService.applyStats(userId, item, quantity);
-      return await this.consumeItem(userId, itemId, quantity);
-    } catch (error) {
-      return null;
-    }
+    await this.pixegotchiService.applyStats(userId, item, quantity);
+    return await this.consumeItem(userId, itemId, quantity);
   }
 
   async openChest(userId: number, chestType: ChestType) {

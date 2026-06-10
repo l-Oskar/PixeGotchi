@@ -29,6 +29,7 @@ export type {
 export type { User, UserProfile } from "./types/user";
 export type { InventoryItem, InventoryWithDetails } from "./types/inventory";
 export type { Item, ItemEffects } from "./types/item";
+export type { ItemBuffs } from "./types/item_buffs";
 export { parseItem, parseItemEffects } from "./types/item";
 export type {
   Chest,

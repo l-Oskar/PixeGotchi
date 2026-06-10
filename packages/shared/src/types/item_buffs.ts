@@ -1,4 +1,5 @@
 export enum ItemBuffsType {
+  ADD_EXPERIENCE = "add_experience",
   BOOST_EXPERIENCE = "boost_experience",
 
   REVIVE = "revive",
