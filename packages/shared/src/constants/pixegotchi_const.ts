@@ -75,7 +75,8 @@ export const DEGRADATION_STATS: Record<
   Record<string, number>
 > = {
   health: {
-    REGEN: 0,
+    REGEN: 4,
+    DELTA_LVL: 0.05,
   },
   hunger: {
     DECAY: 5,
@@ -84,19 +85,22 @@ export const DEGRADATION_STATS: Record<
     HEALTH_PLUS_DOUBLE_PERCENT: 80,
     HEALTH_PLUS: 0.5,
     HEALTH_PLUS_PERCENT: 40,
-    HEALTH_MINUS: 1,
+    HEALTH_MINUS: -2,
+    HEALTH_MINUS_PERCENT: 0,
   },
   cleanliness: {
     DECAY: 4,
     DECAY_LVL: 0.03,
-    HEALTH_PLUS: 0.5,
+    HEALTH_PLUS: 1,
     HEALTH_PLUS_PERCENT: 80,
-    HEALTH_MINUS: 0.5,
+    HEALTH_MINUS: 1,
     HEALTH_MINUS_PERCENT: 30,
   },
   happiness: {
-    MINUS: 0.5,
-    PLUS: 0.2,
+    DECAY: 1,
+    DECAY_LVL: 0.05,
+    MINUS: -1,
+    PLUS: 1,
     DECAY_HUNGER: 30,
     DECAY_CLEAN: 30,
   },
@@ -110,13 +114,23 @@ export const DEGRADATION_STATS: Record<
     HUNGER_MID_PERCENT: 40,
     HUNGER_MID_RATE: 1.0,
     HUNGER_LOW_RATE: 0.6,
+    HEALTH_BEST_PERCENT: 80,
+    HEALTH_BEST_RATE: 1.2,
+    HEALTH_MID_PERCENT: 40,
+    HEALTH_MID_RATE: 1,
+    HEALTH_LOW_RATE: 0.6,
   },
 };
 
-export const EXP = {
+export const EXP_MULT: Record<string, number> = {
   HIGH: 1.2,
   HIGH_PERCENT: 80,
-  MID: 0.8,
+  MID: 1,
   MID_PERCENT: 50,
-  LOW: 0.5,
+  LOW: 0.8,
+} as const;
+
+export const EXP: Record<string, number> = {
+  BASE_EXP: 100,
+  LVL_MULT: 0.5,
 } as const;

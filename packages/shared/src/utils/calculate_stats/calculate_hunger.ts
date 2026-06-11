@@ -5,31 +5,26 @@ import {
 import { RarityType } from "../../enums";
 import {
   round,
-  calculateDelta,
+  //calculateDelta,
   applyRarityReduction,
   applyTraitModifier,
-} from "../calculate_delta";
+  getPercentStat,
+} from "./calculate_delta";
 
 export function getBaseHungerDelta(level: number): number {
-  return -(
-    DEGRADATION_STATS.hunger.DECAY +
-    level * DEGRADATION_STATS.hunger.DECAY_LVL
+  return (
+    DEGRADATION_STATS.hunger.DECAY + level * DEGRADATION_STATS.hunger.DECAY_LVL
   );
 }
 
 export function getFinalHungerDelta(level: number, rarity: RarityType): number {
   const deltaHunger = getBaseHungerDelta(level);
-  const applyRarity = applyRarityReduction(
-    deltaHunger,
-    RARITY_STATS[rarity].degradationReduce,
-  );
-  const finalDelta = applyTraitModifier(applyRarity);
-  return round(finalDelta);
+  const applyRarity = applyRarityReduction(deltaHunger, rarity);
+  const applyTrait = applyTraitModifier(applyRarity);
+  const finalDelta = -getPercentStat(applyTrait, RARITY_STATS[rarity].maxStat);
+  return finalDelta;
 }
 
 // for (const key of Object.keys(RarityType)) {
-//   console.log(
-//     `${key}`,
-//     calculateDelta(getFinalHungerDelta(20, key as RarityType), 36000000),
-//   );
+//   console.log(`${key}`, getFinalHungerDelta(20, key as RarityType));
 // }
