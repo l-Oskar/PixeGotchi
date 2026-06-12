@@ -1,18 +1,20 @@
+import { useState } from "react";
 import { PageType, GameStruct } from "@shared";
-
+import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
 }
 
 // GamesPage
 const GamesPage: React.FC<GamePageProps> = () => {
+  const [activeGameId, setActiveGameId] = useState<number | null>(null);
   const games: GameStruct[] = [
     {
       id: 1,
-      name: "Memory Match",
+      name: "Catch Fruits",
       difficulty: "Easy",
       reward: "50-100",
-      icon: "🧠",
+      icon: "🍌",
     },
     {
       id: 2,
@@ -30,6 +32,22 @@ const GamesPage: React.FC<GamePageProps> = () => {
     },
   ];
 
+  const handleGameEnd = async (score: number) => {
+    console.log(`Game score: ${score}`);
+
+    const rewardAmound = Math.floor(score * 2);
+    console.log(`Game reward: ${rewardAmound}pgc`);
+    setActiveGameId(null);
+  };
+
+  if (activeGameId === 1) {
+    return (
+      <div className="p-4">
+        <CatchGame onGameEnd={handleGameEnd} endGame={setActiveGameId} />
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Mini Games (Comming soon!)</h1>
@@ -38,6 +56,13 @@ const GamesPage: React.FC<GamePageProps> = () => {
         {games.map((game) => (
           <button
             key={game.id}
+            onClick={() => {
+              if (game.id === 1) {
+                setActiveGameId(game.id);
+              } else {
+                alert(`${game.name} is comming sood`);
+              }
+            }}
             className="w-full bg-linear-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 rounded-2xl p-4 border border-white/10 transition flex items-center gap-4">
             <div className="text-5xl">{game.icon}</div>
             <div className="flex-1 text-left">
