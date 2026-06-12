@@ -6,7 +6,7 @@ import { RarityType } from "../../enums";
 import {
   applyRarityReduction,
   applyTraitModifier,
-  getPercentStat,
+  percentToValue,
 } from "./calculate_delta";
 
 export function getBaseCleanlinessDelta(level: number): number {
@@ -23,7 +23,7 @@ export function getFinalCleanlinessDelta(
   const deltaCleanliness = getBaseCleanlinessDelta(level);
   const applyRarity = applyRarityReduction(deltaCleanliness, rarity);
   const applyTrait = applyTraitModifier(applyRarity);
-  const finalDelta = -getPercentStat(applyTrait, RARITY_STATS[rarity].maxStat);
+  const finalDelta = -percentToValue(applyTrait, RARITY_STATS[rarity].maxStat);
   return finalDelta;
 }
 

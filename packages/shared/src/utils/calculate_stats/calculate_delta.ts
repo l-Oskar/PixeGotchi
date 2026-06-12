@@ -5,11 +5,11 @@ export function round(num: number): number {
   return parseFloat(num.toFixed(2));
 }
 
-export function getStatPercent(value: number, max: number): number {
+export function valueToPercent(value: number, max: number): number {
   return round((value / max) * 100);
 }
 
-export function getPercentStat(percent: number, max: number): number {
+export function percentToValue(percent: number, max: number): number {
   return round((percent * max) / 100);
 }
 
@@ -28,5 +28,6 @@ export function applyRarityReduction(
 }
 
 export function applyTraitModifier(delta: number): number {
+  //TODO: Implement Train Modifier
   return delta;
 }

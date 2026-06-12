@@ -6,16 +6,16 @@ import { RarityType } from "../../enums";
 import {
   round,
   applyRarityReduction,
-  getStatPercent,
+  valueToPercent,
   applyTraitModifier,
-  getPercentStat,
+  percentToValue,
 } from "./calculate_delta";
 
 export function cleanlinessToHealth(
   cleanliness: number,
   rarity: RarityType,
 ): number {
-  const cleanlinessPercent = getStatPercent(
+  const cleanlinessPercent = valueToPercent(
     cleanliness,
     RARITY_STATS[rarity].maxStat,
   );
@@ -32,7 +32,7 @@ export function cleanlinessToHealth(
 }
 
 export function hungerToHealth(hunger: number, rarity: RarityType): number {
-  const hungerPercent = getStatPercent(hunger, RARITY_STATS[rarity].maxStat);
+  const hungerPercent = valueToPercent(hunger, RARITY_STATS[rarity].maxStat);
   const hungerConst = DEGRADATION_STATS.hunger;
   let healthRegenDelta = 0;
   if (hungerPercent >= hungerConst.HEALTH_PLUS_DOUBLE_PERCENT) {
@@ -66,9 +66,9 @@ export function getFinalHealthDelta(
     getBaseHealthDelta(level) +
     hungerToHealth(hunger, rarity) +
     cleanlinessToHealth(cleanliness, rarity);
-  const applyRarity = round(applyRarityReduction(healthRegenDelta, rarity));
+  const applyRarity = applyRarityReduction(healthRegenDelta, rarity);
   const applyTrait = applyTraitModifier(applyRarity);
-  const finalDelta = -getPercentStat(applyTrait, RARITY_STATS[rarity].maxStat);
+  const finalDelta = -percentToValue(applyTrait, RARITY_STATS[rarity].maxStat);
   return finalDelta;
 }
 
