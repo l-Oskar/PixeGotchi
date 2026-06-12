@@ -18,10 +18,10 @@ export function isPixegotchi(pet: Pet): pet is Pixegotchi {
 }
 
 export function getPixegotchiEvolution(level: number) {
-  if (level < 20) {
+  if (level < 30) {
     return PixegotchiEvolutionStage.BABY;
   }
-  if (level >= 20 && level < 50) {
+  if (level >= 30 && level < 59) {
     return PixegotchiEvolutionStage.TEEN;
   } else {
     return PixegotchiEvolutionStage.ADULT;

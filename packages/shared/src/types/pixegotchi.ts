@@ -39,7 +39,10 @@ export interface Pixegotchi {
   lastUpdateAt: Date | string | null;
   hatchedAt: Date | string | null;
 }
-
+export interface DeltaContext {
+  level: number;
+  rarity: RarityType;
+}
 export interface PixegotchiStats {
   health: number;
   hunger: number;
@@ -47,6 +50,7 @@ export interface PixegotchiStats {
   happiness: number;
   cleanliness: number;
 }
+export interface PixegotchiState extends DeltaContext, PixegotchiStats {}
 
 export interface Cooldowns {
   feed: boolean;
@@ -54,6 +58,10 @@ export interface Cooldowns {
   sleep: boolean;
   clean: boolean;
   heal: boolean;
+}
+
+export interface TickContext {
+  elapsedMs: number;
 }
 
 export interface RarityStatsType {
@@ -71,4 +79,9 @@ export interface GenomeInfo {
   rarity: RarityType;
   gender: PixegotchiGender;
   traits: TraitType[];
+}
+
+export interface PixegotchiContext extends Pixegotchi {
+  userId: number;
+  pixegotchi: Pixegotchi | null;
 }
