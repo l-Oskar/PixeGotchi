@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { PageType, GameStruct } from "@shared";
+import { PageType, GameStruct, Pixegotchi } from "@shared";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
+  pixegotchi: Pixegotchi | null;
 }
 
 // GamesPage
-const GamesPage: React.FC<GamePageProps> = () => {
+const GamesPage: React.FC<GamePageProps> = ({ pixegotchi }) => {
   const [activeGameId, setActiveGameId] = useState<number | null>(null);
   const games: GameStruct[] = [
     {
@@ -43,7 +44,11 @@ const GamesPage: React.FC<GamePageProps> = () => {
   if (activeGameId === 1) {
     return (
       <div className="p-4">
-        <CatchGame onGameEnd={handleGameEnd} endGame={setActiveGameId} />
+        <CatchGame
+          onGameEnd={handleGameEnd}
+          endGame={setActiveGameId}
+          pixegotchi={pixegotchi!}
+        />
       </div>
     );
   }
@@ -58,7 +63,11 @@ const GamesPage: React.FC<GamePageProps> = () => {
             key={game.id}
             onClick={() => {
               if (game.id === 1) {
-                setActiveGameId(game.id);
+                if (!pixegotchi) {
+                  alert("You need active Pixegotchi");
+                } else {
+                  setActiveGameId(game.id);
+                }
               } else {
                 alert(`${game.name} is comming sood`);
               }

@@ -76,7 +76,7 @@ const MainPage: React.FC = () => {
     inventory: (
       <InventoryPage onNavigate={handleNavigate} initialSort={sortParam} />
     ),
-    games: <GamesPage onNavigate={handleNavigate} />,
+    games: <GamesPage onNavigate={handleNavigate} pixegotchi={pixegotchi} />,
     marketplace: <MarketplacePage onNavigate={handleNavigate} />,
     vault: (
       <VaultPage onNavigate={handleNavigate} setActive={setActivePixegotchi} />

@@ -57,7 +57,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   resetGame: () =>
     set({
       score: 0,
-      timeLeft: 60,
+      timeLeft: 30,
       objects: [],
       basketX: get().canvasWidth / 2 - 30,
       isPlaying: false,
