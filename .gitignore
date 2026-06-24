@@ -13,6 +13,9 @@ build/
 .cursor/
 .turbo/
 .qwen/
+.docs/
 
 # OS
 .DS_Store
+
+AGENTS.md

@@ -10,7 +10,12 @@ const VERSION = "V2";
 
 function ErrorBoundaryError({ error }: { error: unknown }) {
   return (
-    <div>
+    <div className="text-white text-center">
+      <h2 className="text-2xl">Сталась полилка.</h2>
+      <h2 className="text-2xl">Обновіть сторінку!</h2>
+      <h2 className="text-2xl">
+        ↗️ Правий куток | (···) Три крапки | 🔄 Перезавантажити
+      </h2>
       <p>An unhandled error occurred:</p>
       <blockquote>
         <code>
