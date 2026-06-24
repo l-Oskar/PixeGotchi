@@ -1,9 +1,9 @@
-import Fastify, { FastifyInstance } from "fastify";
+import Fastify from "fastify";
+import { randomUUID } from "node:crypto";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import jwt from "@fastify/jwt";
 import rateLimit from "@fastify/rate-limit";
-import { prisma } from "@/database/prisma";
 import { config } from "@/config/env";
 import Redis from "ioredis";
 
@@ -19,25 +19,54 @@ import { GenomeGenerator } from "./utils/genome-generator";
 import { itemsRoutes } from "./modules/items/items.routes";
 import { chestRoutes } from "./modules/chest/chest.routes";
 import { ChestGenerator } from "./utils/chest-generator";
+import { logger } from "@/config/logger";
+import { clientLogsRoutes } from "@/modules/client-logs/client-logs.routes";
 
-export async function buildApp(): Promise<FastifyInstance> {
+export async function buildApp() {
   const app = Fastify({
-    logger: {
-      transport:
-        config.nodeEnv === "development"
-          ? {
-              target: "pino-pretty",
-              options: {
-                translateTime: "HH:MM:ss Z",
-                ignore: "pid,hostname",
-                colorize: true,
-              },
-            }
-          : undefined,
-    },
+    loggerInstance: logger,
+    disableRequestLogging: true,
+    genReqId: () => randomUUID(),
+    requestIdLogLabel: "requestId",
   });
 
   const redis = new Redis(config.redisUrl);
+
+  app.addHook("onRequest", async (request, reply) => {
+    reply.header("x-request-id", request.id);
+  });
+
+  app.addHook("onResponse", async (request, reply) => {
+    const path = request.url.split("?", 1)[0] ?? request.url;
+
+    if (path === "/health") {
+      return;
+    }
+
+    const logData = {
+      event: "http_request_completed",
+      request: {
+        method: request.method,
+        path: request.routeOptions.url ?? path,
+      },
+      response: {
+        statusCode: reply.statusCode,
+      },
+      responseTimeMs: reply.elapsedTime,
+    };
+
+    if (reply.statusCode >= 500) {
+      request.log.error(logData, "HTTP request completed");
+      return;
+    }
+
+    if (reply.statusCode >= 400) {
+      request.log.warn(logData, "HTTP request completed");
+      return;
+    }
+
+    request.log.info(logData, "HTTP request completed");
+  });
 
   await app.register(helmet, {
     contentSecurityPolicy: false,
@@ -112,12 +141,19 @@ export async function buildApp(): Promise<FastifyInstance> {
       });
       await apiInstance.register(vaultRoutes, { prefix: "/vault" });
       await apiInstance.register(chestRoutes, { prefix: "/chest" });
+      await apiInstance.register(clientLogsRoutes, { prefix: "/logs" });
     },
     { prefix: "/api" },
   );
 
-  app.setErrorHandler((error: any, reply: any) => {
-    app.log.error(error);
+  app.setErrorHandler((error: any, request: any, reply: any) => {
+    request.log.error(
+      {
+        err: error,
+        event: "request_failed",
+      },
+      "Request failed",
+    );
 
     if (error.name === "PrismaClientKnownRequestError") {
       return reply.code(400).send({
@@ -137,16 +173,6 @@ export async function buildApp(): Promise<FastifyInstance> {
       error: error.message || "Internal Server Error",
     });
   });
-
-  const closeGracefully = async (signal: string) => {
-    app.log.info(`Received signal "${signal}", closing gracefully...`),
-      await app.close(),
-      await prisma.$disconnect();
-    process.exit(0);
-  };
-
-  process.on("SIGINT", () => closeGracefully("SIGINT"));
-  process.on("SIGTERM", () => closeGracefully("SIGTERM"));
 
   return app;
 }

@@ -16,10 +16,16 @@ import "./mockEnv.ts";
 import { QueryProvider } from "./providers/QueryProvider.tsx";
 import { AutoLoginProvider } from "./providers/AutoLoginProvider.tsx";
 import { GameBootstrap } from "./providers/GameBootstrap.tsx";
+import {
+  installClientErrorLogging,
+  reportClientError,
+} from "@/services/client-logger";
 
 const ERUDA_ALLOWED_USER_ID = 506295532;
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
+
+installClientErrorLogging();
 
 try {
   const launchParams = retrieveLaunchParams();
@@ -48,5 +54,10 @@ try {
     );
   });
 } catch (e) {
+  reportClientError("runtime", e, {
+    metadata: {
+      component: "bootstrap",
+    },
+  });
   root.render(<EnvUnsupported />);
 }

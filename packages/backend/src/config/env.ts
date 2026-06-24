@@ -19,6 +19,13 @@ const envShema = z.object({
 
   TON_NETWORK: z.enum(["mainnet", "testnet"]).default("testnet"),
   TON_API_KEY: z.string().optional(),
+
+  LOG_LEVEL: z
+    .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
+    .default("info"),
+  LOG_TO_FILE: z.enum(["true", "false"]).default("false"),
+  LOG_FILE_PATH: z.string().default("/var/log/pixegotchi/backend.log"),
+  APP_VERSION: z.string().default("development"),
 });
 
 const parsedEnv = envShema.safeParse(process.env);
@@ -39,4 +46,8 @@ export const config = {
   telegramBotToken: parsedEnv.data.TELEGRAM_BOT_TOKEN,
   tonNetwork: parsedEnv.data.TON_NETWORK,
   tonApiKey: parsedEnv.data.TON_API_KEY,
+  logLevel: parsedEnv.data.LOG_LEVEL,
+  logToFile: parsedEnv.data.LOG_TO_FILE === "true",
+  logFilePath: parsedEnv.data.LOG_FILE_PATH,
+  appVersion: parsedEnv.data.APP_VERSION,
 };
