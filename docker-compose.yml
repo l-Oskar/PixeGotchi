@@ -32,11 +32,11 @@ services:
       - "127.0.0.1:3000:3000"
     environment:
       DATABASE_URL: postgresql://admin:adminpixe@postgres:5432/pixegotchi?schema=public
-      JWT_SECRET: your-super-secret-jwt-key-change-in-production
-      TELEGRAM_BOT_TOKEN: your-bot-token
+      JWT_SECRET: ${JWT_SECRET}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       REDIS_URL: redis://redis:6379
       TON_NETWORK: testnet
-      NODE_ENV: ${NODE_ENV:-production}
+      NODE_ENV: ${NODE_ENV:-development}
       LOG_LEVEL: ${LOG_LEVEL:-info}
       LOG_TO_FILE: ${LOG_TO_FILE:-true}
       LOG_FILE_PATH: /var/log/pixegotchi/backend.log

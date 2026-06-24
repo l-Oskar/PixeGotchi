@@ -17,6 +17,9 @@ docker compose -f docker-compose.yml logs -f backend
 
 tail -f runtime/logs/backend/backend.log
 
+tail -f /home/ubuntu/pixegotchi/runtime/logs/backend/backend.log |
+jq -R 'fromjson? // .'
+
 # Одноразово встановити ротацію на production host
 
 ./scripts/install-logrotate.sh

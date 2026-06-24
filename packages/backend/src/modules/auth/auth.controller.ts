@@ -16,10 +16,14 @@ export class AuthController {
 
       const result = await this.authService.authenticateTelegram(initData);
 
-      const token = request.server.jwt.sign({
-        userId: result.user.id,
-        expiresId: config.jwtExpiresIn,
-      });
+      const token = request.server.jwt.sign(
+        {
+          userId: result.user.id,
+        },
+        {
+          expiresIn: config.jwtExpiresIn,
+        },
+      );
       return reply.send({ ...result, token });
     } catch (err) {
       request.log.error(
@@ -33,22 +37,24 @@ export class AuthController {
         return reply.status(400).send({ error: "Invalig Telegram init data" });
       }
 
-      return reply
-        .status(500)
-        .send({
-          error: "Internal error 2",
-          message: err instanceof Error ? err.message : err,
-        });
+      return reply.status(500).send({
+        error: "Internal error 2",
+        message: err instanceof Error ? err.message : err,
+      });
     }
   }
 
   async refreshToken(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const payload = await request.jwtVerify();
-      const newToken = request.server.jwt.sign({
-        userId: (payload as any).id,
-        expiresIn: config.jwtExpiresIn,
-      });
+      await request.jwtVerify();
+      const newToken = request.server.jwt.sign(
+        {
+          userId: request.user.userId,
+        },
+        {
+          expiresIn: config.jwtExpiresIn,
+        },
+      );
 
       return reply.send({ token: newToken });
     } catch (err) {
