@@ -1,0 +1,11 @@
+"__LOG_FILE__" {
+    su __LOG_USER__ __LOG_GROUP__
+    daily
+    maxsize 20M
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}

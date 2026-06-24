@@ -13,6 +13,14 @@ docker exec -it pixegotchi-backend-1 sh -c "npx prisma studio"
 
 docker compose -f docker-compose.yml logs -f backend
 
+# Файлові логи
+
+tail -f runtime/logs/backend/backend.log
+
+# Одноразово встановити ротацію на production host
+
+./scripts/install-logrotate.sh
+
 # Перевірити, чи бачить бекенд PostgreSQL
 
 docker exec pixegotchi-backend-1 ping postgres

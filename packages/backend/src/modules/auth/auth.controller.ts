@@ -22,7 +22,13 @@ export class AuthController {
       });
       return reply.send({ ...result, token });
     } catch (err) {
-      console.error("Telegram auth error:", err);
+      request.log.error(
+        {
+          err,
+          event: "telegram_auth_failed",
+        },
+        "Telegram authentication failed",
+      );
       if (err instanceof z.ZodError) {
         return reply.status(400).send({ error: "Invalig Telegram init data" });
       }

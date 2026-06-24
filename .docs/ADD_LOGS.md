@@ -44,3 +44,24 @@ Grafana, Loki та Alloy на першому етапі не встановлю�
 
 Критерії: логи видно через `docker compose logs` і у `backend.log`, вони переживають restart, ротуються, не містять секретів і зберігаються 7 днів.
 
+## Production-команди
+
+```bash
+# Одноразово встановити host logrotate
+./scripts/install-logrotate.sh
+
+# Перебудувати та запустити backend із файловим логуванням
+docker compose up -d --build backend
+
+# Перегляд через Docker
+docker compose logs -f --tail=200 backend
+
+# Перегляд persistent-файлу
+tail -f runtime/logs/backend/backend.log
+
+# Примусова перевірка ротації
+sudo logrotate --force /etc/logrotate.d/pixegotchi-backend
+```
+
+Перед запуском можна перевизначити `NODE_ENV`, `LOG_LEVEL`, `LOG_TO_FILE` та `APP_VERSION` через shell або root `.env`. За замовчуванням Docker Compose використовує production, рівень `info` і запис у файл.
+

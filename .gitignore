@@ -17,6 +17,7 @@ build/
 !.docs/
 .docs/*
 !.docs/ADD_LOGS.md
+runtime/
 
 # OS
 .DS_Store

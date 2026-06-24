@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { config } from "@/config/env";
+import { logger } from "@/config/logger";
 import { UserService } from "@/modules/users/users.service";
-// import { bLogger } from "@logger";
 import { URLSearchParams } from "url";
 
 export class AuthService {
@@ -9,12 +9,13 @@ export class AuthService {
 
   async authenticateTelegram(initData: string) {
     if (config.nodeEnv !== "production") {
-      // bLogger.warn("⚠️ Telegram hash validation skipped (DEV MODE)");
-      console.log("⚠️ Telegram hash validation skipped (DEV MODE)");
+      logger.warn(
+        { event: "telegram_validation_skipped" },
+        "Telegram hash validation skipped in development",
+      );
     } else {
       const isValid = this.validateTelegramInitData(initData);
       if (!isValid) {
-        // bLogger.error(new Error("Invalid telegram authentication data"));
         throw new Error("Invalid telegram authentication data");
       }
     }

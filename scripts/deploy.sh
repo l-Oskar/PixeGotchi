@@ -12,8 +12,10 @@ git reset --hard HEAD
 echo "📥 Pulling latest code..."
 git pull origin main
 
-# Перезапускаємо backend
-echo "🔄 Restarting backend container..."
-docker restart pixegotchi-backend-1
+# Перебудовуємо контейнер, щоб застосувати env, volumes і logging config
+export APP_VERSION="$(git rev-parse --short HEAD)"
+mkdir -p runtime/logs/backend
+echo "🔄 Rebuilding backend container..."
+docker compose up -d --build backend
 
 echo "✅ Deployment complete!"

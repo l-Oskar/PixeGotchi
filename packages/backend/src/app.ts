@@ -28,6 +28,7 @@ export async function buildApp() {
     disableRequestLogging: true,
     genReqId: () => randomUUID(),
     requestIdLogLabel: "requestId",
+    trustProxy: config.nodeEnv === "production",
   });
 
   const redis = new Redis(config.redisUrl);

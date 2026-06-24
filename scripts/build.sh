@@ -4,6 +4,9 @@ set -e
 
 echo "🚀 Starting deployment..."
 
+export APP_VERSION="$(git rev-parse --short HEAD)"
+mkdir -p runtime/logs/backend
+
 # Pull latest code
 git pull origin main
 
