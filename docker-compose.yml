@@ -2,11 +2,11 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-pixegotchi}
-      POSTGRES_USER: ${POSTGRES_USER:-admin}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-adminpixe}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT:?POSTGRES_PORT is required}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -16,7 +16,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - "${REDIS_PORT:?REDIS_PORT is required}:6379"
     volumes:
       - redis_data:/data
     networks:
@@ -29,17 +29,17 @@ services:
       dockerfile: Dockerfile
     # image: fediukv/pixegotchi-backend:latest
     ports:
-      - "127.0.0.1:${BACKEND_PORT:-3000}:3000"
+      - "127.0.0.1:${BACKEND_PORT:?BACKEND_PORT is required}:${BACKEND_PORT:?BACKEND_PORT is required}"
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:-adminpixe}@postgres:5432/${POSTGRES_DB:-pixegotchi}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:?POSTGRES_USER is required}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:?POSTGRES_DB is required}?schema=public
       REDIS_URL: redis://redis:6379
-      PORT: 3000
-      TON_NETWORK: ${TON_NETWORK:-testnet}
-      NODE_ENV: ${NODE_ENV:-development}
-      LOG_LEVEL: ${LOG_LEVEL:-debug}
-      LOG_TO_FILE: ${LOG_TO_FILE:-true}
-      LOG_FILE_PATH: /var/log/pixegotchi/backend.log
-      APP_VERSION: ${APP_VERSION:-unknown}
+      PORT: ${BACKEND_PORT:?BACKEND_PORT is required}
+      TON_NETWORK: ${TON_NETWORK:?TON_NETWORK is required}
+      NODE_ENV: ${NODE_ENV:?NODE_ENV is required}
+      LOG_LEVEL: ${LOG_LEVEL:?LOG_LEVEL is required}
+      LOG_TO_FILE: ${LOG_TO_FILE:?LOG_TO_FILE is required}
+      LOG_FILE_PATH: ${LOG_FILE_PATH:?LOG_FILE_PATH is required}
+      APP_VERSION: ${APP_VERSION:?APP_VERSION is required}
     env_file:
       - ./packages/backend/.env
     volumes:
@@ -70,11 +70,11 @@ services:
       dockerfile: prisma-studio.Dockerfile
     # image: fediukv/pixegotchi-prisma-studio:latest
     ports:
-      - "${PRISMA_STUDIO_PORT:-51212}:51212"
+      - "${PRISMA_STUDIO_PORT:?PRISMA_STUDIO_PORT is required}:51212"
     # expose:
     #   - "51212"
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:-adminpixe}@postgres:5432/${POSTGRES_DB:-pixegotchi}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:?POSTGRES_USER is required}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:?POSTGRES_DB is required}?schema=public
     volumes:
       - ./packages/backend/prisma:/app/prisma
       - ./packages/backend/.env:/app/.env

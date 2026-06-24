@@ -51,9 +51,9 @@ body {
   animation: eggWobble 2s infinite ease-in-out;
 }
 
-.bg {
+/* .bg {
   background-image: url("./bg.png");
   background-size: "cover";
   background-position: "center";
   background-size: 110%;
-}
+} */
