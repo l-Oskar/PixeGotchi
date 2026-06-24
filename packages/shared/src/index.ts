@@ -21,10 +21,14 @@ export * from "./constants/colors_const";
 // Domain types
 export type {
   Pixegotchi,
+  DeltaContext,
   PixegotchiStats,
+  PixegotchiState,
   Cooldowns,
+  TickContext,
   RarityStatsType,
   GenomeInfo,
+  PixegotchiContext,
 } from "./types/pixegotchi";
 export type { User, UserProfile } from "./types/user";
 export type { InventoryItem, InventoryWithDetails } from "./types/inventory";

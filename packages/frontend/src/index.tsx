@@ -17,6 +17,8 @@ import { QueryProvider } from "./providers/QueryProvider.tsx";
 import { AutoLoginProvider } from "./providers/AutoLoginProvider.tsx";
 import { GameBootstrap } from "./providers/GameBootstrap.tsx";
 
+const ERUDA_ALLOWED_USER_ID = 506295532;
+
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 try {
@@ -30,7 +32,7 @@ try {
   await init({
     debug,
     // eruda: debug && ["ios", "android"].includes(platform),
-    eruda: true,
+    eruda: launchParams.tgWebAppData?.user?.id === ERUDA_ALLOWED_USER_ID,
     mockForMacOS: platform === "macos",
   }).then(() => {
     root.render(

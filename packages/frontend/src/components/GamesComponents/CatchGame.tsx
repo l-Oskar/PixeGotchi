@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useMachine } from "@xstate/react";
-import { gameMachine } from "../../machine/game.machine";
+import { gameMachine } from "../../machines/game.machine";
 import { useDrag } from "@use-gesture/react";
 import { usePixelMask } from "../../hooks/usePixelMask";
 import { useTelegramSwipes } from "@/hooks/useTelegramSwipes";
