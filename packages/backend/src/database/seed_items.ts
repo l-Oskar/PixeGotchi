@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { ALL_ITEMS } from "@shared";
+import { ALL_ITEMS } from "@pixegotchi/shared";
 
 async function main() {
   console.log("🌱 Seeding database Items");

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Pixegotchi } from "@shared";
+import { Pixegotchi } from "@pixegotchi/shared";
 
 interface PixegotchiStore {
   activePixegotchi: Pixegotchi | null;

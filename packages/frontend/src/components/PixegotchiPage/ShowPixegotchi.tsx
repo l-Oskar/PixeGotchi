@@ -4,7 +4,7 @@ import {
   ELEMENT_COLORS,
   HomePageProps,
   RARITY_COLORS,
-} from "@shared";
+} from "@pixegotchi/shared";
 import {
   Heart,
   Gamepad2,

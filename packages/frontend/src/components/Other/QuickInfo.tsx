@@ -1,5 +1,5 @@
 import { useVaultStore } from "@/store/vault.store";
-import { User } from "@shared";
+import { User } from "@pixegotchi/shared";
 import { useUserStore } from "@/store/user.store";
 
 const QuickInfo = () => {

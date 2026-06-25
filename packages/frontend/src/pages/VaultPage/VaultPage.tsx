@@ -1,5 +1,5 @@
 import { Sparkles } from "lucide-react";
-import { ElementStats, PageType, RARITY_COLORS } from "@shared";
+import { ElementStats, PageType, RARITY_COLORS } from "@pixegotchi/shared";
 import Loader from "@/components/Other/Loader";
 import { useStatsVault } from "@/services/queries/vault.queries";
 import { useVaultStore } from "@/store/vault.store";

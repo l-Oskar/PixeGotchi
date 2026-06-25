@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Встановлюємо тільки необхідні пакети
 RUN npm init -y && \
-    npm install prisma@7.3.0 @prisma/client@7.3.0 dotenv
+    npm install prisma@7.8.0 @prisma/client@7.8.0 dotenv
 
 # Копіюємо тільки Prisma файли
 COPY prisma ./prisma/

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { type Pixegotchi, type PageType } from "@shared";
+import { type Pixegotchi, type PageType } from "@pixegotchi/shared";
 import VaultPage from "../VaultPage/VaultPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
 import GamesPage from "../GamePage/GamePage";

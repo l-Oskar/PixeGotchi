@@ -1,4 +1,4 @@
-import { RarityType, ElementType } from "@shared";
+import { RarityType, ElementType } from "@pixegotchi/shared";
 // Опис спеціальних здібностей
 export const SPECIAL_ABILITIES_DESCRIPTION: Record<string, string> = {
   enhanced_luck: "+10% шанс критичного успіху в іграх",

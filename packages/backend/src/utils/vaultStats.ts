@@ -1,5 +1,5 @@
 // utils/pixegotchiStats.ts
-import { ElementType, RarityType, ElementStats, VaultStats } from "@shared";
+import { ElementType, RarityType, ElementStats, VaultStats } from "@pixegotchi/shared";
 
 // Порядок рідкості для порівняння
 const RARITY_ORDER: Record<string, number> = {

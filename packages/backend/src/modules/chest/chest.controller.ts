@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ChestService } from "./chest.service";
 import { z } from "zod";
-import { ChestType } from "@shared";
+import { ChestType } from "@pixegotchi/shared";
 
 const specificChestSchema = z.object({
   chestType: z.enum(Object.values(ChestType) as [string, ...string[]]),

@@ -9,7 +9,7 @@ import {
   RarityType,
   CHEST_CONFIG,
   ChestType,
-} from "@shared";
+} from "@pixegotchi/shared";
 
 export interface ChestPreviewProps {
   chestItems: ChestPreview[];

@@ -11,7 +11,7 @@ import {
   ChestType,
   ITEMS_IMG,
   RARITY_BORDER_COLORS,
-} from "@shared";
+} from "@pixegotchi/shared";
 import React, { useEffect, useState } from "react";
 import { useOpenChest } from "@/services/queries/inventory.queries";
 import RewardModal from "../RewardsModal/RewardModal";

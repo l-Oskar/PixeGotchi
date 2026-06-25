@@ -1,4 +1,4 @@
-import { User } from "@shared";
+import { User } from "@pixegotchi/shared";
 import { create } from "zustand";
 
 interface UserStore {

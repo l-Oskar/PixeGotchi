@@ -1,4 +1,4 @@
-import { RARITY_STATS, RarityType } from "@shared";
+import { RARITY_STATS, RarityType } from "@pixegotchi/shared";
 import { LucideIcon } from "lucide-react";
 
 export interface CompactStatProps {

@@ -2,23 +2,34 @@
   "name": "pixegotchi-dapp",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "npm@11.5.2",
+  "engines": {
+    "node": ">=22 <23",
+    "npm": ">=11 <12"
+  },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "contracts:deploy": "npm run deploy --workspace=packages/contracts",
     "backend:dev": "npm run dev --workspace=packages/backend",
+    "docker:dev": "docker compose up",
+    "docker:build": "docker compose build",
+    "docker:down": "docker compose down",
+    "docker:generate": "docker compose run --rm --no-deps backend sh -c \"cd packages/backend && npx prisma generate\"",
+    "docker:studio": "docker compose --profile tools up -d prisma-studio",
+    "server:build": "./scripts/build.sh",
+    "server:deploy": "./scripts/deploy.sh",
     "prisma:dev": "npm run prisma:studio --workspace=packages/backend",
     "frontend:dev": "npm run dev --workspace=packages/frontend"
   },
   "devDependencies": {
     "turbo": "^2.0.0",
     "typescript": "^5.9.2"
-  },
-  "overrides": {
-    "esbuild": "0.25.12"
   }
 }

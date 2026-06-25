@@ -1,6 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { VaultService } from "./vault.service";
-import { z } from "zod";
 
 export class VaultController {
   private vaultService = new VaultService();

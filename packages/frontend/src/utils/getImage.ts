@@ -5,7 +5,7 @@ import {
   EggEvolutionStage,
   PixegotchiEvolutionStage,
   ElementStats,
-} from "@shared";
+} from "@pixegotchi/shared";
 
 type Pet = Egg | Pixegotchi;
 

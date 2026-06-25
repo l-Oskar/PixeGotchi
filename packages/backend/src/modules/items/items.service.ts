@@ -1,6 +1,6 @@
 import { prisma } from "@/database/prisma";
-import type { Pixegotchi, Item } from "@shared";
-import { ItemType, RarityType, parseItem } from "@shared";
+import type { Pixegotchi, Item } from "@pixegotchi/shared";
+import { ItemType, RarityType, parseItem } from "@pixegotchi/shared";
 
 export class ItemsService {
   async getItemDetails(itemId: string) {
@@ -42,36 +42,35 @@ export class ItemsService {
     });
   }
 
-  async validateItemUsage(pixegotchi: Pixegotchi, item: Item) {
+  async validateItemUsage(
+    pixegotchi: Pixegotchi,
+    item: Item,
+  ): Promise<void> {
     // Перевірка рівня
-    try {
-      if (item.minLevel && pixegotchi.level < item.minLevel) {
-        throw new Error(
-          `Pixegotchi must be level ${item.minLevel} to use this item`,
-        );
-      }
+    if (item.minLevel && pixegotchi.level < item.minLevel) {
+      throw new Error(
+        `Pixegotchi must be level ${item.minLevel} to use this item`,
+      );
+    }
 
-      // Перевірка кулдауну
-      if (item.cooldownMinutes) {
-        await this.checkCooldown(
-          pixegotchi.userId,
-          pixegotchi.id,
-          item.itemId,
-          item.cooldownMinutes,
-        );
-      }
+    // Перевірка кулдауну
+    if (item.cooldownMinutes) {
+      await this.checkCooldown(
+        pixegotchi.userId,
+        pixegotchi.id,
+        item.itemId,
+        item.cooldownMinutes,
+      );
+    }
 
-      // Перевірка ліміту на день
-      if (item.maxPerDay) {
-        await this.checkDailyLimit(
-          pixegotchi.userId,
-          pixegotchi.id,
-          item.itemId,
-          item.maxPerDay,
-        );
-      }
-    } catch (error) {
-      return error;
+    // Перевірка ліміту на день
+    if (item.maxPerDay) {
+      await this.checkDailyLimit(
+        pixegotchi.userId,
+        pixegotchi.id,
+        item.itemId,
+        item.maxPerDay,
+      );
     }
   }
 

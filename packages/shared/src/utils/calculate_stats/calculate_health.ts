@@ -4,7 +4,6 @@ import {
 } from "../../constants/pixegotchi_const";
 import { RarityType } from "../../enums";
 import {
-  round,
   applyRarityReduction,
   valueToPercent,
   applyTraitModifier,

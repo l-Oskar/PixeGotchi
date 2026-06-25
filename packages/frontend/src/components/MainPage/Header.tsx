@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
-import { User } from "@shared";
+import { User } from "@pixegotchi/shared";
 import { Crown, Wallet, Coins } from "lucide-react";
 import { useSignal } from "@tma.js/sdk-react";
 import { viewport } from "@tma.js/sdk";

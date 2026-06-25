@@ -9,15 +9,15 @@ import {
   ChestRewardItem,
   type ItemType,
   type RarityType,
-} from "@shared";
+} from "@pixegotchi/shared";
 import {
   CHEST_RARITY_WEIGHTS,
   CHEST_TYPE_TO_RARITY,
   CHEST_CONFIG,
   CHEST_REWARDS,
   GUARANTEED_ITEM_TYPES,
-} from "@shared";
-import { ITEM_POOLS } from "@shared";
+} from "@pixegotchi/shared";
+import { ITEM_POOLS } from "@pixegotchi/shared";
 
 export class ChestGenerator {
   /**

@@ -1,5 +1,5 @@
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
-import { Item, ITEM_COLORS, RARITY_COLORS } from "@shared";
+import { Item, ITEM_COLORS, RARITY_COLORS } from "@pixegotchi/shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";

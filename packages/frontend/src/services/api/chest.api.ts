@@ -1,4 +1,4 @@
-import { ChestType } from "@shared";
+import { ChestType } from "@pixegotchi/shared";
 import { apiClient } from "./client";
 
 export const chestApi = {

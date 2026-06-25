@@ -1,5 +1,5 @@
 import { prisma } from "@/database/prisma";
-import { USER_CONST } from "@shared";
+import { USER_CONST } from "@pixegotchi/shared";
 
 export class UserService {
   async findByTelegramId(telegramId: number) {

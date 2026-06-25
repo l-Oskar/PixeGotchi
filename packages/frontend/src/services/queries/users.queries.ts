@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { usersApi } from "@/services/api/users.api";
-import { UserProfile } from "@shared";
+import { UserProfile } from "@pixegotchi/shared";
 
 export const useUserProfile = () => {
   return useQuery({

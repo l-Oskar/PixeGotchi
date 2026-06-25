@@ -1,4 +1,4 @@
-import { User } from "@shared";
+import { User } from "@pixegotchi/shared";
 import { apiClient } from "./client";
 
 export const AUTH_URL = "/auth";

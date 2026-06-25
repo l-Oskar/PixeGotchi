@@ -1,5 +1,10 @@
-import { TraitType, TRAIT_RARITY, RARITY_TRAIT_POOL } from "@shared";
-import { RarityType, ElementType, PixegotchiGender, GenomeInfo } from "@shared";
+import {
+  TraitType,
+  TRAIT_RARITY,
+  RARITY_TRAIT_POOL,
+  isNegativeTrait,
+} from "@pixegotchi/shared";
+import { RarityType, ElementType, PixegotchiGender, GenomeInfo } from "@pixegotchi/shared";
 
 export class GenomeGenerator {
   private static GENDER_WEIGHTS: Record<PixegotchiGender, number> = {
@@ -266,7 +271,6 @@ export class GenomeGenerator {
 
     // 5. Якщо forceNegative — залишаємо лише негативні
     if (forceNegative) {
-      const { isNegativeTrait } = require("@shared");
       for (const trait of Object.keys(weights) as TraitType[]) {
         if (!isNegativeTrait(trait)) {
           delete weights[trait];
@@ -323,8 +327,6 @@ export class GenomeGenerator {
       mythic: 16,
       legendary: 32,
     };
-
-    const { isNegativeTrait } = require("@shared");
 
     let traitScore = 0;
     let negativeTraitCount = 0;
@@ -503,7 +505,6 @@ export class GenomeGenerator {
     };
 
     // Negative trait stats
-    const { isNegativeTrait } = require("@shared");
     const negativeStats = pets.reduce(
       (acc, p) => {
         const negCount = p.traits.filter((t) => isNegativeTrait(t)).length;

@@ -1,6 +1,7 @@
 import { prisma } from "@/database/prisma";
 import { ChestGenerator } from "@/utils/chest-generator";
-import { ChestType, ChestInventory } from "@shared";
+import { ChestType, ChestInventory } from "@pixegotchi/shared";
+import type { Chest as PrismaChest } from "@/generated/prisma/client";
 
 export class ChestService {
   async getAllChests(userId: number) {
@@ -13,15 +14,17 @@ export class ChestService {
   }
 
   async getSortedChests(userId: number) {
-    const chests = await this.getAllChests(userId);
+    const chests: PrismaChest[] = await this.getAllChests(userId);
 
     const result: ChestInventory[] = Object.values(
       chests.reduce(
         (acc, { chestType }) => {
-          if (!acc[chestType]) {
-            acc[chestType] = { chestType, quantity: 1 };
+          const sharedChestType = chestType as ChestType;
+
+          if (!acc[sharedChestType]) {
+            acc[sharedChestType] = { chestType: sharedChestType, quantity: 1 };
           } else {
-            acc[chestType].quantity += 1;
+            acc[sharedChestType].quantity += 1;
           }
 
           return acc;

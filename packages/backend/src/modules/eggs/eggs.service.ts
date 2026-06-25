@@ -1,7 +1,7 @@
 import { prisma } from "@/database/prisma";
 import { GenomeGenerator } from "@/utils/genome-generator";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
-import { CREATE_STATS, EGG_CONSTANTS, assertValidGenomeHash } from "@shared";
+import { CREATE_STATS, EGG_CONSTANTS, assertValidGenomeHash } from "@pixegotchi/shared";
 import Redis from "ioredis";
 
 export class EggService {

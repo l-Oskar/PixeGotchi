@@ -7,7 +7,7 @@ import {
   RarityType,
   TRAIT_EFFECTS,
   TraitType,
-} from "@shared";
+} from "@pixegotchi/shared";
 import { Mars, Venus } from "lucide-react";
 
 interface PixegothiDataProps {

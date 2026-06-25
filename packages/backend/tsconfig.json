@@ -18,15 +18,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "removeComments": false,
     "isolatedModules": true,
+    "noEmit": true,
 
     "paths": {
-      "@shared": ["../shared/src/index.ts"],
-      "@shared/*": ["../shared/src/*"],
       "@/*": ["./src/*"],
       "@/database/*": ["./src/database/*"],
       "@/modules/*": ["./src/modules/*"],
@@ -42,31 +37,8 @@
   "exclude": [
     "node_modules",
     "dist",
-    "generated",
+    "src/utils/example_open_chest.ts",
     "**/*.spec.ts",
     "**/*.test.ts"
   ]
 }
-
-// {
-//   "compilerOptions": {
-//     "baseUrl": ".",
-//     "paths": {
-//       "@/*": ["src/*"]
-//     },
-//     "target": "ES2020",
-//     "module": "ESNext",
-//     "moduleResolution": "bundler",
-//     "rootDir": ".",
-//     "outDir": "./dist",
-//     "strict": true,
-//     "esModuleInterop": true,
-//     "resolveJsonModule": true,
-//     "skipLibCheck": true
-//     // "ignoreDeprecations": "6.0"
-//   },
-//   "include": ["src/**/*.ts", "generated/**/*.ts"],
-//   "exclude": ["node_modules", "dist"]
-
-
-// }

@@ -1,5 +1,5 @@
 import { setup, assign } from "xstate";
-import type { Pixegotchi, PixegotchiStatus } from "@shared";
+import type { Pixegotchi, PixegotchiStatus } from "@pixegotchi/shared";
 
 export interface PixegotchiMachineInput {
   pixegotchiId: number;

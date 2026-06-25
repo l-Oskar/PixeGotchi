@@ -4,7 +4,7 @@ import { gameMachine } from "../../machines/game.machine";
 import { useDrag } from "@use-gesture/react";
 import { usePixelMask } from "../../hooks/usePixelMask";
 import { useTelegramSwipes } from "@/hooks/useTelegramSwipes";
-import { Pixegotchi } from "@shared";
+import { Pixegotchi } from "@pixegotchi/shared";
 import { getImage } from "@/utils/getImage";
 
 const BASKET_WIDTH = 100;

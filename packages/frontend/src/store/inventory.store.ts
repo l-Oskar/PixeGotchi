@@ -3,7 +3,7 @@ import {
   InventoryWithDetails,
   Chest,
   ChestInventory,
-} from "@shared";
+} from "@pixegotchi/shared";
 import { create } from "zustand";
 
 interface InventoryStore {

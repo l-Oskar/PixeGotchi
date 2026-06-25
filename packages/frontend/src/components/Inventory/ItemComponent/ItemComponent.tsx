@@ -8,7 +8,7 @@ import {
   InventoryWithDetails,
   RARITY_BORDER_COLORS,
   RarityOrder,
-} from "@shared";
+} from "@pixegotchi/shared";
 import { useEffect, useState } from "react";
 import SortedButtons from "./SortedButtons";
 

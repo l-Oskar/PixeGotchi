@@ -1,7 +1,7 @@
 // examples.ts
 
 import { ChestGenerator } from "./chest-generator";
-import { CHEST_DROP_RATES } from "@shared";
+import { CHEST_DROP_RATES } from "@pixegotchi/shared";
 
 // ============================================
 // 1. DROP З ГРИ (випадковий chest)

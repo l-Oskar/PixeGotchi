@@ -52,9 +52,6 @@ export function getStats(
 }
 
 const test = () => {
-  const hunger = 10;
-  const cleanliness = 10;
-  const health = 10;
   const level = 10;
   const time = 5;
   // for (const key of Object.keys(RarityType)) {

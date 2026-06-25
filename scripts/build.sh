@@ -1,33 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
 
-echo "🚀 Starting deployment..."
+COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.yml}"
+SERVICE="${SERVICE:-backend}"
+NO_CACHE="${NO_CACHE:-0}"
 
-export APP_VERSION="$(git rev-parse --short HEAD)"
+echo "🚧 Building Pixegotchi Docker image"
+echo "   compose file: ${COMPOSE_FILE}"
+echo "   service:      ${SERVICE}"
+echo "   git sha:      $(git rev-parse --short HEAD)"
+
+if [[ ! -f "${COMPOSE_FILE}" ]]; then
+  echo "❌ Compose file not found: ${COMPOSE_FILE}" >&2
+  exit 1
+fi
+
 mkdir -p runtime/logs/backend
 
-# Pull latest code
-git pull origin main
+echo "🔎 Validating Docker Compose config..."
+docker compose -f "${COMPOSE_FILE}" config --quiet
 
-echo "🗑 Очищення старих образів..."
-docker image prune -f
+build_args=()
+if [[ "${NO_CACHE}" == "1" ]]; then
+  build_args+=(--no-cache)
+fi
 
-# Build images
-echo "📦 Building Docker images..."
-docker compose -f docker-compose.yml build --no-cache
+echo "📦 Building ${SERVICE} image..."
+docker compose -f "${COMPOSE_FILE}" build "${build_args[@]}" "${SERVICE}"
 
-# Stop old containers
-echo "🛑 Stopping old containers..."
-docker compose -f docker-compose.yml down
-
-# Start new containers
-echo "▶️  Starting new containers..."
-docker compose -f docker-compose.yml up -d
-
-# Health check
-echo "🏥 Checking services health..."
-sleep 10
-docker compose -f docker-compose.yml ps
-
-echo "✅ Deployment complete!"
+echo "✅ Build finished"
+echo "Next:"
+echo "  docker compose -f ${COMPOSE_FILE} run --rm --no-deps ${SERVICE} sh -c \"cd packages/backend && npx prisma generate\""
+echo "  docker compose -f ${COMPOSE_FILE} up -d postgres redis ${SERVICE}"

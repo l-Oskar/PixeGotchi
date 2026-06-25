@@ -9,7 +9,7 @@ import {
   ArrowDown01,
 } from "lucide-react";
 import SortedButton from "./SortedButton";
-import { ITEM_COLORS, ITEM_BG_COLORS } from "@shared";
+import { ITEM_COLORS, ITEM_BG_COLORS } from "@pixegotchi/shared";
 export interface SortedButtonsProps {
   setFilter: (filter: string) => void;
 }

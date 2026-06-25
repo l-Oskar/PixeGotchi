@@ -1,4 +1,4 @@
-import { Pixegotchi, VaultStats } from "@shared";
+import { Pixegotchi, VaultStats } from "@pixegotchi/shared";
 import { create } from "zustand";
 
 interface VaultStore {

@@ -1,5 +1,13 @@
 import { prisma } from "@/database/prisma";
-import { Item, ITEM_EXP, MAX_EXP, RARE_CANDY_EXP, RARITY_STATS } from "@shared";
+import {
+  Item,
+  ITEM_EXP,
+  MAX_EXP,
+  RARE_CANDY_EXP,
+  RARITY_STATS,
+  RarityType,
+} from "@pixegotchi/shared";
+import type { Pixegotchi as PrismaPixegotchi } from "@/generated/prisma/client";
 
 export class PixegotchiService {
   async findByUserId(userId: number) {
@@ -9,7 +17,7 @@ export class PixegotchiService {
     });
   }
 
-  async findActive(userId: number) {
+  async findActive(userId: number): Promise<PrismaPixegotchi | null> {
     const active = await prisma.pixegotchi.findFirst({
       where: { userId, status: "active" },
     });
@@ -67,7 +75,7 @@ export class PixegotchiService {
 
     await this.addExp(userId, item, quantity);
 
-    const maxStat = RARITY_STATS[pixegotchi.rarity].maxStat;
+    const maxStat = RARITY_STATS[pixegotchi.rarity as RarityType].maxStat;
 
     const TIMESTAMP_MAP: Partial<
       Record<keyof NonNullable<Item["effects"]>, string>

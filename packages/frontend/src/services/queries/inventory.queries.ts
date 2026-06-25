@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { inventoryApi } from "../api/inventory.api";
 import { useInventoryStore } from "@/store/inventory.store";
-import { ChestType } from "@shared";
+import { ChestType } from "@pixegotchi/shared";
 
 export const useGetInventory = () => {
   return useQuery({

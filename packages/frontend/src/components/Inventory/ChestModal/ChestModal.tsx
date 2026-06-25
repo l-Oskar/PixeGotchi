@@ -4,7 +4,7 @@ import {
   ChestDescription,
   RARITY_COLORS,
   ITEMS_IMG,
-} from "@shared";
+} from "@pixegotchi/shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
 import ChestItems from "./ChestItems";

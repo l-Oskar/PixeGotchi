@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { PageType, Pixegotchi } from "@shared";
+import { PageType, Pixegotchi } from "@pixegotchi/shared";
 import { Hourglass, CircleX, Egg as EggIcon } from "lucide-react";
 import {
   useGetHatchingStatus,

@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ItemsService } from "./items.service";
-import { ItemType, RarityType } from "@shared";
+import { ItemType, RarityType } from "@pixegotchi/shared";
 
 export class ItemsController {
   private itemsService = new ItemsService();
@@ -16,7 +16,7 @@ export class ItemsController {
     return reply.send(itemDetails);
   }
 
-  async getAllItems(request: FastifyRequest, reply: FastifyReply) {
+  async getAllItems(_request: FastifyRequest, reply: FastifyReply) {
     const allItems = await this.itemsService.getAllItems();
 
     return reply.send(allItems);

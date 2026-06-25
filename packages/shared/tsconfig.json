@@ -4,10 +4,6 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
-    "rootDir": "./src",
-    "outDir": "./dist",
-
-    "composite": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -18,11 +14,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "noEmit": true
   },
-  "include": ["src/**/*", "src/types/item_buffs.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

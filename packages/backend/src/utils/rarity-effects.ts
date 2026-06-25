@@ -1,4 +1,4 @@
-import { RarityType } from "@shared";
+import { RarityType } from "@pixegotchi/shared";
 
 export interface RarityEffects {
   max_status: number; // Максимальне значення статусів (HP, Energy, etc.)

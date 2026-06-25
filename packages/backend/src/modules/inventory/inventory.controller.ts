@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { Inventory } from "./inventory.service";
-import { ITEMS_BY_ID, ChestType } from "@shared";
+import { ITEMS_BY_ID, ChestType } from "@pixegotchi/shared";
 import { z } from "zod";
 
 const addItemScema = z.object({

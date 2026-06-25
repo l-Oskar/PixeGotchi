@@ -1,7 +1,7 @@
 import ChestComponent from "@/components/Inventory/ChestComponent/ChestComponent";
 import ItemComponent from "@/components/Inventory/ItemComponent/ItemComponent";
 import { HeartPlus, Gift } from "lucide-react";
-import { PageType } from "@shared";
+import { PageType } from "@pixegotchi/shared";
 import { useState } from "react";
 
 export interface InventoryPageProps {

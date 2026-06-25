@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import { UserProfile } from "@shared";
+import { UserProfile } from "@pixegotchi/shared";
 
 export const USER_URL = "/users";
 export const USER_URL_KEYS = {

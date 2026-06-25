@@ -4,11 +4,12 @@ import {
   InventoryWithDetails,
   EGG_CONSTANTS,
   ChestType,
-} from "@shared";
+} from "@pixegotchi/shared";
 import { ItemsService } from "../items/items.service";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 import { ChestService } from "../chest/chest.service";
 import { ChestGenerator } from "@/utils/chest-generator";
+import type { Inventory as PrismaInventory } from "@/generated/prisma/client";
 
 export class Inventory {
   private itemService = new ItemsService();
@@ -25,7 +26,7 @@ export class Inventory {
   async getInventoryWithDetails(
     userId: number,
   ): Promise<InventoryWithDetails[]> {
-    const inventory = await prisma.inventory.findMany({
+    const inventory: PrismaInventory[] = await prisma.inventory.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
     });
@@ -122,8 +123,7 @@ export class Inventory {
 
     const item = await this.itemService.getItemDetails(itemId);
 
-    const valid = this.itemService.validateItemUsage(pixegotchi, item);
-    if (!valid) throw new Error("You can't use this item now!");
+    await this.itemService.validateItemUsage(pixegotchi, item);
 
     await this.pixegotchiService.applyStats(userId, item, quantity);
     return await this.consumeItem(userId, itemId, quantity);

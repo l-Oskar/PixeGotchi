@@ -1,6 +1,6 @@
-import { ChestRewards, ITEMS_IMG } from "@shared";
+import { ChestRewards, ITEMS_IMG } from "@pixegotchi/shared";
 import { motion, AnimatePresence } from "framer-motion";
-import { RARITY_COLORS } from "@shared";
+import { RARITY_COLORS } from "@pixegotchi/shared";
 import { X } from "lucide-react";
 import React from "react";
 import { getEggImg } from "@/utils/getImage";

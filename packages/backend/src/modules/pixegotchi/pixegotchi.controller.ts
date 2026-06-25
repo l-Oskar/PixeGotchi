@@ -1,10 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { PixegotchiService } from "./pixegotchi.service";
-import { z } from "zod";
-
-const renameSchema = z.object({
-  name: z.string().min(3).max(30),
-});
 
 export class PixegotchiController {
   private pixegotchiService = new PixegotchiService();
@@ -215,23 +210,16 @@ export class PixegotchiController {
   // }
 
   async rename(
-    request: FastifyRequest<{ Params: { id: string } }>,
+    _request: FastifyRequest<{ Params: { id: string } }>,
     reply: FastifyReply,
   ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
-    const { name } = renameSchema.parse(request.body);
-
     return reply.code(501).send({ error: "Not implemented yet" });
   }
 
   async release(
-    request: FastifyRequest<{ Params: { id: string } }>,
+    _request: FastifyRequest<{ Params: { id: string } }>,
     reply: FastifyReply,
   ) {
-    const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
-
     return reply.code(501).send({ message: "Not implemented yet" });
   }
 }

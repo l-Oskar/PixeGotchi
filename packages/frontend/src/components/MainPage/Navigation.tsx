@@ -1,6 +1,6 @@
 import React from "react";
 import { Heart, ShoppingBag, Gamepad2, Vault, Store, Egg } from "lucide-react";
-import { PageType } from "@shared";
+import { PageType } from "@pixegotchi/shared";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { useEggStore } from "@/store/egg.store";
 

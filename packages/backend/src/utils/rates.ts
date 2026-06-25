@@ -7,7 +7,7 @@ interface PixegotchiRates {
   lifeRecoveryRate: number;
 }
 
-export function getRate(element: string): PixegotchiRates {
+export function getRate(_element: string): PixegotchiRates {
   return {
     hungerRate: 1,
     energyRate: 1,

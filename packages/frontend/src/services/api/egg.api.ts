@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import { Egg, Pixegotchi, UpdatedEgg, EggHatchingStatus } from "@shared";
+import { Egg, Pixegotchi, UpdatedEgg, EggHatchingStatus } from "@pixegotchi/shared";
 
 interface EggWithBalance extends Egg {
   pgcBalance: string;

@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { EggService } from "./eggs.service";
 import { z } from "zod";
-import { EGG_CONSTANTS } from "@shared";
+import { EGG_CONSTANTS } from "@pixegotchi/shared";
 
 const startHatchingSchema = z.object({
   eggId: z.number(),

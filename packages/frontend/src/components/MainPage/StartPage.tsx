@@ -1,6 +1,6 @@
 import { useStartHatching } from "@/services/queries/egg.queries";
 import { useEggStore } from "@/store/egg.store";
-import { Egg, PageType } from "@shared";
+import { Egg, PageType } from "@pixegotchi/shared";
 import React from "react";
 import Loader from "../Other/Loader";
 

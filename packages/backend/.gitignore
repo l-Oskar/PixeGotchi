@@ -8,12 +8,11 @@ node_modules/
 
 # builds
 generated/
+src/generated/
 dist/
-prisma/migrations
 build/
 .next/
 .cache/
 
 # OS
 .DS_Store
-

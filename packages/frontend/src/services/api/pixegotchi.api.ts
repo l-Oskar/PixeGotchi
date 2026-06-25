@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import type { Pixegotchi } from "@shared";
+import type { Pixegotchi } from "@pixegotchi/shared";
 
 export const PIXEGOTCHI_URL = "/pixegotchi";
 export const PIXEGOTCHI_URL_KEYS = {

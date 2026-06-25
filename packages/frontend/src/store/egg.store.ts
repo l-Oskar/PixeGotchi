@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Egg } from "@shared";
+import { Egg } from "@pixegotchi/shared";
 
 export interface EggStore {
   allEggs: Egg[] | [];

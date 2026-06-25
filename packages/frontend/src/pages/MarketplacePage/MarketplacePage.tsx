@@ -7,7 +7,7 @@ import {
   MarketplaceListing,
   CurrencyType,
   EGG_CONSTANTS,
-} from "@shared";
+} from "@pixegotchi/shared";
 
 export interface MarketplacePageProps {
   onNavigate?: (page: PageType) => void;

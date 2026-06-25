@@ -15,7 +15,7 @@ export class UsersController {
     return reply.send(profile);
   }
 
-  async updateProfile(request: FastifyRequest, reply: FastifyReply) {
+  async updateProfile(_request: FastifyRequest, reply: FastifyReply) {
     ///
     return reply.code(501).send({ error: "Not implemented yet" });
   }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PageType, GameStruct, Pixegotchi } from "@shared";
+import { PageType, GameStruct, Pixegotchi } from "@pixegotchi/shared";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;

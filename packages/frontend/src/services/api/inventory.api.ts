@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import { ChestType, InventoryItem, InventoryWithDetails } from "@shared";
+import { ChestType, InventoryItem, InventoryWithDetails } from "@pixegotchi/shared";
 
 const INVENTORY_URL = "/inventory";
 const INVENTORY_KEYS = {
