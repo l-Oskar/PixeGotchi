@@ -41,6 +41,38 @@ const EggComponent: React.FC<EggPageProps> = ({
   // Реф для зберігання ID інтервалу
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const eggStatus = status.data;
+  const progress = eggStatus ? Math.floor(eggStatus.progress * 10) / 10 : 0;
+  const isReady = eggStatus?.canHatchNow;
+
+  // Ефект для відправки batch tap запиту кожні 2 секунди
+  useEffect(() => {
+    if (!egg?.id || isReady) return;
+
+    // Очищаємо попередній інтервал
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
+      const tapCount = tapCountRef.current;
+
+      if (tapCount > 0) {
+        console.log(`Sending batch tap: ${tapCount} taps`);
+        batchTapRef.current({ eggId: egg.id, tapCount });
+        tapCountRef.current = 0; // Скидаємо лічильник після відправки
+      }
+    }, TAP_INTERVAL);
+
+    // Очищення при розмонтуванні або зміні залежностей
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [egg?.id, isReady]);
+
   // Ранній вихід якщо немає яйця
   if (!egg) {
     return (
@@ -70,10 +102,6 @@ const EggComponent: React.FC<EggPageProps> = ({
     );
   }
 
-  const eggStatus = status.data;
-  const progress = eggStatus ? Math.floor(eggStatus.progress * 10) / 10 : 0;
-  const isReady = eggStatus?.canHatchNow;
-
   const handleHatch = async () => {
     if (isReady) {
       try {
@@ -102,34 +130,6 @@ const EggComponent: React.FC<EggPageProps> = ({
     tapCountRef.current += 1;
     console.log(`Tap! Total taps: ${tapCountRef.current}`);
   };
-
-  // Ефект для відправки batch tap запиту кожні 2 секунди
-  useEffect(() => {
-    if (!egg?.id || isReady) return;
-
-    // Очищаємо попередній інтервал
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-
-    intervalRef.current = setInterval(() => {
-      const tapCount = tapCountRef.current;
-
-      if (tapCount > 0) {
-        console.log(`Sending batch tap: ${tapCount} taps`);
-        batchTapRef.current({ eggId: egg.id, tapCount });
-        tapCountRef.current = 0; // Скидаємо лічильник після відправки
-      }
-    }, TAP_INTERVAL);
-
-    // Очищення при розмонтуванні або зміні залежностей
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [egg?.id, isReady]);
 
   return (
     <div className="p-4 space-y-4">
