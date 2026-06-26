@@ -90,8 +90,8 @@ docker compose -f "${COMPOSE_FILE}" logs --tail=120 "${SERVICE}"
 
 echo "🌐 Checking health endpoint: ${HEALTH_URL}"
 for attempt in {1..30}; do
-  if curl -fsS "${HEALTH_URL}" >/tmp/pixegotchi-health.json; then
-    cat /tmp/pixegotchi-health.json
+  if health_response="$(curl -fsS "${HEALTH_URL}")"; then
+    printf "%s\n" "${health_response}"
     echo
     echo "✅ Deployment complete"
     exit 0

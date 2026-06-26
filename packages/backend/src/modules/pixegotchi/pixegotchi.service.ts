@@ -7,7 +7,12 @@ import {
   RARITY_STATS,
   RarityType,
 } from "@pixegotchi/shared";
-import type { Pixegotchi as PrismaPixegotchi } from "@/generated/prisma/client";
+import type {
+  Pixegotchi as PrismaPixegotchi,
+  Prisma,
+} from "@/generated/prisma/client";
+
+type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
 
 export class PixegotchiService {
   async findByUserId(userId: number) {
@@ -26,8 +31,13 @@ export class PixegotchiService {
 
   async setInActive(userId: number) {
     const active = await this.findActive(userId);
-    await prisma.pixegotchi.update({
-      where: { id: active!.id },
+
+    if (!active) {
+      throw new Error("No active pixegotchi");
+    }
+
+    return await prisma.pixegotchi.update({
+      where: { id: active.id },
       data: {
         status: "vault",
       },
@@ -69,11 +79,19 @@ export class PixegotchiService {
     });
   }
 
-  async applyStats(userId: number, item: Item, quantity: number = 1) {
-    const pixegotchi = await this.findActive(userId);
+  async applyStats(
+    userId: number,
+    item: Item,
+    quantity: number = 1,
+    db: PrismaExecutor = prisma,
+  ) {
+    const pixegotchi = await db.pixegotchi.findFirst({
+      where: { userId, status: "active" },
+    });
+
     if (!pixegotchi) throw new Error("You don't have active pixegotchi");
 
-    await this.addExp(userId, item, quantity);
+    await this.addExp(userId, item, quantity, db);
 
     const maxStat = RARITY_STATS[pixegotchi.rarity as RarityType].maxStat;
 
@@ -108,7 +126,7 @@ export class PixegotchiService {
       data[TIMESTAMP_MAP[stat]!] = new Date();
     }
 
-    return await prisma.pixegotchi.update({
+    return await db.pixegotchi.update({
       where: {
         id: pixegotchi.id,
       },
@@ -116,8 +134,16 @@ export class PixegotchiService {
     });
   }
 
-  async addExp(userId: number, item: Item, quantity: number = 1) {
-    const pixegotchi = await this.findActive(userId);
+  async addExp(
+    userId: number,
+    item: Item,
+    quantity: number = 1,
+    db: PrismaExecutor = prisma,
+  ) {
+    const pixegotchi = await db.pixegotchi.findFirst({
+      where: { userId, status: "active" },
+    });
+
     if (!pixegotchi) throw new Error("Not active pixegotchi");
 
     let exp = 0;
@@ -129,7 +155,7 @@ export class PixegotchiService {
     }
 
     if (pixegotchi.experience + exp < MAX_EXP) {
-      return await prisma.pixegotchi.update({
+      return await db.pixegotchi.update({
         where: {
           id: pixegotchi.id,
         },
@@ -142,7 +168,7 @@ export class PixegotchiService {
     const addLvl = Math.floor((pixegotchi.experience + exp) / 1000);
     const addExp = (pixegotchi.experience + exp) % 1000;
 
-    return await prisma.pixegotchi.update({
+    return await db.pixegotchi.update({
       where: {
         id: pixegotchi.id,
       },
@@ -159,13 +185,17 @@ export class PixegotchiService {
 
     if (!activePixegotchi) return null;
 
+    const getDiffMs = (date: Date | null) => {
+      return date ? time - date.getTime() : null;
+    };
+
     const lastUpdates = {
-      lastFedDiff: time - activePixegotchi.lastFedAt!.getTime(),
-      lastHealedDiff: time - activePixegotchi.lastHealedAt!.getTime(),
-      lastCleanedDIff: activePixegotchi.lastCleanedAt!.getTime(),
-      lastPlayseDiff: activePixegotchi.lastPlayedAt!.getTime(),
-      lastBoostedDiff: activePixegotchi.lastBoostedAt!.getTime(),
-      lastUpdatedDiff: activePixegotchi.lastUpdateAt.getTime(),
+      lastFedDiffMs: getDiffMs(activePixegotchi.lastFedAt),
+      lastHealedDiffMs: getDiffMs(activePixegotchi.lastHealedAt),
+      lastCleanedDiffMs: getDiffMs(activePixegotchi.lastCleanedAt),
+      lastPlayedDiffMs: getDiffMs(activePixegotchi.lastPlayedAt),
+      lastBoostedDiffMs: getDiffMs(activePixegotchi.lastBoostedAt),
+      lastUpdatedDiffMs: time - activePixegotchi.lastUpdateAt.getTime(),
     };
 
     return lastUpdates;

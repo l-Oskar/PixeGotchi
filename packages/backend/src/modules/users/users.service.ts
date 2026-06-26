@@ -65,6 +65,10 @@ export class UserService {
       },
     });
 
-    return { ...user, telegramId: user?.telegramId.toString() };
+    if (!user) {
+      return null;
+    }
+
+    return { ...user, telegramId: user.telegramId.toString() };
   }
 }

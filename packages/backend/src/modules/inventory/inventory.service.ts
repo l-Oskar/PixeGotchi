@@ -9,7 +9,12 @@ import { ItemsService } from "../items/items.service";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 import { ChestService } from "../chest/chest.service";
 import { ChestGenerator } from "@/utils/chest-generator";
-import type { Inventory as PrismaInventory } from "@/generated/prisma/client";
+import type {
+  Inventory as PrismaInventory,
+  Prisma,
+} from "@/generated/prisma/client";
+
+type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
 
 export class Inventory {
   private itemService = new ItemsService();
@@ -55,8 +60,9 @@ export class Inventory {
     userId: number,
     itemId: keyof typeof ITEMS_BY_ID,
     quantity: number = 1,
+    db: PrismaExecutor = prisma,
   ) {
-    const item = await prisma.item.findFirst({
+    const item = await db.item.findFirst({
       where: {
         itemId,
       },
@@ -64,14 +70,14 @@ export class Inventory {
 
     if (!item) throw new Error(`Item ${itemId} not found`);
 
-    const existing = await prisma.inventory.findUnique({
+    const existing = await db.inventory.findUnique({
       where: {
         userId_itemId: { userId, itemId },
       },
     });
 
     if (existing) {
-      return await prisma.inventory.update({
+      return await db.inventory.update({
         where: { id: existing.id },
         data: {
           quantity: { increment: quantity },
@@ -79,7 +85,7 @@ export class Inventory {
       });
     }
 
-    return await prisma.inventory.create({
+    return await db.inventory.create({
       data: {
         userId,
         itemId,
@@ -90,8 +96,13 @@ export class Inventory {
     });
   }
 
-  async consumeItem(userId: number, itemId: string, quantity: number = 1) {
-    const item = await prisma.inventory.findUnique({
+  async consumeItem(
+    userId: number,
+    itemId: string,
+    quantity: number = 1,
+    db: PrismaExecutor = prisma,
+  ) {
+    const item = await db.inventory.findUnique({
       where: {
         userId_itemId: { userId, itemId },
       },
@@ -102,11 +113,11 @@ export class Inventory {
     }
 
     if (item.quantity === quantity) {
-      await prisma.inventory.delete({
+      await db.inventory.delete({
         where: { id: item.id },
       });
     } else {
-      await prisma.inventory.update({
+      await db.inventory.update({
         where: { id: item.id },
         data: {
           quantity: { decrement: quantity },
@@ -117,16 +128,35 @@ export class Inventory {
   }
 
   async useItem(userId: number, itemId: string, quantity?: number) {
+    const quantityToUse = quantity ?? 1;
     const pixegotchi = await this.pixegotchiService.findActive(userId);
 
     if (!pixegotchi) throw new Error("No active pixegotchi");
 
     const item = await this.itemService.getItemDetails(itemId);
 
-    await this.itemService.validateItemUsage(pixegotchi, item);
+    await this.itemService.validateItemUsage(pixegotchi, item, quantityToUse);
 
-    await this.pixegotchiService.applyStats(userId, item, quantity);
-    return await this.consumeItem(userId, itemId, quantity);
+    return await prisma.$transaction(async (tx) => {
+      await this.consumeItem(userId, itemId, quantityToUse, tx);
+      const updatedPixegotchi = await this.pixegotchiService.applyStats(
+        userId,
+        item,
+        quantityToUse,
+        tx,
+      );
+
+      await tx.itemUsageHistory.create({
+        data: {
+          userId,
+          pixegotchiId: pixegotchi.id,
+          itemId,
+          quantity: quantityToUse,
+        },
+      });
+
+      return updatedPixegotchi;
+    });
   }
 
   async openChest(userId: number, chestType: ChestType) {
@@ -156,9 +186,9 @@ export class Inventory {
         });
       }
 
-      rewards.items.forEach(
-        async (item) => await this.addItem(userId, item.itemId, item.quantity),
-      );
+      for (const item of rewards.items) {
+        await this.addItem(userId, item.itemId, item.quantity, prisma);
+      }
 
       await prisma.chest.update({
         where: {

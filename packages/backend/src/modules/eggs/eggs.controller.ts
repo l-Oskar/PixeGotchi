@@ -4,16 +4,18 @@ import { z } from "zod";
 import { EGG_CONSTANTS } from "@pixegotchi/shared";
 
 const startHatchingSchema = z.object({
-  eggId: z.number(),
+  eggId: z.number().int().positive(),
 });
 
 const hatchSchema = z.object({
   name: z.string().min(3).max(30).optional(),
 });
 
+const eggIdParamSchema = z.coerce.number().int().positive();
+
 const batchTapSchema = z.object({
-  eggId: z.number(),
-  tapCount: z.number().min(1).max(EGG_CONSTANTS.EGG_MAX_BATCH_TAP),
+  eggId: z.number().int().positive(),
+  tapCount: z.number().int().min(1).max(EGG_CONSTANTS.EGG_MAX_BATCH_TAP),
 });
 
 export class EggsController {
@@ -31,7 +33,7 @@ export class EggsController {
     reply: FastifyReply,
   ) {
     const userId = (request.user as any).userId;
-    const eggId = parseInt(request.params.id);
+    const eggId = eggIdParamSchema.parse(request.params.id);
 
     const egg = await this.eggService.getEggById(userId, eggId);
     return reply.send(egg);
@@ -64,7 +66,7 @@ export class EggsController {
     reply: FastifyReply,
   ) {
     const userId = (request.user as any).userId;
-    const eggId = parseInt(request.params.id);
+    const eggId = eggIdParamSchema.parse(request.params.id);
 
     const status = await this.eggService.getHatchingStatus(userId, eggId);
 
@@ -76,7 +78,7 @@ export class EggsController {
     reply: FastifyReply,
   ) {
     const userId = (request.user as any).userId;
-    const eggId = parseInt(request.params.id);
+    const eggId = eggIdParamSchema.parse(request.params.id);
     const { name } = hatchSchema.parse(request.body);
 
     const hatchedPixegotchi = await this.eggService.hatchEgg(
@@ -93,7 +95,7 @@ export class EggsController {
     reply: FastifyReply,
   ) {
     const userId = (request.user as any).userId;
-    const eggId = parseInt(request.params.id);
+    const eggId = eggIdParamSchema.parse(request.params.id);
 
     const egg = await this.eggService.cancelHatching(userId, eggId);
     return reply.send(egg);

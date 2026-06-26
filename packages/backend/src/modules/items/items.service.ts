@@ -45,6 +45,7 @@ export class ItemsService {
   async validateItemUsage(
     pixegotchi: Pixegotchi,
     item: Item,
+    quantity: number = 1,
   ): Promise<void> {
     // Перевірка рівня
     if (item.minLevel && pixegotchi.level < item.minLevel) {
@@ -70,6 +71,7 @@ export class ItemsService {
         pixegotchi.id,
         item.itemId,
         item.maxPerDay,
+        quantity,
       );
     }
   }
@@ -102,6 +104,7 @@ export class ItemsService {
     pixegotchiId: number,
     itemId: string,
     maxPerDay: number,
+    quantity: number,
   ) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -118,7 +121,7 @@ export class ItemsService {
 
     const usedToday = usageToday._sum.quantity || 0;
 
-    if (usedToday >= maxPerDay) {
+    if (usedToday + quantity > maxPerDay) {
       throw new Error(`Daily limit reached for this item (${maxPerDay}/day)`);
     }
   }

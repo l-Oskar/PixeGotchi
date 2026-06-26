@@ -1,5 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { z } from "zod";
 import { PixegotchiService } from "./pixegotchi.service";
+
+const pixegotchiIdParamSchema = z.coerce.number().int().positive();
 
 export class PixegotchiController {
   private pixegotchiService = new PixegotchiService();
@@ -29,7 +32,7 @@ export class PixegotchiController {
     reply: FastifyReply,
   ) {
     const userId = (request.user as any).userId;
-    const id = parseInt(request.params.id);
+    const id = pixegotchiIdParamSchema.parse(request.params.id);
     const pixegotchi = await this.pixegotchiService.findById(id, userId);
 
     if (!pixegotchi) {

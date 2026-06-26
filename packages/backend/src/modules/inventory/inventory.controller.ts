@@ -3,14 +3,16 @@ import { Inventory } from "./inventory.service";
 import { ITEMS_BY_ID, ChestType } from "@pixegotchi/shared";
 import { z } from "zod";
 
+const positiveQuantitySchema = z.number().int().positive().optional();
+
 const addItemScema = z.object({
   itemId: z.enum(Object.keys(ITEMS_BY_ID) as [string, ...string[]]),
-  quantity: z.number().optional(),
+  quantity: positiveQuantitySchema,
 });
 
 const useItemScheme = z.object({
   itemId: z.enum(Object.keys(ITEMS_BY_ID) as [string, ...string[]]),
-  quantity: z.number().optional(),
+  quantity: positiveQuantitySchema,
 });
 
 const specificChestSchema = z.object({

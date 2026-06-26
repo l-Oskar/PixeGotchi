@@ -1,6 +1,14 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { ItemsService } from "./items.service";
 import { ItemType, RarityType } from "@pixegotchi/shared";
+import { z } from "zod";
+
+const itemTypeParamSchema = z.enum(
+  Object.values(ItemType) as [ItemType, ...ItemType[]],
+);
+const rarityTypeParamSchema = z.enum(
+  Object.values(RarityType) as [RarityType, ...RarityType[]],
+);
 
 export class ItemsController {
   private itemsService = new ItemsService();
@@ -26,7 +34,7 @@ export class ItemsController {
     request: FastifyRequest<{ Params: { itemType: ItemType } }>,
     reply: FastifyReply,
   ) {
-    const itemType = request.params.itemType;
+    const itemType = itemTypeParamSchema.parse(request.params.itemType);
 
     const typeItems = await this.itemsService.getItemsByType(itemType);
 
@@ -37,7 +45,7 @@ export class ItemsController {
     request: FastifyRequest<{ Params: { rarityType: RarityType } }>,
     reply: FastifyReply,
   ) {
-    const rarityType = request.params.rarityType;
+    const rarityType = rarityTypeParamSchema.parse(request.params.rarityType);
 
     const rarityItems = await this.itemsService.getItemsByRarity(rarityType);
 

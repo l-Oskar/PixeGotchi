@@ -3,16 +3,21 @@ import { config } from "@/config/env";
 import { UserService } from "@/modules/users/users.service";
 import { URLSearchParams } from "url";
 
+export class InvalidTelegramAuthError extends Error {
+  constructor(message = "Invalid telegram authentication data") {
+    super(message);
+    this.name = "InvalidTelegramAuthError";
+  }
+}
+
 export class AuthService {
   private userService = new UserService();
 
   async authenticateTelegram(initData: string) {
-    if (config.nodeEnv !== "production") {
-      console.log("Telegram hash validation skipped in development");
-    } else {
+    if (config.nodeEnv === "production") {
       const isValid = this.validateTelegramInitData(initData);
       if (!isValid) {
-        throw new Error("Invalid telegram authentication data");
+        throw new InvalidTelegramAuthError();
       }
     }
 
@@ -75,10 +80,15 @@ export class AuthService {
     const userParam = urlParams.get("user");
 
     if (!userParam) {
-      throw new Error("User data not found in initData");
+      throw new InvalidTelegramAuthError("User data not found in initData");
     }
 
     const user = JSON.parse(decodeURIComponent(userParam));
+
+    if (typeof user.id !== "number") {
+      throw new InvalidTelegramAuthError("User id not found in initData");
+    }
+
     return {
       id: user.id,
       username: user.username,

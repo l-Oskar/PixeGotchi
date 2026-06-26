@@ -1,4 +1,5 @@
 import { prisma } from "@/database/prisma";
+import { config } from "@/config/env";
 import { GenomeGenerator } from "@/utils/genome-generator";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
 import { CREATE_STATS, EGG_CONSTANTS, assertValidGenomeHash } from "@pixegotchi/shared";
@@ -9,7 +10,7 @@ export class EggService {
   private redis: Redis;
 
   constructor() {
-    this.redis = new Redis(process.env.REDIS_URL!);
+    this.redis = new Redis(config.redisUrl);
   }
 
   async findAllEggs(userId: number) {
@@ -52,20 +53,21 @@ export class EggService {
   }
 
   async createEgg(userId: number) {
-    return await prisma.$transaction(async (prisma) => {
-      const user = await prisma.user.findUnique({
+    return await prisma.$transaction(async (tx) => {
+      const user = await tx.user.findUnique({
         where: {
           id: userId,
         },
       });
 
       if (!user) throw new Error("User not found");
-      if (Number(user.pgcBalance) < EGG_CONSTANTS.EGG_PRICE)
-        throw new Error("Not enought funds");
 
-      const newBalance = await prisma.user.update({
+      const balanceUpdate = await tx.user.updateMany({
         where: {
           id: userId,
+          pgcBalance: {
+            gte: EGG_CONSTANTS.EGG_PRICE,
+          },
         },
         data: {
           pgcBalance: {
@@ -74,7 +76,17 @@ export class EggService {
         },
       });
 
-      const createdEgg = await prisma.egg.create({
+      if (balanceUpdate.count !== 1) {
+        throw new Error("Not enought funds");
+      }
+
+      const updatedUser = await tx.user.findUniqueOrThrow({
+        where: {
+          id: userId,
+        },
+      });
+
+      const createdEgg = await tx.egg.create({
         data: {
           userId,
           createdAt: new Date(),
@@ -82,7 +94,7 @@ export class EggService {
         },
       });
 
-      return { ...createdEgg, pgcBalance: newBalance.pgcBalance.toString() };
+      return { ...createdEgg, pgcBalance: updatedUser.pgcBalance.toString() };
     });
   }
 
@@ -195,8 +207,15 @@ export class EggService {
     const genome = GenomeGenerator.generate();
     assertValidGenomeHash(genome.genome_hash);
 
-    const data = await prisma.$transaction(async (prisma) => {
-      const currentEgg = await prisma.egg.findFirst({
+    const data = await prisma.$transaction(async (tx) => {
+      const activePixegotchi = await tx.pixegotchi.findFirst({
+        where: { userId, status: "active" },
+      });
+
+      if (activePixegotchi)
+        throw new Error("You already have an active Pixegotchi");
+
+      const currentEgg = await tx.egg.findFirst({
         where: {
           id,
           userId,
@@ -206,8 +225,18 @@ export class EggService {
       if (!currentEgg) throw new Error("Egg not found");
       if (currentEgg.isHatched) throw new Error("Egg was already hatched");
       if (!currentEgg.isHatching) throw new Error("Egg is not hatching");
+      if (!currentEgg.hatchStartedAt) throw new Error("Egg hatching was not started");
 
-      const pixegotchi = await prisma.pixegotchi.create({
+      const elapsedTime = Date.now() - currentEgg.hatchStartedAt.getTime();
+      const remainingTime = Math.max(0, currentEgg.hatchingTimeMs - elapsedTime);
+
+      if (remainingTime > 0) {
+        throw new Error(
+          `Egg is not ready to hatch. Remaining time: ${Math.ceil(remainingTime / 1000)}s`,
+        );
+      }
+
+      const pixegotchi = await tx.pixegotchi.create({
         data: {
           userId,
           name,
@@ -237,7 +266,7 @@ export class EggService {
         },
       });
 
-      await prisma.egg.update({
+      await tx.egg.update({
         where: { userId, id },
         data: {
           isHatched: true,
@@ -253,10 +282,17 @@ export class EggService {
   }
 
   async proccessTapBatch(userId: number, eggId: number, tapCount: number) {
-    const egg = await this.getHatchingEgg(userId);
+    const egg = await prisma.egg.findFirst({
+      where: {
+        id: eggId,
+        userId,
+        isHatching: true,
+        isHatched: false,
+      },
+    });
 
     if (!egg) throw new Error("Egg not found or not hatching");
-    if (egg.isHatched) return;
+    if (!egg.hatchStartedAt) throw new Error("Egg hatching was not started");
 
     const maxTapPerBatch = EGG_CONSTANTS.EGG_MAX_BATCH_TAP;
     const actualTaps = Math.min(tapCount, maxTapPerBatch);
@@ -284,7 +320,7 @@ export class EggService {
 
     await prisma.egg.update({
       where: {
-        id: eggId,
+        id: egg.id,
       },
       data: {
         tapCount: { increment: actualTaps },
@@ -292,7 +328,7 @@ export class EggService {
       },
     });
 
-    const newStatus = this.getHatchingStatus(userId, eggId);
+    const newStatus = await this.getHatchingStatus(userId, egg.id);
 
     return newStatus;
   }

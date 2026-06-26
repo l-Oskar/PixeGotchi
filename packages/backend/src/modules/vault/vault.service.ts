@@ -9,7 +9,7 @@ export class VaultService {
         status: "vault",
       },
     });
-    if (!vaultPixe) throw new Error("Error vault");
+
     const stats = getVaultStats(vaultPixe);
     return stats;
   }
