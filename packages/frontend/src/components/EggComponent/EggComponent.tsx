@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { PageType, Pixegotchi } from "@pixegotchi/shared";
+import { PageType } from "@pixegotchi/shared";
 import { Hourglass, CircleX, Egg as EggIcon } from "lucide-react";
 import {
   useGetHatchingStatus,
@@ -15,14 +15,12 @@ import QuickInfo from "../Other/QuickInfo";
 
 export interface EggPageProps {
   onNavigate?: (page: PageType) => void;
-  setActivePixegotchi: (pixegitchi: Pixegotchi) => void;
 }
 
 const TAP_INTERVAL = 2000; // 2 секунди
 
 const EggComponent: React.FC<EggPageProps> = ({
   onNavigate,
-  setActivePixegotchi,
 }) => {
   const egg = useEggStore((s) => s.hatchingEgg);
   const hatchEgg = useHatchEgg();
@@ -105,8 +103,7 @@ const EggComponent: React.FC<EggPageProps> = ({
   const handleHatch = async () => {
     if (isReady) {
       try {
-        const newPixe = await hatchEgg.mutateAsync(egg.id);
-        setActivePixegotchi(newPixe);
+        await hatchEgg.mutateAsync(egg.id);
         onNavigate?.("home");
       } catch (error) {
         console.error("Failed to hatch egg:", error);

@@ -12,10 +12,9 @@ import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 interface VaultPageProps {
   onNavigate: (page: PageType) => void;
-  setActive: (x: null) => void;
 }
 
-const VaultPage: React.FC<VaultPageProps> = ({ onNavigate, setActive }) => {
+const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   const { isLoading, data } = useStatsVault();
   const statsVault = useVaultStore((s) => s.statsVault);
   const [vaultStats, setVaultStats] = useState<ElementStats[] | []>([]);
@@ -25,7 +24,6 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate, setActive }) => {
   const handleSetToVault = async () => {
     try {
       await setPixegotchiToVault.mutateAsync();
-      setActive(null);
       onNavigate("start");
     } catch (error) {
       console.error("Failed to send Pixegotchi to vault:", error);

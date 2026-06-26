@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { type Pixegotchi, type PageType } from "@pixegotchi/shared";
+import { type PageType } from "@pixegotchi/shared";
 import VaultPage from "../VaultPage/VaultPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
 import GamesPage from "../GamePage/GamePage";
@@ -21,9 +21,6 @@ const MainPage: React.FC = () => {
   const pixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
 
   const [currentPage, setCurrentPage] = useState<PageType>("start");
-  const [activePixegotchi, setActivePixegotchi] = useState<Pixegotchi | null>(
-    null,
-  );
   const [sortParam, setSortParam] = useState<string | undefined>(undefined);
 
   const handleNavigate = (page: PageType, sortBy?: string) => {
@@ -41,35 +38,42 @@ const MainPage: React.FC = () => {
     }
   }, [currentPage]);
 
-  // Compute effective pixegotchi: use active override if set, otherwise use store value
-  const effectivePixegotchi = activePixegotchi ?? pixegotchi;
-
   // Derive currentPage based on state (no circular deps)
   const derivedPage = useMemo<PageType>(() => {
-    if (effectivePixegotchi) return "home";
+    if (pixegotchi) return "home";
     if (egg) return "egg";
     return "start";
-  }, [effectivePixegotchi, egg]);
+  }, [pixegotchi, egg]);
 
   // Use derived page for rendering, but allow manual override via setCurrentPage
-  const resolvedPage =
-    currentPage === "start" && derivedPage !== "start"
-      ? derivedPage
-      : currentPage;
+  const resolvedPage = useMemo<PageType>(() => {
+    if (currentPage === "start" && derivedPage !== "start") {
+      return derivedPage;
+    }
+
+    if ((currentPage === "home" || currentPage === "data") && !pixegotchi) {
+      return derivedPage;
+    }
+
+    if (currentPage === "egg" && !egg) {
+      return derivedPage;
+    }
+
+    return currentPage;
+  }, [currentPage, derivedPage, pixegotchi, egg]);
 
   const pages: Record<PageType, React.ReactNode> = {
-    data: <PixegothiData pixegotchi={effectivePixegotchi} />,
+    data: <PixegothiData pixegotchi={pixegotchi} />,
     loader: <Loader />,
     start: <Empty onNavigate={handleNavigate} />,
-    home: effectivePixegotchi ? (
+    home: pixegotchi ? (
       <ShowPixeGotchi
-        pixegotchi={effectivePixegotchi}
+        pixegotchi={pixegotchi}
         onNavigate={handleNavigate}
       />
     ) : null,
     egg: egg ? (
       <EggComponent
-        setActivePixegotchi={setActivePixegotchi}
         onNavigate={handleNavigate}
       />
     ) : null,
@@ -79,7 +83,7 @@ const MainPage: React.FC = () => {
     games: <GamesPage onNavigate={handleNavigate} pixegotchi={pixegotchi} />,
     marketplace: <MarketplacePage onNavigate={handleNavigate} />,
     vault: (
-      <VaultPage onNavigate={handleNavigate} setActive={setActivePixegotchi} />
+      <VaultPage onNavigate={handleNavigate} />
     ),
   };
 
