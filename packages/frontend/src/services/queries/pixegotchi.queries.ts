@@ -23,14 +23,9 @@ export const usePixegotchiById = (id: number | null) => {
 };
 
 export const useActivePixegotchi = () => {
-  const setActive = usePixegotchiStore((s) => s.setActive);
   return useQuery({
     queryKey: ["activePixegotchi"],
-    queryFn: async () => {
-      const activePixegotchi = await pixegotchiApi.getActive();
-      if (activePixegotchi) setActive(activePixegotchi);
-      return activePixegotchi;
-    },
+    queryFn: pixegotchiApi.getActive,
   });
 };
 

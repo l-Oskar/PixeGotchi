@@ -16,7 +16,7 @@ export const useEggStore = create<EggStore>((set) => ({
   chosenEgg: null,
   allEggs: [],
   setAllEggs: (list: Egg[] | []) =>
-    set({ allEggs: list.sort((a, b) => a.id - b.id) }),
+    set({ allEggs: [...list].sort((a, b) => a.id - b.id) }),
   setChosenEgg: (egg: Egg) => set({ chosenEgg: egg }),
   setHatchingEgg: (egg: Egg) => set({ hatchingEgg: egg }),
   clearEgg: () =>

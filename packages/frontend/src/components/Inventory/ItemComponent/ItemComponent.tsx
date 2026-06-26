@@ -48,12 +48,12 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
     let sortedItems;
     switch (sortCase) {
       case "rarity":
-        sortedItems = items.sort((a, b) => {
+        sortedItems = [...items].sort((a, b) => {
           return RarityOrder[a.rarity] - RarityOrder[b.rarity];
         });
         break;
       case "rarity_r":
-        sortedItems = items.sort((a, b) => {
+        sortedItems = [...items].sort((a, b) => {
           return RarityOrder[b.rarity] - RarityOrder[a.rarity];
         });
         break;

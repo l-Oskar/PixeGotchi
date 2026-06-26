@@ -21,7 +21,7 @@ const Navigation: React.FC<NavigationProps> = ({
     } else if (activePixegotchi) {
       return { id: "home" as PageType, icon: Heart, label: "Home" };
     } else {
-      return { id: "start" as PageType, icon: Egg, label: "Egg" };
+      return { id: "start" as PageType, icon: Egg, label: "Hatch" };
     }
   };
   return (

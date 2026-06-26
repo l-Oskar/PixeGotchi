@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { inventoryApi } from "../api/inventory.api";
 import { useInventoryStore } from "@/store/inventory.store";
 import { ChestType } from "@pixegotchi/shared";
+import { EGG_KEYS } from "./egg.queries";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export const useGetInventory = () => {
   return useQuery({
@@ -42,6 +44,7 @@ export const useAddItem = () => {
 
 export const useUseItem = () => {
   const queryClient = useQueryClient();
+  const setActive = usePixegotchiStore((s) => s.setActive);
   return useMutation({
     mutationFn: ({
       itemId,
@@ -52,7 +55,9 @@ export const useUseItem = () => {
     }) => {
       return inventoryApi.useItem(itemId, quantity);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setActive(data);
+      queryClient.setQueryData(["activePixegotchi"], data);
       queryClient.invalidateQueries({
         queryKey: ["detailed"],
       }),
@@ -75,11 +80,14 @@ export const useOpenChest = () => {
     }) => {
       return await inventoryApi.openChest(chestType, quantity);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["detailed"] }),
         queryClient.invalidateQueries({ queryKey: ["inventory"] }),
         queryClient.invalidateQueries({ queryKey: ["chests"] }),
         queryClient.invalidateQueries({ queryKey: ["sorted_chests"] });
+      if (data.egg) {
+        queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      }
     },
   });
 };

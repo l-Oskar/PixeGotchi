@@ -1,5 +1,10 @@
 import { apiClient } from "./client";
-import { ChestType, InventoryItem, InventoryWithDetails } from "@pixegotchi/shared";
+import {
+  ChestType,
+  InventoryItem,
+  InventoryWithDetails,
+  Pixegotchi,
+} from "@pixegotchi/shared";
 
 const INVENTORY_URL = "/inventory";
 const INVENTORY_KEYS = {
@@ -29,7 +34,7 @@ export const inventoryApi = {
     });
     return data;
   },
-  useItem: async (itemId: string, quantity?: number): Promise<void> => {
+  useItem: async (itemId: string, quantity?: number): Promise<Pixegotchi> => {
     const { data } = await apiClient.post(INVENTORY_KEYS.useItem, {
       itemId,
       quantity,

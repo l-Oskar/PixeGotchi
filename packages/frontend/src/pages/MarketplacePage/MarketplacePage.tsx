@@ -1,7 +1,6 @@
-import { useCreateEgg, useGetAllEggs } from "@/services/queries/egg.queries";
+import { useCreateEgg } from "@/services/queries/egg.queries";
 import { useAddItem } from "@/services/queries/inventory.queries";
 import { useGetRandomChest } from "@/services/queries/chest.queries";
-import { useEggStore } from "@/store/egg.store";
 import {
   PageType,
   MarketplaceListing,
@@ -15,15 +14,12 @@ export interface MarketplacePageProps {
 
 const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const createEgg = useCreateEgg();
-  const getAllEggs = useGetAllEggs();
   const addItem = useAddItem();
   const getRandomChest = useGetRandomChest();
-  const setAllEggs = useEggStore((s) => s.setAllEggs);
 
   const handleCreateEgg = () => {
     createEgg.mutate(undefined, {
       onSuccess: () => {
-        setAllEggs(getAllEggs.data!);
         alert("You bought an egg!");
       },
       onError: (error) => {

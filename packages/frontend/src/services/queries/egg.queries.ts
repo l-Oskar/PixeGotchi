@@ -14,14 +14,9 @@ export const EGG_KEYS = {
 };
 
 export const useGetAllEggs = () => {
-  const setAllEggs = useEggStore((s) => s.setAllEggs);
   return useQuery({
     queryKey: EGG_KEYS.all,
-    queryFn: async () => {
-      const allEggs = await eggApi.getAllEggs();
-      setAllEggs(allEggs);
-      return allEggs;
-    },
+    queryFn: eggApi.getAllEggs,
   });
 };
 
