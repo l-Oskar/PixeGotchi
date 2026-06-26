@@ -1,9 +1,9 @@
-import { useVaultStore } from "@/store/vault.store";
+import { useAllVault } from "@/services/queries/vault.queries";
 import { User } from "@pixegotchi/shared";
 import { useUserStore } from "@/store/user.store";
 
 const QuickInfo = () => {
-  const vault = useVaultStore((s) => s.allVault);
+  const { data: vault } = useAllVault();
   const user = useUserStore((s) => s.user);
 
   const userAge = (user: User) => {

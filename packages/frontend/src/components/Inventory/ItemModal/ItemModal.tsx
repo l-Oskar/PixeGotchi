@@ -2,7 +2,7 @@ import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { Item, ITEM_COLORS, RARITY_COLORS } from "@pixegotchi/shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface ItemModalProps {
   item: Item | null;
@@ -22,6 +22,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
   const [useQuantity, setUseQuantity] = useState(1);
   const [isUsing, setIsUsing] = useState(false);
   const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
+
+  useEffect(() => {
+    if (isOpen) {
+      setUseQuantity(1);
+    }
+  }, [isOpen, item?.itemId]);
 
   if (!item) return null;
 

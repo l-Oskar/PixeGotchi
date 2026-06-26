@@ -1,7 +1,6 @@
-import { useStartHatching } from "@/services/queries/egg.queries";
-import { useEggStore } from "@/store/egg.store";
+import { useGetAllEggs, useStartHatching } from "@/services/queries/egg.queries";
 import { Egg, PageType } from "@pixegotchi/shared";
-import React from "react";
+import React, { useMemo } from "react";
 import Loader from "../Other/Loader";
 
 interface StartPageProps {
@@ -9,10 +8,14 @@ interface StartPageProps {
 }
 
 const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
-  const allEggs = useEggStore((s) => s.allEggs);
+  const { data: allEggs, isLoading } = useGetAllEggs();
   const startHatchingEgg = useStartHatching();
+  const sortedEggs = useMemo(
+    () => [...(allEggs ?? [])].sort((a, b) => a.id - b.id),
+    [allEggs],
+  );
 
-  if (!allEggs) return <Loader title={"Loading eggs..."} />;
+  if (isLoading || !allEggs) return <Loader title={"Loading eggs..."} />;
 
   const handleHatch = async (egg: Egg) => {
     try {
@@ -23,7 +26,7 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
     }
   };
 
-  if (allEggs.length == 0)
+  if (sortedEggs.length == 0)
     return (
       <div className="p-4 space-y-4">
         <div className="min-h-100 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl border border-white/10 backdrop-blur-sm">
@@ -40,9 +43,10 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
       <div className="min-h-100 p-6 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl border border-white/10 backdrop-blur-sm">
         <div className="grid gap-2 text-xl">
           <div>
-            You have {allEggs.length} {allEggs.length > 1 ? "eggs" : "egg"}
+            You have {sortedEggs.length}{" "}
+            {sortedEggs.length > 1 ? "eggs" : "egg"}
           </div>
-          {allEggs.map((egg) => (
+          {sortedEggs.map((egg) => (
             <div
               className="flex justify-between items-center bg-white/5 rounded-2xl p-4 border border-white/10"
               key={egg.id}>
