@@ -77,7 +77,91 @@ The deploy script does this:
 
 By default it does not run database migrations.
 
-## 4. Migrations
+## 4. Database migrations
+
+Main rule:
+
+- create migrations only on a development machine;
+- commit migration files to git;
+- on the server, only apply committed migrations;
+- do not run `prisma migrate dev` on the server.
+
+### What creates migration files
+
+This command creates new files in `packages/backend/prisma/migrations`:
+
+```bash
+npm run prisma:migrate:dev --workspace=packages/backend
+```
+
+Run it only locally or on a disposable development database.
+
+These commands should not create new migration files:
+
+```bash
+npm run docker:generate
+npm run prisma:migrate:deploy --workspace=packages/backend
+BRANCH=build-config RUN_MIGRATIONS=1 ./scripts/deploy.sh
+```
+
+`prisma generate` creates the Prisma client in `packages/backend/src/generated/prisma`, which is ignored by git.
+
+### Normal schema-change workflow
+
+When you change `packages/backend/prisma/schema.prisma`:
+
+1. Run a local dev database.
+2. Create a migration locally:
+
+   ```bash
+   npm run prisma:migrate:dev --workspace=packages/backend
+   ```
+
+3. Check generated migration files:
+
+   ```bash
+   git status --short packages/backend/prisma/migrations
+   ```
+
+4. Review the SQL in the new migration directory.
+5. Run verification:
+
+   ```bash
+   npm run build --workspace=@pixegotchi/backend
+   npm run typecheck --workspace=@pixegotchi/backend
+   npm run build
+   ```
+
+6. Commit both the Prisma schema and migration files:
+
+   ```bash
+   git add packages/backend/prisma/schema.prisma packages/backend/prisma/migrations
+   git commit -m "Add database migration"
+   git push origin build-config
+   ```
+
+7. Deploy on the server with migrations enabled:
+
+   ```bash
+   BRANCH=build-config RUN_MIGRATIONS=1 ./scripts/deploy.sh
+   ```
+
+### Existing server database / baseline
+
+If the server already has tables and data, do not blindly create and apply an initial migration.
+
+Before enabling migrations for the first time on an existing database, decide the baseline strategy:
+
+- either create a baseline migration that represents the current schema and mark it as applied;
+- or create a clean migration history before real production data matters.
+
+Until that baseline is clear, deploy without migrations:
+
+```bash
+BRANCH=build-config ./scripts/deploy.sh
+```
+
+### Applying already committed migrations on the server
 
 Run migrations only when you intentionally want to apply existing committed migrations:
 
@@ -85,9 +169,93 @@ Run migrations only when you intentionally want to apply existing committed migr
 BRANCH=build-config RUN_MIGRATIONS=1 ./scripts/deploy.sh
 ```
 
-Do not use this until the existing server database has a clear migration/baseline plan.
+This runs `prisma migrate deploy` inside Docker. It applies migrations that already exist in git and should not create new migration files.
 
-## 5. If the server has local changes
+### If migration files appear on the server
+
+If `deploy.sh` stops because the server working tree is dirty, check:
+
+```bash
+git status --short
+git status --short packages/backend/prisma/migrations
+```
+
+If you see untracked migration files:
+
+```text
+?? packages/backend/prisma/migrations/...
+```
+
+then one of these happened:
+
+- `prisma migrate dev` was run on the server;
+- migration files were created manually;
+- old uncommitted files already existed on the server.
+
+Decision:
+
+- if the migration is real, copy it back to the development machine, review it, commit it, and push it;
+- if it is accidental, remove it from the server working tree.
+
+Safe cleanup when you are sure server-local files are disposable:
+
+```bash
+git reset --hard HEAD
+git clean -fd
+```
+
+Do not use `git clean -fdx` unless you understand the impact. `-x` can remove ignored local files such as `.env`, runtime logs, generated client, and other local-only artifacts.
+
+## 5. Future development and server workflow
+
+Use this loop while the project is still in active development:
+
+1. Develop locally on `build-config` or a feature branch.
+2. Run relevant checks:
+
+   ```bash
+   npm run build --workspace=@pixegotchi/backend
+   npm run typecheck --workspace=@pixegotchi/backend
+   npm run build --workspace=packages/frontend
+   ```
+
+3. If shared code changed, check shared too:
+
+   ```bash
+   npm run build --workspace=@pixegotchi/shared
+   npm run typecheck --workspace=@pixegotchi/shared
+   ```
+
+4. If Prisma schema changed, create and commit a migration locally.
+5. Commit and push to GitHub.
+6. Test Docker build on a Linux machine when Docker Desktop on macOS is slow:
+
+   ```bash
+   ./scripts/build.sh
+   ```
+
+7. Deploy on the server:
+
+   ```bash
+   BRANCH=build-config ./scripts/deploy.sh
+   ```
+
+8. If this deploy includes committed database migrations:
+
+   ```bash
+   BRANCH=build-config RUN_MIGRATIONS=1 ./scripts/deploy.sh
+   ```
+
+Do not edit generated files manually:
+
+- `packages/backend/src/generated/prisma`
+- `packages/backend/dist`
+- `packages/shared/dist`
+- `packages/frontend/dist`
+
+These are local/generated artifacts and should stay out of git.
+
+## 6. If the server has local changes
 
 Default deploy stops if the server working tree is dirty. This is intentional.
 
@@ -105,7 +273,7 @@ BRANCH=build-config RESET_LOCAL_CHANGES=1 ./scripts/deploy.sh
 
 This runs `git reset --hard HEAD` and `git clean -fd`, so use it carefully.
 
-## 6. Manual fallback commands
+## 7. Manual fallback commands
 
 If you want to run the steps manually:
 
@@ -126,7 +294,13 @@ docker compose logs --tail=200 backend
 curl http://127.0.0.1:3000/health
 ```
 
-## 7. Useful environment variables for scripts
+To apply committed migrations manually:
+
+```bash
+docker compose run --rm backend sh -c "cd packages/backend && npx prisma migrate deploy"
+```
+
+## 8. Useful environment variables for scripts
 
 ```bash
 BRANCH=build-config
