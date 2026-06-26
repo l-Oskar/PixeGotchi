@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Cooldowns,
   ELEMENT_COLORS,
@@ -23,18 +23,12 @@ import {
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
-import { useActivePixegotchi } from "@/services/queries/pixegotchi.queries";
 import QuickInfo from "../Other/QuickInfo";
-import Loader from "../Other/Loader";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,
   onNavigate,
 }) => {
-  const getActive = useActivePixegotchi();
-
-  useEffect(() => {}, [getActive.data]);
-
   const [cooldowns] = useState<Cooldowns>({
     feed: false,
     play: false,
@@ -59,8 +53,6 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   //   setActive(null);
   //   onNavigate("start");
   // };
-
-  if (getActive.isLoading) return <Loader title={"Pixegotchi is loading..."} />;
 
   if (pixegotchi)
     return (

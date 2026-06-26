@@ -41,6 +41,7 @@ export const usePixegotchiToVault = () => {
     mutationFn: pixegotchiApi.setInActive,
     onSuccess: async () => {
       clearPixegotchi();
+      queryClient.setQueryData(["activePixegotchi"], null);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["activePixegotchi"] }),
         queryClient.invalidateQueries({ queryKey: ["vault"] }),
