@@ -22,10 +22,14 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate, setActive }) => {
   const setPixegotchiToVault = usePixegotchiToVault();
   const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
 
-  const handleSetToVault = () => {
-    setPixegotchiToVault.mutateAsync();
-    setActive(null);
-    onNavigate("start");
+  const handleSetToVault = async () => {
+    try {
+      await setPixegotchiToVault.mutateAsync();
+      setActive(null);
+      onNavigate("start");
+    } catch (error) {
+      console.error("Failed to send Pixegotchi to vault:", error);
+    }
   };
 
   useEffect(() => {
@@ -40,7 +44,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate, setActive }) => {
   const totalCount = 14;
 
   if (isLoading) {
-    <Loader title={"Loading vault..."} />;
+    return <Loader title={"Loading vault..."} />;
   }
 
   return (
@@ -51,7 +55,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate, setActive }) => {
           icon={SquareArrowRight}
           label="Send to Vault"
           onClick={() => handleSetToVault()}
-          disabled={false}
+          disabled={setPixegotchiToVault.isPending}
           gradient="w-full from-violer-500 to-purple-500"
         />
       )}

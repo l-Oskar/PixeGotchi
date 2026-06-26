@@ -14,9 +14,13 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
 
   if (!allEggs) return <Loader title={"Loading eggs..."} />;
 
-  const handleHatch = (egg: Egg) => {
-    startHatchingEgg.mutate(egg.id);
-    console.log("Start hatching");
+  const handleHatch = async (egg: Egg) => {
+    try {
+      await startHatchingEgg.mutateAsync(egg.id);
+      onNavigate("egg");
+    } catch (error) {
+      console.error("Failed to start hatching:", error);
+    }
   };
 
   if (allEggs.length == 0)
@@ -45,11 +49,10 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
               <span>🥚 Egg-#{egg.id}</span>
               {/* <span>Is listed: {egg.isListed ? "Yes" : "No"} </span> */}
               <button
-                className="px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition"
-                onClick={() => {
-                  handleHatch(egg), onNavigate("egg");
-                }}>
-                HATCH
+                className="px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition disabled:opacity-50 disabled:hover:scale-100"
+                disabled={startHatchingEgg.isPending}
+                onClick={() => handleHatch(egg)}>
+                {startHatchingEgg.isPending ? "HATCHING..." : "HATCH"}
               </button>
             </div>
           ))}

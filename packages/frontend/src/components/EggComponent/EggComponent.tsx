@@ -56,7 +56,7 @@ const EggComponent: React.FC<EggPageProps> = ({
 
   // Статус завантаження
   if (status.isLoading) {
-    <Loader title={"Loading egg status..."} />;
+    return <Loader title={"Loading egg status..."} />;
   }
 
   // Обробка помилки

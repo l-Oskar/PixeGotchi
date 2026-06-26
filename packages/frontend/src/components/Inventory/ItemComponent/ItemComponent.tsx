@@ -38,8 +38,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   };
 
   const handleUseItem = async (itemId: string, quantity: number) => {
-    useItem.mutate({ itemId, quantity });
-    setIsModalOpen(false);
+    await useItem.mutateAsync({ itemId, quantity });
   };
 
   const handleSortItems = (
@@ -115,13 +114,14 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
           {handleSortItems(inventory, sortedList).map((item) => (
             <button
               key={item.id}
+              disabled={!item.details}
               onClick={() => handleItemClick(item.itemId, item.quantity)}
-              className={`border ${RARITY_BORDER_COLORS[item.rarity]} bg-white/5 hover:bg-white/10 rounded-2xl p-4 transition flex flex-col items-center gap-2 group`}>
+              className={`border ${RARITY_BORDER_COLORS[item.rarity]} bg-white/5 hover:bg-white/10 rounded-2xl p-4 transition flex flex-col items-center gap-2 group disabled:opacity-50 disabled:hover:bg-white/5`}>
               <div className="text-4xl group-hover:scale-110 transition">
-                {item.details?.iconUrl}
+                {item.details?.iconUrl ?? "?"}
               </div>
               <div className="text-xs font-medium text-center">
-                {item.details!.name}
+                {item.details?.name ?? item.itemId}
               </div>
               <div className="text-xs text-white/60">{item.quantity}</div>
             </button>

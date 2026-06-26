@@ -36,13 +36,16 @@ export const useActivePixegotchi = () => {
 
 export const usePixegotchiToVault = () => {
   const clearPixegotchi = usePixegotchiStore((s) => s.setToVault);
-  const useQuery = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async () => {
-      await pixegotchiApi.setInActive(),
-        clearPixegotchi(),
-        useQuery.invalidateQueries({ queryKey: ["vault"] }),
-        useQuery.invalidateQueries({ queryKey: ["stats"] });
+    mutationFn: pixegotchiApi.setInActive,
+    onSuccess: async () => {
+      clearPixegotchi();
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["activePixegotchi"] }),
+        queryClient.invalidateQueries({ queryKey: ["vault"] }),
+        queryClient.invalidateQueries({ queryKey: ["stats"] }),
+      ]);
     },
   });
 };
