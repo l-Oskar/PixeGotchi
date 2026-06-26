@@ -109,7 +109,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   return (
     <>
       <div>
-        <SortedButtons setFilter={setSortedList} />
+        <SortedButtons initialFilter={sortedList} setFilter={setSortedList} />
         <div className="grid grid-cols-3 gap-3">
           {handleSortItems(inventory, sortedList).map((item) => (
             <button

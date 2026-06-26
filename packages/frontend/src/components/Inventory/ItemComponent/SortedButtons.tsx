@@ -11,11 +11,15 @@ import {
 import SortedButton from "./SortedButton";
 import { ITEM_COLORS, ITEM_BG_COLORS } from "@pixegotchi/shared";
 export interface SortedButtonsProps {
+  initialFilter?: string;
   setFilter: (filter: string) => void;
 }
 
-const SortedButtons: React.FC<SortedButtonsProps> = ({ setFilter }) => {
-  const [active, setActive] = useState<string>("rarity");
+const SortedButtons: React.FC<SortedButtonsProps> = ({
+  initialFilter,
+  setFilter,
+}) => {
+  const [active, setActive] = useState<string>(initialFilter || "rarity");
   const handleFilter = (filterValue: string) => {
     setFilter(filterValue);
     setActive(filterValue);
