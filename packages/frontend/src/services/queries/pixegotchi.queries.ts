@@ -3,14 +3,9 @@ import { pixegotchiApi } from "@/services/api/pixegotchi.api";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export const useAllPixegotchi = () => {
-  const setAllPixegotchi = usePixegotchiStore((s) => s.setAllPixegotchi);
   return useQuery({
     queryKey: ["allPixegotchi"],
-    queryFn: async () => {
-      const allPixe = await pixegotchiApi.getAll();
-      setAllPixegotchi(allPixe);
-      return allPixe;
-    },
+    queryFn: pixegotchiApi.getAll,
   });
 };
 

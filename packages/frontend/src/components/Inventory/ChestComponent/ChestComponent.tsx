@@ -1,8 +1,4 @@
-import {
-  useGetAllChests,
-  useGetSortedChests,
-} from "@/services/queries/chest.queries";
-import { useInventoryStore } from "@/store/inventory.store";
+import { useGetSortedChests } from "@/services/queries/chest.queries";
 import ChestModal from "../ChestModal/ChestModal";
 import {
   CHEST_TYPE_TO_RARITY,
@@ -12,16 +8,15 @@ import {
   ITEMS_IMG,
   RARITY_BORDER_COLORS,
 } from "@pixegotchi/shared";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useOpenChest } from "@/services/queries/inventory.queries";
 import RewardModal from "../RewardsModal/RewardModal";
 
 const ChestComponent: React.FC = () => {
   const [rewards, setRewards] = useState<ChestRewards | null>(null);
   const { data: sortedChestData } = useGetSortedChests();
-  const { data: chestData } = useGetAllChests();
   const openChest = useOpenChest();
-  const sortedChests = useInventoryStore((s) => s.sortedChests);
+  const sortedChests = sortedChestData ?? [];
   const [selectedChest, setSelectedChest] = useState<ChestInventory | null>(
     null,
   );
@@ -30,8 +25,6 @@ const ChestComponent: React.FC = () => {
   const currentChest = selectedChest
     ? sortedChests?.find((chest) => chest.chestType === selectedChest.chestType)
     : null;
-
-  useEffect(() => {}, [sortedChestData, chestData]);
 
   const handleChestClick = (chestType: ChestType, quantity: number) => {
     setSelectedChest({ chestType, quantity });

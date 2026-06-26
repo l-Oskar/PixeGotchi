@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { inventoryApi } from "../api/inventory.api";
-import { useInventoryStore } from "@/store/inventory.store";
 import { ChestType } from "@pixegotchi/shared";
 import { EGG_KEYS } from "./egg.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
@@ -13,14 +12,9 @@ export const useGetInventory = () => {
 };
 
 export const useDetailedInventory = () => {
-  const updateDetailed = useInventoryStore((s) => s.updateInventory);
   return useQuery({
     queryKey: ["detailed"],
-    queryFn: async () => {
-      const inventory = await inventoryApi.getDetailed();
-      updateDetailed(inventory);
-      return inventory;
-    },
+    queryFn: inventoryApi.getDetailed,
   });
 };
 

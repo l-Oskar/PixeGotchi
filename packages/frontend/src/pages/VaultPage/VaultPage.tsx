@@ -1,12 +1,10 @@
 import { Sparkles } from "lucide-react";
-import { ElementStats, PageType, RARITY_COLORS } from "@pixegotchi/shared";
+import { PageType, RARITY_COLORS } from "@pixegotchi/shared";
 import Loader from "@/components/Other/Loader";
 import { useStatsVault } from "@/services/queries/vault.queries";
-import { useVaultStore } from "@/store/vault.store";
 import { getPixegotchiImg } from "@/utils/getImage";
 import { SquareArrowRight } from "lucide-react";
 import ActionButton from "@/components/MainPage/ActionButton";
-import { useEffect, useState } from "react";
 import { usePixegotchiToVault } from "@/services/queries/pixegotchi.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
@@ -16,8 +14,7 @@ interface VaultPageProps {
 
 const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   const { isLoading, data } = useStatsVault();
-  const statsVault = useVaultStore((s) => s.statsVault);
-  const [vaultStats, setVaultStats] = useState<ElementStats[] | []>([]);
+  const vaultStats = data ?? [];
   const setPixegotchiToVault = usePixegotchiToVault();
   const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
 
@@ -29,12 +26,6 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
       console.error("Failed to send Pixegotchi to vault:", error);
     }
   };
-
-  useEffect(() => {
-    if (data) {
-      setVaultStats(data);
-    }
-  }, [data, statsVault]);
 
   const collectedCount = vaultStats
     ? vaultStats.filter((stat) => !stat.isEmpty).length

@@ -3,13 +3,12 @@ import {
   useDetailedInventory,
   useUseItem,
 } from "@/services/queries/inventory.queries";
-import { useInventoryStore } from "@/store/inventory.store";
 import {
   InventoryWithDetails,
   RARITY_BORDER_COLORS,
   RarityOrder,
 } from "@pixegotchi/shared";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SortedButtons from "./SortedButtons";
 
 export interface ItemComponentProps {
@@ -19,7 +18,7 @@ export interface ItemComponentProps {
 const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   const getInventory = useDetailedInventory();
   const useItem = useUseItem();
-  const inventory = useInventoryStore((s) => s.detailedInventory);
+  const inventory = getInventory.data ?? [];
   const [sortedList, setSortedList] = useState<string>(sorted || "rarity");
 
   const [selectedItem, setSelectedItem] = useState<{
@@ -30,8 +29,6 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   const currentItem = selectedItem
     ? inventory.find((i) => i.itemId === selectedItem.itemId)?.details
     : null;
-  useEffect(() => {}, [getInventory.data]);
-
   const handleItemClick = (itemId: string, quantity: number) => {
     setSelectedItem({ itemId, quantity });
     setIsModalOpen(true);
