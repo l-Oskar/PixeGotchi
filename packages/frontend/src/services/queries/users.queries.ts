@@ -1,10 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { usersApi } from "@/services/api/users.api";
 import { UserProfile } from "@pixegotchi/shared";
 
+export const USER_KEYS = {
+  profile: ["userProfile"] as const,
+};
+
 export const useUserProfile = () => {
   return useQuery({
-    queryKey: ["userProfile"],
+    queryKey: USER_KEYS.profile,
     queryFn: async () => {
       const data = usersApi.getProfile();
       return data;
@@ -12,9 +16,14 @@ export const useUserProfile = () => {
   });
 };
 
-export const useUpdateProfile = (updates: Partial<UserProfile>) => {
-  return useQuery({
-    queryKey: ["usernameInfo"],
-    queryFn: () => usersApi.updateProfile(updates),
+export const useUpdateProfile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (updates: Partial<UserProfile>) =>
+      usersApi.updateProfile(updates),
+    onSuccess: (data) => {
+      queryClient.setQueryData(USER_KEYS.profile, data);
+    },
   });
 };

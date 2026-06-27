@@ -23,7 +23,10 @@ export const useGetAllEggs = () => {
 export const useGetById = (eggId: number | null) => {
   return useQuery({
     queryKey: EGG_KEYS.details(eggId),
-    queryFn: () => eggApi.getEggById(eggId!),
+    queryFn: () => {
+      if (!eggId) throw new Error("eggId is required");
+      return eggApi.getEggById(eggId);
+    },
     enabled: !!eggId,
   });
 };
@@ -52,7 +55,7 @@ export const useStartHatching = () => {
   const setHatching = useEggStore((s) => s.setHatchingEgg);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (eggId: number) => eggApi.startHatching(eggId!),
+    mutationFn: (eggId: number) => eggApi.startHatching(eggId),
     onSuccess: (data) => {
       setHatching(data);
       queryClient.setQueryData(EGG_KEYS.hatching, data);
@@ -66,9 +69,8 @@ export const useBatchTap = () => {
   return useMutation({
     mutationFn: ({ eggId, tapCount }: { eggId: number; tapCount: number }) =>
       eggApi.batchTap(eggId, tapCount),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
-      queryClient.invalidateQueries({ queryKey: EGG_KEYS.hatching });
+    onSuccess: (data, { eggId }) => {
+      queryClient.setQueryData(EGG_KEYS.status(eggId), data);
       return data;
     },
   });
@@ -77,7 +79,10 @@ export const useBatchTap = () => {
 export const useGetHatchingStatus = (eggId: number | null) => {
   return useQuery({
     queryKey: EGG_KEYS.status(eggId),
-    queryFn: () => eggApi.getHatchingStatus(eggId!),
+    queryFn: () => {
+      if (!eggId) throw new Error("eggId is required");
+      return eggApi.getHatchingStatus(eggId);
+    },
     enabled: !!eggId,
     refetchInterval: 1000,
   });
@@ -90,7 +95,7 @@ export const useHatchEgg = () => {
 
   return useMutation({
     mutationFn: (eggId: number) => {
-      return eggApi.hatchEgg(eggId!);
+      return eggApi.hatchEgg(eggId);
     },
     onSuccess: (data) => {
       clearEgg();

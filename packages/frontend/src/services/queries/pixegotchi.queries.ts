@@ -12,7 +12,10 @@ export const useAllPixegotchi = () => {
 export const usePixegotchiById = (id: number | null) => {
   return useQuery({
     queryKey: ["pixegotchi", id],
-    queryFn: () => pixegotchiApi.getById(id!),
+    queryFn: () => {
+      if (!id) throw new Error("pixegotchi id is required");
+      return pixegotchiApi.getById(id);
+    },
     enabled: !!id,
   });
 };
