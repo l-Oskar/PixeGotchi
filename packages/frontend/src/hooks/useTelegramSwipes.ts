@@ -19,24 +19,17 @@ export const useTelegramSwipes = (disabled: boolean) => {
 
     const tg = (window as any)?.Telegram?.WebApp;
 
-    console.log("Telegram WebApp:", tg);
-
     const hasControl =
       tg &&
       typeof tg.disableVerticalSwipes === "function" &&
       typeof tg.enableVerticalSwipes === "function";
 
-    console.log("Has control:", hasControl);
-    console.log("Disabled param:", disabled);
-
     if (!hasControl) return;
 
     if (disabled) {
       tg.disableVerticalSwipes();
-      console.log("Disabled swipes ✅");
     } else {
       tg.enableVerticalSwipes();
-      console.log("Enabled swipes ✅");
     }
 
     return () => {

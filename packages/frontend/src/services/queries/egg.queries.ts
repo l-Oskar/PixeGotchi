@@ -5,6 +5,7 @@ import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { useUserStore } from "@/store/user.store";
 import { Pixegotchi, UserProfile } from "@pixegotchi/shared";
 import { USER_KEYS } from "./users.queries";
+import { PIXEGOTCHI_KEYS } from "./pixegotchi.queries";
 
 export const EGG_KEYS = {
   all: ["eggs"] as const,
@@ -110,10 +111,10 @@ export const useHatchEgg = () => {
       clearEgg();
       setActivePixegotchi(data);
       queryClient.setQueryData(EGG_KEYS.hatching, null);
-      queryClient.setQueryData(["activePixegotchi"], data);
-      queryClient.setQueryData(["pixegotchi", data.id], data);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.active, data);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.details(data.id), data);
       queryClient.setQueryData<Pixegotchi[] | undefined>(
-        ["allPixegotchi"],
+        PIXEGOTCHI_KEYS.all,
         (current) => {
           if (!current) return current;
           return current.some((pixegotchi) => pixegotchi.id === data.id)

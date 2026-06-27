@@ -2,17 +2,24 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { pixegotchiApi } from "@/services/api/pixegotchi.api";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { Pixegotchi } from "@pixegotchi/shared";
+import { VAULT_KEYS } from "./vault.queries";
+
+export const PIXEGOTCHI_KEYS = {
+  all: ["allPixegotchi"] as const,
+  active: ["activePixegotchi"] as const,
+  details: (id: number | null) => ["pixegotchi", id] as const,
+};
 
 export const useAllPixegotchi = () => {
   return useQuery({
-    queryKey: ["allPixegotchi"],
+    queryKey: PIXEGOTCHI_KEYS.all,
     queryFn: pixegotchiApi.getAll,
   });
 };
 
 export const usePixegotchiById = (id: number | null) => {
   return useQuery({
-    queryKey: ["pixegotchi", id],
+    queryKey: PIXEGOTCHI_KEYS.details(id),
     queryFn: () => {
       if (!id) throw new Error("pixegotchi id is required");
       return pixegotchiApi.getById(id);
@@ -23,7 +30,7 @@ export const usePixegotchiById = (id: number | null) => {
 
 export const useActivePixegotchi = () => {
   return useQuery({
-    queryKey: ["activePixegotchi"],
+    queryKey: PIXEGOTCHI_KEYS.active,
     queryFn: pixegotchiApi.getActive,
   });
 };
@@ -35,11 +42,11 @@ export const usePixegotchiToVault = () => {
     mutationFn: pixegotchiApi.setInActive,
     onSuccess: async (data) => {
       clearPixegotchi();
-      queryClient.setQueryData(["activePixegotchi"], null);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.active, null);
       if (data) {
-        queryClient.setQueryData(["pixegotchi", data.id], data);
+        queryClient.setQueryData(PIXEGOTCHI_KEYS.details(data.id), data);
         queryClient.setQueryData<Pixegotchi[] | undefined>(
-          ["allPixegotchi"],
+          PIXEGOTCHI_KEYS.all,
           (current) =>
             current?.map((pixegotchi) =>
               pixegotchi.id === data.id ? data : pixegotchi,
@@ -47,8 +54,8 @@ export const usePixegotchiToVault = () => {
         );
       }
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["vault"] }),
-        queryClient.invalidateQueries({ queryKey: ["stats"] }),
+        queryClient.invalidateQueries({ queryKey: VAULT_KEYS.all }),
+        queryClient.invalidateQueries({ queryKey: VAULT_KEYS.stats }),
       ]);
     },
   });

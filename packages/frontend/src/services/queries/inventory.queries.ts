@@ -3,17 +3,24 @@ import { inventoryApi } from "../api/inventory.api";
 import { ChestType, Pixegotchi } from "@pixegotchi/shared";
 import { EGG_KEYS } from "./egg.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
+import { CHEST_KEYS } from "./chest.queries";
+import { PIXEGOTCHI_KEYS } from "./pixegotchi.queries";
+
+export const INVENTORY_KEYS = {
+  all: ["inventory"] as const,
+  detailed: ["detailed"] as const,
+};
 
 export const useGetInventory = () => {
   return useQuery({
-    queryKey: ["inventory"],
+    queryKey: INVENTORY_KEYS.all,
     queryFn: inventoryApi.getAll,
   });
 };
 
 export const useDetailedInventory = () => {
   return useQuery({
-    queryKey: ["detailed"],
+    queryKey: INVENTORY_KEYS.detailed,
     queryFn: inventoryApi.getDetailed,
   });
 };
@@ -31,8 +38,8 @@ export const useAddItem = () => {
       return inventoryApi.addItem(itemId, quantity);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["detailed"] });
-      queryClient.invalidateQueries({ queryKey: ["inventory"] });
+      queryClient.invalidateQueries({ queryKey: INVENTORY_KEYS.detailed });
+      queryClient.invalidateQueries({ queryKey: INVENTORY_KEYS.all });
     },
   });
 };
@@ -52,19 +59,19 @@ export const useUseItem = () => {
     },
     onSuccess: (data) => {
       setActive(data);
-      queryClient.setQueryData(["activePixegotchi"], data);
-      queryClient.setQueryData(["pixegotchi", data.id], data);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.active, data);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.details(data.id), data);
       queryClient.setQueryData<Pixegotchi[] | undefined>(
-        ["allPixegotchi"],
+        PIXEGOTCHI_KEYS.all,
         (current) =>
           current?.map((pixegotchi) =>
             pixegotchi.id === data.id ? data : pixegotchi,
           ),
       );
       queryClient.invalidateQueries({
-        queryKey: ["detailed"],
+        queryKey: INVENTORY_KEYS.detailed,
       });
-      queryClient.invalidateQueries({ queryKey: ["inventory"] });
+      queryClient.invalidateQueries({ queryKey: INVENTORY_KEYS.all });
     },
   });
 };
@@ -79,13 +86,13 @@ export const useOpenChest = () => {
       chestType: ChestType;
       quantity?: number;
     }) => {
-      return await inventoryApi.openChest(chestType, quantity);
+      return inventoryApi.openChest(chestType, quantity);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["detailed"] }),
-        queryClient.invalidateQueries({ queryKey: ["inventory"] }),
-        queryClient.invalidateQueries({ queryKey: ["chests"] }),
-        queryClient.invalidateQueries({ queryKey: ["sorted_chests"] });
+      queryClient.invalidateQueries({ queryKey: INVENTORY_KEYS.detailed });
+      queryClient.invalidateQueries({ queryKey: INVENTORY_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: CHEST_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: CHEST_KEYS.sorted });
       if (data.egg) {
         queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
       }
