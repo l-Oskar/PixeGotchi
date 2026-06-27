@@ -80,8 +80,11 @@ else
   echo "⏭ Skipping migrations. Use RUN_MIGRATIONS=1 only when you intentionally want migrate deploy."
 fi
 
-echo "▶️ Starting services..."
-docker compose -f "${COMPOSE_FILE}" up -d --no-build postgres redis "${SERVICE}"
+echo "▶️ Starting dependencies..."
+docker compose -f "${COMPOSE_FILE}" up -d --no-build postgres redis
+
+echo "🔁 Starting or restarting ${SERVICE} container..."
+docker compose -f "${COMPOSE_FILE}" up -d --no-build --force-recreate "${SERVICE}"
 
 echo "🏥 Checking service status..."
 docker compose -f "${COMPOSE_FILE}" ps

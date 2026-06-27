@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { inventoryApi } from "../api/inventory.api";
-import { ChestType } from "@pixegotchi/shared";
+import { ChestType, Pixegotchi } from "@pixegotchi/shared";
 import { EGG_KEYS } from "./egg.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
@@ -32,6 +32,7 @@ export const useAddItem = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["detailed"] });
+      queryClient.invalidateQueries({ queryKey: ["inventory"] });
     },
   });
 };
@@ -52,12 +53,18 @@ export const useUseItem = () => {
     onSuccess: (data) => {
       setActive(data);
       queryClient.setQueryData(["activePixegotchi"], data);
+      queryClient.setQueryData(["pixegotchi", data.id], data);
+      queryClient.setQueryData<Pixegotchi[] | undefined>(
+        ["allPixegotchi"],
+        (current) =>
+          current?.map((pixegotchi) =>
+            pixegotchi.id === data.id ? data : pixegotchi,
+          ),
+      );
       queryClient.invalidateQueries({
         queryKey: ["detailed"],
-      }),
-        queryClient.invalidateQueries({
-          queryKey: ["activePixegotchi"],
-        });
+      });
+      queryClient.invalidateQueries({ queryKey: ["inventory"] });
     },
   });
 };

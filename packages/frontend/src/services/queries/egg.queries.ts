@@ -3,6 +3,8 @@ import { eggApi } from "../api/egg.api";
 import { useEggStore } from "@/store/egg.store";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { useUserStore } from "@/store/user.store";
+import { Pixegotchi, UserProfile } from "@pixegotchi/shared";
+import { USER_KEYS } from "./users.queries";
 
 export const EGG_KEYS = {
   all: ["eggs"] as const,
@@ -46,6 +48,13 @@ export const useCreateEgg = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
       updateBallance(data.pgcBalance.toString());
+      queryClient.setQueryData<UserProfile | undefined>(
+        USER_KEYS.profile,
+        (current) =>
+          current
+            ? { ...current, pgcBalance: data.pgcBalance.toString() }
+            : current,
+      );
       return data;
     },
   });
@@ -102,6 +111,18 @@ export const useHatchEgg = () => {
       setActivePixegotchi(data);
       queryClient.setQueryData(EGG_KEYS.hatching, null);
       queryClient.setQueryData(["activePixegotchi"], data);
+      queryClient.setQueryData(["pixegotchi", data.id], data);
+      queryClient.setQueryData<Pixegotchi[] | undefined>(
+        ["allPixegotchi"],
+        (current) => {
+          if (!current) return current;
+          return current.some((pixegotchi) => pixegotchi.id === data.id)
+            ? current.map((pixegotchi) =>
+                pixegotchi.id === data.id ? data : pixegotchi,
+              )
+            : [data, ...current];
+        },
+      );
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
       queryClient.invalidateQueries({ queryKey: EGG_KEYS.hatching });
     },

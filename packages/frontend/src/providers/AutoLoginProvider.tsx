@@ -9,19 +9,17 @@ export const AutoLoginProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const loginMutation = useTelegramLogin();
+  const { isPending, mutate } = useTelegramLogin();
   const isAuthenticate = useAuthStore((s) => s.isAuthenticated);
   const initDataRaw = retrieveRawInitData();
 
   useEffect(() => {
-    if (isAuthenticate) return;
+    if (isAuthenticate || isPending) return;
 
     if (initDataRaw) {
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      loginMutation.mutate(initDataRaw);
-      //loginMutation.mutate(import.meta.env.VITE_DEV_INIT_DATA);
+      mutate(initDataRaw);
     }
-  }, [isAuthenticate, initDataRaw]);
+  }, [isAuthenticate, initDataRaw, isPending, mutate]);
 
   if (!isAuthenticate) {
     return (
