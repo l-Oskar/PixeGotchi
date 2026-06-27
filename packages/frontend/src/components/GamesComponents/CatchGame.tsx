@@ -370,7 +370,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
       )}
 
       {state.matches("gameOver") && (
-        <div className="absolute inset-0 m-auto w-70 h-45 items-center flex flex-col rounded-lg bg-gray-900 text-white font-pixel m-4 p-4">
+        <div className="absolute inset-0 w-70 h-45 items-center flex flex-col rounded-lg bg-gray-900 text-white font-pixel m-4 p-4">
           <h2 className="text-2xl mb-4">Game Over</h2>
           <p className="text-xl mb-4">
             Your score: {finalScore ?? displayScore}

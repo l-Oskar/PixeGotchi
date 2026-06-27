@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PageType, GameStruct, Pixegotchi } from "@pixegotchi/shared";
-import { Coins, CircleStar, Zap } from "lucide-react";
+import { Coins, StarPlus, Zap } from "lucide-react";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
@@ -106,13 +106,13 @@ const GamesPage: React.FC<GamePageProps> = ({
                   {game.difficulty}
                 </span>
                 <span className="text-[10px] px-1.5 py-0.5 bg-orange-500/20 rounded-full text-orange-400 whitespace-nowrap flex items-center gap-0.5">
-                  {game.energy} <Zap size={12} className="text-orange-400" />
+                  {game.energy} <Zap size={10} className="text-orange-400" />
                 </span>
                 <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 rounded-full text-yellow-400 whitespace-nowrap flex items-center gap-0.5">
-                  {game.reward} <Coins size={12} className="text-yellow-400" />
+                  {game.reward} <Coins size={10} className="text-yellow-400" />
                 </span>
                 <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 rounded-full text-green-400 whitespace-nowrap flex items-center gap-0.5">
-                  {game.exp} <CircleStar size={12} className="text-green-400" />
+                  {game.exp} <StarPlus size={10} className="text-green-400" />
                 </span>
               </div>
             </div>

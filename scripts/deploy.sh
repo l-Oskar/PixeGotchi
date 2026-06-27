@@ -6,6 +6,7 @@ COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.yml}"
 BRANCH="${BRANCH:-$(git branch --show-current)}"
 REMOTE="${REMOTE:-origin}"
 SERVICE="${SERVICE:-backend}"
+BUILD="${BUILD:-0}"
 RESET_LOCAL_CHANGES="${RESET_LOCAL_CHANGES:-0}"
 RUN_MIGRATIONS="${RUN_MIGRATIONS:-0}"
 RESET_NODE_MODULES="${RESET_NODE_MODULES:-1}"
@@ -16,6 +17,7 @@ echo "   branch:       ${BRANCH}"
 echo "   remote:       ${REMOTE}"
 echo "   compose file: ${COMPOSE_FILE}"
 echo "   service:      ${SERVICE}"
+echo "   build image:  ${BUILD}"
 
 if [[ ! -f "${COMPOSE_FILE}" ]]; then
   echo "❌ Compose file not found: ${COMPOSE_FILE}" >&2
@@ -44,7 +46,12 @@ mkdir -p runtime/logs/backend
 echo "🔎 Validating Docker Compose config..."
 docker compose -f "${COMPOSE_FILE}" config --quiet
 
-echo "📦 Skipping image build. Run ./scripts/build.sh before deploy when the image must be rebuilt."
+if [[ "${BUILD}" == "1" ]]; then
+  echo "📦 Building ${SERVICE} image because BUILD=1..."
+  COMPOSE_FILE="${COMPOSE_FILE}" SERVICE="${SERVICE}" ./scripts/build.sh
+else
+  echo "📦 Skipping image build. Run with BUILD=1 when the image must be rebuilt."
+fi
 
 if [[ "${RESET_NODE_MODULES}" == "1" ]]; then
   echo "♻️  Recreating Docker node_modules volumes for fresh dependencies..."
