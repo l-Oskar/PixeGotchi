@@ -26,8 +26,11 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
     quantity: number;
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const currentInventoryItem = selectedItem
+    ? inventory.find((i) => i.itemId === selectedItem.itemId)
+    : null;
   const currentItem = selectedItem
-    ? inventory.find((i) => i.itemId === selectedItem.itemId)?.details
+    ? currentInventoryItem?.details
     : null;
   const handleItemClick = (itemId: string, quantity: number) => {
     setSelectedItem({ itemId, quantity });
@@ -127,7 +130,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
 
         <ItemModal
           item={currentItem!}
-          quantity={selectedItem?.quantity ?? 0}
+          quantity={currentInventoryItem?.quantity ?? 0}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onUse={handleUseItem}

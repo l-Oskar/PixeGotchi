@@ -16,6 +16,8 @@ const RewardModal: React.FC<RewardModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  if (!rewards) return null;
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -50,7 +52,7 @@ const RewardModal: React.FC<RewardModalProps> = ({
               {/* Контент нагород */}
               <div className="grid gap-3">
                 <div className="grid gap-3 max-h-96 overflow-y-auto">
-                  {rewards!.items.map((item) => (
+                  {rewards.items.map((item) => (
                     <div
                       key={item.itemId}
                       className="bg-white/5 rounded-xl p-3">

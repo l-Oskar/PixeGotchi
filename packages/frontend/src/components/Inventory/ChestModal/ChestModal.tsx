@@ -1,7 +1,6 @@
 import {
   ChestType,
   ChestInventory,
-  ChestDescription,
   RARITY_COLORS,
   ITEMS_IMG,
 } from "@pixegotchi/shared";
@@ -9,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
 import ChestItems from "./ChestItems";
 import { X, ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 export interface ChestModalProps {
   chest: ChestInventory | null;
@@ -28,14 +27,21 @@ const ChestModal: React.FC<ChestModalProps> = ({
 }) => {
   const [useQuantity] = useState(1);
   const [isUsing, setIsUsing] = useState(false);
-  const [chestDescription, setChestDescription] =
-    useState<ChestDescription | null>(null);
   const [isItemPoolOpen, setIsItemPoolOpen] = useState(false);
-
-  useEffect(() => {
-    if (chest)
-      setChestDescription(ChestGenerator.getChestDescription(chest.chestType));
-  }, [chest]);
+  const chestDescription = useMemo(
+    () =>
+      chest
+        ? ChestGenerator.getChestDescription(chest.chestType)
+        : null,
+    [chest],
+  );
+  const chestItems = useMemo(
+    () =>
+      chest
+        ? ChestGenerator.getItemsWithProbabilities(chest.chestType)
+        : [],
+    [chest],
+  );
 
   if (!chest || !chestDescription) return null;
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
@@ -129,13 +135,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
                       onClick={() => setIsItemPoolOpen(!isItemPoolOpen)}
                       className="flex items-center justify-between w-full p-2 rounded-lg bg-white/5 hover:bg-white/10 transition group">
                       <span className="text-white/80 text-sm font-medium">
-                        Item Pool (
-                        {
-                          ChestGenerator.getItemsWithProbabilities(
-                            chest.chestType,
-                          ).length
-                        }{" "}
-                        items)
+                        Item Pool ({chestItems.length} items)
                       </span>
                       <motion.div
                         animate={{ rotate: isItemPoolOpen ? 180 : 0 }}
@@ -157,9 +157,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
                           className="overflow-hidden mt-2">
                           <ChestItems
                             chest={chest}
-                            chestItems={ChestGenerator.getItemsWithProbabilities(
-                              chest.chestType,
-                            )}
+                            chestItems={chestItems}
                           />
                         </motion.div>
                       )}
