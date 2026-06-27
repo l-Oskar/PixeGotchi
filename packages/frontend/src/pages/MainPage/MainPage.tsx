@@ -86,13 +86,14 @@ const MainPage: React.FC = () => {
       <VaultPage onNavigate={handleNavigate} />
     ),
   };
+  const renderedPage = pages[resolvedPage] ?? pages[derivedPage] ?? pages.start;
 
   return (
     <div className="min-h-screen bg-linear-to-b from-purple-900 via-blue-900 to-indigo-900 text-white">
       {/* Header */}
       <Header user={user} />
       {/* Content */}
-      <main className="max-w-md mx-auto pb-20">{pages[resolvedPage]}</main>
+      <main className="max-w-md mx-auto pb-20">{renderedPage}</main>
       {/* Bottom Navigation */}
       <Navigation currentPage={resolvedPage} setCurrentPage={setCurrentPage} />
     </div>

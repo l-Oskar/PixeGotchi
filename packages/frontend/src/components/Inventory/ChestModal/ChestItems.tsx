@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ChestPreview,
   ChestInventory,
@@ -17,25 +17,31 @@ export interface ChestPreviewProps {
 }
 
 const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
-  if (!chestItems || chestItems.length === 0) return null;
-
-  // Групуємо елементи за рідкістю
-  const groupedByRarity = chestItems.reduce(
-    (groups, item) => {
-      const rarity = item.rarity;
-      if (!groups[rarity]) {
-        groups[rarity] = [];
-      }
-      groups[rarity].push(item);
-      return groups;
-    },
-    {} as Record<string, ChestPreview[]>,
+  const groupedByRarity = useMemo(
+    () =>
+      chestItems.reduce(
+        (groups, item) => {
+          const rarity = item.rarity;
+          if (!groups[rarity]) {
+            groups[rarity] = [];
+          }
+          groups[rarity].push(item);
+          return groups;
+        },
+        {} as Record<string, ChestPreview[]>,
+      ),
+    [chestItems],
+  );
+  const sortedRarities = useMemo(
+    () =>
+      Object.keys(groupedByRarity).sort(
+        (a, b) =>
+          RarityOrder[a as RarityType] - RarityOrder[b as RarityType],
+      ),
+    [groupedByRarity],
   );
 
-  // Отримуємо відсортовані рідкості
-  const sortedRarities = Object.keys(groupedByRarity).sort(
-    (a, b) => RarityOrder[a as RarityType] - RarityOrder[b as RarityType],
-  );
+  if (!chest || chestItems.length === 0) return null;
 
   return (
     <div className="max-h-65 overflow-y-auto custom-scrollbar">
@@ -45,7 +51,7 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
           <div className="sticky top-0 bg-gray-800 backdrop-blur-sm z-10 px-2 py-1 mb-2 rounded">
             <span
               className={`text-xs font-bold ${RARITY_BORDER_COLORS[rarity].replace("border", "text")}`}>
-              {`${rarity.toUpperCase()} - ${CHEST_CONFIG[chest!.chestType as ChestType].item_rarity_distribution[rarity as RarityType]}%`}
+              {`${rarity.toUpperCase()} - ${CHEST_CONFIG[chest.chestType as ChestType].item_rarity_distribution[rarity as RarityType]}%`}
             </span>
           </div>
 

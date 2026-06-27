@@ -33,7 +33,7 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (allEggs) {
-      setAlleggs(allEggs!);
+      setAlleggs(allEggs);
     }
     if (vault) {
       setVault(vault);

@@ -32,7 +32,7 @@ const EggComponent: React.FC<EggPageProps> = ({
   batchTapRef.current = batchTapMutation.mutate;
 
   // Використовуємо умовний запит - тільки якщо є egg
-  const status = useGetHatchingStatus(egg?.id!);
+  const status = useGetHatchingStatus(egg?.id ?? null);
 
   // Реф для зберігання кількості тапів
   const tapCountRef = useRef<number>(0);
@@ -56,7 +56,6 @@ const EggComponent: React.FC<EggPageProps> = ({
       const tapCount = tapCountRef.current;
 
       if (tapCount > 0) {
-        console.log(`Sending batch tap: ${tapCount} taps`);
         batchTapRef.current({ eggId: egg.id, tapCount });
         tapCountRef.current = 0; // Скидаємо лічильник після відправки
       }
@@ -125,7 +124,6 @@ const EggComponent: React.FC<EggPageProps> = ({
   const handleTap = () => {
     // Збільшуємо лічильник тапів
     tapCountRef.current += 1;
-    console.log(`Tap! Total taps: ${tapCountRef.current}`);
   };
 
   return (
@@ -169,7 +167,7 @@ const EggComponent: React.FC<EggPageProps> = ({
         </div>
 
         {/* Visual компонент - передаємо egg та статус */}
-        <Visual pet={egg} status={eggStatus!} />
+        <Visual pet={egg} status={eggStatus ?? null} />
 
         <div className="mt-5 grid grid-cols-3 gap-3">
           <ActionButton

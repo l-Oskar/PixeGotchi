@@ -6,11 +6,13 @@ const QuickInfo = () => {
   const { data: vault } = useAllVault();
   const user = useUserStore((s) => s.user);
 
-  const userAge = (user: User) => {
-    if (!user) return "0";
+  const userAge = (user: User | null) => {
+    if (!user?.createdAt) return "0";
 
     const dateNow = Date.now();
-    const createdAt = Date.parse(`${user.createdAt!}`);
+    const createdAt = Date.parse(`${user.createdAt}`);
+    if (Number.isNaN(createdAt)) return "0";
+
     const timeSince = Math.floor((dateNow - createdAt) / 1000 / 86400);
     return timeSince;
   };
@@ -33,7 +35,7 @@ const QuickInfo = () => {
           </div>
           <div>
             <div className="text-white/60 text-xs">Age</div>
-            <div className="font-semibold">{userAge(user!)} days</div>
+            <div className="font-semibold">{userAge(user)} days</div>
           </div>
         </div>
       </div>

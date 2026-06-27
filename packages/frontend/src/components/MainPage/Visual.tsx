@@ -21,7 +21,7 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
         }>
         <img
           className="-mb-5 w-25 h-33"
-          src={`./${getImage(egg, status!)}`}
+          src={`./${getImage(egg, status)}`}
           alt={`Egg-${egg.id}`}
         />
       </div>
@@ -72,7 +72,6 @@ export const Visual: React.FC<VisualProps> = ({ pet, status }) => {
 
   if (isEgg(pet)) {
     if (!status) {
-      console.log("No status for egg");
       return null;
     }
     return <EggDisplay egg={pet} status={status} />;

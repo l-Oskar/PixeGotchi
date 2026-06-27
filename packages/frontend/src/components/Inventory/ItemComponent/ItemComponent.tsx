@@ -8,7 +8,7 @@ import {
   RARITY_BORDER_COLORS,
   RarityOrder,
 } from "@pixegotchi/shared";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SortedButtons from "./SortedButtons";
 
 export interface ItemComponentProps {
@@ -23,17 +23,31 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
 
   const [selectedItem, setSelectedItem] = useState<{
     itemId: string;
-    quantity: number;
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const currentInventoryItem = selectedItem
-    ? inventory.find((i) => i.itemId === selectedItem.itemId)
-    : null;
-  const currentItem = selectedItem
-    ? currentInventoryItem?.details
-    : null;
-  const handleItemClick = (itemId: string, quantity: number) => {
-    setSelectedItem({ itemId, quantity });
+  const currentInventoryItem = useMemo(
+    () =>
+      selectedItem
+        ? inventory.find((i) => i.itemId === selectedItem.itemId)
+        : null,
+    [inventory, selectedItem],
+  );
+  const currentItem = currentInventoryItem?.details ?? null;
+
+  useEffect(() => {
+    if (
+      isModalOpen &&
+      selectedItem &&
+      getInventory.isSuccess &&
+      !currentInventoryItem
+    ) {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    }
+  }, [currentInventoryItem, getInventory.isSuccess, isModalOpen, selectedItem]);
+
+  const handleItemClick = (itemId: string) => {
+    setSelectedItem({ itemId });
     setIsModalOpen(true);
   };
 
@@ -105,17 +119,21 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
     }
     return sortedItems;
   };
+  const sortedInventory = useMemo(
+    () => handleSortItems(inventory, sortedList),
+    [inventory, sortedList],
+  );
 
   return (
     <>
       <div>
         <SortedButtons initialFilter={sortedList} setFilter={setSortedList} />
         <div className="grid grid-cols-3 gap-3">
-          {handleSortItems(inventory, sortedList).map((item) => (
+          {sortedInventory.map((item) => (
             <button
               key={item.id}
               disabled={!item.details}
-              onClick={() => handleItemClick(item.itemId, item.quantity)}
+              onClick={() => handleItemClick(item.itemId)}
               className={`border ${RARITY_BORDER_COLORS[item.rarity]} bg-white/5 hover:bg-white/10 rounded-2xl p-4 transition flex flex-col items-center gap-2 group disabled:opacity-50 disabled:hover:bg-white/5`}>
               <div className="text-4xl group-hover:scale-110 transition">
                 {item.details?.iconUrl ?? "?"}
@@ -129,10 +147,13 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
         </div>
 
         <ItemModal
-          item={currentItem!}
+          item={currentItem}
           quantity={currentInventoryItem?.quantity ?? 0}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
           onUse={handleUseItem}
         />
       </div>
