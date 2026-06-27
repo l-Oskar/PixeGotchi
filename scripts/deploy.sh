@@ -44,8 +44,7 @@ mkdir -p runtime/logs/backend
 echo "🔎 Validating Docker Compose config..."
 docker compose -f "${COMPOSE_FILE}" config --quiet
 
-echo "📦 Building ${SERVICE} image..."
-docker compose -f "${COMPOSE_FILE}" build "${SERVICE}"
+echo "📦 Skipping image build. Run ./scripts/build.sh before deploy when the image must be rebuilt."
 
 if [[ "${RESET_NODE_MODULES}" == "1" ]]; then
   echo "♻️  Recreating Docker node_modules volumes for fresh dependencies..."
@@ -70,19 +69,19 @@ else
 fi
 
 echo "🧬 Generating Prisma client for Docker dev runtime..."
-docker compose -f "${COMPOSE_FILE}" run --rm --no-deps "${SERVICE}" \
+docker compose -f "${COMPOSE_FILE}" run --rm --no-build --no-deps "${SERVICE}" \
   sh -c "cd packages/backend && npx prisma generate"
 
 if [[ "${RUN_MIGRATIONS}" == "1" ]]; then
   echo "🗄 Running Prisma migrate deploy..."
-  docker compose -f "${COMPOSE_FILE}" run --rm "${SERVICE}" \
+  docker compose -f "${COMPOSE_FILE}" run --rm --no-build "${SERVICE}" \
     sh -c "cd packages/backend && npx prisma migrate deploy"
 else
   echo "⏭ Skipping migrations. Use RUN_MIGRATIONS=1 only when you intentionally want migrate deploy."
 fi
 
 echo "▶️ Starting services..."
-docker compose -f "${COMPOSE_FILE}" up -d postgres redis "${SERVICE}"
+docker compose -f "${COMPOSE_FILE}" up -d --no-build postgres redis "${SERVICE}"
 
 echo "🏥 Checking service status..."
 docker compose -f "${COMPOSE_FILE}" ps
