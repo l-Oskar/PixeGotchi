@@ -14,8 +14,12 @@ const OBJECT_SIZE = 30;
 const FALL_SPEED = 2.5;
 const FRUIT_EMOJIS = ["🍎", "🍌", "🍒", "🍊"];
 const BOMB_EMOJI = "💣";
+const SPECIAL_FRUIT_EMOJI = "🫐";
+const SPECIAL_FRUIT_SCORE = 50;
+const SPECIAL_FRUIT_SPAWN_TIME = Math.round(Math.random() * 10 + 10); // Секунда, коли з'явиться спеціальний фрукт
 const PIXEL_CHECK_STEP = 3;
 const GAME_DURATION = 30;
+const SCALE = 2;
 
 interface GameObject {
   id: number;
@@ -25,6 +29,7 @@ interface GameObject {
   emoji: string;
   isExploding?: boolean;
   explodeStartTime?: number;
+  isSpecial?: boolean; // Додаємо флаг для спеціального фрукта
 }
 
 export interface CatchGameProps {
@@ -51,6 +56,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   const rafRef = useRef<number>(0);
   const canvasWidthRef = useRef(0);
   const canvasHeightRef = useRef(0);
+  const specialFruitSpawnedRef = useRef(false); // Чи вже випав спеціальний фрукт
 
   // React state тільки для UI поза canvas
   const [displayScore, setDisplayScore] = useState(0);
@@ -171,7 +177,12 @@ export const CatchGame: React.FC<CatchGameProps> = ({
       ) {
         if (checkPixelCollision(obj.x, obj.y, bktX, basketTop)) {
           if (obj.type === "fruit") {
-            scoreDelta += 1;
+            // Перевіряємо, чи це спеціальний фрукт
+            if (obj.isSpecial) {
+              scoreDelta += SPECIAL_FRUIT_SCORE; // 50 очок
+            } else {
+              scoreDelta += 1;
+            }
             toRemove.add(obj.id);
           } else {
             scoreDelta -= 10;
@@ -239,7 +250,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
     }
   }, [checkPixelCollision]);
 
-  // Спавн об'єктів — теж без React state
+  // Спавн звичайних об'єктів
   useEffect(() => {
     if (!state.matches("playing")) return;
     const interval = setInterval(() => {
@@ -257,6 +268,36 @@ export const CatchGame: React.FC<CatchGameProps> = ({
       });
     }, 100);
     return () => clearInterval(interval);
+  }, [state]);
+
+  // Спавн спеціального фрукта 🫐
+  useEffect(() => {
+    if (!state.matches("playing")) return;
+
+    const specialCheckInterval = setInterval(() => {
+      if (!isPlayingRef.current) return;
+
+      // Перевіряємо, чи настав час для спеціального фрукта і чи він ще не випав
+      const timeLeft = timeLeftRef.current;
+      if (
+        timeLeft === SPECIAL_FRUIT_SPAWN_TIME &&
+        !specialFruitSpawnedRef.current
+      ) {
+        // Спавнимо спеціальний фрукт
+        objectsRef.current.push({
+          id: Date.now() + Math.random(),
+          x: Math.random() * (canvasWidthRef.current - OBJECT_SIZE),
+          y: 0,
+          type: "fruit",
+          emoji: SPECIAL_FRUIT_EMOJI,
+          isSpecial: true, // Позначаємо як спеціальний
+        });
+        specialFruitSpawnedRef.current = true;
+        console.log("🫐 Special fruit spawned!"); // Для дебагу
+      }
+    }, 100); // Перевіряємо кожні 100ms
+
+    return () => clearInterval(specialCheckInterval);
   }, [state]);
 
   // Таймер — оновлює тільки UI, не game loop
@@ -281,7 +322,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
     ({ delta: [dx], event }) => {
       event.preventDefault();
       if (!isPlayingRef.current) return;
-      const newX = basketXRef.current + dx * 1.5;
+      const newX = basketXRef.current + dx * SCALE;
       basketXRef.current = Math.min(
         canvasWidthRef.current - BASKET_WIDTH,
         Math.max(0, newX),
@@ -299,6 +340,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
     setFinalScore(null);
     basketXRef.current = canvasWidthRef.current / 2 - BASKET_WIDTH / 2;
     isPlayingRef.current = true;
+    specialFruitSpawnedRef.current = false; // Скидаємо флаг для нового раунду
     send({ type: "START" });
     rafRef.current = requestAnimationFrame(gameLoop);
   }, [send, gameLoop]);

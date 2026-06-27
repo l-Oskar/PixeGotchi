@@ -51,7 +51,9 @@ export const GameShell: React.FC<GameShellProps> = ({
           <div className="min-w-0 text-center">
             <h1 className="text-sm font-semibold truncate">{title}</h1>
             {score && (
-              <div className="mt-0.5 text-xs text-white/75 truncate">{score}</div>
+              <div className="mt-0.5 text-xs text-white/75 truncate">
+                {score}
+              </div>
             )}
           </div>
 
@@ -60,7 +62,9 @@ export const GameShell: React.FC<GameShellProps> = ({
           </div>
         </div>
 
-        <div className="relative min-h-0 flex-1 overflow-hidden">{children}</div>
+        <div className="relative min-h-0 flex-1 overflow-hidden">
+          {children}
+        </div>
       </div>
     </section>
   );

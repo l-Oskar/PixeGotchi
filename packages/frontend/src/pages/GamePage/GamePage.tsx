@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PageType, GameStruct, Pixegotchi } from "@pixegotchi/shared";
+import { Coins, CircleStar, Zap } from "lucide-react";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
@@ -19,6 +20,8 @@ const GamesPage: React.FC<GamePageProps> = ({
       name: "Catch Fruits",
       difficulty: "Easy",
       reward: "50-100",
+      energy: 10,
+      exp: "10-50",
       icon: "🍌",
     },
     {
@@ -26,6 +29,8 @@ const GamesPage: React.FC<GamePageProps> = ({
       name: "Quick Tap",
       difficulty: "Medium",
       reward: "100-200",
+      energy: 15,
+      exp: "20-60",
       icon: "⚡",
     },
     {
@@ -33,6 +38,8 @@ const GamesPage: React.FC<GamePageProps> = ({
       name: "Puzzle Solver",
       difficulty: "Hard",
       reward: "200-500",
+      energy: 20,
+      exp: "30-70",
       icon: "🧩",
     },
   ];
@@ -94,12 +101,18 @@ const GamesPage: React.FC<GamePageProps> = ({
             <div className="text-5xl">{game.icon}</div>
             <div className="flex-1 text-left">
               <h3 className="font-bold">{game.name}</h3>
-              <div className="flex gap-2 mt-1">
-                <span className="text-xs px-2 py-0.5 bg-white/10 rounded-full">
+              <div className="flex gap-1.5 mt-1 overflow-x-auto">
+                <span className="text-[10px] px-1.5 py-0.5 bg-white/10 rounded-full whitespace-nowrap">
                   {game.difficulty}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-yellow-500/20 rounded-full text-yellow-400">
-                  {game.reward} PGC
+                <span className="text-[10px] px-1.5 py-0.5 bg-orange-500/20 rounded-full text-orange-400 whitespace-nowrap flex items-center gap-0.5">
+                  {game.energy} <Zap size={12} className="text-orange-400" />
+                </span>
+                <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 rounded-full text-yellow-400 whitespace-nowrap flex items-center gap-0.5">
+                  {game.reward} <Coins size={12} className="text-yellow-400" />
+                </span>
+                <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 rounded-full text-green-400 whitespace-nowrap flex items-center gap-0.5">
+                  {game.exp} <CircleStar size={12} className="text-green-400" />
                 </span>
               </div>
             </div>
