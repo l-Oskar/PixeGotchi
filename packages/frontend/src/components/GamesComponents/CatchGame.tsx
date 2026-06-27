@@ -6,6 +6,7 @@ import { usePixelMask } from "../../hooks/usePixelMask";
 import { useTelegramSwipes } from "@/hooks/useTelegramSwipes";
 import { Pixegotchi } from "@pixegotchi/shared";
 import { getImage } from "@/utils/getImage";
+import { GameShell } from "./GameShell";
 
 const BASKET_WIDTH = 100;
 const BASKET_HEIGHT = 100;
@@ -28,7 +29,7 @@ interface GameObject {
 
 export interface CatchGameProps {
   onGameEnd?: (score: number) => void;
-  endGame: (n: null) => void;
+  endGame: () => void;
   pixegotchi: Pixegotchi;
 }
 
@@ -82,9 +83,10 @@ export const CatchGame: React.FC<CatchGameProps> = ({
     const resize = () => {
       const container = canvas.parentElement;
       if (container) {
-        const width = Math.min(container.clientWidth, 500);
+        const width = container.clientWidth;
+        const height = container.clientHeight;
         canvas.width = width;
-        canvas.height = width * 1.5;
+        canvas.height = height;
         canvasWidthRef.current = canvas.width;
         canvasHeightRef.current = canvas.height;
         basketXRef.current = canvas.width / 2 - BASKET_WIDTH / 2;
@@ -288,15 +290,6 @@ export const CatchGame: React.FC<CatchGameProps> = ({
     { pointer: { touch: true }, preventDefault: true },
   );
 
-  useEffect(() => {
-    if (!state.matches("playing")) return;
-    const orig = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = orig;
-    };
-  }, [state]);
-
   const startGame = useCallback(() => {
     objectsRef.current = [];
     scoreRef.current = 0;
@@ -314,19 +307,11 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
 
   return (
-    <div className="relative flex flex-col justify-center bg-black/40 rounded-xl overflow-hidden">
-      <button
-        onClick={() => endGame(null)}
-        className="absolute top-2 left-2 z-10 bg-black/70 px-3 py-1 rounded-lg font-mono text-white cursor-pointer">
-        ← Exit
-      </button>
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 bg-black/70 px-3 py-1 rounded-lg font-mono text-white">
-        🍎 Score: {displayScore}
-      </div>
-      <div className="absolute top-2 right-2 z-10 bg-black/70 px-3 py-1 rounded-lg font-mono text-white">
-        ⏱️ {isGameOver ? 0 : displayTime}s
-      </div>
-
+    <GameShell
+      title="Catch Fruits"
+      score={`Score: ${displayScore}`}
+      timer={`${isGameOver ? 0 : displayTime}s`}
+      onExit={endGame}>
       <canvas
         ref={canvasRef}
         className="w-full h-full touch-none cursor-pointer"
@@ -358,6 +343,6 @@ export const CatchGame: React.FC<CatchGameProps> = ({
           </button>
         </div>
       )}
-    </div>
+    </GameShell>
   );
 };

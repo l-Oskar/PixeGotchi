@@ -22,6 +22,7 @@ const MainPage: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState<PageType>("start");
   const [sortParam, setSortParam] = useState<string | undefined>(undefined);
+  const [isGameActive, setIsGameActive] = useState(false);
 
   const handleNavigate = (page: PageType, sortBy?: string) => {
     setCurrentPage(page);
@@ -80,7 +81,13 @@ const MainPage: React.FC = () => {
     inventory: (
       <InventoryPage onNavigate={handleNavigate} initialSort={sortParam} />
     ),
-    games: <GamesPage onNavigate={handleNavigate} pixegotchi={pixegotchi} />,
+    games: (
+      <GamesPage
+        onNavigate={handleNavigate}
+        onGameActiveChange={setIsGameActive}
+        pixegotchi={pixegotchi}
+      />
+    ),
     marketplace: <MarketplacePage onNavigate={handleNavigate} />,
     vault: (
       <VaultPage onNavigate={handleNavigate} />
@@ -90,12 +97,15 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-purple-900 via-blue-900 to-indigo-900 text-white">
-      {/* Header */}
-      <Header user={user} />
+      {!isGameActive && <Header user={user} />}
       {/* Content */}
       <main className="max-w-md mx-auto pb-20">{renderedPage}</main>
       {/* Bottom Navigation */}
-      <Navigation currentPage={resolvedPage} setCurrentPage={setCurrentPage} />
+      <Navigation
+        currentPage={resolvedPage}
+        isHidden={isGameActive}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 };

@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageType, GameStruct, Pixegotchi } from "@pixegotchi/shared";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
+  onGameActiveChange?: (isActive: boolean) => void;
   pixegotchi: Pixegotchi | null;
 }
 
 // GamesPage
-const GamesPage: React.FC<GamePageProps> = ({ pixegotchi }) => {
+const GamesPage: React.FC<GamePageProps> = ({
+  onGameActiveChange,
+  pixegotchi,
+}) => {
   const [activeGameId, setActiveGameId] = useState<number | null>(null);
   const games: GameStruct[] = [
     {
@@ -33,23 +37,37 @@ const GamesPage: React.FC<GamePageProps> = ({ pixegotchi }) => {
     },
   ];
 
+  useEffect(() => {
+    return () => {
+      onGameActiveChange?.(false);
+    };
+  }, [onGameActiveChange]);
+
+  const openGame = (gameId: number) => {
+    onGameActiveChange?.(true);
+    setActiveGameId(gameId);
+  };
+
+  const closeGame = () => {
+    setActiveGameId(null);
+    onGameActiveChange?.(false);
+  };
+
   const handleGameEnd = async (score: number) => {
     console.log(`Game score: ${score}`);
 
     const rewardAmound = Math.floor(score * 2);
     console.log(`Game reward: ${rewardAmound}pgc`);
-    setActiveGameId(null);
+    closeGame();
   };
 
   if (activeGameId === 1) {
     return (
-      <div className="p-4">
-        <CatchGame
-          onGameEnd={handleGameEnd}
-          endGame={setActiveGameId}
-          pixegotchi={pixegotchi!}
-        />
-      </div>
+      <CatchGame
+        onGameEnd={handleGameEnd}
+        endGame={closeGame}
+        pixegotchi={pixegotchi!}
+      />
     );
   }
 
@@ -66,7 +84,7 @@ const GamesPage: React.FC<GamePageProps> = ({ pixegotchi }) => {
                 if (!pixegotchi) {
                   alert("You need active Pixegotchi");
                 } else {
-                  setActiveGameId(game.id);
+                  openGame(game.id);
                 }
               } else {
                 alert(`${game.name} is comming sood`);

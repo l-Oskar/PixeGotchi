@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Heart, ShoppingBag, Gamepad2, Vault, Store, Egg } from "lucide-react";
 import { PageType } from "@pixegotchi/shared";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
@@ -15,15 +15,6 @@ const Navigation: React.FC<NavigationProps> = ({
   isHidden = false,
   setCurrentPage,
 }) => {
-  useEffect(() => {
-    if (isHidden) {
-      setIsHiddenState(true);
-    } else {
-      setIsHiddenState(false);
-    }
-  }, [currentPage]);
-
-  const [isHiddenState, setIsHiddenState] = useState(false);
   const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
   const hatchingEgg = useEggStore((s) => s.hatchingEgg);
   const navButton = () => {
@@ -37,7 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({
   };
   return (
     <nav
-      className={`${isHiddenState ? "hidden" : ""} fixed bottom-0 left-0 right-0 pb-1 bg-black/40 backdrop-blur-xl border-t border-white/10`}>
+      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 pb-1 bg-black/40 backdrop-blur-xl border-t border-white/10`}>
       <div className="max-w-md mx-auto px-4 py-3 flex justify-around">
         {[
           navButton(),
