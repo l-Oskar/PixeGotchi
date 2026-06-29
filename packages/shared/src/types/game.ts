@@ -7,3 +7,12 @@ export interface GameStruct {
   reward: string;
   icon: string;
 }
+
+export interface GameConfig {
+  energyCost: number;
+  minDuration: number;
+  pgcPerPoint: number;
+  expPerPoint: number;
+  chestDropChance: number;
+  maxScore: number;
+}

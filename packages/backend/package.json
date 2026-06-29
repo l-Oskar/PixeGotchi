@@ -18,7 +18,10 @@
     "prisma:server": "BROWSER=none npx prisma studio --port 51212",
     "prisma:seed": "tsx src/database/seed.ts",
     "prisma:items": "tsx src/database/seed_items.ts",
-    "test": "jest"
+    "test": "dotenv -e .env.test -- vitest run",
+    "test:watch": "dotenv -e .env.test -- vitest",
+    "test:coverage": "dotenv -e .env.test -- vitest run --coverage",
+    "test:db:push": "dotenv -e .env.test -- prisma db push --skip-generate"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
@@ -41,10 +44,13 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/pg": "^8.11.0",
+    "@vitest/coverage-v8": "^4.1.9",
+    "dotenv-cli": "^11.0.0",
     "node-pg-migrate": "^7.0.0",
     "prisma": "7.8.0",
     "tsup": "^8.4.0",
     "tsx": "4.20.6",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.9"
   }
 }

@@ -7,10 +7,11 @@ import Redis from "ioredis";
 
 export class EggService {
   private pixegotchiService = new PixegotchiService();
-  private redis: Redis;
+  private redis?: Redis;
 
-  constructor() {
-    this.redis = new Redis(config.redisUrl);
+  private getRedis() {
+    this.redis ??= new Redis(config.redisUrl);
+    return this.redis;
   }
 
   async findAllEggs(userId: number) {
@@ -298,7 +299,8 @@ export class EggService {
     const actualTaps = Math.min(tapCount, maxTapPerBatch);
 
     const redisKey = `egg:${eggId}:taps:${userId}`;
-    const lastBatchTime = await this.redis.get(`${redisKey}:time`);
+    const redis = this.getRedis();
+    const lastBatchTime = await redis.get(`${redisKey}:time`);
 
     if (lastBatchTime) {
       const timeSinceLastBatch = Date.now() - parseInt(lastBatchTime);
@@ -308,7 +310,7 @@ export class EggService {
       }
     }
 
-    await this.redis.setex(`${redisKey}:time`, 60, Date.now().toString());
+    await redis.setex(`${redisKey}:time`, 60, Date.now().toString());
 
     const currentTime = Date.now();
     const startTime = egg.hatchStartedAt!.getTime();

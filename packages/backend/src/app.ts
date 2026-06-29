@@ -33,6 +33,10 @@ export async function buildApp() {
 
   const redis = new Redis(config.redisUrl);
 
+  app.addHook("onClose", async () => {
+    await redis.quit();
+  });
+
   app.addHook("onRequest", async (request, reply) => {
     reply.header("x-request-id", request.id);
   });
