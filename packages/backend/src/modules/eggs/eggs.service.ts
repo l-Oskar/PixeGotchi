@@ -14,6 +14,11 @@ export class EggService {
     return this.redis;
   }
 
+  async close() {
+    await this.redis?.quit();
+    this.redis = undefined;
+  }
+
   async findAllEggs(userId: number) {
     const eggs = await prisma.egg.findMany({
       where: {

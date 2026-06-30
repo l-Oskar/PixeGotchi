@@ -1,13 +1,26 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { prisma } from "@/database/prisma";
 import { EggService } from "./eggs.service";
 import { createEgg, createPixegotchi, createUser } from "@/test/helpers/factories";
 import { EGG_CONSTANTS } from "@pixegotchi/shared";
 
 describe("EggService", () => {
+  const eggServices: EggService[] = [];
+
+  function createEggService() {
+    const eggService = new EggService();
+    eggServices.push(eggService);
+    return eggService;
+  }
+
+  afterEach(async () => {
+    await Promise.all(eggServices.map((eggService) => eggService.close()));
+    eggServices.length = 0;
+  });
+
   it("creates an egg and deducts user balance transactionally", async () => {
     const user = await createUser({ pgcBalance: 250 });
-    const eggService = new EggService();
+    const eggService = createEggService();
 
     const egg = await eggService.createEgg(user.id);
     const updatedUser = await prisma.user.findUniqueOrThrow({
@@ -21,7 +34,7 @@ describe("EggService", () => {
 
   it("rejects egg creation when balance is insufficient", async () => {
     const user = await createUser({ pgcBalance: 99 });
-    const eggService = new EggService();
+    const eggService = createEggService();
 
     await expect(eggService.createEgg(user.id)).rejects.toThrow(
       "Not enought funds",
@@ -32,7 +45,7 @@ describe("EggService", () => {
   });
 
   it("does not start hatching for listed, hatched, or active-pet users", async () => {
-    const eggService = new EggService();
+    const eggService = createEggService();
     const listedUser = await createUser();
     const listedEgg = await createEgg(listedUser.id, { isListed: true });
 
@@ -62,7 +75,7 @@ describe("EggService", () => {
       isHatching: true,
       hatchStartedAt: new Date(Date.now() - EGG_CONSTANTS.HATCHING_TIME - 1),
     });
-    const eggService = new EggService();
+    const eggService = createEggService();
 
     const pixegotchi = await eggService.hatchEgg(user.id, egg.id, "Readygo");
     const updatedEgg = await prisma.egg.findUniqueOrThrow({
@@ -85,10 +98,51 @@ describe("EggService", () => {
       isHatching: true,
       hatchStartedAt: new Date(),
     });
-    const eggService = new EggService();
+    const eggService = createEggService();
 
     await expect(eggService.hatchEgg(user.id, egg.id)).rejects.toThrow(
       "Egg is not ready to hatch",
     );
+  });
+
+  it("processes tap batches and caps taps by max batch size", async () => {
+    const user = await createUser();
+    const egg = await createEgg(user.id, {
+      isHatching: true,
+      hatchStartedAt: new Date(),
+      hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
+      tapCount: 0,
+    });
+    const eggService = createEggService();
+
+    const status = await eggService.proccessTapBatch(
+      user.id,
+      egg.id,
+      EGG_CONSTANTS.EGG_MAX_BATCH_TAP + 10,
+    );
+    const updatedEgg = await prisma.egg.findUniqueOrThrow({
+      where: { id: egg.id },
+    });
+
+    expect(updatedEgg.tapCount).toBe(EGG_CONSTANTS.EGG_MAX_BATCH_TAP);
+    expect(status.tapCount).toBe(EGG_CONSTANTS.EGG_MAX_BATCH_TAP);
+    expect(status.remainingTimeMs).toBe(0);
+    expect(status.canHatchNow).toBe(true);
+  });
+
+  it("rate limits tap batches for the same egg and user", async () => {
+    const user = await createUser();
+    const egg = await createEgg(user.id, {
+      isHatching: true,
+      hatchStartedAt: new Date(),
+      hatchingTimeMs: EGG_CONSTANTS.HATCHING_TIME,
+    });
+    const eggService = createEggService();
+
+    await eggService.proccessTapBatch(user.id, egg.id, 1);
+
+    await expect(
+      eggService.proccessTapBatch(user.id, egg.id, 1),
+    ).rejects.toThrow("Too many requests");
   });
 });

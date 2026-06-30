@@ -3,6 +3,7 @@ import {
   CREATE_STATS,
   EGG_CONSTANTS,
   ElementType,
+  ChestType,
   ItemType,
   RarityType,
 } from "@pixegotchi/shared";
@@ -91,6 +92,20 @@ export async function createPixegotchi(
       lastBoostedAt: new Date(),
       lastSleptAt: new Date(),
       lastUpdateAt: new Date(),
+      ...overrides,
+    },
+  });
+}
+
+export async function createChest(
+  userId: number,
+  overrides: Record<string, unknown> = {},
+) {
+  return prisma.chest.create({
+    data: {
+      userId,
+      chestType: ChestType.wooden,
+      isOpened: false,
       ...overrides,
     },
   });
