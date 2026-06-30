@@ -44,7 +44,7 @@ describe("EggService", () => {
     );
   });
 
-  it("does not start hatching for listed, hatched, or active-pet users", async () => {
+  it("does not start hatching for listed, hatched, or occupied-slot users", async () => {
     const eggService = createEggService();
     const listedUser = await createUser();
     const listedEgg = await createEgg(listedUser.id, { isListed: true });
@@ -67,9 +67,25 @@ describe("EggService", () => {
     await expect(
       eggService.startHatching(activeUser.id, activeEgg.id),
     ).rejects.toThrow("active Pixegotchi");
+
+    const criticalUser = await createUser();
+    const criticalEgg = await createEgg(criticalUser.id);
+    await createPixegotchi(criticalUser.id, { status: "critical" });
+
+    await expect(
+      eggService.startHatching(criticalUser.id, criticalEgg.id),
+    ).rejects.toThrow("active Pixegotchi");
+
+    const deadUser = await createUser();
+    const deadEgg = await createEgg(deadUser.id);
+    await createPixegotchi(deadUser.id, { status: "dead" });
+
+    await expect(
+      eggService.startHatching(deadUser.id, deadEgg.id),
+    ).rejects.toThrow("active Pixegotchi");
   });
 
-  it("hatches a ready egg into an active pixegotchi", async () => {
+  it("hatches a ready egg into the current active pixegotchi", async () => {
     const user = await createUser();
     const egg = await createEgg(user.id, {
       isHatching: true,
@@ -81,6 +97,9 @@ describe("EggService", () => {
     const updatedEgg = await prisma.egg.findUniqueOrThrow({
       where: { id: egg.id },
     });
+    const updatedUser = await prisma.user.findUniqueOrThrow({
+      where: { id: user.id },
+    });
 
     expect(pixegotchi).toMatchObject({
       userId: user.id,
@@ -88,6 +107,7 @@ describe("EggService", () => {
       name: "Readygo",
       status: "active",
     });
+    expect(updatedUser.currentPixegotchiId).toBe(pixegotchi.id);
     expect(updatedEgg.isHatched).toBe(true);
     expect(updatedEgg.isHatching).toBe(false);
   });

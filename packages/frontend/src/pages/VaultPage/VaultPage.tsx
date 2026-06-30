@@ -59,7 +59,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
         </div>
         <div className="w-full bg-white/10 h-2 rounded-full mt-2 overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-yellow-400 to-orange-400"
+            className="h-full bg-linear-to-r from-yellow-400 to-orange-400"
             style={{ width: `${(collectedCount / totalCount) * 100}%` }}
           />
         </div>

@@ -14,6 +14,8 @@ import type {
 
 type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
 
+const OCCUPIED_SLOT_STATUSES = ["active", "critical", "dead"] as const;
+
 export class PixegotchiService {
   async findByUserId(userId: number) {
     return await prisma.pixegotchi.findMany({
@@ -22,25 +24,59 @@ export class PixegotchiService {
     });
   }
 
-  async findActive(userId: number): Promise<PrismaPixegotchi | null> {
-    const active = await prisma.pixegotchi.findFirst({
-      where: { userId, status: "active" },
+  async findCurrent(
+    userId: number,
+    db: PrismaExecutor = prisma,
+  ): Promise<PrismaPixegotchi | null> {
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      include: { currentPixegotchi: true },
     });
-    return active ?? null;
+
+    const current = user?.currentPixegotchi;
+
+    if (!current || current.userId !== userId) return null;
+    if (!OCCUPIED_SLOT_STATUSES.some((status) => status === current.status))
+      return null;
+
+    return current;
+  }
+
+  async findActive(userId: number): Promise<PrismaPixegotchi | null> {
+    return await this.findCurrent(userId);
+  }
+
+  async hasOccupiedPixegotchiSlot(userId: number, db: PrismaExecutor = prisma) {
+    return (await this.findCurrent(userId, db)) !== null;
   }
 
   async setInActive(userId: number) {
-    const active = await this.findActive(userId);
+    const active = await this.findCurrent(userId);
 
     if (!active) {
       throw new Error("No active pixegotchi");
     }
 
-    return await prisma.pixegotchi.update({
-      where: { id: active.id },
-      data: {
-        status: "vault",
-      },
+    if (active.status === "dead" || active.status === "critical") {
+      throw new Error("Dead pixegotchi cannot be stored in vault");
+    }
+
+    return await prisma.$transaction(async (tx) => {
+      const updatedPixegotchi = await tx.pixegotchi.update({
+        where: { id: active.id },
+        data: {
+          status: "vault",
+        },
+      });
+
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          currentPixegotchiId: null,
+        },
+      });
+
+      return updatedPixegotchi;
     });
   }
 
@@ -85,11 +121,11 @@ export class PixegotchiService {
     quantity: number = 1,
     db: PrismaExecutor = prisma,
   ) {
-    const pixegotchi = await db.pixegotchi.findFirst({
-      where: { userId, status: "active" },
-    });
+    const pixegotchi = await this.findCurrent(userId, db);
 
     if (!pixegotchi) throw new Error("You don't have active pixegotchi");
+    if (pixegotchi.status !== "active")
+      throw new Error("Pixegotchi is not active");
 
     await this.addExp(userId, item, quantity, db);
 
@@ -140,11 +176,11 @@ export class PixegotchiService {
     quantity: number = 1,
     db: PrismaExecutor = prisma,
   ) {
-    const pixegotchi = await db.pixegotchi.findFirst({
-      where: { userId, status: "active" },
-    });
+    const pixegotchi = await this.findCurrent(userId, db);
 
     if (!pixegotchi) throw new Error("Not active pixegotchi");
+    if (pixegotchi.status !== "active")
+      throw new Error("Pixegotchi is not active");
 
     let exp = 0;
 
@@ -181,7 +217,7 @@ export class PixegotchiService {
 
   async checkStatus(userId: number) {
     const time = Date.now();
-    const activePixegotchi = await this.findActive(userId);
+    const activePixegotchi = await this.findCurrent(userId);
 
     if (!activePixegotchi) return null;
 

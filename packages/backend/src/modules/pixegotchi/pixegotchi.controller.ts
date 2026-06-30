@@ -13,11 +13,15 @@ export class PixegotchiController {
     return reply.send(pixegotchis);
   }
 
-  async getActive(request: FastifyRequest, reply: FastifyReply) {
+  async getCurrent(request: FastifyRequest, reply: FastifyReply) {
     const userId = (request.user as any).userId;
-    const activePixegotchi = await this.pixegotchiService.findActive(userId);
+    const currentPixegotchi = await this.pixegotchiService.findCurrent(userId);
 
-    return reply.send(activePixegotchi);
+    return reply.send(currentPixegotchi);
+  }
+
+  async getActive(request: FastifyRequest, reply: FastifyReply) {
+    return this.getCurrent(request, reply);
   }
 
   async setInActive(request: FastifyRequest, reply: FastifyReply) {

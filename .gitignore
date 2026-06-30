@@ -16,6 +16,8 @@ build/
 .turbo/
 .qwen/
 .docs/
+.agents/
+.codex/
 !.docs/
 .docs/*
 !.docs/ADD_LOGS.md

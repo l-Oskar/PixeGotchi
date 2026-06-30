@@ -87,26 +87,28 @@ enum CurrencyType {
 // ============================================
 
 model User {
-  id            Int      @id @default(autoincrement())
-  telegramId    BigInt   @unique @map("telegram_id")
-  walletAddress String?  @map("wallet_address") @db.VarChar(48)
-  username      String?  @db.VarChar(255)
-  pgcBalance    Decimal  @default(0) @map("pgc_balance") @db.Decimal(20, 8)
+  id                  Int      @id @default(autoincrement())
+  telegramId          BigInt   @unique @map("telegram_id")
+  walletAddress       String?  @map("wallet_address") @db.VarChar(48)
+  username            String?  @db.VarChar(255)
+  pgcBalance          Decimal  @default(0) @map("pgc_balance") @db.Decimal(20, 8)
+  currentPixegotchiId Int?     @unique @map("current_pixegotchi_id")
   
   // Додаткові поля
-  lastActiveAt  DateTime? @map("last_active_at")
+  lastActiveAt        DateTime? @map("last_active_at")
   
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
 
   // Relations
-  eggs         Egg[]
-  pixegotchis  Pixegotchi[]
-  inventory    Inventory[]
-  chests       Chest[]
-  vault        Vault[]
-  listings     MarketplaceListing[] @relation("SellerListings")
-  purchases    MarketplaceListing[] @relation("BuyerPurchases")
+  eggs                Egg[]
+  pixegotchis         Pixegotchi[] @relation("UserPixegotchis")
+  currentPixegotchi   Pixegotchi?  @relation("CurrentPixegotchi", fields: [currentPixegotchiId], references: [id], onDelete: SetNull)
+  inventory           Inventory[]
+  chests              Chest[]
+  vault               Vault[]
+  listings            MarketplaceListing[] @relation("SellerListings")
+  purchases           MarketplaceListing[] @relation("BuyerPurchases")
 
   @@index([telegramId])
   @@index([walletAddress])
@@ -188,7 +190,8 @@ model Pixegotchi {
   
   hatchedAt    DateTime          @default(now()) @map("hatched_at")
 
-  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User              @relation("UserPixegotchis", fields: [userId], references: [id], onDelete: Cascade)
+  currentForUser User?           @relation("CurrentPixegotchi")
   egg          Egg?              @relation(fields: [eggId], references: [id])
   vault        Vault[]
   gameSessions GameSession[]

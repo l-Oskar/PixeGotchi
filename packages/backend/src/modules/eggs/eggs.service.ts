@@ -105,8 +105,9 @@ export class EggService {
   }
 
   async startHatching(userId: number, id: number) {
-    const activePixegotchi = await this.pixegotchiService.findActive(userId);
-    if (activePixegotchi)
+    const hasOccupiedPixegotchiSlot =
+      await this.pixegotchiService.hasOccupiedPixegotchiSlot(userId);
+    if (hasOccupiedPixegotchiSlot)
       throw new Error("You already have an active Pixegotchi");
 
     const egg = await this.getEggById(userId, id);
@@ -214,11 +215,9 @@ export class EggService {
     assertValidGenomeHash(genome.genome_hash);
 
     const data = await prisma.$transaction(async (tx) => {
-      const activePixegotchi = await tx.pixegotchi.findFirst({
-        where: { userId, status: "active" },
-      });
-
-      if (activePixegotchi)
+      const hasOccupiedPixegotchiSlot =
+        await this.pixegotchiService.hasOccupiedPixegotchiSlot(userId, tx);
+      if (hasOccupiedPixegotchiSlot)
         throw new Error("You already have an active Pixegotchi");
 
       const currentEgg = await tx.egg.findFirst({
@@ -278,6 +277,13 @@ export class EggService {
           isHatched: true,
           hatchedAt: new Date(),
           isHatching: false,
+        },
+      });
+
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          currentPixegotchiId: pixegotchi.id,
         },
       });
 

@@ -24,4 +24,8 @@ export class VaultService {
 
     return vaultPixe;
   }
+
+  // async getFromVault(userId: number, pixegothiId: number) {
+  //   const activePixegotchi = await prisma.pixegotchi.findFirst()
+  // }
 }

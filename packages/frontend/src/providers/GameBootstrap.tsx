@@ -8,8 +8,9 @@ import {
 } from "@/services/queries/egg.queries";
 import { useEggStore } from "@/store/egg.store";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
-import { useAllVault } from "@/services/queries/vault.queries";
-import { useVaultStore } from "@/store/vault.store";
+import { useStatsVault } from "@/services/queries/vault.queries";
+import { useDetailedInventory } from "@/services/queries/inventory.queries";
+import { useGetSortedChests } from "@/services/queries/chest.queries";
 
 export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
   const {
@@ -23,8 +24,9 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
     isSuccess: eggSuccess,
   } = useGetHatchingEgg();
   const { data: allEggs } = useGetAllEggs();
-  const { data: vault } = useAllVault();
-  const setVault = useVaultStore((s) => s.setAllVault);
+  useDetailedInventory();
+  useGetSortedChests();
+  useStatsVault();
   const setEgg = useEggStore((s) => s.setHatchingEgg);
   const clearEgg = useEggStore((s) => s.clearEgg);
   const setAlleggs = useEggStore((s) => s.setAllEggs);
@@ -34,9 +36,6 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (allEggs) {
       setAlleggs(allEggs);
-    }
-    if (vault) {
-      setVault(vault);
     }
     if (eggSuccess) {
       if (egg) {
@@ -54,13 +53,11 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
     }
   }, [
     allEggs,
-    vault,
     egg,
     eggSuccess,
     pixegotchi,
     pixeSuccess,
     setAlleggs,
-    setVault,
     setEgg,
     clearEgg,
     setActive,

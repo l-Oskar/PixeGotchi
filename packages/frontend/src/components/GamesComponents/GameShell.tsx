@@ -36,7 +36,7 @@ export const GameShell: React.FC<GameShellProps> = ({
 
   return (
     <section
-      className="fixed inset-0 z-[100] bg-[#121528] text-white overflow-hidden"
+      className="fixed inset-0 z-100 bg-[#121528] text-white overflow-hidden"
       style={{ paddingTop: `${topInset}px` }}>
       <div className="flex h-full min-h-0 flex-col">
         <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-2 bg-black/55 backdrop-blur-md border-b border-white/10">

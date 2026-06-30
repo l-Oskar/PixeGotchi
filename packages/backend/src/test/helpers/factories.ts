@@ -69,7 +69,7 @@ export async function createPixegotchi(
 ) {
   const egg = await createEgg(userId, { isHatched: true });
 
-  return prisma.pixegotchi.create({
+  const pixegotchi = await prisma.pixegotchi.create({
     data: {
       userId,
       eggId: egg.id,
@@ -95,6 +95,15 @@ export async function createPixegotchi(
       ...overrides,
     },
   });
+
+  if (["active", "critical", "dead"].includes(pixegotchi.status)) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { currentPixegotchiId: pixegotchi.id },
+    });
+  }
+
+  return pixegotchi;
 }
 
 export async function createChest(
