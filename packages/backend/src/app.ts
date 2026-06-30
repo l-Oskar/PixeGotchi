@@ -6,6 +6,7 @@ import jwt from "@fastify/jwt";
 import rateLimit from "@fastify/rate-limit";
 import { config } from "@/config/env";
 import Redis from "ioredis";
+import { ZodError } from "zod";
 
 import { authRoutes } from "@/modules/auth/auth.routes";
 import { usersRoutes } from "@/modules/users/users.routes";
@@ -167,7 +168,11 @@ export async function buildApp() {
       });
     }
 
-    if (error.name === "ZodError") {
+    if (
+      error instanceof ZodError ||
+      error.name === "ZodError" ||
+      Array.isArray(error.issues)
+    ) {
       return reply.code(400).send({
         error: "Validation error",
         message: error.message,
