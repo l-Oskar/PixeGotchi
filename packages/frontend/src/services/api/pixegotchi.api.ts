@@ -4,7 +4,7 @@ import type { Pixegotchi } from "@pixegotchi/shared";
 export const PIXEGOTCHI_URL = "/pixegotchi";
 export const PIXEGOTCHI_URL_KEYS = {
   all: `${PIXEGOTCHI_URL}` as const,
-  active: `${PIXEGOTCHI_URL}/active` as const,
+  current: `${PIXEGOTCHI_URL}/current` as const,
   inActive: `${PIXEGOTCHI_URL}/inactive` as const,
   id: (id: number | null) => `${PIXEGOTCHI_URL}/${id}` as const,
 };
@@ -15,8 +15,8 @@ export const pixegotchiApi = {
     return data;
   },
 
-  getActive: async (): Promise<Pixegotchi | null> => {
-    const { data } = await apiClient.get(PIXEGOTCHI_URL_KEYS.active);
+  getCurrent: async (): Promise<Pixegotchi | null> => {
+    const { data } = await apiClient.get(PIXEGOTCHI_URL_KEYS.current);
     return data;
   },
 

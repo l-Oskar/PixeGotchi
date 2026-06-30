@@ -217,21 +217,21 @@ export class PixegotchiService {
 
   async checkStatus(userId: number) {
     const time = Date.now();
-    const activePixegotchi = await this.findCurrent(userId);
+    const currentPixegotchi = await this.findCurrent(userId);
 
-    if (!activePixegotchi) return null;
+    if (!currentPixegotchi) return null;
 
     const getDiffMs = (date: Date | null) => {
       return date ? time - date.getTime() : null;
     };
 
     const lastUpdates = {
-      lastFedDiffMs: getDiffMs(activePixegotchi.lastFedAt),
-      lastHealedDiffMs: getDiffMs(activePixegotchi.lastHealedAt),
-      lastCleanedDiffMs: getDiffMs(activePixegotchi.lastCleanedAt),
-      lastPlayedDiffMs: getDiffMs(activePixegotchi.lastPlayedAt),
-      lastBoostedDiffMs: getDiffMs(activePixegotchi.lastBoostedAt),
-      lastUpdatedDiffMs: time - activePixegotchi.lastUpdateAt.getTime(),
+      lastFedDiffMs: getDiffMs(currentPixegotchi.lastFedAt),
+      lastHealedDiffMs: getDiffMs(currentPixegotchi.lastHealedAt),
+      lastCleanedDiffMs: getDiffMs(currentPixegotchi.lastCleanedAt),
+      lastPlayedDiffMs: getDiffMs(currentPixegotchi.lastPlayedAt),
+      lastBoostedDiffMs: getDiffMs(currentPixegotchi.lastBoostedAt),
+      lastUpdatedDiffMs: time - currentPixegotchi.lastUpdateAt.getTime(),
     };
 
     return lastUpdates;

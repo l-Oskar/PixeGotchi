@@ -18,7 +18,7 @@ import PixegothiData from "@/components/PixegotchiPage/PixegothiData";
 const MainPage: React.FC = () => {
   const user = useUserStore((s) => s.user);
   const egg = useEggStore((s) => s.hatchingEgg);
-  const pixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
+  const pixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
 
   const [currentPage, setCurrentPage] = useState<PageType>("start");
   const [sortParam, setSortParam] = useState<string | undefined>(undefined);

@@ -21,7 +21,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
 }) => {
   const [useQuantity, setUseQuantity] = useState(1);
   const [isUsing, setIsUsing] = useState(false);
-  const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
+  const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
 
   useEffect(() => {
     if (isOpen) {
@@ -33,7 +33,10 @@ const ItemModal: React.FC<ItemModalProps> = ({
 
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
   const canUse =
-    useQuantity >= 1 && useQuantity <= quantity && !isUsing && activePixegotchi;
+    useQuantity >= 1 &&
+    useQuantity <= quantity &&
+    !isUsing &&
+    currentPixegotchi;
 
   const handleUse = async () => {
     if (!canUse) return;

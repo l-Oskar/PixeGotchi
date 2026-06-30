@@ -2,26 +2,26 @@ import { create } from "zustand";
 import { Pixegotchi } from "@pixegotchi/shared";
 
 interface PixegotchiStore {
-  activePixegotchi: Pixegotchi | null;
+  currentPixegotchi: Pixegotchi | null;
   allPixegotchi: Pixegotchi[] | [];
   setAllPixegotchi: (pixegotchi: Pixegotchi[]) => void;
-  setActive: (pixegotchi: Pixegotchi) => void;
-  setToVault: () => void;
+  setCurrent: (pixegotchi: Pixegotchi) => void;
+  clearCurrent: () => void;
 }
 
 export const usePixegotchiStore = create<PixegotchiStore>((set) => ({
-  activePixegotchi: null,
+  currentPixegotchi: null,
   allPixegotchi: [],
   setAllPixegotchi: (list: Pixegotchi[]) =>
     set({
       allPixegotchi: list,
     }),
-  setActive: (pixegotchi: Pixegotchi) =>
+  setCurrent: (pixegotchi: Pixegotchi) =>
     set({
-      activePixegotchi: pixegotchi,
+      currentPixegotchi: pixegotchi,
     }),
-  setToVault: () =>
+  clearCurrent: () =>
     set({
-      activePixegotchi: null,
+      currentPixegotchi: null,
     }),
 }));

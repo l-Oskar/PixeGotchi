@@ -4,6 +4,8 @@ import {
   InventoryWithDetails,
   EGG_CONSTANTS,
   ChestType,
+  Item,
+  ItemBuffsType,
 } from "@pixegotchi/shared";
 import { ItemsService } from "../items/items.service";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
@@ -15,6 +17,10 @@ import type {
 } from "@/generated/prisma/client";
 
 type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
+
+function hasReviveEffect(item: Item) {
+  return item.effects?.buffs?.some((buff) => buff[ItemBuffsType.REVIVE]);
+}
 
 export class Inventory {
   private itemService = new ItemsService();
@@ -129,13 +135,49 @@ export class Inventory {
 
   async useItem(userId: number, itemId: string, quantity?: number) {
     const quantityToUse = quantity ?? 1;
-    const pixegotchi = await this.pixegotchiService.findActive(userId);
+    const pixegotchi = await this.pixegotchiService.findCurrent(userId);
 
     if (!pixegotchi) throw new Error("No active pixegotchi");
 
     const item = await this.itemService.getItemDetails(itemId);
+    const isReviveItem = hasReviveEffect(item);
+
+    if (pixegotchi.status !== "active" && !isReviveItem)
+      throw new Error("Pixegotchi is not active");
+
+    if (pixegotchi.status === "active" && isReviveItem)
+      throw new Error("Pixegotchi is already active");
 
     await this.itemService.validateItemUsage(pixegotchi, item, quantityToUse);
+
+    if (isReviveItem) {
+      return await prisma.$transaction(async (tx) => {
+        await this.consumeItem(userId, itemId, quantityToUse, tx);
+
+        const updatedPixegotchi = await tx.pixegotchi.update({
+          where: { id: pixegotchi.id },
+          data: {
+            status: "active",
+            health: 50,
+            healthZeroAt: null,
+            criticalSince: null,
+            lastHealedAt: new Date(),
+            lastUpdateAt: new Date(),
+          },
+        });
+
+        await tx.itemUsageHistory.create({
+          data: {
+            userId,
+            pixegotchiId: pixegotchi.id,
+            itemId,
+            quantity: quantityToUse,
+          },
+        });
+
+        return updatedPixegotchi;
+      });
+    }
 
     return await prisma.$transaction(async (tx) => {
       await this.consumeItem(userId, itemId, quantityToUse, tx);

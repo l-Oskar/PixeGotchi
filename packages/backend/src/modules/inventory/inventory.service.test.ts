@@ -8,7 +8,12 @@ import {
   createUser,
 } from "@/test/helpers/factories";
 import { ChestGenerator } from "@/utils/chest-generator";
-import { ChestType, ItemType, RarityType } from "@pixegotchi/shared";
+import {
+  ChestType,
+  ItemBuffsType,
+  ItemType,
+  RarityType,
+} from "@pixegotchi/shared";
 
 describe("Inventory", () => {
   afterEach(() => {
@@ -92,6 +97,69 @@ describe("Inventory", () => {
         where: { userId: user.id, itemId: "apple", quantity: 1 },
       }),
     ).resolves.toBe(1);
+  });
+
+  it("revives a current dead pixegotchi with a revive item", async () => {
+    const user = await createUser();
+    await createItem({
+      itemId: "revive_stone",
+      itemType: ItemType.special,
+      effects: {
+        hunger: 0,
+        happiness: 0,
+        health: 0,
+        cleanliness: 0,
+        energy: 0,
+        buffs: [{ [ItemBuffsType.REVIVE]: 1 }],
+      },
+      maxPerDay: 1,
+      isStackable: false,
+    });
+    await createPixegotchi(user.id, {
+      status: "dead",
+      health: 0,
+      healthZeroAt: new Date(),
+      criticalSince: new Date(),
+    });
+    const inventory = new Inventory();
+
+    await inventory.addItem(user.id, "revive_stone", 1);
+    const pixegotchi = await inventory.useItem(user.id, "revive_stone", 1);
+
+    expect(pixegotchi).toMatchObject({
+      status: "active",
+      health: 50,
+      healthZeroAt: null,
+      criticalSince: null,
+    });
+    await expect(
+      prisma.inventory.findUnique({
+        where: { userId_itemId: { userId: user.id, itemId: "revive_stone" } },
+      }),
+    ).resolves.toBeNull();
+    await expect(
+      prisma.itemUsageHistory.count({
+        where: { userId: user.id, itemId: "revive_stone", quantity: 1 },
+      }),
+    ).resolves.toBe(1);
+  });
+
+  it("does not consume a normal item for a current dead pixegotchi", async () => {
+    const user = await createUser();
+    await createItem({ itemId: "apple" });
+    await createPixegotchi(user.id, { status: "dead", health: 0 });
+    const inventory = new Inventory();
+
+    await inventory.addItem(user.id, "apple", 1);
+
+    await expect(inventory.useItem(user.id, "apple", 1)).rejects.toThrow(
+      "Pixegotchi is not active",
+    );
+    await expect(
+      prisma.inventory.findUnique({
+        where: { userId_itemId: { userId: user.id, itemId: "apple" } },
+      }),
+    ).resolves.toMatchObject({ quantity: 1 });
   });
 
   it("opens a chest, stores rewards, adds items, and creates an egg reward", async () => {

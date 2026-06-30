@@ -1,6 +1,6 @@
 // app/GameBootstrap.tsx
 import { useEffect } from "react";
-import { useActivePixegotchi } from "../services/queries/pixegotchi.queries";
+import { useCurrentPixegotchi } from "../services/queries/pixegotchi.queries";
 import SplashScreen from "../components/Other/SplashScreen";
 import {
   useGetAllEggs,
@@ -17,7 +17,7 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
     data: pixegotchi,
     isLoading: pixeLoading,
     isSuccess: pixeSuccess,
-  } = useActivePixegotchi();
+  } = useCurrentPixegotchi();
   const {
     data: egg,
     isLoading: eggLoading,
@@ -30,8 +30,8 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
   const setEgg = useEggStore((s) => s.setHatchingEgg);
   const clearEgg = useEggStore((s) => s.clearEgg);
   const setAlleggs = useEggStore((s) => s.setAllEggs);
-  const setActive = usePixegotchiStore((s) => s.setActive);
-  const clearActive = usePixegotchiStore((s) => s.setToVault);
+  const setCurrent = usePixegotchiStore((s) => s.setCurrent);
+  const clearCurrent = usePixegotchiStore((s) => s.clearCurrent);
 
   useEffect(() => {
     if (allEggs) {
@@ -46,9 +46,9 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
     }
     if (pixeSuccess) {
       if (pixegotchi) {
-        setActive(pixegotchi);
+        setCurrent(pixegotchi);
       } else {
-        clearActive();
+        clearCurrent();
       }
     }
   }, [
@@ -60,8 +60,8 @@ export const GameBootstrap = ({ children }: { children: React.ReactNode }) => {
     setAlleggs,
     setEgg,
     clearEgg,
-    setActive,
-    clearActive,
+    setCurrent,
+    clearCurrent,
   ]);
 
   if (eggLoading || pixeLoading) {

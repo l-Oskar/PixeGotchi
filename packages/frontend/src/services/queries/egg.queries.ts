@@ -99,7 +99,7 @@ export const useGetHatchingStatus = (eggId: number | null) => {
 };
 
 export const useHatchEgg = () => {
-  const setActivePixegotchi = usePixegotchiStore((s) => s.setActive);
+  const setCurrentPixegotchi = usePixegotchiStore((s) => s.setCurrent);
   const clearEgg = useEggStore((s) => s.clearEgg);
   const queryClient = useQueryClient();
 
@@ -109,9 +109,9 @@ export const useHatchEgg = () => {
     },
     onSuccess: (data) => {
       clearEgg();
-      setActivePixegotchi(data);
+      setCurrentPixegotchi(data);
       queryClient.setQueryData(EGG_KEYS.hatching, null);
-      queryClient.setQueryData(PIXEGOTCHI_KEYS.active, data);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.current, data);
       queryClient.setQueryData(PIXEGOTCHI_KEYS.details(data.id), data);
       queryClient.setQueryData<Pixegotchi[] | undefined>(
         PIXEGOTCHI_KEYS.all,

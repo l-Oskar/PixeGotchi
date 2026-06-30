@@ -15,12 +15,12 @@ const Navigation: React.FC<NavigationProps> = ({
   isHidden = false,
   setCurrentPage,
 }) => {
-  const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
+  const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
   const hatchingEgg = useEggStore((s) => s.hatchingEgg);
   const navButton = () => {
     if (hatchingEgg) {
       return { id: "egg" as PageType, icon: Egg, label: "Egg" };
-    } else if (activePixegotchi) {
+    } else if (currentPixegotchi) {
       return { id: "home" as PageType, icon: Heart, label: "Home" };
     } else {
       return { id: "start" as PageType, icon: Egg, label: "Hatch" };

@@ -46,7 +46,7 @@ export const useAddItem = () => {
 
 export const useUseItem = () => {
   const queryClient = useQueryClient();
-  const setActive = usePixegotchiStore((s) => s.setActive);
+  const setCurrent = usePixegotchiStore((s) => s.setCurrent);
   return useMutation({
     mutationFn: ({
       itemId,
@@ -58,8 +58,8 @@ export const useUseItem = () => {
       return inventoryApi.useItem(itemId, quantity);
     },
     onSuccess: (data) => {
-      setActive(data);
-      queryClient.setQueryData(PIXEGOTCHI_KEYS.active, data);
+      setCurrent(data);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.current, data);
       queryClient.setQueryData(PIXEGOTCHI_KEYS.details(data.id), data);
       queryClient.setQueryData<Pixegotchi[] | undefined>(
         PIXEGOTCHI_KEYS.all,

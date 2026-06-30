@@ -16,7 +16,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   const { isLoading, data } = useStatsVault();
   const vaultStats = data ?? [];
   const setPixegotchiToVault = usePixegotchiToVault();
-  const activePixegotchi = usePixegotchiStore((s) => s.activePixegotchi);
+  const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
 
   const handleSetToVault = async () => {
     try {
@@ -39,7 +39,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Vault Collection</h1>
-      {activePixegotchi && (
+      {currentPixegotchi && (
         <ActionButton
           icon={SquareArrowRight}
           label="Send to Vault"

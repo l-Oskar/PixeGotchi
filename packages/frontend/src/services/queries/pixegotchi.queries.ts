@@ -6,7 +6,7 @@ import { VAULT_KEYS } from "./vault.queries";
 
 export const PIXEGOTCHI_KEYS = {
   all: ["allPixegotchi"] as const,
-  active: ["activePixegotchi"] as const,
+  current: ["currentPixegotchi"] as const,
   details: (id: number | null) => ["pixegotchi", id] as const,
 };
 
@@ -28,21 +28,21 @@ export const usePixegotchiById = (id: number | null) => {
   });
 };
 
-export const useActivePixegotchi = () => {
+export const useCurrentPixegotchi = () => {
   return useQuery({
-    queryKey: PIXEGOTCHI_KEYS.active,
-    queryFn: pixegotchiApi.getActive,
+    queryKey: PIXEGOTCHI_KEYS.current,
+    queryFn: pixegotchiApi.getCurrent,
   });
 };
 
 export const usePixegotchiToVault = () => {
-  const clearPixegotchi = usePixegotchiStore((s) => s.setToVault);
+  const clearPixegotchi = usePixegotchiStore((s) => s.clearCurrent);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: pixegotchiApi.setInActive,
     onSuccess: async (data) => {
       clearPixegotchi();
-      queryClient.setQueryData(PIXEGOTCHI_KEYS.active, null);
+      queryClient.setQueryData(PIXEGOTCHI_KEYS.current, null);
       if (data) {
         queryClient.setQueryData(PIXEGOTCHI_KEYS.details(data.id), data);
         queryClient.setQueryData<Pixegotchi[] | undefined>(
