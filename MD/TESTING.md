@@ -52,6 +52,14 @@ This Docker path does not require Node or npm on the host. The host only needs `
 docker compose -f docker-compose.test.yml --profile test up --build --abort-on-container-exit --exit-code-from backend-test backend-test
 ```
 
+After the test image has been built once, code-only changes can run without rebuilding:
+
+```sh
+docker compose -f docker-compose.test.yml --profile test up --no-build --abort-on-container-exit --exit-code-from backend-test backend-test
+```
+
+Use `--build` again when `package.json`, `package-lock.json`, the backend Dockerfile, or dependency setup changes.
+
 Clean the test containers and test database volume:
 
 ```sh
@@ -83,10 +91,13 @@ Useful options:
 
 ```sh
 BRANCH=main ./scripts/server-test-deploy.sh
+TEST_BUILD=1 ./scripts/server-test-deploy.sh
 SKIP_PULL=1 ./scripts/server-test-deploy.sh
 RESTART_APP=0 ./scripts/server-test-deploy.sh
 COMPOSE_FILE=docker-compose.yml TEST_COMPOSE_FILE=docker-compose.test.yml ./scripts/server-test-deploy.sh
 ```
+
+`TEST_BUILD` defaults to `0`, so the server script uses `--no-build` by default. Run with `TEST_BUILD=1` for the first run, after dependency changes, or after Dockerfile changes. The test compose mounts `packages/backend` and `packages/shared`, so pulled code changes are visible to the test container even without rebuilding the image.
 
 ## Commands
 

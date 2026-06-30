@@ -8,6 +8,7 @@ BRANCH="${BRANCH:-$(git branch --show-current)}"
 REMOTE="${REMOTE:-origin}"
 SKIP_PULL="${SKIP_PULL:-0}"
 RESTART_APP="${RESTART_APP:-1}"
+TEST_BUILD="${TEST_BUILD:-0}"
 
 test_status=0
 
@@ -38,6 +39,7 @@ echo "   compose file:      ${COMPOSE_FILE}"
 echo "   test compose file: ${TEST_COMPOSE_FILE}"
 echo "   skip pull:         ${SKIP_PULL}"
 echo "   restart app:       ${RESTART_APP}"
+echo "   test build:        ${TEST_BUILD}"
 
 if [[ ! -f "${COMPOSE_FILE}" ]]; then
   echo "❌ Compose file not found: ${COMPOSE_FILE}" >&2
@@ -72,12 +74,24 @@ echo "🔎 Validating test Compose config..."
 docker compose -f "${TEST_COMPOSE_FILE}" --profile test config --quiet
 
 echo "🧪 Running isolated Docker test stack..."
+test_compose_args=(
+  -f "${TEST_COMPOSE_FILE}"
+  --profile test
+  up
+  --abort-on-container-exit
+  --exit-code-from backend-test
+)
+
+if [[ "${TEST_BUILD}" == "1" ]]; then
+  test_compose_args+=(--build)
+else
+  test_compose_args+=(--no-build)
+fi
+
+test_compose_args+=(backend-test)
+
 set +e
-docker compose -f "${TEST_COMPOSE_FILE}" --profile test up \
-  --build \
-  --abort-on-container-exit \
-  --exit-code-from backend-test \
-  backend-test
+docker compose "${test_compose_args[@]}"
 test_status=$?
 set -e
 
