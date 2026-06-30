@@ -50,7 +50,7 @@ describe("app routes", () => {
       },
     });
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode, response.body).toBe(400);
     expect(response.json()).toMatchObject({ error: "Validation error" });
   });
 });

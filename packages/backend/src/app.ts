@@ -23,6 +23,25 @@ import { ChestGenerator } from "./utils/chest-generator";
 import { logger } from "@/config/logger";
 import { clientLogsRoutes } from "@/modules/client-logs/client-logs.routes";
 
+function isZodValidationError(error: unknown): error is Error {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const maybeError = error as {
+    name?: unknown;
+    issues?: unknown;
+    errors?: unknown;
+  };
+
+  return (
+    error instanceof ZodError ||
+    maybeError.name === "ZodError" ||
+    Array.isArray(maybeError.issues) ||
+    Array.isArray(maybeError.errors)
+  );
+}
+
 export async function buildApp() {
   const app = Fastify({
     loggerInstance: logger,
@@ -105,6 +124,34 @@ export async function buildApp() {
     }
   });
 
+  app.setErrorHandler((error: any, request: any, reply: any) => {
+    request.log.error(
+      {
+        err: error,
+        event: "request_failed",
+      },
+      "Request failed",
+    );
+
+    if (error.name === "PrismaClientKnownRequestError") {
+      return reply.code(400).send({
+        error: "Database error",
+        message: error.message,
+      });
+    }
+
+    if (isZodValidationError(error)) {
+      return reply.code(400).send({
+        error: "Validation error",
+        message: error.message,
+      });
+    }
+
+    reply.code(error.statusCode || 500).send({
+      error: error.message || "Internal Server Error",
+    });
+  });
+
   app.get("/", async () => {
     return {
       status: "ok",
@@ -151,38 +198,6 @@ export async function buildApp() {
     },
     { prefix: "/api" },
   );
-
-  app.setErrorHandler((error: any, request: any, reply: any) => {
-    request.log.error(
-      {
-        err: error,
-        event: "request_failed",
-      },
-      "Request failed",
-    );
-
-    if (error.name === "PrismaClientKnownRequestError") {
-      return reply.code(400).send({
-        error: "Database error",
-        message: error.message,
-      });
-    }
-
-    if (
-      error instanceof ZodError ||
-      error.name === "ZodError" ||
-      Array.isArray(error.issues)
-    ) {
-      return reply.code(400).send({
-        error: "Validation error",
-        message: error.message,
-      });
-    }
-
-    reply.code(error.statusCode || 500).send({
-      error: error.message || "Internal Server Error",
-    });
-  });
 
   return app;
 }
