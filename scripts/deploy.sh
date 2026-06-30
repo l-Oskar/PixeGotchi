@@ -76,12 +76,12 @@ else
 fi
 
 echo "🧬 Generating Prisma client for Docker dev runtime..."
-docker compose -f "${COMPOSE_FILE}" run --rm --no-build --no-deps "${SERVICE}" \
+docker compose -f "${COMPOSE_FILE}" run --rm --no-deps "${SERVICE}" \
   sh -c "cd packages/backend && npx prisma generate"
 
 if [[ "${RUN_MIGRATIONS}" == "1" ]]; then
   echo "🗄 Running Prisma migrate deploy..."
-  docker compose -f "${COMPOSE_FILE}" run --rm --no-build "${SERVICE}" \
+  docker compose -f "${COMPOSE_FILE}" run --rm "${SERVICE}" \
     sh -c "cd packages/backend && npx prisma migrate deploy"
 else
   echo "⏭ Skipping migrations. Use RUN_MIGRATIONS=1 only when you intentionally want migrate deploy."

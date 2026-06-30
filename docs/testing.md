@@ -73,7 +73,7 @@ This path does not use the normal `postgres`, `redis`, or `backend` services fro
 On a weak server, do not keep the main app stack and the test stack running at the same time. Use the server script:
 
 ```sh
-./scripts/server-test-deploy.sh
+./scripts/test-deploy.sh
 ```
 
 The script does this in order:
@@ -90,11 +90,11 @@ The main stack is started again even if tests fail. That behavior is handled by 
 Useful options:
 
 ```sh
-BRANCH=main ./scripts/server-test-deploy.sh
-TEST_BUILD=1 ./scripts/server-test-deploy.sh
-SKIP_PULL=1 ./scripts/server-test-deploy.sh
-RESTART_APP=0 ./scripts/server-test-deploy.sh
-COMPOSE_FILE=docker-compose.yml TEST_COMPOSE_FILE=docker-compose.test.yml ./scripts/server-test-deploy.sh
+BRANCH=main ./scripts/test-deploy.sh
+TEST_BUILD=1 ./scripts/test-deploy.sh
+SKIP_PULL=1 ./scripts/test-deploy.sh
+RESTART_APP=0 ./scripts/test-deploy.sh
+COMPOSE_FILE=docker-compose.yml TEST_COMPOSE_FILE=docker-compose.test.yml ./scripts/test-deploy.sh
 ```
 
 `TEST_BUILD` defaults to `0`, so the server script uses `--no-build` by default. Run with `TEST_BUILD=1` for the first run, after dependency changes, or after Dockerfile changes. The test compose mounts `packages/backend` and `packages/shared`, so pulled code changes are visible to the test container even without rebuilding the image.
