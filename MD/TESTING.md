@@ -28,7 +28,7 @@ The repository currently has a Prisma schema but no real migration history. Beca
 npm run test:db:push --workspace=packages/backend
 ```
 
-Use `prisma db push --skip-generate` for the test database. Do not use `prisma migrate deploy` until real migrations exist.
+Use `prisma db push` for the test database. Do not use `prisma migrate deploy` until real migrations exist.
 
 PostgreSQL and Redis can be local services or the existing Docker Compose services. The route tests build the Fastify app, so Redis should be available when running the full backend test suite.
 
