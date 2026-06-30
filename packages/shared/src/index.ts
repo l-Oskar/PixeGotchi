@@ -6,6 +6,12 @@ export {
   validateGenomeHash,
   assertValidGenomeHash,
 } from "./utils/genome-validator";
+export {
+  calculateCurrentStats,
+  derivePixegotchiStatus,
+  buildPixegotchiSnapshot,
+} from "./utils/calculate_stats/lazy_degradation";
+export type { PixegotchiSnapshot } from "./utils/calculate_stats/lazy_degradation";
 
 export * from "./types/item_buffs";
 export * from "./constants/pixegotchi_const";

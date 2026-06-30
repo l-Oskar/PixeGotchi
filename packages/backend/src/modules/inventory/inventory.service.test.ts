@@ -99,6 +99,36 @@ describe("Inventory", () => {
     ).resolves.toBe(1);
   });
 
+  it("uses an item on top of lazy degraded stats", async () => {
+    const user = await createUser();
+    await createItem({
+      itemId: "apple",
+      effects: {
+        hunger: 15,
+        happiness: 0,
+        health: 0,
+        cleanliness: 0,
+        energy: 0,
+        buffs: [],
+      },
+    });
+    const staleUpdate = new Date(Date.now() - 2 * 60 * 60 * 1000);
+    await createPixegotchi(user.id, {
+      hunger: 70,
+      lastUpdateAt: staleUpdate,
+    });
+    const inventory = new Inventory();
+
+    await inventory.addItem(user.id, "apple", 1);
+    const pixegotchi = await inventory.useItem(user.id, "apple", 1);
+
+    expect(pixegotchi.hunger).toBeLessThan(85);
+    expect(pixegotchi.hunger).toBeGreaterThan(70);
+    expect(pixegotchi.lastUpdateAt.getTime()).toBeGreaterThan(
+      staleUpdate.getTime(),
+    );
+  });
+
   it("revives a current dead pixegotchi with a revive item", async () => {
     const user = await createUser();
     await createItem({

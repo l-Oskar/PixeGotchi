@@ -1,11 +1,14 @@
 import { prisma } from "@/database/prisma";
 import {
+  buildPixegotchiSnapshot,
   Item,
   ITEM_EXP,
   MAX_EXP,
+  PixegotchiSnapshot,
   RARE_CANDY_EXP,
   RARITY_STATS,
   RarityType,
+  derivePixegotchiStatus,
 } from "@pixegotchi/shared";
 import type {
   Pixegotchi as PrismaPixegotchi,
@@ -13,21 +16,33 @@ import type {
 } from "@/generated/prisma/client";
 
 type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
+type StatEffectKey = Extract<
+  keyof NonNullable<Item["effects"]>,
+  "health" | "hunger" | "energy" | "happiness" | "cleanliness"
+>;
 
 const OCCUPIED_SLOT_STATUSES = ["active", "critical", "dead"] as const;
 
+const toPersistedStat = (value: number) => Math.round(value);
+
 export class PixegotchiService {
-  async findByUserId(userId: number) {
-    return await prisma.pixegotchi.findMany({
+  private toSnapshot(pixegotchi: PrismaPixegotchi): PixegotchiSnapshot {
+    return buildPixegotchiSnapshot(pixegotchi);
+  }
+
+  async findByUserId(userId: number): Promise<PixegotchiSnapshot[]> {
+    const pixegotchis = await prisma.pixegotchi.findMany({
       where: { userId },
       orderBy: { hatchedAt: "desc" },
     });
+
+    return pixegotchis.map((pixegotchi) => this.toSnapshot(pixegotchi));
   }
 
   async findCurrent(
     userId: number,
     db: PrismaExecutor = prisma,
-  ): Promise<PrismaPixegotchi | null> {
+  ): Promise<PixegotchiSnapshot | null> {
     const user = await db.user.findUnique({
       where: { id: userId },
       include: { currentPixegotchi: true },
@@ -39,10 +54,10 @@ export class PixegotchiService {
     if (!OCCUPIED_SLOT_STATUSES.some((status) => status === current.status))
       return null;
 
-    return current;
+    return this.toSnapshot(current);
   }
 
-  async findActive(userId: number): Promise<PrismaPixegotchi | null> {
+  async findActive(userId: number): Promise<PixegotchiSnapshot | null> {
     return await this.findCurrent(userId);
   }
 
@@ -81,13 +96,18 @@ export class PixegotchiService {
   }
 
   // Get by ID with ownership check
-  async findById(id: number, userId: number) {
-    return await prisma.pixegotchi.findFirst({
+  async findById(
+    id: number,
+    userId: number,
+  ): Promise<PixegotchiSnapshot | null> {
+    const pixegotchi = await prisma.pixegotchi.findFirst({
       where: {
         id,
         userId,
       },
     });
+
+    return pixegotchi ? this.toSnapshot(pixegotchi) : null;
   }
 
   async storedInVault(id: number, userId: number) {
@@ -131,9 +151,7 @@ export class PixegotchiService {
 
     const maxStat = RARITY_STATS[pixegotchi.rarity as RarityType].maxStat;
 
-    const TIMESTAMP_MAP: Partial<
-      Record<keyof NonNullable<Item["effects"]>, string>
-    > = {
+    const TIMESTAMP_MAP: Record<StatEffectKey, string> = {
       hunger: "lastFedAt",
       health: "lastHealedAt",
       happiness: "lastPlayedAt",
@@ -141,32 +159,59 @@ export class PixegotchiService {
       energy: "lastBoostedAt",
     };
 
-    const statKeys = Object.keys(TIMESTAMP_MAP) as Array<
-      keyof NonNullable<Item["effects"]>
-    >;
+    const statKeys = Object.keys(TIMESTAMP_MAP) as StatEffectKey[];
 
-    const data: Record<string, unknown> = {};
+    const nextStats = {
+      health: pixegotchi.health,
+      hunger: pixegotchi.hunger,
+      energy: pixegotchi.energy,
+      happiness: pixegotchi.happiness,
+      cleanliness: pixegotchi.cleanliness,
+    };
+    const now = new Date();
+    const data: Record<string, unknown> = {
+      lastUpdateAt: now,
+    };
 
     for (const stat of statKeys) {
       const effectValue = item.effects?.[stat];
       if (!effectValue || typeof effectValue !== "number") continue;
 
-      data[stat as string] = Math.min(
+      nextStats[stat] = Math.min(
         maxStat,
-        Math.max(
-          0,
-          (pixegotchi[stat as keyof typeof pixegotchi] as number) +
-            effectValue * quantity,
-        ),
+        Math.max(0, nextStats[stat] + effectValue * quantity),
       );
-      data[TIMESTAMP_MAP[stat]!] = new Date();
+      data[TIMESTAMP_MAP[stat]!] = now;
     }
+
+    const status = derivePixegotchiStatus(pixegotchi, nextStats, now);
+    const enteredCritical = status === "critical" && !pixegotchi.healthZeroAt;
 
     return await db.pixegotchi.update({
       where: {
         id: pixegotchi.id,
       },
-      data,
+      data: {
+        ...data,
+        health: toPersistedStat(nextStats.health),
+        hunger: toPersistedStat(nextStats.hunger),
+        energy: toPersistedStat(nextStats.energy),
+        happiness: toPersistedStat(nextStats.happiness),
+        cleanliness: toPersistedStat(nextStats.cleanliness),
+        status,
+        healthZeroAt:
+          status === "active"
+            ? null
+            : enteredCritical
+              ? now
+              : pixegotchi.healthZeroAt,
+        criticalSince:
+          status === "active"
+            ? null
+            : enteredCritical
+              ? now
+              : pixegotchi.criticalSince,
+      },
     });
   }
 
@@ -221,8 +266,12 @@ export class PixegotchiService {
 
     if (!currentPixegotchi) return null;
 
-    const getDiffMs = (date: Date | null) => {
-      return date ? time - date.getTime() : null;
+    const getDiffMs = (date: Date | string | null) => {
+      if (!date) return null;
+
+      const dateTime =
+        date instanceof Date ? date.getTime() : new Date(date).getTime();
+      return Number.isFinite(dateTime) ? time - dateTime : null;
     };
 
     const lastUpdates = {
@@ -231,7 +280,7 @@ export class PixegotchiService {
       lastCleanedDiffMs: getDiffMs(currentPixegotchi.lastCleanedAt),
       lastPlayedDiffMs: getDiffMs(currentPixegotchi.lastPlayedAt),
       lastBoostedDiffMs: getDiffMs(currentPixegotchi.lastBoostedAt),
-      lastUpdatedDiffMs: time - currentPixegotchi.lastUpdateAt.getTime(),
+      lastUpdatedDiffMs: getDiffMs(currentPixegotchi.lastUpdateAt),
     };
 
     return lastUpdates;

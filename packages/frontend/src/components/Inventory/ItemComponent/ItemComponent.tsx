@@ -10,6 +10,8 @@ import {
 } from "@pixegotchi/shared";
 import { useEffect, useMemo, useState } from "react";
 import SortedButtons from "./SortedButtons";
+import { usePixegotchiActionFlow } from "@/hooks/usePixegotchi";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
 export interface ItemComponentProps {
   sorted?: string;
@@ -18,41 +20,46 @@ export interface ItemComponentProps {
 const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   const getInventory = useDetailedInventory();
   const useItem = useUseItem();
+  const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
+  const actionFlow = usePixegotchiActionFlow(
+    currentPixegotchi?.status ?? null,
+  );
   const inventory = getInventory.data ?? [];
   const [sortedList, setSortedList] = useState<string>(sorted || "rarity");
 
-  const [selectedItem, setSelectedItem] = useState<{
-    itemId: string;
-  } | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const currentInventoryItem = useMemo(
     () =>
-      selectedItem
-        ? inventory.find((i) => i.itemId === selectedItem.itemId)
+      actionFlow.selectedItemId
+        ? inventory.find((i) => i.itemId === actionFlow.selectedItemId)
         : null,
-    [inventory, selectedItem],
+    [actionFlow.selectedItemId, inventory],
   );
   const currentItem = currentInventoryItem?.details ?? null;
 
   useEffect(() => {
     if (
-      isModalOpen &&
-      selectedItem &&
+      actionFlow.isModalOpen &&
+      actionFlow.selectedItemId &&
       getInventory.isSuccess &&
       !currentInventoryItem
     ) {
-      setIsModalOpen(false);
-      setSelectedItem(null);
+      actionFlow.cancel();
     }
-  }, [currentInventoryItem, getInventory.isSuccess, isModalOpen, selectedItem]);
+  }, [actionFlow, currentInventoryItem, getInventory.isSuccess]);
 
   const handleItemClick = (itemId: string) => {
-    setSelectedItem({ itemId });
-    setIsModalOpen(true);
+    actionFlow.requestAction(itemId);
   };
 
   const handleUseItem = async (itemId: string, quantity: number) => {
-    await useItem.mutateAsync({ itemId, quantity });
+    actionFlow.confirmAction(itemId, quantity);
+    try {
+      await useItem.mutateAsync({ itemId, quantity });
+      actionFlow.mutationSucceeded();
+    } catch (error) {
+      actionFlow.mutationFailed(error);
+      throw error;
+    }
   };
 
   const handleSortItems = (
@@ -149,11 +156,8 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
         <ItemModal
           item={currentItem}
           quantity={currentInventoryItem?.quantity ?? 0}
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedItem(null);
-          }}
+          isOpen={actionFlow.isModalOpen}
+          onClose={actionFlow.cancel}
           onUse={handleUseItem}
         />
       </div>

@@ -1,6 +1,7 @@
 import { useActorRef, useSelector } from "@xstate/react";
 import { useEffect } from "react";
-import { pixegotchiMachine } from "../machines/pixegotchi.machine";
+import type { PixegotchiStatus } from "@pixegotchi/shared";
+import { pixegotchiUiMachine } from "../machines/pixegotchi.machine";
 import { usePixegotchiById } from "@/services/queries/pixegotchi.queries";
 
 interface UsePixegotchiProps {
@@ -8,99 +9,94 @@ interface UsePixegotchiProps {
   userId: number;
 }
 
-export function usePixegotchi({ pixegotchiId, userId }: UsePixegotchiProps) {
-  const pixegotchiQuery = usePixegotchiById(pixegotchiId);
-  const service = useActorRef(pixegotchiMachine, {
-    input: {
-      pixegotchiId,
-      userId,
-    },
-  });
+export function usePixegotchiActionFlow(status?: PixegotchiStatus | null) {
+  const service = useActorRef(pixegotchiUiMachine);
 
   useEffect(() => {
-    if (pixegotchiQuery.data) {
-      service.send({ type: "LOAD_SUCCESS", data: pixegotchiQuery.data });
-      return;
-    }
+    service.send({ type: "DATA_SYNCED", status: status ?? null });
+  }, [service, status]);
 
-    if (pixegotchiQuery.isError) {
-      service.send({ type: "LOAD_ERROR", data: pixegotchiQuery.error });
-    }
-  }, [
-    pixegotchiQuery.data,
-    pixegotchiQuery.error,
-    pixegotchiQuery.isError,
+  const selectedItemId = useSelector(
     service,
-  ]);
-
-  // === Context values (stats) ===
-  const health = useSelector(service, (state) => state.context.health);
-  const hunger = useSelector(service, (state) => state.context.hunger);
-  const energy = useSelector(service, (state) => state.context.energy);
-  const happiness = useSelector(service, (state) => state.context.happiness);
-  const cleanliness = useSelector(
-    service,
-    (state) => state.context.cleanliness,
+    (state) => state.context.selectedItemId,
   );
-  const status = useSelector(service, (state) => state.context.status);
-  const tickCount = useSelector(service, (state) => state.context.tickCount);
+  const selectedQuantity = useSelector(
+    service,
+    (state) => state.context.selectedQuantity,
+  );
+  const lastStatus = useSelector(service, (state) => state.context.lastStatus);
   const lastError = useSelector(service, (state) => state.context.lastError);
-  const syncErrors = useSelector(service, (state) => state.context.syncErrors);
-
-  // === State matching ===
-  const isActive = useSelector(service, (state) => state.matches("active"));
-  const isCritical = useSelector(service, (state) => state.matches("critical"));
-  const isDead = useSelector(service, (state) => state.matches("dead"));
-  const isInitializing = useSelector(service, (state) =>
-    state.matches("initializing"),
+  const isBootstrapping = useSelector(service, (state) =>
+    state.matches("bootstrapping"),
   );
-  const isError = useSelector(service, (state) => state.matches("error"));
-
-  // === Action dispatchers ===
-  const feed = () => service.send({ type: "FEED" });
-  const sleep = () => service.send({ type: "SLEEP" });
-  const play = () => service.send({ type: "PLAY" });
-  const clean = () => service.send({ type: "CLEAN" });
-  const heal = () => service.send({ type: "HEAL" });
-  const retry = () => {
-    service.send({ type: "RETRY" });
-    pixegotchiQuery.refetch();
-  };
-  const pauseStats = () => service.send({ type: "PAUSE_DEGRADATION" });
-  const resumeStats = () => service.send({ type: "RESUME_DEGRADATION" });
+  const isIdle = useSelector(service, (state) =>
+    state.matches({ ready: "idle" }),
+  );
+  const isConfirmingAction = useSelector(service, (state) =>
+    state.matches({ ready: "confirmingAction" }),
+  );
+  const isSubmittingAction = useSelector(service, (state) =>
+    state.matches({ ready: "submittingAction" }),
+  );
+  const isActionSuccess = useSelector(service, (state) =>
+    state.matches({ ready: "actionSuccess" }),
+  );
+  const isActionError = useSelector(service, (state) =>
+    state.matches({ ready: "actionError" }),
+  );
+  const isBlocked = useSelector(service, (state) => state.matches("blocked"));
 
   return {
-    // Stats
-    health,
-    hunger,
-    energy,
-    happiness,
-    cleanliness,
-    status,
-    tickCount,
+    selectedItemId,
+    selectedQuantity,
+    lastStatus,
     lastError,
-    syncErrors,
-
-    // State checks
-    isActive,
-    isCritical,
-    isDead,
-    isInitializing,
-    isError,
-    query: pixegotchiQuery,
-
-    // Actions
-    feed,
-    sleep,
-    play,
-    clean,
-    heal,
-    retry,
-    pauseStats,
-    resumeStats,
-
-    // Service for advanced use
+    isBootstrapping,
+    isIdle,
+    isConfirmingAction,
+    isSubmittingAction,
+    isActionSuccess,
+    isActionError,
+    isBlocked,
+    isModalOpen:
+      isConfirmingAction || isSubmittingAction || isActionError || isActionSuccess,
+    requestAction: (itemId: string) =>
+      service.send({ type: "ACTION_REQUESTED", itemId }),
+    confirmAction: (itemId: string, quantity: number) =>
+      service.send({ type: "ACTION_CONFIRMED", itemId, quantity }),
+    mutationSucceeded: () => service.send({ type: "MUTATION_SUCCEEDED" }),
+    mutationFailed: (error: unknown) =>
+      service.send({ type: "MUTATION_FAILED", error }),
+    cancel: () => service.send({ type: "CANCEL" }),
+    retry: () => service.send({ type: "RETRY" }),
     service,
+  };
+}
+
+export function usePixegotchi({ pixegotchiId }: UsePixegotchiProps) {
+  const pixegotchiQuery = usePixegotchiById(pixegotchiId);
+  const flow = usePixegotchiActionFlow(pixegotchiQuery.data?.status ?? null);
+  const pixegotchi = pixegotchiQuery.data ?? null;
+
+  return {
+    pixegotchi,
+    health: Number(pixegotchi?.health ?? 0),
+    hunger: Number(pixegotchi?.hunger ?? 0),
+    energy: Number(pixegotchi?.energy ?? 0),
+    happiness: Number(pixegotchi?.happiness ?? 0),
+    cleanliness: Number(pixegotchi?.cleanliness ?? 0),
+    status: pixegotchi?.status ?? null,
+    isActive: pixegotchi?.status === "active",
+    isCritical: pixegotchi?.status === "critical",
+    isDead: pixegotchi?.status === "dead",
+    isInitializing: pixegotchiQuery.isLoading || flow.isBootstrapping,
+    isError: pixegotchiQuery.isError || flow.isActionError,
+    query: pixegotchiQuery,
+    ...flow,
+    retry: () => {
+      flow.retry();
+      void pixegotchiQuery.refetch();
+    },
   };
 }
 

@@ -1,424 +1,193 @@
-import { setup, assign } from "xstate";
-import type { Pixegotchi, PixegotchiStatus } from "@pixegotchi/shared";
+import { assign, setup } from "xstate";
+import type { PixegotchiStatus } from "@pixegotchi/shared";
 
-export interface PixegotchiMachineInput {
-  pixegotchiId: number;
-  userId: number;
-}
-
-interface PixegotchiMachineContext {
-  pixegotchiId: number;
-  userId: number;
-  pixegotchi: Pixegotchi | null;
-  health: number;
-  hunger: number;
-  energy: number;
-  happiness: number;
-  cleanliness: number;
-  genome: unknown | null;
-  status: PixegotchiStatus;
-  level: number;
-  lastServerSync: number;
-  lastUpdateAt: number;
-  tickCount: number;
-  criticalSince: number | null;
-  hungerRate: number;
-  energyRate: number;
-  happinesRate: number;
-  cleanlinessRate: number;
-  syncErrors: number;
+interface PixegotchiUiContext {
+  selectedItemId: string | null;
+  selectedQuantity: number;
+  lastStatus: PixegotchiStatus | null;
   lastError: string | null;
 }
 
-type PixegotchiPayload = Pixegotchi &
-  Partial<{
-    genome: unknown;
-    hungerRate: number | string;
-    energyRate: number | string;
-    happinesRate: number | string;
-    cleanlinessRate: number | string;
-  }>;
+type PixegotchiUiEvent =
+  | { type: "DATA_SYNCED"; status: PixegotchiStatus | null }
+  | { type: "ACTION_REQUESTED"; itemId: string }
+  | { type: "ACTION_CONFIRMED"; itemId: string; quantity: number }
+  | { type: "MUTATION_SUCCEEDED" }
+  | { type: "MUTATION_FAILED"; error: unknown }
+  | { type: "CANCEL" }
+  | { type: "RETRY" };
 
-const toNumber = (value: number | string | null | undefined, fallback: number) =>
-  typeof value === "number" ? value : Number(value ?? fallback);
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  return "Action failed";
+};
 
-const toTime = (value: Date | string | null | undefined) =>
-  value ? new Date(value).getTime() : Date.now();
-
-export const pixegotchiMachine = setup({
+export const pixegotchiUiMachine = setup({
   types: {
-    context: {} as PixegotchiMachineContext,
-    input: {} as PixegotchiMachineInput,
-    events: {} as
-      | { type: "FEED" }
-      | { type: "SLEEP" }
-      | { type: "PLAY" }
-      | { type: "CLEAN" }
-      | { type: "HEAL" }
-      | { type: "RETRY" }
-      | { type: "LOAD_SUCCESS"; data: PixegotchiPayload }
-      | { type: "LOAD_ERROR"; data: unknown }
-      | { type: "PAUSE_DEGRADATION" }
-      | { type: "RESUME_DEGRADATION" }
-      | { type: "SYNC_SUCCESS"; data: any }
-      | { type: "SYNC_ERROR"; data: any }
-      | { type: "ENTER_CRITICAL" }
-      | { type: "CHECK_CRITICAL" },
+    context: {} as PixegotchiUiContext,
+    events: {} as PixegotchiUiEvent,
   },
-
   actions: {
-    // === Initialization ===
-    initializeFromData: assign(({ event }) => {
-      const data = event.type === "LOAD_SUCCESS" ? event.data : null;
+    syncStatus: assign(({ event }) => {
+      if (event.type !== "DATA_SYNCED") return {};
+      return { lastStatus: event.status, lastError: null };
+    }),
+    selectItem: assign(({ event }) => {
+      if (event.type !== "ACTION_REQUESTED") return {};
       return {
-        pixegotchiId: data?.id || 0,
-        userId: data?.userId || 0,
-        pixegotchi: data,
-        health: toNumber(data?.health, 100),
-        hunger: toNumber(data?.hunger, 70),
-        energy: toNumber(data?.energy, 100),
-        happiness: toNumber(data?.happiness, 50),
-        cleanliness: toNumber(data?.cleanliness, 100),
-        genome: data?.genome ?? null,
-        status: (data?.status || "active") as PixegotchiStatus,
-        level: data?.level || 1,
-        hungerRate: toNumber(data?.hungerRate, 1.0),
-        energyRate: toNumber(data?.energyRate, 1.0),
-        happinesRate: toNumber(data?.happinesRate, 1.0),
-        cleanlinessRate: toNumber(data?.cleanlinessRate, 1.0),
-        lastUpdateAt: toTime(data?.lastUpdateAt),
+        selectedItemId: event.itemId,
+        selectedQuantity: 1,
         lastError: null,
       };
     }),
-
-    handleInitError: assign(() => ({
-      lastError: "Failed to load pixegotchi",
-    })),
-
-    // === Stat Degradation (per second) ===
-    degradeStats: assign(({ context }) => {
-      // Convert per-hour rates to per-second
-      const hungerPerSecond = context.hungerRate / 3600;
-      const energyPerSecond = context.energyRate / 3600;
-      const happinessPerSecond = context.happinesRate / 3600;
-      const cleanlinessPerSecond = context.cleanlinessRate / 3600;
-
+    confirmAction: assign(({ event }) => {
+      if (event.type !== "ACTION_CONFIRMED") return {};
       return {
-        hunger: Math.max(0, context.hunger - hungerPerSecond),
-        energy: Math.max(0, context.energy - energyPerSecond),
-        happiness: Math.max(0, context.happiness - happinessPerSecond),
-        cleanliness: Math.max(0, context.cleanliness - cleanlinessPerSecond),
-        tickCount: context.tickCount + 1,
+        selectedItemId: event.itemId,
+        selectedQuantity: event.quantity,
+        lastError: null,
       };
     }),
-
-    // === Player Actions ===
-    feed: assign(({ context }) => ({
-      hunger: Math.min(100, context.hunger + 30),
-    })),
-
-    updateHappiness: assign(({ context }) => ({
-      happiness: Math.min(100, context.happiness + 5),
-    })),
-
-    sleep: assign({
-      energy: 100,
-    }),
-
-    play: assign(({ context }) => ({
-      happiness: Math.min(100, context.happiness + 25),
-    })),
-
-    expendEnergy: assign(({ context }) => ({
-      energy: Math.max(0, context.energy - 20),
-    })),
-
-    clean: assign({
-      cleanliness: 100,
-    }),
-
-    // === Health Check ===
-    checkHealth: assign(({ context }) => {
-      let health = context.health;
-
-      // Hunger affects health
-      if (context.hunger > 80) health -= 1;
-      if (context.hunger === 0) health -= 5;
-
-      // Cleanliness affects health
-      if (context.cleanliness < 20) health -= 1;
-
-      // Happiness affects health
-      if (context.happiness < 20) health -= 1;
-
-      // Energy affects health
-      if (context.energy === 0) health -= 5;
-
-      // Regenerate if all good
-      if (
-        context.hunger < 50 &&
-        context.cleanliness > 70 &&
-        context.happiness > 50
-      ) {
-        health = Math.min(100, health + 1);
-      }
-
-      return {
-        health: Math.max(0, Math.min(100, health)),
-      };
-    }),
-
-    // === Server Sync ===
-    syncWithServer: () => {
-      console.log("Syncing with server...");
-    },
-
-    retrySync: () => {
-      console.log("Retrying sync...");
-    },
-
-    clearSyncError: assign({
-      syncErrors: 0,
+    clearAction: assign({
+      selectedItemId: null,
+      selectedQuantity: 1,
       lastError: null,
     }),
-
-    handleSyncError: assign(({ context }) => ({
-      syncErrors: context.syncErrors + 1,
-      lastError: "Sync failed, will retry",
-    })),
-
-    // === Critical State ===
-    enterCritical: assign(() => ({
-      status: "critical" as const,
-      criticalSince: Date.now(),
-    })),
-
-    onEnterCritical: ({ context }) => {
-      console.log(`Pixegotchi ${context.pixegotchiId} entered CRITICAL state`);
-    },
-
-    resurrect: assign({
-      health: 50,
-      status: "active" as const,
-      criticalSince: null,
+    clearError: assign({
+      lastError: null,
     }),
-
-    onTimeout: ({ context }) => {
-      console.log(`Pixegotchi ${context.pixegotchiId} grace period expired`);
-    },
-
-    onDeath: ({ context }) => {
-      console.log(`Pixegotchi ${context.pixegotchiId} DIED`);
-    },
+    setError: assign(({ event }) => {
+      if (event.type !== "MUTATION_FAILED") return {};
+      return { lastError: getErrorMessage(event.error) };
+    }),
   },
-
   guards: {
-    isHealthCritical: ({ context }) => context.health <= 0,
-
-    hasResurrectionItem: () => {
-      // TODO: Check inventory for resurrection item
-      return false;
-    },
-
-    isGracePeriodExpired: ({ context }) => {
-      if (!context.criticalSince) return false;
-      return Date.now() - context.criticalSince > 2592000000; // 30 days
-    },
+    isCritical: ({ event }) =>
+      event.type === "DATA_SYNCED" && event.status === "critical",
+    isDead: ({ event }) =>
+      event.type === "DATA_SYNCED" && event.status === "dead",
+    isVault: ({ event }) =>
+      event.type === "DATA_SYNCED" && event.status === "vault",
   },
 }).createMachine({
-  id: "pixegotchi",
-  initial: "initializing",
-
-  context: ({ input }) => ({
-    pixegotchiId: input.pixegotchiId,
-    userId: input.userId,
-    pixegotchi: null,
-    health: 100,
-    hunger: 70,
-    energy: 100,
-    happiness: 50,
-    cleanliness: 100,
-    genome: null,
-    status: "active" as const,
-    level: 1,
-    lastServerSync: Date.now(),
-    lastUpdateAt: Date.now(),
-    tickCount: 0,
-    criticalSince: null,
-    hungerRate: 1.0,
-    energyRate: 1.0,
-    happinesRate: 1.0,
-    cleanlinessRate: 1.0,
-    syncErrors: 0,
+  id: "pixegotchiUi",
+  initial: "bootstrapping",
+  context: {
+    selectedItemId: null,
+    selectedQuantity: 1,
+    lastStatus: null,
     lastError: null,
-  }),
-
+  },
+  on: {
+    DATA_SYNCED: [
+      {
+        guard: "isCritical",
+        target: ".blocked.critical",
+        actions: "syncStatus",
+      },
+      {
+        guard: "isDead",
+        target: ".blocked.dead",
+        actions: "syncStatus",
+      },
+      {
+        guard: "isVault",
+        target: ".blocked.vault",
+        actions: "syncStatus",
+      },
+      {
+        target: ".ready.idle",
+        actions: "syncStatus",
+      },
+    ],
+  },
   states: {
-    // ============================================
-    // INITIALIZING - Load pixegotchi from server
-    // ============================================
-    initializing: {
-      on: {
-        LOAD_SUCCESS: {
-          target: "active",
-          actions: "initializeFromData",
-        },
-        LOAD_ERROR: {
-          target: "error",
-          actions: "handleInitError",
-        },
-      },
-    },
-
-    // ============================================
-    // ACTIVE - Main state (parallel processes)
-    // ============================================
-    active: {
-      type: "parallel",
-
+    bootstrapping: {},
+    ready: {
+      initial: "idle",
       states: {
-        // === Stat Degradation ===
-        degradation: {
-          initial: "running",
-          states: {
-            running: {
-              after: {
-                1000: {
-                  target: "running",
-                  actions: "degradeStats",
-                },
-              },
+        idle: {
+          entry: "clearAction",
+          on: {
+            ACTION_REQUESTED: {
+              target: "selectingItem",
+              actions: "selectItem",
             },
-            paused: {},
+          },
+        },
+        selectingItem: {
+          always: {
+            target: "confirmingAction",
           },
           on: {
-            PAUSE_DEGRADATION: ".paused",
-            RESUME_DEGRADATION: ".running",
+            ACTION_REQUESTED: {
+              target: "confirmingAction",
+              actions: "selectItem",
+            },
+            CANCEL: {
+              target: "idle",
+            },
           },
         },
-
-        // === Server Synchronization ===
-        synchronization: {
-          initial: "syncing",
-          states: {
-            syncing: {
-              after: {
-                30000: {
-                  target: "syncing",
-                  actions: "syncWithServer",
-                },
-              },
-            },
-            error: {
-              after: {
-                5000: {
-                  target: "syncing",
-                  actions: "retrySync",
-                },
-              },
-            },
-          },
+        confirmingAction: {
           on: {
-            SYNC_SUCCESS: {
-              target: ".syncing",
-              actions: "clearSyncError",
+            ACTION_CONFIRMED: {
+              target: "submittingAction",
+              actions: "confirmAction",
             },
-            SYNC_ERROR: {
-              target: ".error",
-              actions: "handleSyncError",
+            ACTION_REQUESTED: {
+              actions: "selectItem",
             },
-          },
-        },
-
-        // === Health Monitoring ===
-        healthMonitoring: {
-          initial: "monitoring",
-          states: {
-            monitoring: {
-              after: {
-                5000: {
-                  target: "monitoring",
-                  actions: "checkHealth",
-                },
-              },
+            CANCEL: {
+              target: "idle",
             },
           },
         },
-      },
-
-      // === Transitions from ACTIVE ===
-      on: {
-        // Player actions
-        FEED: {
-          actions: ["feed", "updateHappiness"],
-        },
-        SLEEP: {
-          actions: "sleep",
-        },
-        PLAY: {
-          actions: ["play", "expendEnergy"],
-        },
-        CLEAN: {
-          actions: "clean",
-        },
-
-        // Health check
-        ENTER_CRITICAL: {
-          guard: "isHealthCritical",
-          target: "critical",
-          actions: "enterCritical",
-        },
-      },
-    },
-
-    // ============================================
-    // CRITICAL - Health = 0 (30 day grace period)
-    // ============================================
-    critical: {
-      entry: "onEnterCritical",
-
-      // Automatic transition after 30 days
-      after: {
-        2592000000: {
-          target: "dead",
-          actions: "onTimeout",
-        },
-      },
-
-      on: {
-        // Try to save with resurrection item
-        HEAL: {
-          guard: "hasResurrectionItem",
-          target: "active",
-          actions: "resurrect",
-        },
-
-        // Manual check for grace period expiration
-        CHECK_CRITICAL: [
-          {
-            guard: "isGracePeriodExpired",
-            target: "dead",
-            actions: "onTimeout",
+        submittingAction: {
+          on: {
+            MUTATION_SUCCEEDED: {
+              target: "actionSuccess",
+              actions: "clearError",
+            },
+            MUTATION_FAILED: {
+              target: "actionError",
+              actions: "setError",
+            },
           },
-        ],
+        },
+        actionSuccess: {
+          after: {
+            700: {
+              target: "idle",
+            },
+          },
+        },
+        actionError: {
+          on: {
+            RETRY: {
+              target: "confirmingAction",
+              actions: "clearError",
+            },
+            ACTION_CONFIRMED: {
+              target: "submittingAction",
+              actions: "confirmAction",
+            },
+            CANCEL: {
+              target: "idle",
+            },
+          },
+        },
       },
     },
-
-    // ============================================
-    // DEAD - Final state
-    // ============================================
-    dead: {
-      type: "final",
-      entry: "onDeath",
-    },
-
-    // ============================================
-    // ERROR - Error state
-    // ============================================
-    error: {
-      on: {
-        RETRY: "initializing",
+    blocked: {
+      states: {
+        critical: {},
+        dead: {},
+        vault: {},
       },
     },
   },
 });
+
+export const pixegotchiMachine = pixegotchiUiMachine;

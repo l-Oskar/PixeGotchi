@@ -36,6 +36,7 @@ export interface Pixegotchi {
   lastSleptAt: Date | string | null;
   lastCleanedAt: Date | string | null;
   lastHealedAt: Date | string | null;
+  lastBoostedAt: Date | string | null;
   lastUpdateAt: Date | string | null;
   hatchedAt: Date | string | null;
 }
