@@ -10,6 +10,8 @@ export const PIXEGOTCHI_KEYS = {
   details: (id: number | null) => ["pixegotchi", id] as const,
 };
 
+const CURRENT_PIXEGOTCHI_REFETCH_INTERVAL_MS = 30_000;
+
 export const useAllPixegotchi = () => {
   return useQuery({
     queryKey: PIXEGOTCHI_KEYS.all,
@@ -32,6 +34,7 @@ export const useCurrentPixegotchi = () => {
   return useQuery({
     queryKey: PIXEGOTCHI_KEYS.current,
     queryFn: pixegotchiApi.getCurrent,
+    refetchInterval: CURRENT_PIXEGOTCHI_REFETCH_INTERVAL_MS,
   });
 };
 
