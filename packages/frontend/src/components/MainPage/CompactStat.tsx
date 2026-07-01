@@ -1,5 +1,9 @@
 import { RARITY_STATS, RarityType } from "@pixegotchi/shared";
 import { LucideIcon } from "lucide-react";
+import {
+  formatWholeStatValue,
+  toFiniteStatNumber,
+} from "@/utils/formatStats";
 
 export interface CompactStatProps {
   icon: LucideIcon;
@@ -17,8 +21,11 @@ const CompactStat: React.FC<CompactStatProps> = ({
   rarity,
 }) => {
   const maxStats = RARITY_STATS[rarity].maxStat;
+  const currentValue = Math.min(maxStats, Math.max(0, toFiniteStatNumber(value)));
+  const displayValue = formatWholeStatValue(currentValue);
   const circumference = 2 * Math.PI * 16; // radius = 16
-  const strokeDashoffset = circumference - (value / maxStats) * circumference;
+  const strokeDashoffset =
+    circumference - (currentValue / maxStats) * circumference;
 
   return (
     <div className="flex flex-col items-center gap-1">
@@ -54,7 +61,7 @@ const CompactStat: React.FC<CompactStatProps> = ({
           <Icon size={16} className={strokeColor} />
         </div>
       </div>
-      <div className="text-[10px] font-semibold text-white/80">{`${value} / ${maxStats}`}</div>
+      <div className="text-[10px] font-semibold text-white/80">{`${displayValue} / ${maxStats}`}</div>
     </div>
   );
 };

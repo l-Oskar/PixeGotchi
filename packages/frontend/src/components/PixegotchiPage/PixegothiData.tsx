@@ -9,6 +9,10 @@ import {
   TraitType,
 } from "@pixegotchi/shared";
 import { Mars, Venus } from "lucide-react";
+import {
+  formatWholeStatValue,
+  toFiniteStatNumber,
+} from "@/utils/formatStats";
 
 interface PixegothiDataProps {
   pixegotchi: Pixegotchi | null;
@@ -20,12 +24,13 @@ const StatBar: React.FC<{
   color: string;
   rarity: RarityType;
 }> = ({ label, value, color, rarity }) => {
-  const numericValue = typeof value === "number" ? value : 0;
+  const numericValue = toFiniteStatNumber(value);
   const currentValue = Math.min(
     RARITY_STATS[rarity].maxStat,
     Math.max(0, numericValue),
   );
   const maxValue = RARITY_STATS[rarity].maxStat;
+  const displayValue = formatWholeStatValue(currentValue);
   const percentage = (currentValue / maxValue) * 100;
 
   return (
@@ -34,8 +39,8 @@ const StatBar: React.FC<{
         <span className="text-white/80">{label}</span>
         <div>
           <span
-            className={`${numericValue === maxValue ? "text-green-500" : "text-yellow-500"}  font-medium`}>
-            {numericValue}
+            className={`${currentValue === maxValue ? "text-green-500" : "text-yellow-500"}  font-medium`}>
+            {displayValue}
           </span>
           {" / "}
           <span className="text-green-500 font-medium">{maxValue}</span>
