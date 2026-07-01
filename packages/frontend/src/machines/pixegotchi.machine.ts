@@ -10,7 +10,7 @@ interface PixegotchiUiContext {
 
 type PixegotchiUiEvent =
   | { type: "DATA_SYNCED"; status: PixegotchiStatus | null }
-  | { type: "ACTION_REQUESTED"; itemId: string }
+  | { type: "ACTION_REQUESTED"; itemId: string; canUseWhileBlocked?: boolean }
   | { type: "ACTION_CONFIRMED"; itemId: string; quantity: number }
   | { type: "MUTATION_SUCCEEDED" }
   | { type: "MUTATION_FAILED"; error: unknown }
@@ -69,6 +69,8 @@ export const pixegotchiUiMachine = setup({
       event.type === "DATA_SYNCED" && event.status === "dead",
     isVault: ({ event }) =>
       event.type === "DATA_SYNCED" && event.status === "vault",
+    canUseWhileBlocked: ({ event }) =>
+      event.type === "ACTION_REQUESTED" && event.canUseWhileBlocked === true,
   },
 }).createMachine({
   id: "pixegotchiUi",
@@ -181,6 +183,14 @@ export const pixegotchiUiMachine = setup({
       },
     },
     blocked: {
+      initial: "critical",
+      on: {
+        ACTION_REQUESTED: {
+          guard: "canUseWhileBlocked",
+          target: "#pixegotchiUi.ready.confirmingAction",
+          actions: "selectItem",
+        },
+      },
       states: {
         critical: {},
         dead: {},

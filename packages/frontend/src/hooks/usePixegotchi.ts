@@ -60,8 +60,8 @@ export function usePixegotchiActionFlow(status?: PixegotchiStatus | null) {
     isBlocked,
     isModalOpen:
       isConfirmingAction || isSubmittingAction || isActionError || isActionSuccess,
-    requestAction: (itemId: string) =>
-      service.send({ type: "ACTION_REQUESTED", itemId }),
+    requestAction: (itemId: string, canUseWhileBlocked = false) =>
+      service.send({ type: "ACTION_REQUESTED", itemId, canUseWhileBlocked }),
     confirmAction: (itemId: string, quantity: number) =>
       service.send({ type: "ACTION_CONFIRMED", itemId, quantity }),
     mutationSucceeded: () => service.send({ type: "MUTATION_SUCCEEDED" }),

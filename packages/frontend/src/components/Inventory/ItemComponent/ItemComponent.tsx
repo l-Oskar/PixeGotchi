@@ -12,6 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import SortedButtons from "./SortedButtons";
 import { usePixegotchiActionFlow } from "@/hooks/usePixegotchi";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
+import { canUseItemForStatus } from "@/utils/itemUsage";
 
 export interface ItemComponentProps {
   sorted?: string;
@@ -24,6 +25,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   const actionFlow = usePixegotchiActionFlow(
     currentPixegotchi?.status ?? null,
   );
+  const currentStatus = currentPixegotchi?.status ?? null;
   const inventory = getInventory.data ?? [];
   const [sortedList, setSortedList] = useState<string>(sorted || "rarity");
 
@@ -47,8 +49,10 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
     }
   }, [actionFlow, currentInventoryItem, getInventory.isSuccess]);
 
-  const handleItemClick = (itemId: string) => {
-    actionFlow.requestAction(itemId);
+  const handleItemClick = (item: InventoryWithDetails) => {
+    if (!canUseItemForStatus(item.details, currentStatus)) return;
+
+    actionFlow.requestAction(item.itemId, currentStatus !== "active");
   };
 
   const handleUseItem = async (itemId: string, quantity: number) => {
@@ -135,22 +139,31 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
     <>
       <div>
         <SortedButtons initialFilter={sortedList} setFilter={setSortedList} />
+        {actionFlow.isBlocked && (
+          <div className="mb-3 rounded-2xl border border-yellow-400/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-100">
+            Only revive items can be used while Pixegotchi is not active.
+          </div>
+        )}
         <div className="grid grid-cols-3 gap-3">
-          {sortedInventory.map((item) => (
-            <button
-              key={item.id}
-              disabled={!item.details}
-              onClick={() => handleItemClick(item.itemId)}
-              className={`border ${RARITY_BORDER_COLORS[item.rarity]} bg-white/5 hover:bg-white/10 rounded-2xl p-4 transition flex flex-col items-center gap-2 group disabled:opacity-50 disabled:hover:bg-white/5`}>
-              <div className="text-4xl group-hover:scale-110 transition">
-                {item.details?.iconUrl ?? "?"}
-              </div>
-              <div className="text-xs font-medium text-center">
-                {item.details?.name ?? item.itemId}
-              </div>
-              <div className="text-xs text-white/60">{item.quantity}</div>
-            </button>
-          ))}
+          {sortedInventory.map((item) => {
+            const canUseItem = canUseItemForStatus(item.details, currentStatus);
+
+            return (
+              <button
+                key={item.id}
+                disabled={!canUseItem}
+                onClick={() => handleItemClick(item)}
+                className={`border ${RARITY_BORDER_COLORS[item.rarity]} bg-white/5 hover:bg-white/10 rounded-2xl p-4 transition flex flex-col items-center gap-2 group disabled:opacity-50 disabled:hover:bg-white/5`}>
+                <div className="text-4xl group-hover:scale-110 transition">
+                  {item.details?.iconUrl ?? "?"}
+                </div>
+                <div className="text-xs font-medium text-center">
+                  {item.details?.name ?? item.itemId}
+                </div>
+                <div className="text-xs text-white/60">{item.quantity}</div>
+              </button>
+            );
+          })}
         </div>
 
         <ItemModal
