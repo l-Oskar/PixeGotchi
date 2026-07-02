@@ -41,8 +41,13 @@ const CompactStat: React.FC<CompactStatProps> = ({
   if (variant === "row") {
     return (
       <div className="flex items-center gap-1.5">
-        <div className={`pixel-icon-box h-6 w-6 shrink-0 ${bgColor}`}>
-          <Icon size={14} strokeWidth={2.4} className={strokeColor} />
+        <div
+          className={`pixel-icon-box h-[1.625rem] w-[1.625rem] shrink-0 max-[380px]:h-6 max-[380px]:w-6 ${bgColor}`}>
+          <Icon
+            size={15}
+            strokeWidth={2.4}
+            className={`${strokeColor} max-[380px]:h-3.5 max-[380px]:w-3.5`}
+          />
         </div>
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex items-center justify-between gap-1.5 font-pixel">
@@ -53,7 +58,7 @@ const CompactStat: React.FC<CompactStatProps> = ({
               {displayValue}/{maxStats}
             </span>
           </div>
-          <div className="h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep">
+          <div className="h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep shadow-[inset_0_0_0_1px_rgba(0,0,0,0.55)]">
             <div
               className={`h-full ${fillColor} shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] transition-all duration-500`}
               style={{ width: `${progressPercent}%` }}

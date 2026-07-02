@@ -57,12 +57,12 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     : "active";
 
   return (
-    <div className="space-y-2.5 p-2.5">
-      <section className="pixel-panel overflow-hidden bg-pixel-bg-deep/60 p-2.5">
-        <div className="mb-2.5 flex items-start justify-between gap-2">
+    <div className="space-y-2 p-2.5">
+      <section className="pixel-panel overflow-hidden bg-pixel-bg-deep/65 p-2 shadow-[0_5px_0_#05030a,0_0_0_2px_#3c286b,inset_0_0_0_2px_rgba(248,244,216,0.1)]">
+        <div className="mb-2 flex items-start justify-between gap-2">
           <div className="min-w-0">
             <div className="flex min-w-0 items-center gap-2">
-              <h2 className="truncate font-pixel text-sm leading-5 text-pixel-ink">
+              <h2 className="truncate font-pixel text-[15px] leading-6 text-pixel-ink max-[380px]:text-sm">
                 {pixegotchi.name ?? "Unknown"}
               </h2>
               <button
@@ -74,15 +74,15 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             </div>
             <div className="mt-1.5 flex gap-1.5 overflow-x-auto pb-1 font-pixel">
               <span
-                className={`rounded-sm border px-1.5 py-0.5 text-[7px] capitalize leading-3 ${RARITY_COLORS[pixegotchi.rarity]} whitespace-nowrap`}>
+                className={`rounded-sm border px-2 py-1 text-[7px] capitalize leading-3 ${RARITY_COLORS[pixegotchi.rarity]} whitespace-nowrap`}>
                 {pixegotchi.rarity}
               </span>
               <span
-                className={`rounded-sm border px-1.5 py-0.5 text-[7px] capitalize leading-3 ${ELEMENT_COLORS[pixegotchi.element]} whitespace-nowrap`}>
+                className={`rounded-sm border px-2 py-1 text-[7px] capitalize leading-3 ${ELEMENT_COLORS[pixegotchi.element]} whitespace-nowrap`}>
                 {pixegotchi.element}
               </span>
               <span
-                className={`rounded-sm border bg-pixel-bg-deep/50 px-1.5 py-0.5 text-[7px] leading-3 whitespace-nowrap ${pixegotchi.gender === "male" ? "border-blue-500 text-blue-400" : "border-pink-400 text-pink-400"}`}>
+                className={`rounded-sm border bg-pixel-bg-deep/50 px-2 py-1 text-[7px] leading-3 whitespace-nowrap ${pixegotchi.gender === "male" ? "border-blue-500 text-blue-400" : "border-pink-400 text-pink-400"}`}>
                 <span className="flex items-center gap-1">
                   {pixegotchi.gender === "male" ? (
                     <Mars size={10} />
@@ -113,8 +113,11 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           </div>
         </div>
 
-        <div className="grid min-h-[16.5rem] grid-cols-[minmax(9.75rem,48%)_1fr] gap-2 max-[380px]:min-h-[15.25rem]">
-          <div className="pixel-panel-soft flex flex-col justify-center gap-2.5 bg-pixel-bg-deep/75 p-2">
+        <div className="relative min-h-[15.75rem] overflow-hidden max-[380px]:min-h-[15rem]">
+          <div className="[&_.pixel-room-bg]:h-full [&_.pixel-room-bg]:min-h-[15.75rem] max-[380px]:[&_.pixel-room-bg]:min-h-[15rem]">
+            <Visual pet={pixegotchi} status={null} />
+          </div>
+          <div className="pixel-panel-soft absolute bottom-0 left-0 top-0 z-20 flex w-[45%] flex-col justify-center gap-2 border-pixel-border bg-pixel-bg-deep/90 p-2 shadow-[0_4px_0_#05030a,inset_0_0_0_2px_rgba(248,244,216,0.08)] max-[380px]:bottom-2 max-[380px]:left-2 max-[380px]:top-2 max-[380px]:w-[46%] max-[380px]:gap-1.5">
             <CompactStat
               icon={Heart}
               label="Health"
@@ -161,40 +164,36 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               variant="row"
             />
           </div>
-
-          <div className="min-w-0 [&_.pixel-room-bg]:h-full [&_.pixel-room-bg]:min-h-[16.5rem] max-[380px]:[&_.pixel-room-bg]:min-h-[15.25rem]">
-            <Visual pet={pixegotchi} status={null} />
-          </div>
         </div>
       </section>
 
-      <section className="pixel-panel flex items-center gap-2.5 bg-pixel-bg-deep/70 p-2">
+      <section className="pixel-panel flex items-center gap-2 bg-pixel-bg-deep/75 p-2">
         <div className="min-w-0 flex-1">
-          <div className="mb-2 grid grid-cols-[auto_1fr_auto] items-center gap-2 font-pixel text-[9px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[8px]">
+          <div className="mb-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-2 font-pixel text-[9px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[7px]">
             <span className="whitespace-nowrap text-pixel-border">
               Level {pixegotchi.level}
             </span>
             <span className="truncate text-center text-pixel-muted">
               {pixegotchi.experience} / {experienceTarget} EXP
             </span>
-            <span className="whitespace-nowrap">
-              Status:{" "}
-              <span className="text-pixel-green capitalize">{statusLabel}</span>
-            </span>
           </div>
-          <div className="pixel-progress h-2.5">
+          <div className="pixel-progress h-2.5 w-50">
             <div
               className="h-full bg-pixel-border shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] transition-all duration-500"
               style={{ width: `${experienceProgress}%` }}
             />
           </div>
         </div>
+        <span className="font-pixel text-[8px] whitespace-nowrap">
+          Status:{" "}
+          <span className="text-pixel-green capitalize">{statusLabel}</span>
+        </span>
         <span className="pixel-icon-button hidden h-9 min-h-9 w-9 min-w-9 shrink-0 text-pixel-border min-[390px]:grid">
           <Smile size={16} />
         </span>
       </section>
 
-      <section className="grid grid-cols-3 gap-2">
+      <section className="grid grid-cols-3 gap-2 max-[380px]:gap-1.5">
         <ActionButton
           icon={Apple}
           label="Feed"
@@ -238,13 +237,13 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         />
       </section>
 
-      <section className="grid grid-cols-2 gap-2">
-        <div className="pixel-panel flex min-h-20 items-center gap-1.5 bg-pixel-bg-deep/70 p-2">
+      <section className="grid grid-cols-2 gap-2 max-[380px]:gap-1.5">
+        <div className="pixel-panel flex min-h-[4.75rem] items-center gap-2 bg-pixel-bg-deep/75 p-2">
           <span className="pixel-icon-box h-10 w-10 shrink-0 bg-pixel-surface-soft text-pixel-highlight">
             <Gift size={21} />
           </span>
           <div className="min-w-0 flex-1">
-            <div className="truncate font-pixel text-[8px] uppercase leading-3 text-pixel-border">
+            <div className="truncate font-pixel text-[7px] uppercase leading-3 text-pixel-border min-[430px]:text-[8px]">
               Daily Chest
             </div>
             <div className="mt-1 font-pixel text-[9px] leading-3 text-pixel-muted">
@@ -256,17 +255,17 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           </div>
           <button
             type="button"
-            className="pixel-icon-button hidden h-8 min-h-8 w-8 min-w-8 text-pixel-border min-[390px]:grid"
+            className="pixel-icon-button hidden h-7 min-h-7 w-7 min-w-7 text-pixel-border min-[390px]:grid"
             aria-label="Daily chest reward">
-            <Gift size={16} />
+            <Gift size={14} />
           </button>
         </div>
-        <div className="pixel-panel flex min-h-20 items-center gap-1.5 bg-pixel-bg-deep/70 p-2">
+        <div className="pixel-panel flex min-h-[4.75rem] items-center gap-2 bg-pixel-bg-deep/75 p-2">
           <span className="pixel-icon-box h-10 w-10 shrink-0 bg-pixel-surface-soft text-orange-500">
             <Flame size={21} />
           </span>
           <div className="min-w-0 flex-1">
-            <div className="font-pixel text-[8px] uppercase leading-3 text-pixel-border">
+            <div className="font-pixel text-[7px] uppercase leading-3 text-pixel-border min-[430px]:text-[8px]">
               Streak
             </div>
             <div className="mt-1 flex items-center gap-1.5 font-pixel text-[9px] leading-3 text-pixel-ink">
@@ -286,9 +285,9 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           </div>
           <button
             type="button"
-            className="pixel-icon-button hidden h-8 min-h-8 w-8 min-w-8 text-pixel-muted min-[390px]:grid"
+            className="pixel-icon-button hidden h-7 min-h-7 w-7 min-w-7 text-pixel-muted min-[390px]:grid"
             aria-label="Streak calendar">
-            <CalendarDays size={17} />
+            <CalendarDays size={14} />
           </button>
         </div>
       </section>
