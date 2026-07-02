@@ -97,6 +97,29 @@ body {
     opacity: 0.55;
   }
 
+  .pixel-icon-button {
+    display: grid;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    min-height: 2.5rem;
+    place-items: center;
+    border: 2px solid var(--color-pixel-border);
+    border-radius: var(--radius-pixel);
+    background: var(--color-pixel-surface);
+    color: var(--color-pixel-ink);
+    box-shadow: 0 3px 0 var(--color-pixel-bg-deep);
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease,
+      filter 120ms ease;
+  }
+
+  .pixel-icon-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--color-pixel-bg-deep);
+  }
+
   .pixel-icon-box {
     display: grid;
     width: 2.25rem;
