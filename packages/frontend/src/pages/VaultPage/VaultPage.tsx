@@ -35,56 +35,46 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   }
 
   return (
-    <div className="space-y-3 p-3">
-      <div className="pixel-panel p-3">
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
-            Vault
-          </h1>
+    <div className="space-y-2.5 p-2.5">
+      <div className="pixel-panel p-2.5">
+        <div className="mb-2.5 flex items-center justify-between gap-2">
+          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">Vault</h1>
         </div>
 
-        <div className="pixel-panel-soft overflow-hidden border-pink-400/70 bg-linear-to-br from-fuchsia-500/20 via-pixel-surface-soft to-pixel-bg-deep p-4">
-          <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+        <div className="pixel-panel-soft overflow-hidden border-pink-400/70 bg-linear-to-br from-fuchsia-500/20 via-pixel-surface-soft to-pixel-bg-deep p-3">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-2.5">
             <div className="min-w-0">
-              <div className="mb-2 flex items-center gap-2">
-                <Sparkles className="text-pink-300" size={16} />
-                <span className="font-pixel text-[10px] leading-4 text-pixel-ink">
+              <div className="mb-1.5 flex items-center gap-2">
+                <Sparkles className="text-pink-300" size={15} />
+                <span className="font-pixel text-[9px] leading-3 text-pixel-ink">
                   Collection Progress
                 </span>
               </div>
-              <div className="font-pixel text-2xl leading-8 text-pixel-ink">
+              <div className="font-pixel text-xl leading-7 text-pixel-ink">
                 {collectedCount} / {totalCount}
               </div>
-              <div className="pixel-progress mt-2">
+              <div className="pixel-progress mt-1.5 h-2.5">
                 <div
                   className="pixel-progress-fill bg-linear-to-r from-pink-500 to-fuchsia-400"
                   style={{ width: `${(collectedCount / totalCount) * 100}%` }}
                 />
               </div>
-              <div className="mt-3 max-w-48 font-pixel text-[8px] leading-4 text-pixel-muted">
+              <div className="mt-2 max-w-48 font-pixel text-[7px] leading-3 text-pixel-muted">
                 Collect all elements with level 100 to get Unique rarity.
               </div>
             </div>
 
-            <div className="pixel-panel-soft grid h-20 w-20 place-items-center border-pink-300/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
-              <div className="relative grid h-14 w-14 place-items-center">
-                <Sparkles
-                  className="absolute right-0 top-0 text-pink-300"
-                  size={12}
-                />
-                <Sparkles
-                  className="absolute bottom-0 left-0 text-fuchsia-300"
-                  size={10}
-                />
-                <span className="text-4xl leading-none">🏆</span>
+            <div className="pixel-panel-soft grid h-16 w-16 place-items-center border-pink-300/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
+              <div className="relative grid h-12 w-12 place-items-center">
+                <span className="text-3xl leading-none">🏆</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-2">
+        <div className="mt-3 flex items-center justify-between gap-2">
           <div>
-            <h2 className="font-pixel text-[11px] leading-4 text-pixel-ink">
+            <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
               Elements Collection
             </h2>
             <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
@@ -100,27 +90,27 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
           {vaultStats.map((item) => (
             <div
               key={item.element}
-              className={`pixel-panel-soft relative min-h-40 overflow-hidden p-2 transition ${
+              className={`pixel-panel-soft relative min-h-36 overflow-hidden p-2 transition max-[380px]:min-h-32 max-[380px]:p-1.5 ${
                 item.isEmpty
                   ? "border-dashed bg-pixel-bg-deep/35 opacity-70"
                   : `cursor-pointer bg-linear-to-b from-pixel-surface-soft to-pixel-bg-deep/60 hover:border-pixel-highlight/70 ${RARITY_COLORS[item.bestRarity]?.replace("text", "border") || ""}`
               }`}>
               {!item.isEmpty && item.count > 1 && (
-                <div className="absolute right-2 top-2 rounded-sm border border-pixel-ink/20 bg-pixel-bg-deep/80 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-ink">
+                <div className="absolute right-1.5 top-1.5 rounded-sm border border-pixel-ink/20 bg-pixel-bg-deep/80 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-ink">
                   x{item.count}
                 </div>
               )}
 
-              <div className="grid h-24 place-items-center">
+              <div className="grid h-20 place-items-center max-[380px]:h-16">
                 {item.isEmpty ? (
-                  <div className="grid h-20 w-20 place-items-center rounded-sm border border-dashed border-pixel-border/70 bg-pixel-surface/40">
-                    <span className="font-pixel text-xl leading-none text-pixel-muted">
+                  <div className="grid h-16 w-16 place-items-center rounded-sm border border-dashed border-pixel-border/70 bg-pixel-surface/40 max-[380px]:h-14 max-[380px]:w-14">
+                    <span className="font-pixel text-lg leading-none text-pixel-muted">
                       ?
                     </span>
                   </div>
                 ) : (
                   <img
-                    className="pixelated h-28 w-28 object-contain"
+                    className="pixelated h-24 w-24 object-contain max-[380px]:h-20 max-[380px]:w-20"
                     src={`./${getPixegotchiImg(item)}`}
                     alt={`Pixegotchi-${item.element}`}
                   />
@@ -129,7 +119,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
 
               {!item.isEmpty ? (
                 <div className="mt-1">
-                  <h3 className="truncate font-pixel text-[9px] leading-4 capitalize text-pixel-ink">
+                  <h3 className="truncate font-pixel text-[9px] leading-3 capitalize text-pixel-ink max-[380px]:text-[8px]">
                     {item.element}
                   </h3>
                   <div className="mt-1 flex items-center justify-between gap-1">
@@ -137,14 +127,14 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
                       Lv {item.highestLevel}
                     </div>
                     <div
-                      className={`rounded-sm border px-1.5 py-1 font-pixel text-[7px] leading-3 ${RARITY_COLORS[item.bestRarity] || "text-pixel-ink"}`}>
+                      className={`rounded-sm border px-1.5 py-1 font-pixel text-[7px] leading-3 max-[380px]:px-1 max-[380px]:py-0.5 ${RARITY_COLORS[item.bestRarity] || "text-pixel-ink"}`}>
                       {item.bestRarity.toUpperCase()}
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="mt-1 text-center">
-                  <h3 className="font-pixel text-[9px] leading-4 text-pixel-muted">
+                  <h3 className="font-pixel text-[9px] leading-3 text-pixel-muted max-[380px]:text-[8px]">
                     Empty
                   </h3>
                   <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
@@ -179,7 +169,9 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
               type="button">
               <SquareArrowRight size={14} />
               <span>
-                {setPixegotchiToVault.isPending ? "Sending..." : "Send to Vault"}
+                {setPixegotchiToVault.isPending
+                  ? "Sending..."
+                  : "Send to Vault"}
               </span>
             </button>
           </div>

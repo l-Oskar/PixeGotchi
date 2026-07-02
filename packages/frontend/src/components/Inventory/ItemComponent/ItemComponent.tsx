@@ -154,14 +154,14 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
                 key={item.id}
                 disabled={!canUseItem}
                 onClick={() => handleItemClick(item)}
-                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group relative flex min-h-36 flex-col items-center justify-between gap-2 p-2 pt-4 transition hover:border-pixel-highlight/70 disabled:opacity-50`}>
+                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group relative flex min-h-32 flex-col items-center justify-between gap-1.5 p-2 pt-3 transition hover:border-pixel-highlight/70 disabled:opacity-50 max-[380px]:min-h-30`}>
                 <span className="absolute right-1.5 top-1.5 min-w-6 rounded-sm border-2 border-pixel-border bg-pixel-surface-soft px-1.5 py-0.5 text-center font-pixel text-[8px] leading-3 text-pixel-ink">
                   {item.quantity}
                 </span>
-                <div className="mt-1 text-4xl leading-none transition group-hover:scale-110">
+                <div className="mt-1 text-3xl leading-none transition group-hover:scale-110">
                   {item.details?.iconUrl ?? "?"}
                 </div>
-                <div className="line-clamp-2 min-h-8 text-center font-pixel text-[8px] leading-4 text-pixel-ink">
+                <div className="line-clamp-2 min-h-7 text-center font-pixel text-[7px] leading-3 text-pixel-ink">
                   {item.details?.name ?? item.itemId}
                 </div>
                 <span

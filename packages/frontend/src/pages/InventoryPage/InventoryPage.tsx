@@ -32,9 +32,9 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
   };
 
   return (
-    <div className="space-y-3 p-3">
-      <div className="pixel-panel p-3">
-        <div className="mb-3 flex items-center justify-between gap-2">
+    <div className="space-y-2.5 p-2.5">
+      <div className="pixel-panel p-2.5">
+        <div className="mb-2.5 flex items-center justify-between gap-2">
           <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
             Items
           </h1>
@@ -49,12 +49,12 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
                 <button
                   key={tab.id}
                   onClick={() => handleChangeTab(tab.id)}
-                  className={`flex min-h-8 items-center justify-center gap-1.5 rounded-sm border-2 px-2 py-1 font-pixel text-[8px] leading-3 transition ${
+                  className={`flex min-h-7 items-center justify-center gap-1.5 rounded-sm border-2 px-2 py-1 font-pixel text-[7px] leading-3 transition ${
                     activeTab === tab.id
                       ? "border-pixel-highlight bg-pixel-highlight/15 text-pixel-highlight"
                       : "border-transparent text-pixel-muted hover:border-pixel-border hover:text-pixel-ink"
                   }`}>
-                  <Icon size={14} />
+                  <Icon size={13} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -62,8 +62,8 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
           </div>
 
           <div className="grid min-w-0 grid-cols-[1fr_auto] gap-2">
-            <label className="pixel-panel-soft flex min-h-10 min-w-0 items-center gap-2 px-3 py-2">
-              <Search size={16} className="shrink-0 text-pixel-muted" />
+            <label className="pixel-panel-soft flex min-h-9 min-w-0 items-center gap-2 px-2.5 py-1.5">
+              <Search size={15} className="shrink-0 text-pixel-muted" />
               <input
                 aria-label="Search items"
                 className="min-w-0 flex-1 bg-transparent font-pixel text-[9px] leading-4 text-pixel-ink outline-none placeholder:text-pixel-muted"
@@ -73,10 +73,10 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
             </label>
 
             <button
-              className="pixel-icon-button h-10 min-h-10 w-10 min-w-10 text-pixel-ink"
+              className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-ink"
               type="button"
               aria-label="Filter items">
-              <Funnel size={16} />
+              <Funnel size={15} />
             </button>
           </div>
         </div>

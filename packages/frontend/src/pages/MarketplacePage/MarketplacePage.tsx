@@ -156,9 +156,9 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   };
 
   return (
-    <div className="space-y-3 p-3">
-      <div className="pixel-panel p-3">
-        <div className="mb-3 flex items-center justify-between gap-2">
+    <div className="space-y-2.5 p-2.5">
+      <div className="pixel-panel p-2.5">
+        <div className="mb-2.5 flex items-center justify-between gap-2">
           <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
             Marketplace
           </h1>
@@ -167,19 +167,19 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
           </span>
         </div>
 
-        <div className="pixel-panel-soft overflow-hidden border-pixel-highlight/60 bg-linear-to-br from-pixel-highlight/20 via-pixel-surface-soft to-pixel-bg-deep p-4">
-          <div className="flex items-center justify-between gap-3">
+        <div className="pixel-panel-soft overflow-hidden border-pixel-highlight/60 bg-linear-to-br from-pixel-highlight/20 via-pixel-surface-soft to-pixel-bg-deep p-3">
+          <div className="flex items-center justify-between gap-2.5">
             <div className="min-w-0">
-              <div className="mb-2 flex items-center gap-2">
-                <ShoppingBag className="text-pixel-highlight" size={16} />
-                <span className="font-pixel text-[10px] leading-4 text-pixel-ink">
+              <div className="mb-1.5 flex items-center gap-2">
+                <ShoppingBag className="text-pixel-highlight" size={15} />
+                <span className="font-pixel text-[9px] leading-3 text-pixel-ink">
                   Pixegotchi Shop
                 </span>
               </div>
-              <div className="font-pixel text-2xl leading-8 text-pixel-ink">
+              <div className="font-pixel text-xl leading-7 text-pixel-ink">
                 {listings.length} items
               </div>
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
                 <span className="rounded-sm border border-pixel-ink/15 bg-pixel-bg-deep/55 px-2 py-1 font-pixel text-[7px] leading-3 text-pixel-muted">
                   {freeListingsCount} free
                 </span>
@@ -189,21 +189,21 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
               </div>
             </div>
 
-            <div className="pixel-panel-soft grid h-20 w-20 shrink-0 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
-              <div className="relative grid h-14 w-14 place-items-center">
+            <div className="pixel-panel-soft grid h-16 w-16 shrink-0 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
+              <div className="relative grid h-12 w-12 place-items-center">
                 <Sparkles
                   className="absolute right-0 top-0 text-pixel-highlight"
-                  size={12}
+                  size={10}
                 />
-                <Package className="text-pixel-ink" size={34} />
+                <Package className="text-pixel-ink" size={28} />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-2">
+        <div className="mt-3 flex items-center justify-between gap-2">
           <div>
-            <h2 className="font-pixel text-[11px] leading-4 text-pixel-ink">
+            <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
               Featured Items
             </h2>
             <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
@@ -222,24 +222,24 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
             return (
               <div
                 key={listing.id}
-                className="pixel-panel-soft flex min-h-40 flex-col overflow-hidden bg-linear-to-b from-pixel-surface-soft to-pixel-bg-deep/60 p-2">
-                <div className="grid h-20 place-items-center">
-                  <div className="pixel-icon-box h-16 w-16 text-3xl">
+                className="pixel-panel-soft flex min-h-36 flex-col overflow-hidden bg-linear-to-b from-pixel-surface-soft to-pixel-bg-deep/60 p-2 max-[380px]:min-h-32 max-[380px]:p-1.5">
+                <div className="grid h-16 place-items-center max-[380px]:h-13">
+                  <div className="pixel-icon-box h-13 w-13 text-2xl max-[380px]:h-11 max-[380px]:w-11">
                     {listing.icon}
                   </div>
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate font-pixel text-[10px] leading-4 text-pixel-ink">
+                  <h3 className="truncate font-pixel text-[9px] leading-3 text-pixel-ink max-[380px]:text-[8px]">
                     {listing.item}
                   </h3>
-                  <div className="mt-1 truncate font-pixel text-[8px] leading-3 text-pixel-muted">
+                  <div className="mt-1 truncate font-pixel text-[7px] leading-3 text-pixel-muted">
                     by {listing.seller}
                   </div>
                 </div>
 
-                <div className="mt-2 flex items-center justify-between gap-2">
-                  <div className="rounded-sm border border-pixel-highlight/35 bg-pixel-bg-deep/60 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-highlight">
+                <div className="mt-1.5 flex items-center justify-between gap-1.5 max-[380px]:mt-1 max-[380px]:gap-1">
+                  <div className="rounded-sm border border-pixel-highlight/35 bg-pixel-bg-deep/60 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-highlight max-[380px]:px-1 max-[380px]:py-0.5">
                     {listing.price == 0
                       ? "Free"
                       : `${listing.price} ${listing.currency}`}
@@ -250,7 +250,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                       handleBuy(listing);
                     }}
                     disabled={isPending}
-                    className="pixel-button min-h-0 px-3 py-2 font-pixel text-[8px] leading-3 hover:scale-105 disabled:cursor-wait disabled:opacity-70 disabled:hover:scale-100">
+                    className="pixel-button min-h-0 px-2.5 py-1.5 font-pixel text-[7px] leading-3 hover:scale-105 disabled:cursor-wait disabled:opacity-70 disabled:hover:scale-100 max-[380px]:px-2 max-[380px]:py-1">
                     {isPending ? "..." : "BUY"}
                   </button>
                 </div>
