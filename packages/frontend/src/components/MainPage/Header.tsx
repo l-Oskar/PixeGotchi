@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
         </div>
 
         <div className="flex shrink-0 items-center gap-1">
-          <div className="pixel-panel-soft flex items-center gap-1 px-2 py-1 text-pixel-highlight">
+          <div className="pixel-panel-soft flex items-center gap-1 p-2 text-pixel-highlight">
             <Coins size={14} />
             <span className="font-pixel text-[9px] leading-4">
               {user?.pgcBalance || "0"}
