@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { User } from "@pixegotchi/shared";
-import { Crown, Wallet, Coins, Plus, Menu } from "lucide-react";
+import { Crown, Wallet, Coins, Plus, Menu, UserRound } from "lucide-react";
 import { useSignal } from "@tma.js/sdk-react";
 import { viewport } from "@tma.js/sdk";
 
@@ -18,50 +18,48 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
   return (
     <header
       style={{ paddingTop: `${Math.max(0, topInset - 5)}px` }}
-      className="sticky top-0 z-50 bg-pixel-bg/95">
-      <div className="mx-auto flex max-w-md items-center justify-between gap-1 px-2 py-1.5">
-        <div className="pixel-panel-soft flex min-w-0 flex-1 items-center gap-1.5 px-2 py-1">
-          <div className="pixel-icon-box h-8 w-8 shrink-0 bg-linear-to-br from-pixel-highlight to-yellow-600 text-pixel-bg-deep">
-            <Crown size={15} />
+      className="sticky top-0 z-50 bg-pixel-bg/95 shadow-[0_12px_28px_rgba(11,7,20,0.55)]">
+      <div className="mx-auto flex max-w-md items-center justify-between gap-1.5 px-2.5 py-1.5">
+        <div className="flex min-w-0 flex-1 items-center gap-1.5">
+          <div className="relative grid h-12 w-12 shrink-0 place-items-center rounded-sm border-2 border-pixel-red bg-linear-to-br from-pixel-red/70 to-pixel-bg-deep text-pixel-ink shadow-[0_4px_0_#090412,inset_0_0_0_2px_rgba(255,255,255,0.14)]">
+            <UserRound size={24} />
+            <span className="absolute -left-1 -top-1 grid h-5 w-5 place-items-center rounded-sm border-2 border-pixel-bg-deep bg-pixel-highlight text-pixel-bg-deep shadow-[0_2px_0_#090412]">
+              <Crown size={12} />
+            </span>
           </div>
-          <div className="min-w-0">
-            <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
-              Player
-            </div>
-            <div
-              className="truncate font-pixel text-[10px] leading-4 text-pixel-ink"
-              title={user?.username || "Unknown"}>
-              {user?.username || "Unknown"}
-            </div>
+          <div
+            className="min-w-0 truncate font-pixel text-xs leading-5 text-pixel-ink"
+            title={user?.username || "Unknown"}>
+            {user?.username || "Unknown"}
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-1">
-          <div className="pixel-panel-soft flex items-center gap-1 p-2 text-pixel-highlight">
-            <Coins size={14} />
-            <span className="font-pixel text-[9px] leading-4">
+        <div className="flex shrink-0 items-center gap-1.5">
+          <div className="pixel-panel flex h-10 items-center gap-1.5 bg-pixel-bg-deep/75 px-1.5 text-pixel-highlight">
+            <Coins size={18} />
+            <span className="font-pixel text-[11px] leading-4 text-pixel-ink">
               {user?.pgcBalance || "0"}
             </span>
             <button
-              className="grid h-6 w-6 place-items-center border-l-2 border-pixel-border pl-1 text-pixel-green"
+              className="grid h-7 w-7 place-items-center rounded-sm border-2 border-pixel-bg-deep bg-pixel-border text-white shadow-[0_2px_0_#090412]"
               type="button"
               aria-label="Add PGC">
-              <Plus size={14} />
+              <Plus size={16} />
             </button>
           </div>
           <Link to="/ton-connect">
             <button
-              className="pixel-icon-button"
+              className="pixel-icon-button h-10 min-h-10 w-10 min-w-10 bg-pixel-surface text-pixel-ink"
               type="button"
               aria-label="Wallet">
-              <Wallet size={15} />
+              <Wallet size={18} />
             </button>
           </Link>
           <button
-            className="pixel-icon-button text-pixel-muted"
+            className="pixel-icon-button h-10 min-h-10 w-10 min-w-10 bg-pixel-surface text-pixel-ink"
             type="button"
             aria-label="Menu">
-            <Menu size={15} />
+            <Menu size={20} />
           </button>
         </div>
       </div>

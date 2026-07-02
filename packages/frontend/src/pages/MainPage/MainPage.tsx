@@ -99,7 +99,7 @@ const MainPage: React.FC = () => {
     <div className="min-h-screen bg-pixel-bg text-white">
       {!isGameActive && <Header user={user} />}
       {/* Content */}
-      <main className="max-w-md mx-auto pb-20">{renderedPage}</main>
+      <main className="max-w-md mx-auto pb-24">{renderedPage}</main>
       {/* Bottom Navigation */}
       <Navigation
         currentPage={resolvedPage}

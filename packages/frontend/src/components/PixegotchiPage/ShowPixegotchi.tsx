@@ -6,27 +6,28 @@ import {
   RARITY_COLORS,
 } from "@pixegotchi/shared";
 import {
-  Heart,
-  Gamepad2,
-  Bubbles,
   Apple,
-  Pill,
-  Moon,
-  Zap,
-  Smile,
-  Droplets,
-  Menu,
-  Mars,
-  Venus,
-  Rocket,
-  Gift,
+  Bubbles,
+  CalendarDays,
   Flame,
-  Activity,
+  Gamepad2,
+  Gift,
+  Heart,
+  Mars,
+  Moon,
+  MoreHorizontal,
+  Pencil,
+  Pill,
+  Rocket,
+  Smile,
+  Sparkles,
+  Venus,
+  Zap,
+  Droplets,
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
-import QuickInfo from "../Other/QuickInfo";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,
@@ -40,22 +41,9 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     heal: false,
   });
 
-  // const handleAction = (action: keyof Cooldowns) => {
-  //   setCooldowns((prev) => ({ ...prev, [action]: true }));
-  //   setTimeout(() => {
-  //     setCooldowns((prev) => ({ ...prev, [action]: false }));
-  //   }, 3000);
-  // };
   const handleAction = (action: string) => {
     console.log(action);
   };
-
-  // const handleSetToVault = () => {
-  //   setPixegotchiToVault.mutateAsync();
-  //   clearPixegotchi();
-  //   setActive(null);
-  //   onNavigate("start");
-  // };
 
   if (!pixegotchi) return null;
 
@@ -69,203 +57,241 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     : "active";
 
   return (
-      <div className="p-3 space-y-3">
-        {/* Pixegotchi Card */}
-        <div className="pixel-panel p-3">
-          <div className="flex flex-col gap-1 mb-3">
-            <div className="flex justify-between">
-              <h2 className="font-pixel text-base leading-6 flex items-center gap-2">
+    <div className="space-y-2.5 p-2.5">
+      <section className="pixel-panel overflow-hidden bg-pixel-bg-deep/60 p-2.5">
+        <div className="mb-2.5 flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <div className="flex min-w-0 items-center gap-2">
+              <h2 className="truncate font-pixel text-sm leading-5 text-pixel-ink">
                 {pixegotchi.name ?? "Unknown"}
               </h2>
               <button
-                onClick={() => onNavigate("data")}
-                className="text-pixel-muted hover:text-pixel-ink">
-                <Menu size={20} />
+                type="button"
+                aria-label="Edit Pixegotchi"
+                className="shrink-0 text-pixel-border hover:text-pixel-highlight">
+                <Pencil size={16} />
               </button>
             </div>
-            <div className="flex gap-2 py-1">
-              <div className="flex justify-between flex-1 gap-1.5 overflow-x-auto font-pixel">
-                <span
-                  className={`text-[9px] px-2 py-1 ${RARITY_COLORS[pixegotchi.rarity]} rounded-sm border capitalize whitespace-nowrap`}>
-                  {pixegotchi.rarity}
-                </span>
-                <span
-                  className={`text-[9px] px-2 py-1 ${ELEMENT_COLORS[pixegotchi.element]} rounded-sm border capitalize whitespace-nowrap`}>
-                  {pixegotchi.element}
-                </span>
-                <span
-                  className={`text-[9px] px-2 py-1 bg-amber-200/20 rounded-sm border whitespace-nowrap ${pixegotchi.gender === "male" ? "border-blue-500" : "border-pink-400"}`}>
+            <div className="mt-1.5 flex gap-1.5 overflow-x-auto pb-1 font-pixel">
+              <span
+                className={`rounded-sm border px-1.5 py-0.5 text-[7px] capitalize leading-3 ${RARITY_COLORS[pixegotchi.rarity]} whitespace-nowrap`}>
+                {pixegotchi.rarity}
+              </span>
+              <span
+                className={`rounded-sm border px-1.5 py-0.5 text-[7px] capitalize leading-3 ${ELEMENT_COLORS[pixegotchi.element]} whitespace-nowrap`}>
+                {pixegotchi.element}
+              </span>
+              <span
+                className={`rounded-sm border bg-pixel-bg-deep/50 px-1.5 py-0.5 text-[7px] leading-3 whitespace-nowrap ${pixegotchi.gender === "male" ? "border-blue-500 text-blue-400" : "border-pink-400 text-pink-400"}`}>
+                <span className="flex items-center gap-1">
                   {pixegotchi.gender === "male" ? (
-                    <div className="flex gap-1 text-blue-400">
-                      <Mars size={12} />
-                      <span>Male</span>
-                    </div>
+                    <Mars size={10} />
                   ) : (
-                    <div className="flex gap-1 text-pink-400">
-                      <Venus size={12} />
-                      <span>Female</span>
-                    </div>
+                    <Venus size={10} />
                   )}
+                  <span>
+                    {pixegotchi.gender === "male" ? "Male" : "Female"}
+                  </span>
                 </span>
-              </div>
-            </div>
-
-            {/* Compact Experience Bar */}
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-center font-pixel text-[9px] text-pixel-muted mb-1">
-                <span className="">EXP</span>
-                <span>
-                  {pixegotchi.experience} / {experienceTarget}
-                </span>
-              </div>
-              <div className="pixel-progress">
-                <div
-                  className="pixel-progress-fill transition-all duration-500"
-                  style={{ width: `${experienceProgress}%` }}
-                />
-              </div>
+              </span>
             </div>
           </div>
+          <div className="flex shrink-0 gap-1.5">
+            <button
+              type="button"
+              className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-red"
+              aria-label="Favorite">
+              <Heart size={16} fill="currentColor" />
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate("data")}
+              className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-muted"
+              aria-label="Pixegotchi details">
+              <MoreHorizontal size={18} />
+            </button>
+          </div>
+        </div>
 
-          {/* Compact Stats Grid */}
-          <div className="grid grid-cols-5 gap-2 mb-2">
+        <div className="grid min-h-[16.5rem] grid-cols-[minmax(9.75rem,48%)_1fr] gap-2 max-[380px]:min-h-[15.25rem]">
+          <div className="pixel-panel-soft flex flex-col justify-center gap-2.5 bg-pixel-bg-deep/75 p-2">
             <CompactStat
               icon={Heart}
+              label="Health"
               value={Number(pixegotchi.health)}
               bgColor="bg-red-500/20"
               strokeColor="text-red-500"
               rarity={pixegotchi.rarity}
+              variant="row"
             />
             <CompactStat
               icon={Apple}
+              label="Hunger"
               value={Number(pixegotchi.hunger)}
               bgColor="bg-orange-500/20"
               strokeColor="text-orange-500"
               rarity={pixegotchi.rarity}
+              variant="row"
             />
             <CompactStat
               icon={Zap}
+              label="Energy"
               value={Number(pixegotchi.energy)}
               bgColor="bg-yellow-500/20"
               strokeColor="text-yellow-500"
               rarity={pixegotchi.rarity}
+              variant="row"
             />
             <CompactStat
               icon={Smile}
+              label="Happiness"
               value={Number(pixegotchi.happiness)}
               bgColor="bg-pink-500/20"
               strokeColor="text-pink-500"
               rarity={pixegotchi.rarity}
+              variant="row"
             />
             <CompactStat
               icon={Droplets}
+              label="Cleanliness"
               value={Number(pixegotchi.cleanliness)}
               bgColor="bg-blue-500/20"
               strokeColor="text-blue-500"
               rarity={pixegotchi.rarity}
+              variant="row"
             />
           </div>
 
-          {/* Pixegotchi Visual */}
-          <Visual pet={pixegotchi} status={null} />
-
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            <div className="pixel-panel-soft p-2">
-              <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
-                LVL
-              </div>
-              <div className="font-pixel text-sm leading-5 text-pixel-highlight">
-                {pixegotchi.level}
-              </div>
-            </div>
-            <div className="pixel-panel-soft col-span-2 p-2">
-              <div className="flex items-center gap-1 font-pixel text-[8px] leading-3 text-pixel-muted">
-                <Activity size={12} />
-                <span>Status</span>
-              </div>
-              <div className="mt-1 font-pixel text-[10px] leading-4 capitalize text-pixel-ink">
-                {statusLabel}
-              </div>
-            </div>
+          <div className="min-w-0 [&_.pixel-room-bg]:h-full [&_.pixel-room-bg]:min-h-[16.5rem] max-[380px]:[&_.pixel-room-bg]:min-h-[15.25rem]">
+            <Visual pet={pixegotchi} status={null} />
           </div>
         </div>
+      </section>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-3 gap-2">
-          <ActionButton
-            icon={Apple}
-            label="Feed"
-            onClick={() => onNavigate("inventory", "food")}
-            disabled={false}
-            gradient="from-orange-500 to-red-500"
-          />
-          <ActionButton
-            icon={Pill}
-            label="Heal"
-            onClick={() => onNavigate("inventory", "medicine")}
-            disabled={false}
-            gradient="from-green-500 to-emerald-500"
-          />
-          <ActionButton
-            icon={Bubbles}
-            label="Clean"
-            onClick={() => onNavigate("inventory", "cleaning")}
-            disabled={cooldowns.clean}
-            gradient="from-cyan-500 to-blue-500"
-          />
-          <ActionButton
-            icon={Gamepad2}
-            label="Play"
-            onClick={() => onNavigate("inventory", "toy")}
-            disabled={false}
-            gradient="from-purple-500 to-pink-500"
-          />
-          <ActionButton
-            icon={Rocket}
-            label="Boost"
-            onClick={() => onNavigate("inventory", "boost")}
-            gradient="from-yellow-500 to-orange-500"
-          />
-          <ActionButton
-            icon={Moon}
-            label="Sleep"
-            onClick={() => handleAction("sleep")}
-            disabled={true}
-            gradient="from-blue-500 to-indigo-500"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          <div className="pixel-panel-soft flex items-center gap-2 p-2">
-            <span className="pixel-icon-box h-8 w-8 text-pixel-highlight">
-              <Gift size={16} />
+      <section className="pixel-panel flex items-center gap-2.5 bg-pixel-bg-deep/70 p-2">
+        <div className="min-w-0 flex-1">
+          <div className="mb-2 grid grid-cols-[auto_1fr_auto] items-center gap-2 font-pixel text-[9px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[8px]">
+            <span className="whitespace-nowrap text-pixel-border">
+              Level {pixegotchi.level}
             </span>
-            <div className="min-w-0">
-              <div className="font-pixel text-[9px] leading-3 text-pixel-ink">
-                Daily
-              </div>
-              <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
-                Chest
-              </div>
-            </div>
-          </div>
-          <div className="pixel-panel-soft flex items-center gap-2 p-2">
-            <span className="pixel-icon-box h-8 w-8 text-pixel-red">
-              <Flame size={16} />
+            <span className="truncate text-center text-pixel-muted">
+              {pixegotchi.experience} / {experienceTarget} EXP
             </span>
-            <div className="min-w-0">
-              <div className="font-pixel text-[9px] leading-3 text-pixel-ink">
-                Streak
-              </div>
-              <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
-                Day 1
-              </div>
-            </div>
+            <span className="whitespace-nowrap">
+              Status:{" "}
+              <span className="text-pixel-green capitalize">{statusLabel}</span>
+            </span>
+          </div>
+          <div className="pixel-progress h-2.5">
+            <div
+              className="h-full bg-pixel-border shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] transition-all duration-500"
+              style={{ width: `${experienceProgress}%` }}
+            />
           </div>
         </div>
+        <span className="pixel-icon-button hidden h-9 min-h-9 w-9 min-w-9 shrink-0 text-pixel-border min-[390px]:grid">
+          <Smile size={16} />
+        </span>
+      </section>
 
-        {/* Quick Stats */}
-        <QuickInfo />
-      </div>
+      <section className="grid grid-cols-3 gap-2">
+        <ActionButton
+          icon={Apple}
+          label="Feed"
+          onClick={() => onNavigate("inventory", "food")}
+          disabled={false}
+          gradient="from-red-500 to-red-700"
+        />
+        <ActionButton
+          icon={Pill}
+          label="Heal"
+          onClick={() => onNavigate("inventory", "medicine")}
+          disabled={false}
+          gradient="from-green-500 to-emerald-700"
+        />
+        <ActionButton
+          icon={Bubbles}
+          label="Clean"
+          onClick={() => onNavigate("inventory", "cleaning")}
+          disabled={cooldowns.clean}
+          gradient="from-sky-500 to-blue-700"
+        />
+        <ActionButton
+          icon={Gamepad2}
+          label="Play"
+          onClick={() => onNavigate("inventory", "toy")}
+          disabled={false}
+          gradient="from-purple-500 to-violet-800"
+        />
+        <ActionButton
+          icon={Rocket}
+          label="Boost"
+          onClick={() => onNavigate("inventory", "boost")}
+          gradient="from-orange-400 to-orange-700"
+        />
+        <ActionButton
+          icon={Moon}
+          label="Sleep"
+          onClick={() => handleAction("sleep")}
+          disabled={true}
+          gradient="from-indigo-600 to-slate-800"
+        />
+      </section>
+
+      <section className="grid grid-cols-2 gap-2">
+        <div className="pixel-panel flex min-h-20 items-center gap-1.5 bg-pixel-bg-deep/70 p-2">
+          <span className="pixel-icon-box h-10 w-10 shrink-0 bg-pixel-surface-soft text-pixel-highlight">
+            <Gift size={21} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="truncate font-pixel text-[8px] uppercase leading-3 text-pixel-border">
+              Daily Chest
+            </div>
+            <div className="mt-1 font-pixel text-[9px] leading-3 text-pixel-muted">
+              0 / 10
+            </div>
+            <div className="mt-2 h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep">
+              <div className="h-full w-1/3 bg-pink-500 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)]" />
+            </div>
+          </div>
+          <button
+            type="button"
+            className="pixel-icon-button hidden h-8 min-h-8 w-8 min-w-8 text-pixel-border min-[390px]:grid"
+            aria-label="Daily chest reward">
+            <Gift size={16} />
+          </button>
+        </div>
+        <div className="pixel-panel flex min-h-20 items-center gap-1.5 bg-pixel-bg-deep/70 p-2">
+          <span className="pixel-icon-box h-10 w-10 shrink-0 bg-pixel-surface-soft text-orange-500">
+            <Flame size={21} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="font-pixel text-[8px] uppercase leading-3 text-pixel-border">
+              Streak
+            </div>
+            <div className="mt-1 flex items-center gap-1.5 font-pixel text-[9px] leading-3 text-pixel-ink">
+              <span>1 day</span>
+              <Sparkles size={12} className="shrink-0 text-pixel-highlight" />
+            </div>
+            <div className="mt-2 flex gap-1">
+              {Array.from({ length: 7 }).map((_, index) => (
+                <span
+                  key={index}
+                  className={`h-1.5 w-1.5 rounded-sm border border-pixel-bg-deep ${
+                    index === 0 ? "bg-pixel-highlight" : "bg-pixel-surface"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+          <button
+            type="button"
+            className="pixel-icon-button hidden h-8 min-h-8 w-8 min-w-8 text-pixel-muted min-[390px]:grid"
+            aria-label="Streak calendar">
+            <CalendarDays size={17} />
+          </button>
+        </div>
+      </section>
+    </div>
   );
 };
