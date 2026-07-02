@@ -17,8 +17,9 @@
 }
 
 @theme {
-  --font-pixel: "Dogica Pixel", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", monospace;
+  --font-pixel:
+    "Dogica Pixel", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
 
   --color-pixel-ink: #f8f4d8;
   --color-pixel-muted: #b9abc8;
@@ -34,7 +35,7 @@
 
   --shadow-pixel: 0 4px 0 #0b0714, 0 0 0 2px #6f4b8d;
   --shadow-pixel-inset: inset 0 0 0 2px rgba(248, 244, 216, 0.12);
-  --radius-pixel: 0.25rem;
+  --radius-pixel: 0.35rem;
 }
 
 body {
@@ -65,7 +66,8 @@ body {
   }
 
   .pixel-panel-soft {
-    border: 2px solid color-mix(in srgb, var(--color-pixel-border) 72%, transparent);
+    border: 2px solid
+      color-mix(in srgb, var(--color-pixel-border) 72%, transparent);
     border-radius: var(--radius-pixel);
     background: var(--color-pixel-surface-soft);
     color: var(--color-pixel-ink);
@@ -125,7 +127,8 @@ body {
     width: 2.25rem;
     height: 2.25rem;
     place-items: center;
-    border: 2px solid color-mix(in srgb, var(--color-pixel-ink) 22%, transparent);
+    border: 2px solid
+      color-mix(in srgb, var(--color-pixel-ink) 22%, transparent);
     border-radius: var(--radius-pixel);
     background: color-mix(in srgb, var(--color-pixel-bg-deep) 36%, transparent);
   }
