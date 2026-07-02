@@ -1,6 +1,7 @@
 import { useAllVault } from "@/services/queries/vault.queries";
 import { User } from "@pixegotchi/shared";
 import { useUserStore } from "@/store/user.store";
+import { Clock3, Gamepad2 } from "lucide-react";
 
 const QuickInfo = () => {
   const { data: vault } = useAllVault();
@@ -17,25 +18,42 @@ const QuickInfo = () => {
     return timeSince;
   };
   return (
-    <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
-      <h3 className="text-sm font-semibold mb-3 text-white/80">Quick Info</h3>
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-            🎮
+    <div className="pixel-panel-soft p-3">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <h3 className="font-pixel text-[10px] leading-4 text-pixel-ink">
+          Quick Info
+        </h3>
+        <span className="font-pixel text-[7px] leading-3 text-pixel-muted">
+          Profile
+        </span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <div className="pixel-panel-soft flex min-h-18 items-center gap-2 bg-pixel-bg-deep/35 p-2">
+          <div className="pixel-icon-box h-9 w-9 shrink-0 text-pixel-highlight">
+            <Gamepad2 size={18} />
           </div>
-          <div>
-            <div className="text-white/60 text-xs">Have Pixegotchis</div>
-            <div className="font-semibold">{vault ? vault.length : "?"}</div>
+          <div className="min-w-0">
+            <div className="truncate font-pixel text-[7px] leading-3 text-pixel-muted">
+              Have Pixegotchis
+            </div>
+            <div className="mt-1 font-pixel text-[11px] leading-4 text-pixel-ink">
+              {vault ? vault.length : "?"}
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-            ⏱️
+
+        <div className="pixel-panel-soft flex min-h-18 items-center gap-2 bg-pixel-bg-deep/35 p-2">
+          <div className="pixel-icon-box h-9 w-9 shrink-0 text-pixel-highlight">
+            <Clock3 size={18} />
           </div>
-          <div>
-            <div className="text-white/60 text-xs">Age</div>
-            <div className="font-semibold">{userAge(user)} days</div>
+          <div className="min-w-0">
+            <div className="truncate font-pixel text-[7px] leading-3 text-pixel-muted">
+              Age
+            </div>
+            <div className="mt-1 font-pixel text-[11px] leading-4 text-pixel-ink">
+              {userAge(user)} days
+            </div>
           </div>
         </div>
       </div>
