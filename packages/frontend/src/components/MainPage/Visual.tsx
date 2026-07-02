@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Pixegotchi, Egg, EggHatchingStatus } from "@pixegotchi/shared";
 import { isEgg, isPixegotchi, getImage } from "@/utils/getImage";
 import { MessageCircleHeart } from "lucide-react";
+import { RoomScene } from "./RoomScene";
 
 interface VisualProps {
   pet: Pixegotchi | Egg;
@@ -13,7 +14,7 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
   status,
 }) => {
   return (
-    <div className="pixel-panel-soft pixel-room-bg relative h-48 flex items-center justify-center overflow-hidden">
+    <RoomScene>
       <div
         className={
           `text-9xl ` +
@@ -25,7 +26,7 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
           alt={`Egg-${egg.id}`}
         />
       </div>
-    </div>
+    </RoomScene>
   );
 };
 
@@ -46,7 +47,7 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   };
 
   return (
-    <div className="pixel-panel-soft pixel-room-bg relative h-48 flex items-center justify-center overflow-hidden">
+    <RoomScene>
       <div
         className={`-mb-15 text-9xl ${isAnimating ? "animate-egg-wobble" : "animate-bounce"}`}>
         <img
@@ -63,7 +64,7 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
           <MessageCircleHeart size={30} className="animate-ping text-red-500" />
         </div>
       )}
-    </div>
+    </RoomScene>
   );
 };
 
