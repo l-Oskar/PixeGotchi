@@ -75,9 +75,14 @@ const EggComponent: React.FC<EggPageProps> = ({
     return (
       <div className="p-3 space-y-3">
         <div className="pixel-panel p-4">
-          <div className="flex h-48 items-center justify-center">
-            <div className="font-pixel text-[10px] leading-4 text-pixel-muted">
-              No egg is hatching
+          <div className="pixel-panel-soft grid min-h-48 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 p-4 text-center">
+            <div>
+              <div className="mx-auto mb-3 grid h-20 w-20 place-items-center rounded-sm border border-pixel-border/70 bg-pixel-surface/40">
+                <EggIcon className="text-pixel-muted" size={38} />
+              </div>
+              <div className="font-pixel text-[10px] leading-4 text-pixel-muted">
+                No egg is hatching
+              </div>
             </div>
           </div>
         </div>
@@ -95,7 +100,7 @@ const EggComponent: React.FC<EggPageProps> = ({
     return (
       <div className="p-3">
         <div className="pixel-panel p-4">
-          <div className="flex h-48 items-center justify-center">
+          <div className="pixel-panel-soft flex min-h-48 items-center justify-center border-pixel-red/60 bg-pixel-bg-deep/40 p-4 text-center">
             <div className="font-pixel text-[10px] leading-4 text-pixel-red">
               Failed to load egg status
             </div>
@@ -135,35 +140,40 @@ const EggComponent: React.FC<EggPageProps> = ({
   return (
     <div className="p-3 space-y-3">
       <div className="pixel-panel p-3">
-        <div className="mb-3 flex flex-col gap-1">
-          <div className="flex justify-between">
-            <h2 className="font-pixel text-base leading-6 flex items-center gap-2">
-              {`Egg-#${egg.id}`}
-            </h2>
-          </div>
-
-          <div className="flex gap-2 mt-1">
-            <div className="flex items-center gap-2">
-              <span
-                className={`font-pixel text-[9px] px-2 py-1 rounded-sm border capitalize whitespace-nowrap ${
-                  isReady
-                    ? "bg-green-500/30 border-green-400/50"
-                    : "bg-orange-500/30 border-orange-400/50"
-                }`}>
-                {isReady ? "Ready to hatch!" : "Hatching"}
-              </span>
-
-              {!isReady && (
-                <span className="font-pixel text-[9px] px-2 py-1 bg-purple-500/30 rounded-sm border border-purple-400/50 whitespace-nowrap">
-                  Progress: {progress}%
+        <div className="pixel-panel-soft mb-3 overflow-hidden border-pixel-highlight/60 bg-linear-to-br from-pixel-highlight/20 via-pixel-surface-soft to-pixel-bg-deep p-4">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+            <div className="min-w-0">
+              <div className="mb-2 flex items-center gap-2">
+                <EggIcon className="text-pixel-highlight" size={16} />
+                <h2 className="truncate font-pixel text-sm leading-5 text-pixel-ink">
+                  {`Egg-#${egg.id}`}
+                </h2>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <span
+                  className={`rounded-sm border px-2 py-1 font-pixel text-[8px] leading-3 ${
+                    isReady
+                      ? "border-green-400/50 bg-green-500/20 text-green-200"
+                      : "border-orange-400/50 bg-orange-500/20 text-orange-200"
+                  }`}>
+                  {isReady ? "Ready to hatch!" : "Hatching"}
                 </span>
-              )}
+
+                {!isReady && (
+                  <span className="rounded-sm border border-pixel-highlight/35 bg-pixel-bg-deep/60 px-2 py-1 font-pixel text-[8px] leading-3 text-pixel-highlight">
+                    {progress}%
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="pixel-panel-soft grid h-20 w-20 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
+              <EggIcon className="text-pixel-highlight" size={40} />
             </div>
           </div>
 
-          {/* Прогрес бар для візуалізації */}
           {!isReady && (
-            <div className="pixel-progress mt-2 w-full">
+            <div className="pixel-progress mt-3 w-full">
               <div
                 className="pixel-progress-fill transition-all duration-300"
                 style={{ width: `${progress}%` }}
