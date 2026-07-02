@@ -96,7 +96,7 @@ const MainPage: React.FC = () => {
   const renderedPage = pages[resolvedPage] ?? pages[derivedPage] ?? pages.start;
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-purple-900 via-blue-900 to-indigo-900 text-white">
+    <div className="min-h-screen bg-pixel-bg text-white">
       {!isGameActive && <Header user={user} />}
       {/* Content */}
       <main className="max-w-md mx-auto pb-20">{renderedPage}</main>

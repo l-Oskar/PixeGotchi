@@ -73,10 +73,12 @@ const EggComponent: React.FC<EggPageProps> = ({
   // Ранній вихід якщо немає яйця
   if (!egg) {
     return (
-      <div className="p-4 space-y-4">
-        <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-          <div className="flex justify-center items-center h-56">
-            <div className="text-white/60">No egg is hatching</div>
+      <div className="p-3 space-y-3">
+        <div className="pixel-panel p-4">
+          <div className="flex h-48 items-center justify-center">
+            <div className="font-pixel text-[10px] leading-4 text-pixel-muted">
+              No egg is hatching
+            </div>
           </div>
         </div>
       </div>
@@ -91,9 +93,13 @@ const EggComponent: React.FC<EggPageProps> = ({
   // Обробка помилки
   if (status.isError) {
     return (
-      <div className="mt-5 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-        <div className="flex justify-center items-center h-56">
-          <div className="text-red-400">Failed to load egg status</div>
+      <div className="p-3">
+        <div className="pixel-panel p-4">
+          <div className="flex h-48 items-center justify-center">
+            <div className="font-pixel text-[10px] leading-4 text-pixel-red">
+              Failed to load egg status
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -127,11 +133,11 @@ const EggComponent: React.FC<EggPageProps> = ({
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-        <div className="flex flex-col gap-1 mb-4">
+    <div className="p-3 space-y-3">
+      <div className="pixel-panel p-3">
+        <div className="mb-3 flex flex-col gap-1">
           <div className="flex justify-between">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
+            <h2 className="font-pixel text-base leading-6 flex items-center gap-2">
               {`Egg-#${egg.id}`}
             </h2>
           </div>
@@ -139,7 +145,7 @@ const EggComponent: React.FC<EggPageProps> = ({
           <div className="flex gap-2 mt-1">
             <div className="flex items-center gap-2">
               <span
-                className={`text-xs px-2 py-0.5 rounded-full border capitalize ${
+                className={`font-pixel text-[9px] px-2 py-1 rounded-sm border capitalize whitespace-nowrap ${
                   isReady
                     ? "bg-green-500/30 border-green-400/50"
                     : "bg-orange-500/30 border-orange-400/50"
@@ -148,7 +154,7 @@ const EggComponent: React.FC<EggPageProps> = ({
               </span>
 
               {!isReady && (
-                <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
+                <span className="font-pixel text-[9px] px-2 py-1 bg-purple-500/30 rounded-sm border border-purple-400/50 whitespace-nowrap">
                   Progress: {progress}%
                 </span>
               )}
@@ -157,9 +163,9 @@ const EggComponent: React.FC<EggPageProps> = ({
 
           {/* Прогрес бар для візуалізації */}
           {!isReady && (
-            <div className="mt-3 w-full h-2 bg-white/10 rounded-full overflow-hidden">
+            <div className="pixel-progress mt-2 w-full">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300"
+                className="pixel-progress-fill transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -169,7 +175,7 @@ const EggComponent: React.FC<EggPageProps> = ({
         {/* Visual компонент - передаємо egg та статус */}
         <Visual pet={egg} status={eggStatus ?? null} />
 
-        <div className="mt-5 grid grid-cols-3 gap-3">
+        <div className="mt-3 grid grid-cols-3 gap-2">
           <ActionButton
             icon={EggIcon}
             label={isReady ? "Hatch Now!" : "Hatch"}
@@ -195,7 +201,7 @@ const EggComponent: React.FC<EggPageProps> = ({
 
         {/* Підказка для користувача */}
         {!isReady && (
-          <div className="mt-4 text-xs text-white/40 text-center">
+          <div className="mt-3 text-center font-pixel text-[8px] leading-4 text-pixel-muted">
             Tap to interact with the egg and speed up hatching!
           </div>
         )}

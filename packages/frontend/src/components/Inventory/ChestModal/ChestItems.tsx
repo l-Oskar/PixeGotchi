@@ -44,13 +44,13 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
   if (!chest || chestItems.length === 0) return null;
 
   return (
-    <div className="max-h-65 overflow-y-auto custom-scrollbar">
+    <div className="custom-scrollbar max-h-65 overflow-y-auto">
       {sortedRarities.map((rarity) => (
         <div key={rarity} className="mb-4">
           {/* Заголовок рідкості (опціонально) */}
-          <div className="sticky top-0 bg-gray-800 backdrop-blur-sm z-10 px-2 py-1 mb-2 rounded">
+          <div className="sticky top-0 z-10 mb-2 bg-pixel-panel px-2 py-1">
             <span
-              className={`text-xs font-bold ${RARITY_BORDER_COLORS[rarity].replace("border", "text")}`}>
+              className={`font-pixel text-[8px] leading-3 ${RARITY_BORDER_COLORS[rarity].replace("border", "text")}`}>
               {`${rarity.toUpperCase()} - ${CHEST_CONFIG[chest.chestType as ChestType].item_rarity_distribution[rarity as RarityType]}%`}
             </span>
           </div>
@@ -60,21 +60,21 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
             {groupedByRarity[rarity].map((item) => (
               <div
                 key={item.itemId}
-                className={`border bg-white/5 hover:bg-white/10 rounded-lg p-2 transition-all duration-200 cursor-pointer ${RARITY_BORDER_COLORS[item.rarity]}`}>
+                className={`pixel-panel-soft cursor-pointer p-2 transition hover:border-pixel-highlight/70 ${RARITY_BORDER_COLORS[item.rarity]}`}>
                 <div className="flex flex-col items-center text-center gap-1">
-                  <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
+                  <div className="pixel-icon-box h-10 w-10 text-xl">
                     {ITEMS_IMG[item.type]?.[item.itemId] || "📦"}
                   </div>
-                  <p className="text-white font-medium text-xs truncate w-full">
+                  <p className="w-full truncate font-pixel text-[7px] leading-3 text-pixel-ink">
                     {item.itemId.charAt(0).toUpperCase() +
                       item.itemId.slice(1).split("_").join(" ")}
                   </p>
                   <p
-                    className={`${ITEM_COLORS[item.type]} text-[10px] capitalize`}>
+                    className={`${ITEM_COLORS[item.type]} font-pixel text-[7px] leading-3 capitalize`}>
                     {item.type}
                   </p>
                   <div className="flex items-center justify-center">
-                    <span className="text-white/60 text-[9px] font-mono">
+                    <span className="font-pixel text-[7px] leading-3 text-pixel-muted">
                       {item.probability}%
                     </span>
                   </div>

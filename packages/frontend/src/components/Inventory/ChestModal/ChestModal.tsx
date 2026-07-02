@@ -76,7 +76,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
           {/* Modal */}
           <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
             <motion.div
-              className="bg-[#1a1a2e] rounded-3xl p-6 max-w-sm w-full mx-4 pointer-events-auto border border-white/10 shadow-2xl"
+              className="pixel-panel mx-4 max-h-[88vh] w-full max-w-sm overflow-y-auto p-4 pointer-events-auto"
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -84,17 +84,17 @@ const ChestModal: React.FC<ChestModalProps> = ({
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="text-5xl">
+                  <div className="pixel-icon-box h-12 w-12 shrink-0 text-2xl">
                     {ITEMS_IMG.chest[chest.chestType]}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="font-pixel text-sm leading-5 text-pixel-ink">
                       {`${chest.chestType.toUpperCase()} Chest`}
                     </h2>
-                    <div className={`text-sm `}>
+                    <div className="mt-1 font-pixel text-[8px] leading-3 text-pixel-muted">
                       Rarity •{" "}
                       <span
-                        className={`text-sm ${RARITY_COLORS[chestDescription.rarity]}`}>
+                        className={`${RARITY_COLORS[chestDescription.rarity]}`}>
                         {chestDescription?.rarity.toUpperCase()}
                       </span>
                     </div>
@@ -102,29 +102,29 @@ const ChestModal: React.FC<ChestModalProps> = ({
                 </div>
                 <button
                   onClick={onClose}
-                  className="text-white/60 hover:text-white transition p-1">
-                  <X size={24} />
+                  className="pixel-button grid h-8 w-8 place-items-center p-0 text-pixel-muted hover:text-pixel-ink">
+                  <X size={16} />
                 </button>
               </div>
 
               {/* Description */}
               {chestDescription && (
-                <div className="grid gap-2 mb-4">
-                  <p className="text-white/80 text-sm">
+                <div className="mb-4 grid gap-2 font-pixel text-[8px] leading-4 text-pixel-muted">
+                  <p>
                     Egg chance:{" "}
-                    <span className="text-white text-xl">
+                    <span className="text-[10px] text-pixel-ink">
                       {chestDescription.eggChance}%
                     </span>
                   </p>
-                  <p className="text-white/80 text-sm">
+                  <p>
                     Boost item chance:{" "}
-                    <span className="text-white text-xl">
+                    <span className="text-[10px] text-pixel-ink">
                       {chestDescription.boostChance}%
                     </span>
                   </p>
-                  <p className="text-white/80 text-sm">
+                  <p>
                     Guaranteed items:{" "}
-                    <span className="text-white text-xl">
+                    <span className="text-[10px] text-pixel-ink">
                       {chestDescription.guaranteed_items}
                     </span>
                   </p>
@@ -133,16 +133,16 @@ const ChestModal: React.FC<ChestModalProps> = ({
                   <div className="mt-2">
                     <button
                       onClick={() => setIsItemPoolOpen(!isItemPoolOpen)}
-                      className="flex items-center justify-between w-full p-2 rounded-lg bg-white/5 hover:bg-white/10 transition group">
-                      <span className="text-white/80 text-sm font-medium">
+                      className="pixel-panel-soft flex w-full items-center justify-between p-2 transition hover:border-pixel-highlight/70">
+                      <span className="font-pixel text-[8px] leading-3 text-pixel-ink">
                         Item Pool ({chestItems.length} items)
                       </span>
                       <motion.div
                         animate={{ rotate: isItemPoolOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}>
                         <ChevronDown
-                          size={18}
-                          className="text-white/60 group-hover:text-white/80"
+                          size={14}
+                          className="text-pixel-muted"
                         />
                       </motion.div>
                     </button>
@@ -166,129 +166,11 @@ const ChestModal: React.FC<ChestModalProps> = ({
                 </div>
               )}
 
-              {/* Effects */}
-              {/* {chest.effects && (
-                <div className="bg-white/5 rounded-2xl p-4 mb-4">
-                  <h3 className="text-sm font-semibold text-white/80 mb-2">
-                    Effects:
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    {item.effects.hunger !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>🍖</span>
-                        <span className="text-white/60">Hunger:</span>
-                        <span
-                          className={
-                            item.effects.hunger > 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                          }>
-                          {item.effects.hunger > 0 ? "+" : ""}
-                          {item.effects.hunger}
-                        </span>
-                      </div>
-                    )}
-                    {item.effects.happiness !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>😊</span>
-                        <span className="text-white/60">Happiness:</span>
-                        <span
-                          className={
-                            item.effects.happiness > 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                          }>
-                          {item.effects.happiness > 0 ? "+" : ""}
-                          {item.effects.happiness}
-                        </span>
-                      </div>
-                    )}
-                    {item.effects.health !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>❤️</span>
-                        <span className="text-white/60">Health:</span>
-                        <span
-                          className={
-                            item.effects.health > 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                          }>
-                          {item.effects.health > 0 ? "+" : ""}
-                          {item.effects.health}
-                        </span>
-                      </div>
-                    )}
-                    {item.effects.cleanliness !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>✨</span>
-                        <span className="text-white/60">Cleanliness:</span>
-                        <span
-                          className={
-                            item.effects.cleanliness > 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                          }>
-                          {item.effects.cleanliness > 0 ? "+" : ""}
-                          {item.effects.cleanliness}
-                        </span>
-                      </div>
-                    )}
-                    {item.effects.energy !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>⚡</span>
-                        <span className="text-white/60">Energy:</span>
-                        <span
-                          className={
-                            item.effects.energy > 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                          }>
-                          {item.effects.energy > 0 ? "+" : ""}
-                          {item.effects.energy}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )} */}
-
-              {/* Info */}
-              {/* <div className="flex items-center justify-between text-sm text-white/60 mb-4">
-                <span>Quantity: ×{quantity}</span>
-                {item.cooldownMinutes && (
-                  <span>Cooldown: {item.cooldownMinutes} min.</span>
-                )}
-              </div> */}
-
-              {/* Quantity Selector */}
-              {/* {item.isStackable && quantity > 1 && (
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-white/80 text-sm">Amount:</span>
-                  <button
-                    onClick={() => setUseQuantity(Math.max(1, useQuantity - 1))}
-                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold transition"
-                    disabled={isUsing}>
-                    −
-                  </button>
-                  <span className="text-white font-bold w-8 text-center">
-                    {useQuantity}
-                  </span>
-                  <button
-                    onClick={() =>
-                      setUseQuantity(Math.min(quantity, useQuantity + 1))
-                    }
-                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold transition"
-                    disabled={isUsing}>
-                    +
-                  </button>
-                </div>
-              )} */}
-
               {/* Use Button */}
               <button
                 onClick={handleUse}
                 disabled={!canUse}
-                className="w-full py-3 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 disabled:from-white/10 disabled:to-white/10 disabled:text-white/40 text-white font-bold transition-all active:scale-95">
+                className="pixel-button w-full bg-linear-to-br from-green-500 to-emerald-600 py-3 font-pixel text-[9px] leading-4 text-white hover:scale-105 disabled:bg-none disabled:text-pixel-muted disabled:hover:scale-100">
                 {isUsing ? "Using..." : "Use item"}
               </button>
             </motion.div>

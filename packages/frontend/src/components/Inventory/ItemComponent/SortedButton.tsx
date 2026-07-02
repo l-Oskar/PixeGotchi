@@ -21,8 +21,13 @@ const SortedButton: React.FC<SortedButtonsProps> = ({
   return (
     <button
       onClick={() => setFilter(filter)}
-      className={`p-2 flex items-center rounded-2xl ${bgColor} ${color} ${active ? `border-2` : `border-2 border-transparent`}`}>
-      <Icon height={18} />
+      aria-label={`Filter ${filter}`}
+      className={`grid min-h-9 place-items-center rounded-sm border-2 p-1 transition ${bgColor} ${color} ${
+        active
+          ? "border-pixel-highlight text-pixel-highlight"
+          : "border-transparent hover:border-pixel-border"
+      }`}>
+      <Icon size={16} />
     </button>
   );
 };

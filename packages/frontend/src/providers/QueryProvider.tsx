@@ -3,6 +3,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import axios from "axios";
 import type { ReactNode } from "react";
 
+const enableQueryDevtools = import.meta.env.VITE_ENABLE_QUERY_DEVTOOLS === "1";
+
 const shouldRetryQuery = (failureCount: number, error: unknown) => {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status;
@@ -29,7 +31,7 @@ export function QueryProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+      {enableQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

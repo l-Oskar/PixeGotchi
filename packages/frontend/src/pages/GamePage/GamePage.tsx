@@ -79,46 +79,61 @@ const GamesPage: React.FC<GamePageProps> = ({
   }
 
   return (
-    <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Mini Games (Comming soon!)</h1>
+    <div className="space-y-3 p-3">
+      <div className="pixel-panel p-3">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
+            Mini Games
+          </h1>
+          <span className="font-pixel text-[8px] leading-3 text-pixel-muted">
+            Coming soon
+          </span>
+        </div>
 
-      <div className="space-y-3">
-        {games.map((game) => (
-          <button
-            key={game.id}
-            onClick={() => {
-              if (game.id === 1) {
-                if (!pixegotchi) {
-                  alert("You need active Pixegotchi");
+        <div className="space-y-2">
+          {games.map((game) => (
+            <button
+              key={game.id}
+              onClick={() => {
+                if (game.id === 1) {
+                  if (!pixegotchi) {
+                    alert("You need active Pixegotchi");
+                  } else {
+                    openGame(game.id);
+                  }
                 } else {
-                  openGame(game.id);
+                  alert(`${game.name} is coming soon`);
                 }
-              } else {
-                alert(`${game.name} is comming sood`);
-              }
-            }}
-            className="w-full bg-linear-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 rounded-2xl p-4 border border-white/10 transition flex items-center gap-4">
-            <div className="text-5xl">{game.icon}</div>
-            <div className="flex-1 text-left">
-              <h3 className="font-bold">{game.name}</h3>
-              <div className="flex gap-1.5 mt-1 overflow-x-auto">
-                <span className="text-[10px] px-1.5 py-0.5 bg-white/10 rounded-full whitespace-nowrap">
-                  {game.difficulty}
-                </span>
-                <span className="text-[10px] px-1.5 py-0.5 bg-orange-500/20 rounded-full text-orange-400 whitespace-nowrap flex items-center gap-0.5">
-                  {game.energy} <Zap size={10} className="text-orange-400" />
-                </span>
-                <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 rounded-full text-yellow-400 whitespace-nowrap flex items-center gap-0.5">
-                  {game.reward} <Coins size={10} className="text-yellow-400" />
-                </span>
-                <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 rounded-full text-green-400 whitespace-nowrap flex items-center gap-0.5">
-                  {game.exp} <StarPlus size={10} className="text-green-400" />
-                </span>
+              }}
+              className="pixel-panel-soft grid w-full grid-cols-[3rem_1fr] items-center gap-2 p-2 text-left transition hover:border-pixel-highlight/70">
+              <div className="pixel-icon-box h-11 w-11 shrink-0 text-xl">
+                {game.icon}
               </div>
-            </div>
-            <div className="text-white/40">▶</div>
-          </button>
-        ))}
+              <div className="min-w-0 flex-1">
+                <h3 className="truncate font-pixel text-[10px] leading-4 text-pixel-ink">
+                  {game.name}
+                </h3>
+                <div className="mt-1 flex flex-wrap gap-1.5 font-pixel">
+                  <span className="whitespace-nowrap rounded-sm border border-pixel-border bg-pixel-panel px-1.5 py-1 text-[7px] leading-3 text-pixel-muted">
+                    {game.difficulty}
+                  </span>
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-orange-400/40 bg-orange-500/15 px-1.5 py-1 text-[7px] leading-3 text-orange-300">
+                    {game.energy}
+                    <Zap size={10} />
+                  </span>
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-yellow-400/40 bg-yellow-500/15 px-1.5 py-1 text-[7px] leading-3 text-yellow-300">
+                    {game.reward}
+                    <Coins size={10} />
+                  </span>
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-green-400/40 bg-green-500/15 px-1.5 py-1 text-[7px] leading-3 text-green-300">
+                    {game.exp}
+                    <StarPlus size={10} />
+                  </span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

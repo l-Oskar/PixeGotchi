@@ -13,14 +13,14 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
   status,
 }) => {
   return (
-    <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl min-h-56 flex items-center justify-center border border-white/5">
+    <div className="pixel-panel-soft pixel-room-bg relative h-48 flex items-center justify-center overflow-hidden">
       <div
         className={
           `text-9xl ` +
           (!status.canHatchNow ? "animate-egg-wobble" : "animate-egg-wobble")
         }>
         <img
-          className="-mb-5 w-25 h-33"
+          className="-mb-4 h-30 w-23 pixelated"
           src={`./${getImage(egg, status)}`}
           alt={`Egg-${egg.id}`}
         />
@@ -46,11 +46,11 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   };
 
   return (
-    <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
+    <div className="pixel-panel-soft pixel-room-bg relative h-48 flex items-center justify-center overflow-hidden">
       <div
         className={`-mb-15 text-9xl ${isAnimating ? "animate-egg-wobble" : "animate-bounce"}`}>
         <img
-          className="w-50 h-50 cursor-pointer hover:scale-105 transition-transform"
+          className="h-44 w-44 cursor-pointer hover:scale-105 transition-transform pixelated"
           src={`./${getImage(pixe)}`}
           alt={`Pixegotchi-${pixe.id}`}
           onClick={handleClick}
@@ -68,7 +68,15 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
 };
 
 export const Visual: React.FC<VisualProps> = ({ pet, status }) => {
-  if (!pet) return <div>No Pet/No egg</div>;
+  if (!pet) {
+    return (
+      <div className="pixel-panel-soft flex h-48 items-center justify-center">
+        <span className="font-pixel text-[9px] leading-4 text-pixel-muted">
+          No Pet / No egg
+        </span>
+      </div>
+    );
+  }
 
   if (isEgg(pet)) {
     if (!status) {

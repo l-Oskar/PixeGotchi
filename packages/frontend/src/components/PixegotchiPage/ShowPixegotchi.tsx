@@ -19,6 +19,9 @@ import {
   Mars,
   Venus,
   Rocket,
+  Gift,
+  Flame,
+  Activity,
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
@@ -54,66 +57,71 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   //   onNavigate("start");
   // };
 
-  if (pixegotchi)
-    return (
-      <div className="p-4 space-y-4">
+  if (!pixegotchi) return null;
+
+  const experienceTarget = 1000;
+  const experienceProgress = Math.min(
+    100,
+    Math.max(0, (pixegotchi.experience * 100) / experienceTarget),
+  );
+  const statusLabel = pixegotchi.status
+    ? String(pixegotchi.status).replace(/_/g, " ")
+    : "active";
+
+  return (
+      <div className="p-3 space-y-3">
         {/* Pixegotchi Card */}
-        <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-5 border border-white/10 backdrop-blur-sm">
+        <div className="pixel-panel p-3">
           <div className="flex flex-col gap-1 mb-3">
             <div className="flex justify-between">
-              <h2 className="text-2xl font-bold flex items-center gap-2">
+              <h2 className="font-pixel text-base leading-6 flex items-center gap-2">
                 {pixegotchi.name ?? "Unknown"}
               </h2>
               <button
                 onClick={() => onNavigate("data")}
-                className="text-white/60 hover:text-white">
+                className="text-pixel-muted hover:text-pixel-ink">
                 <Menu size={20} />
               </button>
             </div>
             <div className="flex gap-2 py-1">
-              <div className="flex justify-between flex-1">
+              <div className="flex justify-between flex-1 gap-1.5 overflow-x-auto font-pixel">
                 <span
-                  className={`text-xs px-2 py-0.5 ${RARITY_COLORS[pixegotchi.rarity]} rounded-full border capitalize`}>
+                  className={`text-[9px] px-2 py-1 ${RARITY_COLORS[pixegotchi.rarity]} rounded-sm border capitalize whitespace-nowrap`}>
                   {pixegotchi.rarity}
                 </span>
                 <span
-                  className={`text-xs px-2 py-0.5 ${ELEMENT_COLORS[pixegotchi.element]} rounded-full border capitalize`}>
+                  className={`text-[9px] px-2 py-1 ${ELEMENT_COLORS[pixegotchi.element]} rounded-sm border capitalize whitespace-nowrap`}>
                   {pixegotchi.element}
                 </span>
                 <span
-                  className={`text-xs px-2 py-0.5 bg-amber-200/20 rounded-full border ${pixegotchi.gender === "male" ? "border-blue-500" : "border-pink-400"}`}>
+                  className={`text-[9px] px-2 py-1 bg-amber-200/20 rounded-sm border whitespace-nowrap ${pixegotchi.gender === "male" ? "border-blue-500" : "border-pink-400"}`}>
                   {pixegotchi.gender === "male" ? (
-                    <div className="flex gap-1 text-blue-400 ">
-                      <Mars size={16} />
+                    <div className="flex gap-1 text-blue-400">
+                      <Mars size={12} />
                       <span>Male</span>
                     </div>
                   ) : (
                     <div className="flex gap-1 text-pink-400">
-                      <Venus size={16} />
+                      <Venus size={12} />
                       <span>Female</span>
                     </div>
                   )}
-                </span>
-                <span className="text-xs px-2 py-0.5 bg-blue-400/30 rounded-full border border-blue-400/50 text-blue-400">
-                  Level {pixegotchi.level}
                 </span>
               </div>
             </div>
 
             {/* Compact Experience Bar */}
             <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-center text-[10px] text-white/60 mb-1">
+              <div className="flex justify-between items-center font-pixel text-[9px] text-pixel-muted mb-1">
                 <span className="">EXP</span>
                 <span>
-                  {pixegotchi.experience} / {1000}
+                  {pixegotchi.experience} / {experienceTarget}
                 </span>
               </div>
-              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div className="pixel-progress">
                 <div
-                  className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
-                  style={{
-                    width: `${(pixegotchi.experience * 100) / 1000}%`,
-                  }}
+                  className="pixel-progress-fill transition-all duration-500"
+                  style={{ width: `${experienceProgress}%` }}
                 />
               </div>
             </div>
@@ -160,10 +168,30 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
 
           {/* Pixegotchi Visual */}
           <Visual pet={pixegotchi} status={null} />
+
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            <div className="pixel-panel-soft p-2">
+              <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+                LVL
+              </div>
+              <div className="font-pixel text-sm leading-5 text-pixel-highlight">
+                {pixegotchi.level}
+              </div>
+            </div>
+            <div className="pixel-panel-soft col-span-2 p-2">
+              <div className="flex items-center gap-1 font-pixel text-[8px] leading-3 text-pixel-muted">
+                <Activity size={12} />
+                <span>Status</span>
+              </div>
+              <div className="mt-1 font-pixel text-[10px] leading-4 capitalize text-pixel-ink">
+                {statusLabel}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           <ActionButton
             icon={Apple}
             label="Feed"
@@ -205,17 +233,39 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             disabled={true}
             gradient="from-blue-500 to-indigo-500"
           />
-          {/* <ActionButton
-            icon={Vault}
-            label="Vault"
-            onClick={() => handleSetToVault()}
-            disabled={cooldowns.clean}
-            gradient="from-violer-500 to-purple-500"
-          /> */}
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="pixel-panel-soft flex items-center gap-2 p-2">
+            <span className="pixel-icon-box h-8 w-8 text-pixel-highlight">
+              <Gift size={16} />
+            </span>
+            <div className="min-w-0">
+              <div className="font-pixel text-[9px] leading-3 text-pixel-ink">
+                Daily
+              </div>
+              <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+                Chest
+              </div>
+            </div>
+          </div>
+          <div className="pixel-panel-soft flex items-center gap-2 p-2">
+            <span className="pixel-icon-box h-8 w-8 text-pixel-red">
+              <Flame size={16} />
+            </span>
+            <div className="min-w-0">
+              <div className="font-pixel text-[9px] leading-3 text-pixel-ink">
+                Streak
+              </div>
+              <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+                Day 1
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Quick Stats */}
         <QuickInfo />
       </div>
-    );
+  );
 };

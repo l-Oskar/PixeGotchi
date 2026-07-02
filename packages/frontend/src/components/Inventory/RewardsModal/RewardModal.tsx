@@ -34,18 +34,20 @@ const RewardModal: React.FC<RewardModalProps> = ({
           {/* Modal Container - центрування + pointer-events */}
           <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
             <motion.div
-              className="bg-[#1a1a2e] rounded-3xl p-6 max-w-sm w-full mx-4 pointer-events-auto border border-white/10 shadow-2xl"
+              className="pixel-panel mx-4 w-full max-w-sm p-4 pointer-events-auto"
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}>
               {/* Header з кнопкою закриття (рекомендую додати) */}
               <div className="flex items-start justify-between mb-4">
-                <h2 className="text-xl font-bold text-white">Rewards</h2>
+                <h2 className="font-pixel text-sm leading-5 text-pixel-ink">
+                  Rewards
+                </h2>
                 <button
                   onClick={onClose}
-                  className="text-white/60 hover:text-white transition p-1">
-                  <X size={24} />
+                  className="pixel-button grid h-8 w-8 place-items-center p-0 text-pixel-muted hover:text-pixel-ink">
+                  <X size={16} />
                 </button>
               </div>
 
@@ -55,35 +57,35 @@ const RewardModal: React.FC<RewardModalProps> = ({
                   {rewards.items.map((item) => (
                     <div
                       key={item.itemId}
-                      className="bg-white/5 rounded-xl p-3">
+                      className="pixel-panel-soft p-2">
                       <div className="flex justify-between items-center">
                         <div className="flex gap-2">
-                          <span className="font-medium">
+                          <span className="text-lg leading-none">
                             {ITEMS_IMG[item.type][item.itemId]}
                           </span>
-                          <span className="text-white font-medium">
+                          <span className="font-pixel text-[8px] leading-4 text-pixel-ink">
                             {item.itemId.charAt(0).toUpperCase() +
                               item.itemId.slice(1).split("_").join(" ")}
                           </span>
                         </div>
                         <span
-                          className={`text-sm ${RARITY_COLORS[item.rarity]}`}>
+                          className={`font-pixel text-[7px] leading-3 ${RARITY_COLORS[item.rarity]}`}>
                           {item.rarity}
                         </span>
                       </div>
-                      <div className="text-white/60 text-sm mt-1">
+                      <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
                         {item.type}
                       </div>
                     </div>
                   ))}
                 </div>
                 {rewards?.egg && (
-                  <div className="flex justify-between bg-white/5 rounded-xl p-3">
-                    <div className="flex gap-2">
+                  <div className="pixel-panel-soft flex justify-between p-2">
+                    <div className="flex items-center gap-2 font-pixel text-[8px] leading-4 text-pixel-ink">
                       {<img className="w-5 h-6" src={getEggImg()} alt="egg" />}
                       Egg
                     </div>
-                    <span className={`${RARITY_COLORS.legendary}`}>
+                    <span className={`font-pixel text-[7px] leading-3 ${RARITY_COLORS.legendary}`}>
                       legendary
                     </span>
                   </div>
@@ -93,7 +95,7 @@ const RewardModal: React.FC<RewardModalProps> = ({
               {/* Кнопка закриття (опціонально) */}
               <button
                 onClick={onClose}
-                className="w-full mt-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition">
+                className="pixel-button mt-4 w-full py-3 font-pixel text-[9px] leading-4 hover:scale-105">
                 Close
               </button>
             </motion.div>

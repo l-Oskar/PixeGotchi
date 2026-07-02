@@ -140,11 +140,11 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
       <div>
         <SortedButtons initialFilter={sortedList} setFilter={setSortedList} />
         {actionFlow.isBlocked && (
-          <div className="mb-3 rounded-2xl border border-yellow-400/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-100">
+          <div className="pixel-panel-soft mb-3 px-3 py-2 font-pixel text-[8px] leading-4 text-yellow-100">
             Only revive items can be used while Pixegotchi is not active.
           </div>
         )}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {sortedInventory.map((item) => {
             const canUseItem = canUseItemForStatus(item.details, currentStatus);
 
@@ -153,14 +153,16 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
                 key={item.id}
                 disabled={!canUseItem}
                 onClick={() => handleItemClick(item)}
-                className={`border ${RARITY_BORDER_COLORS[item.rarity]} bg-white/5 hover:bg-white/10 rounded-2xl p-4 transition flex flex-col items-center gap-2 group disabled:opacity-50 disabled:hover:bg-white/5`}>
-                <div className="text-4xl group-hover:scale-110 transition">
+                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group flex min-h-28 flex-col items-center justify-center gap-1.5 p-2 transition hover:border-pixel-highlight/70 disabled:opacity-50`}>
+                <div className="text-2xl leading-none transition group-hover:scale-110">
                   {item.details?.iconUrl ?? "?"}
                 </div>
-                <div className="text-xs font-medium text-center">
+                <div className="line-clamp-2 min-h-8 text-center font-pixel text-[8px] leading-4 text-pixel-ink">
                   {item.details?.name ?? item.itemId}
                 </div>
-                <div className="text-xs text-white/60">{item.quantity}</div>
+                <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+                  x{item.quantity}
+                </div>
               </button>
             );
           })}

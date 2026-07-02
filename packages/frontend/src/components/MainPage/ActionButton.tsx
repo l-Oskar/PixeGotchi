@@ -18,9 +18,11 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`bg-linear-to-br ${gradient} hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed rounded-2xl p-4 transition flex flex-col items-center gap-2 shadow-lg`}>
-    <Icon size={24} />
-    <span className="text-xs font-semibold">{label}</span>
+    className="pixel-button flex min-h-24 w-full flex-col items-center justify-center gap-2 p-2 hover:scale-105 disabled:hover:scale-100">
+    <span className={`pixel-icon-box h-8 w-8 bg-linear-to-br ${gradient}`}>
+      <Icon size={18} />
+    </span>
+    <span className="font-pixel text-[9px] leading-3">{label}</span>
   </button>
 );
 

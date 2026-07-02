@@ -28,32 +28,38 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
 
   if (sortedEggs.length == 0)
     return (
-      <div className="p-4 space-y-4">
-        <div className="min-h-100 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl border border-white/10 backdrop-blur-sm">
-          <div className="p-4 grid gap-2 justify-center text-xl">
-            <span className="text-center">No eggs!</span>
-            <span>Buy some in the market.</span>
+      <div className="p-3 space-y-3">
+        <div className="pixel-panel p-4">
+          <div className="grid min-h-48 place-items-center gap-2 text-center">
+            <span className="font-pixel text-sm leading-5 text-pixel-ink">
+              No eggs!
+            </span>
+            <span className="font-pixel text-[9px] leading-4 text-pixel-muted">
+              Buy some in the market.
+            </span>
           </div>
         </div>
       </div>
     );
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="min-h-100 p-6 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl border border-white/10 backdrop-blur-sm">
-        <div className="grid gap-2 text-xl">
-          <div>
+    <div className="p-3 space-y-3">
+      <div className="pixel-panel p-3">
+        <div className="grid gap-2">
+          <div className="font-pixel text-[10px] leading-4 text-pixel-ink">
             You have {sortedEggs.length}{" "}
             {sortedEggs.length > 1 ? "eggs" : "egg"}
           </div>
           {sortedEggs.map((egg) => (
             <div
-              className="flex justify-between items-center bg-white/5 rounded-2xl p-4 border border-white/10"
+              className="pixel-panel-soft flex items-center justify-between gap-2 p-2"
               key={egg.id}>
-              <span>🥚 Egg-#{egg.id}</span>
+              <span className="font-pixel text-[9px] leading-4 text-pixel-ink">
+                Egg-#{egg.id}
+              </span>
               {/* <span>Is listed: {egg.isListed ? "Yes" : "No"} </span> */}
               <button
-                className="px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition disabled:opacity-50 disabled:hover:scale-100"
+                className="pixel-button min-h-0 px-3 py-2 font-pixel text-[8px] leading-3 hover:scale-105 disabled:hover:scale-100"
                 disabled={startHatchingEgg.isPending}
                 onClick={() => handleHatch(egg)}>
                 {startHatchingEgg.isPending ? "HATCHING..." : "HATCH"}

@@ -11,26 +11,16 @@ export interface InventoryPageProps {
 
 type TabType = "items" | "chests";
 
-const TABS: { id: TabType; label: any }[] = [
+const TABS: { id: TabType; icon: typeof HeartPlus; label: string }[] = [
   {
     id: "items",
-    label: (
-      <>
-        <div className="flex gap-1">
-          <HeartPlus height={19} />
-          <p>Items</p>
-        </div>
-      </>
-    ),
+    icon: HeartPlus,
+    label: "Items",
   },
   {
     id: "chests",
-    label: (
-      <div className="flex gap-1">
-        <Gift height={19} />
-        <p>Chests</p>
-      </div>
-    ),
+    icon: Gift,
+    label: "Chests",
   },
 ];
 
@@ -42,26 +32,32 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Inventory</h1>
+    <div className="space-y-3 p-3">
+      <div className="pixel-panel p-3">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
+            Inventory
+          </h1>
 
-        <div className="flex gap-2">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleChangeTab(tab.id)}
-              className={`
-                px-4 py-2 text-sm font-medium rounded-t-lg transition-all border border-transparent
-                ${
-                  activeTab === tab.id
-                    ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                    : "text-white border-white"
-                }
-              `}>
-              {tab.label}
-            </button>
-          ))}
+          <div className="pixel-panel-soft grid grid-cols-2 gap-1 p-1">
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
+
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => handleChangeTab(tab.id)}
+                  className={`flex min-h-8 items-center justify-center gap-1.5 rounded-sm border-2 px-2 py-1 font-pixel text-[8px] leading-3 transition ${
+                    activeTab === tab.id
+                      ? "border-pixel-highlight bg-pixel-highlight/15 text-pixel-highlight"
+                      : "border-transparent text-pixel-muted hover:border-pixel-border hover:text-pixel-ink"
+                  }`}>
+                  <Icon size={14} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 

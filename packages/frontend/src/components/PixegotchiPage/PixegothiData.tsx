@@ -35,18 +35,18 @@ const StatBar: React.FC<{
 
   return (
     <div className="space-y-1">
-      <div className="flex justify-between text-sm">
-        <span className="text-white/80">{label}</span>
+      <div className="flex justify-between gap-2 font-pixel text-[8px] leading-3">
+        <span className="text-pixel-muted">{label}</span>
         <div>
           <span
-            className={`${currentValue === maxValue ? "text-green-500" : "text-yellow-500"}  font-medium`}>
+            className={`${currentValue === maxValue ? "text-green-500" : "text-yellow-500"}`}>
             {displayValue}
           </span>
           {" / "}
-          <span className="text-green-500 font-medium">{maxValue}</span>
+          <span className="text-green-500">{maxValue}</span>
         </div>
       </div>
-      <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+      <div className="pixel-progress">
         <div
           className={`h-full ${color} transition-all duration-500 ease-out`}
           style={{ width: `${percentage}%` }}
@@ -61,38 +61,46 @@ const InfoBadge: React.FC<{
   value: any;
   color?: string;
 }> = ({ label, value, color }) => (
-  <div className={`border px-3 py-2 rounded-xl text-center ${color}`}>
-    <div className="text-xs text-white/60 uppercase tracking-wider">
+  <div className={`pixel-panel-soft px-2 py-2 text-center ${color}`}>
+    <div className="font-pixel text-[7px] leading-3 text-pixel-muted">
       {label}
     </div>
-    <div className="text-sm font-semibold mt-0.5">{value}</div>
+    <div className="mt-1 font-pixel text-[8px] leading-3">{value}</div>
   </div>
 );
 
 const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
   if (!pixegotchi) {
     return (
-      <div className="p-4">
-        <div className="min-h-96 bg-white/5 rounded-3xl p-6 border border-white/10 backdrop-blur-sm flex items-center justify-center">
-          <div className="text-white/60 text-xl">No Pixegotchi found</div>
+      <div className="p-3">
+        <div className="pixel-panel flex min-h-96 items-center justify-center p-4">
+          <div className="font-pixel text-[10px] leading-4 text-pixel-muted">
+            No Pixegotchi found
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="space-y-3 p-3">
       {/* Header */}
-      <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
+      <div className="pixel-panel p-3">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-white">{pixegotchi.name}</h2>
-            <p className="text-white/60">ID #{pixegotchi.id}</p>
+            <h2 className="font-pixel text-sm leading-5 text-pixel-ink">
+              {pixegotchi.name}
+            </h2>
+            <p className="mt-1 font-pixel text-[8px] leading-3 text-pixel-muted">
+              ID #{pixegotchi.id}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <div className="text-xs text-white/60 uppercase">Level</div>
-              <div className="text-2xl font-bold text-white">
+              <div className="font-pixel text-[7px] leading-3 text-pixel-muted">
+                Level
+              </div>
+              <div className="font-pixel text-sm leading-5 text-pixel-highlight">
                 {pixegotchi.level}
               </div>
             </div>
@@ -101,13 +109,13 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
 
         {/* Experience bar */}
         <div className="space-y-1">
-          <div className="flex justify-between text-xs text-white/60">
+          <div className="flex justify-between gap-2 font-pixel text-[8px] leading-3 text-pixel-muted">
             <span>Experience</span>
             <span>{pixegotchi.experience} / 1000 XP</span>
           </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div className="pixel-progress">
             <div
-              className="h-full bg-gradient-to-r from-yellow-400 to-orange-500 transition-all duration-500"
+              className="pixel-progress-fill transition-all duration-500"
               style={{
                 width: `${(pixegotchi.experience * 100) / 1000}%`,
               }}
@@ -117,7 +125,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
       </div>
 
       {/* Info Grid */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2">
         <InfoBadge
           label="Element"
           value={pixegotchi.element.toUpperCase()}
@@ -133,12 +141,12 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           value={
             pixegotchi.gender === "male" ? (
               <div className="flex gap-1 justify-center">
-                <Mars size={19} />
+                <Mars size={12} />
                 <span>MALE</span>
               </div>
             ) : (
               <div className="flex justify-center">
-                <Venus size={19} />
+                <Venus size={12} />
                 <span>FEMALE</span>
               </div>
             )
@@ -152,8 +160,10 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
       </div>
 
       {/* Stats */}
-      <div className="bg-white/5 rounded-3xl p-6 border border-white/10 backdrop-blur-sm space-y-4">
-        <h3 className="text-lg font-semibold text-white mb-3">Stats</h3>
+      <div className="pixel-panel space-y-3 p-3">
+        <h3 className="font-pixel text-[10px] leading-4 text-pixel-ink">
+          Stats
+        </h3>
         <StatBar
           label="❤️ Health"
           value={pixegotchi.health}
@@ -188,15 +198,19 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
 
       {/* Traits */}
       {pixegotchi.traits && pixegotchi.traits.length > 0 && (
-        <div className="bg-white/5 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-          <h3 className="text-lg font-semibold text-white mb-3">Traits</h3>
+        <div className="pixel-panel p-3">
+          <h3 className="mb-3 font-pixel text-[10px] leading-4 text-pixel-ink">
+            Traits
+          </h3>
           <div className="grid gap-2">
             {pixegotchi.traits.map((trait, index) => (
-              <div key={index} className="flex items-baseline gap-1">
-                <span className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded-full text-sm text-blue-300 font-medium">
+              <div key={index} className="pixel-panel-soft p-2">
+                <span className="font-pixel text-[8px] leading-3 text-blue-300">
                   {trait.toUpperCase()}
                 </span>
-                <p>- {TRAIT_EFFECTS[trait as TraitType].description}</p>
+                <p className="mt-1 font-pixel text-[7px] leading-4 text-pixel-muted">
+                  {TRAIT_EFFECTS[trait as TraitType].description}
+                </p>
               </div>
             ))}
           </div>
@@ -204,29 +218,29 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
       )}
 
       {/* Meta Info */}
-      <div className="bg-white/5 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-        <h3 className="text-lg font-semibold text-white mb-3">
+      <div className="pixel-panel p-3">
+        <h3 className="mb-3 font-pixel text-[10px] leading-4 text-pixel-ink">
           Meta Information
         </h3>
-        <div className="space-y-2 text-sm">
+        <div className="space-y-2 font-pixel text-[8px] leading-4">
           <div className="">
-            <span className="text-white/60">Genome Hash: </span>
+            <span className="text-pixel-muted">Genome Hash: </span>
             <br />
-            <span className="text-white font-mono text-xs">
+            <span className="break-all text-pixel-ink">
               {pixegotchi.genomeHash}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-white/60">Hatched At</span>
-            <span className="text-white">
+            <span className="text-pixel-muted">Hatched At</span>
+            <span className="text-right text-pixel-ink">
               {pixegotchi.hatchedAt
                 ? new Date(pixegotchi.hatchedAt).toLocaleString()
                 : "N/A"}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-white/60">Egg ID</span>
-            <span className="text-white">
+            <span className="text-pixel-muted">Egg ID</span>
+            <span className="text-pixel-ink">
               {pixegotchi.eggId ? `#${pixegotchi.eggId}` : "N/A"}
             </span>
           </div>

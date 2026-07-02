@@ -1,10 +1,8 @@
-import { Sparkles } from "lucide-react";
+import { Sparkles, SquareArrowRight } from "lucide-react";
 import { PageType, RARITY_COLORS } from "@pixegotchi/shared";
 import Loader from "@/components/Other/Loader";
 import { useStatsVault } from "@/services/queries/vault.queries";
 import { getPixegotchiImg } from "@/utils/getImage";
-import { SquareArrowRight } from "lucide-react";
-import ActionButton from "@/components/MainPage/ActionButton";
 import { usePixegotchiToVault } from "@/services/queries/pixegotchi.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 
@@ -37,101 +35,105 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   }
 
   return (
-    <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Vault Collection</h1>
-      {currentPixegotchi && (
-        <ActionButton
-          icon={SquareArrowRight}
-          label="Send to Vault"
-          onClick={() => handleSetToVault()}
-          disabled={setPixegotchiToVault.isPending}
-          gradient="w-full from-violer-500 to-purple-500"
-        />
-      )}
-      {/* Прогрес колекції */}
-      <div className="bg-linear-to-r from-yellow-500/20 to-orange-500/20 rounded-2xl p-4 border border-yellow-500/30">
-        <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="text-yellow-400" size={20} />
-          <span className="font-semibold">Collection Progress</span>
+    <div className="space-y-3 p-3">
+      <div className="pixel-panel p-3">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
+            Vault
+          </h1>
+          {currentPixegotchi && (
+            <button
+              className="pixel-button flex min-h-0 items-center gap-1.5 px-3 py-2 font-pixel text-[8px] leading-3 hover:scale-105 disabled:hover:scale-100"
+              onClick={handleSetToVault}
+              disabled={setPixegotchiToVault.isPending}
+              type="button">
+              <SquareArrowRight size={14} />
+              <span>Send</span>
+            </button>
+          )}
         </div>
-        <div className="text-2xl font-bold">
-          {collectedCount} / {totalCount}
-        </div>
-        <div className="w-full bg-white/10 h-2 rounded-full mt-2 overflow-hidden">
-          <div
-            className="h-full bg-linear-to-r from-yellow-400 to-orange-400"
-            style={{ width: `${(collectedCount / totalCount) * 100}%` }}
-          />
-        </div>
-        <div className="text-xs text-white/60 mt-1">
-          Collect all elements with level 100 to get Unique rarity!
-        </div>
-      </div>
 
-      {/* Сітка елементів */}
-      <div className="grid grid-cols-2 gap-3">
-        {vaultStats.map((item) => (
-          <div
-            key={item.element}
-            className={`
-              rounded-2xl p-4 border transition-all min-h-43
-              ${
+        <div className="pixel-panel-soft p-3">
+          <div className="mb-2 flex items-center gap-2">
+            <Sparkles className="text-pixel-highlight" size={16} />
+            <span className="font-pixel text-[10px] leading-4 text-pixel-ink">
+              Collection Progress
+            </span>
+          </div>
+          <div className="font-pixel text-sm leading-5 text-pixel-highlight">
+            {collectedCount} / {totalCount}
+          </div>
+          <div className="pixel-progress mt-2">
+            <div
+              className="pixel-progress-fill"
+              style={{ width: `${(collectedCount / totalCount) * 100}%` }}
+            />
+          </div>
+          <div className="mt-2 font-pixel text-[8px] leading-4 text-pixel-muted">
+            Collect all elements with level 100 to get Unique rarity.
+          </div>
+        </div>
+
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          {vaultStats.map((item) => (
+            <div
+              key={item.element}
+              className={`pixel-panel-soft min-h-36 p-2 transition ${
                 item.isEmpty
-                  ? "bg-white/5 border-white/10 border-dashed opacity-50"
-                  : `bg-white/10 border-white/20 hover:scale-105 cursor-pointer
-                   ${RARITY_COLORS[item.bestRarity]?.replace("text", "border") || "border-white/20"}`
-              }
-            `}>
-            <div className="text-5xl flex justify-center items-center">
-              {item.isEmpty ? (
-                <span className="pt-10">❓</span>
+                  ? "border-dashed opacity-60"
+                  : `cursor-pointer hover:border-pixel-highlight/70 ${RARITY_COLORS[item.bestRarity]?.replace("text", "border") || ""}`
+              }`}>
+              <div className="grid h-20 place-items-center">
+                {item.isEmpty ? (
+                  <span className="font-pixel text-lg leading-none text-pixel-muted">
+                    ?
+                  </span>
+                ) : (
+                  <img
+                    className="pixelated h-24 w-24 object-contain"
+                    src={`./${getPixegotchiImg(item)}`}
+                    alt={`Pixegotchi-${item.element}`}
+                  />
+                )}
+              </div>
+              <h3 className="truncate font-pixel text-[9px] leading-4 capitalize text-pixel-ink">
+                {!item.isEmpty ? item.element : "Empty"}
+                {!item.isEmpty && item.count > 1 && (
+                  <span className="ml-1 text-pixel-muted">x{item.count}</span>
+                )}
+              </h3>
+
+              {!item.isEmpty ? (
+                <>
+                  <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+                    Level {item.highestLevel}
+                  </div>
+                  <div
+                    className={`mt-1 w-max rounded-sm border px-1.5 py-1 font-pixel text-[7px] leading-3 ${RARITY_COLORS[item.bestRarity] || "text-pixel-ink"}`}>
+                    {item.bestRarity.toUpperCase()}
+                  </div>
+                </>
               ) : (
-                <img
-                  className="-my-8 object-contain"
-                  src={`./${getPixegotchiImg(item)}`}
-                  alt={`Pixegotchi-${item.element}`}
-                />
+                <div className="mt-1 font-pixel text-[8px] leading-3 text-pixel-muted">
+                  Not collected
+                </div>
               )}
             </div>
-            <h3 className="font-semibold capitalize">
-              {!item.isEmpty ? item.element : ""}
-              {!item.isEmpty && item.count > 1 && (
-                <span className="ml-1 text-base text-white/40">
-                  x{item.count}
-                </span>
-              )}
-            </h3>
-
-            {!item.isEmpty ? (
-              <>
-                <div className="text-xs text-white/60">
-                  Level {item.highestLevel}
-                </div>
-                <div
-                  className={`w-max px-2 text-xs font-semibold mt-1 border rounded-xl text-center ${RARITY_COLORS[item.bestRarity] || "text-white"}`}>
-                  {item.bestRarity.toUpperCase()}
-                </div>
-              </>
-            ) : (
-              <div className="text-xs text-center text-white/40 mt-1">
-                Not collected
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Повідомлення про завершення колекції */}
-      {collectedCount === totalCount && (
-        <div className="mt-4 p-4 bg-yellow-500/20 rounded-2xl border border-yellow-500/30 text-center">
-          <div className="text-2xl mb-2">🏆</div>
-          <div className="font-bold">Complete Collection!</div>
-          <div className="text-xs text-white/60 mt-1">
-            You've collected all elements! Now level them up to 100 for Unique
-            rarity.
-          </div>
+          ))}
         </div>
-      )}
+
+        {collectedCount === totalCount && (
+          <div className="pixel-panel-soft mt-3 p-3 text-center">
+            <div className="mb-2 text-xl">🏆</div>
+            <div className="font-pixel text-[10px] leading-4 text-pixel-highlight">
+              Complete Collection!
+            </div>
+            <div className="mt-1 font-pixel text-[8px] leading-4 text-pixel-muted">
+              Level them up to 100 for Unique rarity.
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

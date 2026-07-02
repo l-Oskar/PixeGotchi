@@ -26,7 +26,7 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
   };
 
   return (
-    <div className="mb-2 flex justify-between">
+    <div className="pixel-panel-soft mb-2 grid grid-cols-7 gap-1 p-1">
       <SortedButton
         active={active === "rarity"}
         filter="rarity"

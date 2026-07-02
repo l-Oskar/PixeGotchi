@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { User } from "@pixegotchi/shared";
-import { Crown, Wallet, Coins } from "lucide-react";
+import { Crown, Wallet, Coins, Plus, Menu } from "lucide-react";
 import { useSignal } from "@tma.js/sdk-react";
 import { viewport } from "@tma.js/sdk";
 
@@ -17,30 +17,47 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
 
   return (
     <header
-      style={{ paddingTop: `${topInset - 5}px` }}
-      className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
-      <div className="max-w-md mx-auto px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-linear-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-            <Crown size={16} />
+      style={{ paddingTop: `${Math.max(0, topInset - 5)}px` }}
+      className="sticky top-0 z-50 bg-pixel-bg/95">
+      <div className="mx-auto flex max-w-md items-center justify-between gap-1.5 px-3 py-1.5">
+        <div className="pixel-panel-soft flex min-w-0 flex-1 items-center gap-1.5 px-2 py-1">
+          <div className="pixel-icon-box h-8 w-8 shrink-0 bg-linear-to-br from-pixel-highlight to-yellow-600 text-pixel-bg-deep">
+            <Crown size={15} />
           </div>
-          <span className="font-bold text-lg">
-            {user?.username || "Unknown User"}
-          </span>
+          <div className="min-w-0">
+            <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+              Player
+            </div>
+            <div className="truncate font-pixel text-[10px] leading-4 text-pixel-ink">
+              {user?.username || "Unknown"}
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 bg-yellow-500/20 px-3 py-1.5 rounded-full border border-yellow-500/30">
-            <Coins size={16} className="text-yellow-400" />
-            <span className="font-semibold text-sm">
+        <div className="flex shrink-0 items-center gap-1.5">
+          <div className="pixel-panel-soft flex items-center gap-1 px-2 py-1 text-pixel-highlight">
+            <Coins size={14} />
+            <span className="font-pixel text-[9px] leading-4">
               {user?.pgcBalance || "0"}
             </span>
           </div>
+          <button
+            className="pixel-button grid h-8 w-8 place-items-center p-0 text-pixel-green"
+            type="button"
+            aria-label="Add PGC">
+            <Plus size={15} />
+          </button>
           <Link to="/ton-connect">
-            <button className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition">
-              <Wallet size={16} />
+            <button className="pixel-button grid h-8 w-8 place-items-center p-0" type="button">
+              <Wallet size={15} />
             </button>
           </Link>
+          <button
+            className="pixel-button grid h-8 w-8 place-items-center p-0 text-pixel-muted"
+            type="button"
+            aria-label="Menu">
+            <Menu size={15} />
+          </button>
         </div>
       </div>
     </header>

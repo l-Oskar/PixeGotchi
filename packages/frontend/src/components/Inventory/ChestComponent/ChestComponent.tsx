@@ -68,20 +68,20 @@ const ChestComponent: React.FC = () => {
   return (
     <>
       <div>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {sortedChests?.map((sortedChest: ChestInventory) => (
             <button
               key={sortedChest.chestType}
               onClick={() => handleChestClick(sortedChest.chestType)}
-              className={`bg-white/5 hover:bg-white/10 rounded-2xl p-4 border ${RARITY_BORDER_COLORS[CHEST_TYPE_TO_RARITY[sortedChest.chestType]]} transition flex flex-col items-center gap-2 group`}>
-              <div className="text-4xl group-hover:scale-110 transition">
+              className={`pixel-panel-soft ${RARITY_BORDER_COLORS[CHEST_TYPE_TO_RARITY[sortedChest.chestType]]} group flex min-h-28 flex-col items-center justify-center gap-1.5 p-2 transition hover:border-pixel-highlight/70`}>
+              <div className="text-2xl leading-none transition group-hover:scale-110">
                 {ITEMS_IMG.chest[sortedChest.chestType]}
               </div>
-              <div className="text-xs font-medium text-center">
+              <div className="line-clamp-2 min-h-8 text-center font-pixel text-[8px] leading-4 capitalize text-pixel-ink">
                 {sortedChest.chestType}
               </div>
-              <div className="text-xs text-white/60">
-                {sortedChest.quantity}
+              <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+                x{sortedChest.quantity}
               </div>
             </button>
           ))}

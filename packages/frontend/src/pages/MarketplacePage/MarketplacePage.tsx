@@ -139,22 +139,35 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   ];
 
   return (
-    <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Marketplace</h1>
+    <div className="space-y-3 p-3">
+      <div className="pixel-panel p-3">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
+            Marketplace
+          </h1>
+          <span className="font-pixel text-[8px] leading-3 text-pixel-muted">
+            PGC shop
+          </span>
+        </div>
 
-      <div className="space-y-3">
-        {listings.map((listing) => (
-          <div
-            key={listing.id}
-            className="bg-white/5 rounded-2xl p-4 border border-white/10">
-            <div className="flex items-center gap-4">
-              <div className="text-4xl">{listing.icon}</div>
-              <div className="flex-1">
-                <h3 className="font-semibold">{listing.item}</h3>
-                <div className="text-xs text-white/60">by {listing.seller}</div>
+        <div className="space-y-2">
+          {listings.map((listing) => (
+            <div
+              key={listing.id}
+              className="pixel-panel-soft flex items-center gap-3 p-2">
+              <div className="pixel-icon-box h-11 w-11 shrink-0 text-xl">
+                {listing.icon}
               </div>
-              <div className="text-right">
-                <div className="font-bold text-yellow-400">
+              <div className="min-w-0 flex-1">
+                <h3 className="truncate font-pixel text-[10px] leading-4 text-pixel-ink">
+                  {listing.item}
+                </h3>
+                <div className="mt-1 truncate font-pixel text-[8px] leading-3 text-pixel-muted">
+                  by {listing.seller}
+                </div>
+              </div>
+              <div className="flex shrink-0 flex-col items-end gap-1.5">
+                <div className="font-pixel text-[8px] leading-3 text-pixel-highlight">
                   {listing.price == 0
                     ? "Free"
                     : `${listing.price} ${listing.currency}`}
@@ -163,13 +176,13 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                   onClick={() => {
                     handleBuy(listing);
                   }}
-                  className="mt-2 px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition">
+                  className="pixel-button min-h-0 px-3 py-2 font-pixel text-[8px] leading-3 hover:scale-105">
                   BUY
                 </button>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

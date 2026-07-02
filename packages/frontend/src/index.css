@@ -1,20 +1,128 @@
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @import "tailwindcss";
 
-/* @font-face {
-  font-family: "Press Start 2P";
-  src: url("/public/fonts/PressStart2P-Regular.ttf");
-  font-weight: 400;
+@font-face {
+  font-family: "Dogica Pixel";
+  src: url("/fonts/dogica/dogicapixel.ttf") format("truetype");
+  font-display: swap;
   font-style: normal;
-} */
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Dogica Pixel";
+  src: url("/fonts/dogica/dogicapixelbold.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+
+@theme {
+  --font-pixel: "Dogica Pixel", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", monospace;
+
+  --color-pixel-ink: #f8f4d8;
+  --color-pixel-muted: #b9abc8;
+  --color-pixel-bg: #161126;
+  --color-pixel-bg-deep: #0b0714;
+  --color-pixel-surface: #281c3d;
+  --color-pixel-surface-soft: #3b2858;
+  --color-pixel-border: #6f4b8d;
+  --color-pixel-highlight: #ffd166;
+  --color-pixel-green: #65d66e;
+  --color-pixel-blue: #5cc8ff;
+  --color-pixel-red: #ff6868;
+
+  --shadow-pixel: 0 4px 0 #0b0714, 0 0 0 2px #6f4b8d;
+  --shadow-pixel-inset: inset 0 0 0 2px rgba(248, 244, 216, 0.12);
+  --radius-pixel: 0.25rem;
+}
 
 body {
-  /* font-family: "Press Start 2P", system-ui;
-  font-weight: 400;
-  font-style: normal; */
   background: var(--tg-theme-secondary-bg-color, white);
   padding: 0;
   margin: 0;
+}
+
+@utility pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@utility pixel-room-bg {
+  background:
+    linear-gradient(180deg, rgba(11, 7, 20, 0.04), rgba(11, 7, 20, 0.28)),
+    url("/pixel-room-bg.png") center / cover no-repeat,
+    linear-gradient(180deg, #2f2149 0%, #1b1430 58%, #130d23 58%, #130d23 100%);
+}
+
+@layer components {
+  .pixel-panel {
+    border: 2px solid var(--color-pixel-border);
+    border-radius: var(--radius-pixel);
+    background: var(--color-pixel-surface);
+    color: var(--color-pixel-ink);
+    box-shadow: var(--shadow-pixel), var(--shadow-pixel-inset);
+  }
+
+  .pixel-panel-soft {
+    border: 2px solid color-mix(in srgb, var(--color-pixel-border) 72%, transparent);
+    border-radius: var(--radius-pixel);
+    background: var(--color-pixel-surface-soft);
+    color: var(--color-pixel-ink);
+    box-shadow: var(--shadow-pixel-inset);
+  }
+
+  .pixel-button {
+    min-width: 3.25rem;
+    min-height: 3.25rem;
+    border: 2px solid var(--color-pixel-border);
+    border-radius: var(--radius-pixel);
+    background: var(--color-pixel-surface);
+    color: var(--color-pixel-ink);
+    box-shadow: 0 3px 0 var(--color-pixel-bg-deep);
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease,
+      filter 120ms ease;
+  }
+
+  .pixel-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--color-pixel-bg-deep);
+  }
+
+  .pixel-button:disabled {
+    cursor: not-allowed;
+    filter: grayscale(0.7);
+    opacity: 0.55;
+  }
+
+  .pixel-icon-box {
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    place-items: center;
+    border: 2px solid color-mix(in srgb, var(--color-pixel-ink) 22%, transparent);
+    border-radius: var(--radius-pixel);
+    background: color-mix(in srgb, var(--color-pixel-bg-deep) 36%, transparent);
+  }
+
+  .pixel-progress {
+    height: 0.625rem;
+    overflow: hidden;
+    border: 2px solid var(--color-pixel-bg-deep);
+    border-radius: var(--radius-pixel);
+    background: color-mix(in srgb, var(--color-pixel-bg-deep) 74%, white);
+  }
+
+  .pixel-progress-fill {
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--color-pixel-green),
+      var(--color-pixel-highlight)
+    );
+  }
 }
 
 .splash {

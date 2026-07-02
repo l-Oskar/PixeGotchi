@@ -28,8 +28,8 @@ const Navigation: React.FC<NavigationProps> = ({
   };
   return (
     <nav
-      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 pb-1 bg-black/40 backdrop-blur-xl border-t border-white/10`}>
-      <div className="max-w-md mx-auto px-4 py-3 flex justify-around">
+      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2 pb-1.5 pt-1`}>
+      <div className="pixel-panel mx-auto grid max-w-md grid-cols-5 gap-1 p-1">
         {[
           navButton(),
           { id: "inventory" as PageType, icon: ShoppingBag, label: "Items" },
@@ -41,13 +41,13 @@ const Navigation: React.FC<NavigationProps> = ({
           <button
             key={item.id}
             onClick={() => setCurrentPage(item.id)}
-            className={`flex flex-col items-center gap-1 transition ${
+            className={`flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-sm border-2 px-1 py-1 transition ${
               currentPage === item.id
-                ? "text-pink-400"
-                : "text-white/60 hover:text-white/90"
+                ? "border-pixel-highlight bg-pixel-highlight/15 text-pixel-highlight"
+                : "border-transparent text-pixel-muted hover:border-pixel-border hover:text-pixel-ink"
             }`}>
-            <item.icon size={22} />
-            <span className="text-xs font-medium">{item.label}</span>
+            <item.icon size={18} />
+            <span className="font-pixel text-[8px] leading-3">{item.label}</span>
           </button>
         ))}
       </div>
