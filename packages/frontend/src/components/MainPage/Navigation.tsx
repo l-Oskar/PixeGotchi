@@ -28,7 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({
   };
   return (
     <nav
-      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2.5 pb-2.5 pt-1.5 shadow-[0_-12px_24px_rgba(5,3,10,0.55)]`}>
+      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2.5 pb-4 pt-1.5 shadow-[0_-12px_24px_rgba(5,3,10,0.55)]`}>
       <div className="pixel-panel mx-auto grid max-w-md grid-cols-5 gap-0 overflow-hidden bg-pixel-bg-deep/75 p-0">
         {[
           navButton(),

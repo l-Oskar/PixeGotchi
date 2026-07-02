@@ -5,6 +5,8 @@ import {
 } from "@/services/queries/inventory.queries";
 import {
   InventoryWithDetails,
+  ITEM_BORDER_COLORS,
+  ITEM_COLORS,
   RARITY_BORDER_COLORS,
   RARITY_COLORS,
   RarityOrder,
@@ -23,9 +25,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
   const getInventory = useDetailedInventory();
   const useItem = useUseItem();
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
-  const actionFlow = usePixegotchiActionFlow(
-    currentPixegotchi?.status ?? null,
-  );
+  const actionFlow = usePixegotchiActionFlow(currentPixegotchi?.status ?? null);
   const currentStatus = currentPixegotchi?.status ?? null;
   const inventory = getInventory.data ?? [];
   const [sortedList, setSortedList] = useState<string>(sorted || "rarity");
@@ -165,7 +165,11 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
                   {item.details?.name ?? item.itemId}
                 </div>
                 <span
-                  className={`rounded-sm border px-1.5 py-0.5 font-pixel text-[7px] uppercase leading-3 ${RARITY_BORDER_COLORS[item.rarity]} ${RARITY_COLORS[item.rarity]}`}>
+                  className={`rounded-sm border px-1.5 py-0.5 font-pixel text-[6px] uppercase leading-3 ${ITEM_COLORS[item.itemType]} ${ITEM_BORDER_COLORS[item.itemType]}`}>
+                  {item.itemType}
+                </span>
+                <span
+                  className={`rounded-sm border px-1.5 py-0.5 font-pixel text-[6px] uppercase leading-3 ${RARITY_BORDER_COLORS[item.rarity]} ${RARITY_COLORS[item.rarity]}`}>
                   {item.rarity}
                 </span>
               </button>

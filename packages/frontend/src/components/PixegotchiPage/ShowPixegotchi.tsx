@@ -169,7 +169,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
 
       <section className="pixel-panel flex items-center gap-2 bg-pixel-bg-deep/75 p-2">
         <div className="min-w-0 flex-1">
-          <div className="mb-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-2 font-pixel text-[9px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[7px]">
+          <div className="mb-1.5 grid grid-cols-[auto_1fr_auto] items-between gap-2 font-pixel text-[9px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[7px]">
             <span className="whitespace-nowrap text-pixel-border">
               Level {pixegotchi.level}
             </span>

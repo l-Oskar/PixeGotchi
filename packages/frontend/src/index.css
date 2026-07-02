@@ -35,7 +35,7 @@
 
   --shadow-pixel: 0 4px 0 #05030a, 0 0 0 2px #3c286b;
   --shadow-pixel-inset: inset 0 0 0 2px rgba(248, 244, 216, 0.12);
-  --radius-pixel: 0.35rem;
+  --radius-pixel: 0.7rem;
 }
 
 body {
