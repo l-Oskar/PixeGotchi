@@ -6,6 +6,7 @@ import {
 import {
   InventoryWithDetails,
   RARITY_BORDER_COLORS,
+  RARITY_COLORS,
   RarityOrder,
 } from "@pixegotchi/shared";
 import { useEffect, useMemo, useState } from "react";
@@ -153,16 +154,20 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
                 key={item.id}
                 disabled={!canUseItem}
                 onClick={() => handleItemClick(item)}
-                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group flex min-h-28 flex-col items-center justify-center gap-1.5 p-2 transition hover:border-pixel-highlight/70 disabled:opacity-50`}>
-                <div className="text-2xl leading-none transition group-hover:scale-110">
+                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group relative flex min-h-36 flex-col items-center justify-between gap-2 p-2 pt-4 transition hover:border-pixel-highlight/70 disabled:opacity-50`}>
+                <span className="absolute right-1.5 top-1.5 min-w-6 rounded-sm border-2 border-pixel-border bg-pixel-surface-soft px-1.5 py-0.5 text-center font-pixel text-[8px] leading-3 text-pixel-ink">
+                  {item.quantity}
+                </span>
+                <div className="mt-1 text-4xl leading-none transition group-hover:scale-110">
                   {item.details?.iconUrl ?? "?"}
                 </div>
                 <div className="line-clamp-2 min-h-8 text-center font-pixel text-[8px] leading-4 text-pixel-ink">
                   {item.details?.name ?? item.itemId}
                 </div>
-                <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
-                  x{item.quantity}
-                </div>
+                <span
+                  className={`rounded-sm border px-1.5 py-0.5 font-pixel text-[7px] uppercase leading-3 ${RARITY_BORDER_COLORS[item.rarity]} ${RARITY_COLORS[item.rarity]}`}>
+                  {item.rarity}
+                </span>
               </button>
             );
           })}

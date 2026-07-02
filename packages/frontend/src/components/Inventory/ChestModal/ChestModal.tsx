@@ -54,7 +54,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
       await onUse(chest.chestType, useQuantity);
       onClose();
     } catch (error) {
-      console.error("Failed to use item:", error);
+      console.error("Failed to open chest:", error);
     } finally {
       setIsUsing(false);
     }
@@ -171,7 +171,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
                 onClick={handleUse}
                 disabled={!canUse}
                 className="pixel-button w-full bg-linear-to-br from-green-500 to-emerald-600 py-3 font-pixel text-[9px] leading-4 text-white hover:scale-105 disabled:bg-none disabled:text-pixel-muted disabled:hover:scale-100">
-                {isUsing ? "Using..." : "Use item"}
+                {isUsing ? "Opening..." : "Open chest"}
               </button>
             </motion.div>
           </div>
