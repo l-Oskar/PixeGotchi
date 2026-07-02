@@ -1,6 +1,6 @@
 import ChestComponent from "@/components/Inventory/ChestComponent/ChestComponent";
 import ItemComponent from "@/components/Inventory/ItemComponent/ItemComponent";
-import { HeartPlus, Gift } from "lucide-react";
+import { HeartPlus, Gift, Search, Funnel } from "lucide-react";
 import { PageType } from "@pixegotchi/shared";
 import { useState } from "react";
 
@@ -36,10 +36,12 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
       <div className="pixel-panel p-3">
         <div className="mb-3 flex items-center justify-between gap-2">
           <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
-            Inventory
+            Items
           </h1>
+        </div>
 
-          <div className="pixel-panel-soft grid grid-cols-2 gap-1 p-1">
+        <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
+          <div className="pixel-panel-soft grid grid-cols-2 gap-1 p-1 sm:min-w-48">
             {TABS.map((tab) => {
               const Icon = tab.icon;
 
@@ -57,6 +59,25 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
                 </button>
               );
             })}
+          </div>
+
+          <div className="grid min-w-0 grid-cols-[1fr_auto] gap-2">
+            <label className="pixel-panel-soft flex min-h-10 min-w-0 items-center gap-2 px-3 py-2">
+              <Search size={16} className="shrink-0 text-pixel-muted" />
+              <input
+                aria-label="Search items"
+                className="min-w-0 flex-1 bg-transparent font-pixel text-[9px] leading-4 text-pixel-ink outline-none placeholder:text-pixel-muted"
+                placeholder="Search..."
+                readOnly
+              />
+            </label>
+
+            <button
+              className="pixel-icon-button h-10 min-h-10 w-10 min-w-10 text-pixel-ink"
+              type="button"
+              aria-label="Filter items">
+              <Funnel size={16} />
+            </button>
           </div>
         </div>
       </div>
