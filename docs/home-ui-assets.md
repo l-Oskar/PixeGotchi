@@ -2,49 +2,72 @@
 
 Reference: `/Users/User/Documents/pixe/new_design/home_page.png`
 
-This file tracks bitmap assets and icon replacements needed to move the Home
-screen from lucide placeholders to a closer pixel-art match.
+This file tracks the assets needed to move the Home screen from the current
+pixel CSS/lucide placeholder version to a near-identical pixel-art match.
 
-## Header
+RoomScene and room cosmetics are intentionally deferred. This backlog covers
+Home chrome, cards, buttons, and icon replacements only.
 
-- Player avatar frame with small crown badge.
-- Pixel coin icon for PGC balance.
-- Purple plus button icon.
-- Purple menu button icon.
+## Current Placeholder State
 
-## Pet Card
+- Layout is implemented with reusable pixel CSS/Tailwind primitives.
+- Home pet card uses a temporary room background and current pet sprite.
+- Header, stats, actions, daily/streak, and bottom nav still use lucide icons or
+  simple CSS frames.
+- Action routing and Inventory one-shot sort/filter behavior must stay as-is.
 
-- Pixel favorite heart button.
-- Pixel details / more button.
-- Pixel edit pencil icon.
-- Rarity, element, and gender chip icon variants.
+## Priority 1 - High Impact Replacements
 
-## Stat Panel
+These assets most affect visual similarity to the reference.
 
-- Health heart icon.
-- Hunger pumpkin / food icon.
-- Energy lightning icon.
-- Happiness smile icon.
-- Cleanliness water drop icon.
-- Pixel progress bar caps or 9-slice progress frames.
+- Header player avatar portrait.
+  - Current: `UserRound` lucide placeholder in a red pixel frame.
+  - Needed: square pixel portrait with pink/red frame and small crown badge.
+- Coin / PGC icon.
+  - Current: `Coins` lucide placeholder.
+  - Needed: gold coin sprite with `G` mark, sized for the balance pill.
+- Top-right controls.
+  - Current: lucide plus, wallet, menu.
+  - Needed: purple square plus button and purple square menu button matching the
+    reference. Wallet access must remain available unless product scope changes.
+- Stat icons.
+  - Current: lucide heart/apple/zap/smile/droplets with CSS boxes.
+  - Needed: pixel heart, pumpkin/hunger, lightning, smiley, and water drop.
+- Home action icons.
+  - Current: lucide placeholders.
+  - Needed: apple, medkit, bath, gamepad, lightning, moon + Z pixel sprites.
 
-## Home Actions
+## Priority 2 - Surface / Frame Assets
 
-- Feed apple icon.
-- Heal medkit icon.
-- Clean bath icon.
-- Play gamepad icon.
-- Boost lightning icon.
-- Sleep moon + Z icon.
-- 9-slice colored button backgrounds for red, green, blue, purple, orange, and dark indigo action tiles.
+These make the UI less CSS-like and more like the mockup.
 
-## Daily / Streak
+- 9-slice action button frames.
+  - Red Feed, green Heal, blue Clean, purple Play, orange Boost, dark Sleep.
+  - Include corner highlights and bottom shadow baked into the frame.
+- Pixel progress bar frames.
+  - Stat bars for red/orange/yellow/pink/blue.
+  - EXP bar and Daily Chest bar.
+  - Optional left/right caps for exact pixel-art look.
+- Pixel panel frame.
+  - Main pet card frame.
+  - Stats panel frame.
+  - EXP/status frame.
+  - Daily/Streak frame.
+  - Bottom nav frame and active pink tab frame.
 
-- Treasure chest icon.
-- Gift button icon.
+## Priority 3 - Secondary Home Icons
+
+- Favorite heart button.
+- More/details button.
+- Edit pencil icon.
+- Rarity chip frame variants.
+- Element chip frame variants.
+- Gender chip frame variants.
+- Daily chest treasure icon.
+- Gift reward icon.
 - Fire streak icon.
 - Calendar icon.
-- Small streak dot icons for active/inactive days.
+- Active/inactive streak dots.
 
 ## Bottom Navigation
 
@@ -53,13 +76,14 @@ screen from lucide placeholders to a closer pixel-art match.
 - Games gamepad icon.
 - Market shop icon.
 - Vault safe icon.
-- Active pink tab background and inactive tab separators as 9-slice assets.
+- Active pink tab background.
+- Inactive separator/frame pieces.
 
 ## Deferred Room Assets
 
-RoomScene and room cosmetics stay out of the current pass. When resumed, collect
-or create layered room assets instead of using the reference screenshot as one
-large production background:
+RoomScene / room cosmetics stay out of the current Home polish pass. When this
+phase resumes, collect or create layered room assets instead of using the
+reference screenshot as one large production background.
 
 - Brick wall / room background.
 - Window with curtains.
@@ -68,3 +92,14 @@ large production background:
 - Wall painting.
 - Globe and shelf.
 - Optional foreground/decor layers.
+
+## Search / Creation Notes
+
+- Prefer transparent PNG/WebP sprites or small sprite sheets.
+- Keep assets pixel-art native or nearest-neighbor scaled; avoid blurred
+  vector-to-raster exports.
+- Use consistent outline weight and light direction across icon sets.
+- Do not mix copyrighted game UI packs unless license is clear for commercial
+  use.
+- If exact assets cannot be found, create a small internal replacement set for
+  Priority 1 first.
