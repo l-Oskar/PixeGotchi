@@ -202,30 +202,34 @@ const ItemModal: React.FC<ItemModalProps> = ({
               </div>
 
               {/* Quantity Selector */}
-              {item.isStackable && quantity > 1 && (
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="font-pixel text-[8px] leading-4 text-pixel-muted">
-                    Amount:
-                  </span>
-                  <button
-                    onClick={() => setUseQuantity(Math.max(1, useQuantity - 1))}
-                    className="pixel-button grid h-8 w-8 place-items-center p-0 font-pixel text-[10px]"
-                    disabled={isUsing}>
-                    −
-                  </button>
-                  <span className="w-8 text-center font-pixel text-[10px] leading-4 text-pixel-ink">
-                    {useQuantity}
-                  </span>
-                  <button
-                    onClick={() =>
-                      setUseQuantity(Math.min(quantity, useQuantity + 1))
-                    }
-                    className="pixel-button grid h-8 w-8 place-items-center p-0 font-pixel text-[10px]"
-                    disabled={isUsing}>
-                    +
-                  </button>
-                </div>
-              )}
+              {item.isStackable &&
+                item.cooldownMinutes == 0 &&
+                quantity > 1 && (
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="font-pixel text-[8px] leading-4 text-pixel-muted">
+                      Amount:
+                    </span>
+                    <button
+                      onClick={() =>
+                        setUseQuantity(Math.max(1, useQuantity - 1))
+                      }
+                      className="pixel-button grid h-8 w-8 place-items-center p-0 font-pixel text-[10px]"
+                      disabled={isUsing}>
+                      −
+                    </button>
+                    <span className="w-8 text-center font-pixel text-[10px] leading-4 text-pixel-ink">
+                      {useQuantity}
+                    </span>
+                    <button
+                      onClick={() =>
+                        setUseQuantity(Math.min(quantity, useQuantity + 1))
+                      }
+                      className="pixel-button grid h-8 w-8 place-items-center p-0 font-pixel text-[10px]"
+                      disabled={isUsing}>
+                      +
+                    </button>
+                  </div>
+                )}
 
               {/* Use Button */}
               <button

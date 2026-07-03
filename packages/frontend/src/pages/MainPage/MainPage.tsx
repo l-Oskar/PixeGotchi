@@ -68,16 +68,9 @@ const MainPage: React.FC = () => {
     loader: <Loader />,
     start: <Empty onNavigate={handleNavigate} />,
     home: pixegotchi ? (
-      <ShowPixeGotchi
-        pixegotchi={pixegotchi}
-        onNavigate={handleNavigate}
-      />
+      <ShowPixeGotchi pixegotchi={pixegotchi} onNavigate={handleNavigate} />
     ) : null,
-    egg: egg ? (
-      <EggComponent
-        onNavigate={handleNavigate}
-      />
-    ) : null,
+    egg: egg ? <EggComponent onNavigate={handleNavigate} /> : null,
     inventory: (
       <InventoryPage onNavigate={handleNavigate} initialSort={sortParam} />
     ),
@@ -89,9 +82,7 @@ const MainPage: React.FC = () => {
       />
     ),
     marketplace: <MarketplacePage onNavigate={handleNavigate} />,
-    vault: (
-      <VaultPage onNavigate={handleNavigate} />
-    ),
+    vault: <VaultPage onNavigate={handleNavigate} />,
   };
   const renderedPage = pages[resolvedPage] ?? pages[derivedPage] ?? pages.start;
 

@@ -36,7 +36,7 @@ const Navigation: React.FC<NavigationProps> = ({
           { id: "games" as PageType, icon: Gamepad2, label: "Games" },
           { id: "marketplace" as PageType, icon: Store, label: "Market" },
           { id: "vault" as PageType, icon: Vault, label: "Vault" },
-          // { id: "loader" as PageType, icon: Archive, label: "Load" },
+          // { id: "loader" as PageType, icon: Vault, label: "Load" },
         ].map((item) => (
           <button
             key={item.id}

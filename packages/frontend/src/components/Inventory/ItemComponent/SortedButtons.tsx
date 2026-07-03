@@ -45,6 +45,15 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         bgColor={ITEM_BG_COLORS["food"]}
       />
       <SortedButton
+        active={active === "medicine"}
+        filter="medicine"
+        label="Medical"
+        setFilter={handleFilter}
+        icon={Pill}
+        color={ITEM_COLORS["medicine"]}
+        bgColor={ITEM_BG_COLORS["medicine"]}
+      />
+      <SortedButton
         active={active === "cleaning"}
         filter="cleaning"
         label="Care"
@@ -52,15 +61,6 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         icon={Bubbles}
         color={ITEM_COLORS["cleaning"]}
         bgColor={ITEM_BG_COLORS["cleaning"]}
-      />
-      <SortedButton
-        active={active === "boost"}
-        filter="boost"
-        label="Boost"
-        setFilter={handleFilter}
-        icon={Zap}
-        color={ITEM_COLORS["boost"]}
-        bgColor={ITEM_BG_COLORS["boost"]}
       />
       <SortedButton
         active={active === "toy"}
@@ -72,18 +72,18 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         bgColor={ITEM_BG_COLORS["toy"]}
       />
       <SortedButton
-        active={active === "medicine"}
-        filter="medicine"
-        label="Medical"
+        active={active === "boost"}
+        filter="boost"
+        label="Boost"
         setFilter={handleFilter}
-        icon={Pill}
-        color={ITEM_COLORS["medicine"]}
-        bgColor={ITEM_BG_COLORS["medicine"]}
+        icon={Zap}
+        color={ITEM_COLORS["boost"]}
+        bgColor={ITEM_BG_COLORS["boost"]}
       />
       <SortedButton
         active={active === "special"}
         filter="special"
-        label="Other"
+        label="Special"
         setFilter={handleFilter}
         icon={Clover}
         color={ITEM_COLORS["special"]}
