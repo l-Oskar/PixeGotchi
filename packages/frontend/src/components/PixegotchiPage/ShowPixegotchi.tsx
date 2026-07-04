@@ -58,7 +58,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
 
   return (
     <div className="space-y-2 p-2.5">
-      <section className="pixel-panel overflow-hidden bg-pixel-bg-deep/65 p-2 shadow-[0_5px_0_#05030a,0_0_0_2px_#3c286b,inset_0_0_0_2px_rgba(248,244,216,0.1)]">
+      <section className="pixel-panel overflow-hidden bg-pixel-bg-deep/65 p-2 shadow-[0_5px_0_var(--color-pixel-shadow),0_0_0_2px_var(--color-pixel-border),inset_0_0_0_2px_var(--color-pixel-inset)]">
         <div className="mb-2 flex items-start justify-between gap-2">
           <div className="min-w-0">
             <div className="flex min-w-0 items-center gap-2">
@@ -117,7 +117,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="[&_.pixel-room-bg]:h-full [&_.pixel-room-bg]:min-h-[15.75rem] max-[380px]:[&_.pixel-room-bg]:min-h-[15rem]">
             <Visual pet={pixegotchi} status={null} />
           </div>
-          <div className="pixel-panel-soft absolute bottom-0 left-0 top-0 z-20 flex w-[45%] flex-col justify-center gap-2 border-pixel-border bg-pixel-bg-deep/90 p-2 shadow-[0_4px_0_#05030a,inset_0_0_0_2px_rgba(248,244,216,0.08)] max-[380px]:bottom-2 max-[380px]:left-2 max-[380px]:top-2 max-[380px]:w-[46%] max-[380px]:gap-1.5">
+          <div className="pixel-panel-soft absolute bottom-0 left-0 top-0 z-20 flex w-[45%] flex-col justify-center gap-2 border-pixel-border bg-pixel-bg-deep/90 p-2 shadow-[0_4px_0_var(--color-pixel-shadow),inset_0_0_0_2px_var(--color-pixel-inset-soft)] max-[380px]:bottom-2 max-[380px]:left-2 max-[380px]:top-2 max-[380px]:w-[46%] max-[380px]:gap-1.5">
             <CompactStat
               icon={Heart}
               label="Health"
@@ -179,7 +179,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           </div>
           <div className="pixel-progress h-2.5 w-50">
             <div
-              className="h-full bg-pixel-border shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] transition-all duration-500"
+              className="h-full bg-pixel-border shadow-[inset_0_0_0_1px_var(--color-pixel-inset)] transition-all duration-500"
               style={{ width: `${experienceProgress}%` }}
             />
           </div>
@@ -257,7 +257,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               0 / 10
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep">
-              <div className="h-full w-1/3 bg-pink-500 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)]" />
+              <div className="h-full w-1/3 bg-pink-500 shadow-[inset_0_0_0_1px_var(--color-pixel-inset)]" />
             </div>
           </div>
           <button

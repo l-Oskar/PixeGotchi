@@ -34,8 +34,16 @@
   --color-pixel-red: #fc5858;
   --color-pixel-orange: #ff9068;
 
-  --shadow-pixel: 0 4px 0 #05030a, 0 0 0 2px #3c286b;
-  --shadow-pixel-inset: inset 0 0 0 2px rgba(248, 244, 216, 0.12);
+  --color-pixel-shadow: #05030a;
+  --color-pixel-page-shadow: rgba(5, 3, 10, 0.65);
+  --color-pixel-page-shadow-soft: rgba(5, 3, 10, 0.55);
+  --color-pixel-panel-sheen: rgba(255, 255, 255, 0.035);
+  --color-pixel-inset: rgba(248, 244, 216, 0.12);
+  --color-pixel-inset-soft: rgba(248, 244, 216, 0.08);
+  --color-pixel-progress-shadow: rgba(0, 0, 0, 0.55);
+
+  --shadow-pixel: 0 4px 0 var(--color-pixel-shadow), 0 0 0 2px #3c286b;
+  --shadow-pixel-inset: inset 0 0 0 2px var(--color-pixel-inset);
   --radius-pixel: 0.7rem;
 }
 
@@ -59,8 +67,16 @@ body {
   --color-pixel-red: #c84f84;
   --color-pixel-orange: #b45e8d;
 
-  --shadow-pixel: 0 4px 0 #b487cf, 0 0 0 2px #cfa9e7;
-  --shadow-pixel-inset: inset 0 0 0 2px rgba(255, 255, 255, 0.56);
+  --color-pixel-shadow: #b487cf;
+  --color-pixel-page-shadow: rgba(137, 86, 172, 0.28);
+  --color-pixel-page-shadow-soft: rgba(137, 86, 172, 0.22);
+  --color-pixel-panel-sheen: rgba(255, 255, 255, 0.42);
+  --color-pixel-inset: rgba(255, 255, 255, 0.56);
+  --color-pixel-inset-soft: rgba(255, 255, 255, 0.36);
+  --color-pixel-progress-shadow: rgba(99, 63, 126, 0.28);
+
+  --shadow-pixel: 0 4px 0 var(--color-pixel-shadow), 0 0 0 2px #cfa9e7;
+  --shadow-pixel-inset: inset 0 0 0 2px var(--color-pixel-inset);
 }
 
 @utility pixelated {
@@ -80,7 +96,7 @@ body {
     border: 1px solid var(--color-pixel-border);
     border-radius: var(--radius-pixel);
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 42%),
+      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 42%),
       var(--color-pixel-surface);
     color: var(--color-pixel-ink);
     box-shadow: var(--shadow-pixel), var(--shadow-pixel-inset);
@@ -91,7 +107,7 @@ body {
       color-mix(in srgb, var(--color-pixel-border) 72%, transparent);
     border-radius: var(--radius-pixel);
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 44%),
+      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 44%),
       var(--color-pixel-surface-soft);
     color: var(--color-pixel-ink);
     box-shadow: var(--shadow-pixel-inset);
@@ -179,7 +195,7 @@ body {
 
   .header-add-button:active {
     transform: translateY(0.125rem);
-    box-shadow: 0 1px 0 #05030a;
+    box-shadow: 0 1px 0 var(--color-pixel-shadow);
   }
 
   .header-add-button:active .header-add-sprite,

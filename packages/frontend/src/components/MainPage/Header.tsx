@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
   return (
     <header
       style={{ paddingTop: `${Math.max(0, topInset - 5)}px` }}
-      className="sticky top-0 z-50 bg-pixel-bg/95 shadow-[0_12px_28px_rgba(5,3,10,0.65)]">
+      className="sticky top-0 z-50 bg-pixel-bg/95 shadow-[0_12px_28px_var(--color-pixel-page-shadow)]">
       <div className="mx-auto flex h-16 max-w-md items-center justify-between gap-1.5 px-2 py-2">
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="relative grid -ml-1 h-18 w-18 shrink-0 place-items-center text-pixel-ink max-[430px]:h-[3.875rem] max-[430px]:w-[3.875rem] max-[380px]:h-[3.75rem] max-[380px]:w-[3.75rem]">
@@ -55,12 +55,12 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
               src={publicUrl(`${headerAssetPath}/frame.png`)}
               alt=""
               aria-hidden="true"
-              className="absolute inset-0 h-full w-full pixelated drop-shadow-[0_4px_0_#05030a]"
+              className="absolute inset-0 h-full w-full pixelated drop-shadow-[0_4px_0_var(--color-pixel-shadow)]"
             />
             <div className="relative grid h-[76%] w-[76%] place-items-center">
               <UserRound size={30} />
             </div>
-            <span className="absolute left-2 top-2 grid h-5 w-5 place-items-center rounded-sm border-2 border-pixel-bg-deep bg-pixel-highlight text-pixel-bg-deep shadow-[0_2px_0_#05030a]">
+            <span className="absolute left-2 top-2 grid h-5 w-5 place-items-center rounded-sm border-2 border-pixel-bg-deep bg-pixel-highlight text-pixel-bg-deep shadow-[0_2px_0_var(--color-pixel-shadow)]">
               <Crown size={12} />
             </span>
           </div>
@@ -72,14 +72,14 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <div className="pixel-panel flex h-10 items-center gap-1 bg-pixel-bg-deep/75 px-1 text-pixel-highlight">
+          <div className="pixel-panel flex h-10 items-center bg-pixel-bg-deep/75 px-1 text-pixel-highlight">
             <img
               src={publicUrl(`${headerAssetPath}/coin.png`)}
               alt=""
               aria-hidden="true"
-              className="h-8 w-8 shrink-0 pixelated drop-shadow-[0_2px_0_#05030a]"
+              className="h-8 w-8 shrink-0 pixelated drop-shadow-[0_2px_0_var(--color-pixel-shadow)]"
             />
-            <span className="font-pixel text-[10px] leading-4 text-pixel-ink">
+            <span className="font-pixel pr-1 text-[10px] leading-4 text-pixel-ink">
               {(user?.pgcBalance
                 ? +user.pgcBalance > 99999
                   ? "99999+"

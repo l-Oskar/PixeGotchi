@@ -47,7 +47,7 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
       {sortedRarities.map((rarity) => (
         <div key={rarity} className="mb-4">
           {/* Заголовок рідкості (опціонально) */}
-          <div className="sticky top-0 z-10 mb-2 bg-pixel-panel px-2 py-1 bg-purple-950/80">
+          <div className="sticky top-0 z-10 mb-2 rounded-sm border border-pixel-border/50 bg-pixel-surface/95 px-2 py-1 shadow-[0_2px_0_var(--color-pixel-shadow)]">
             <span
               className={`font-pixel text-[8px] leading-3 ${RARITY_BORDER_COLORS[rarity].replace("border", "text")}`}>
               {`${rarity.toUpperCase()} - ${CHEST_CONFIG[chest.chestType as ChestType].item_rarity_distribution[rarity as RarityType]}%`}

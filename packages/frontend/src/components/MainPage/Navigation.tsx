@@ -28,7 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({
   };
   return (
     <nav
-      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2.5 pb-4 pt-1.5 shadow-[0_-12px_24px_rgba(5,3,10,0.55)]`}>
+      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2.5 pb-4 pt-1.5 shadow-[0_-12px_24px_var(--color-pixel-page-shadow-soft)]`}>
       <div className="pixel-panel mx-auto grid max-w-md grid-cols-5 gap-0 overflow-hidden bg-pixel-bg-deep/75 p-0">
         {[
           navButton(),
@@ -43,13 +43,15 @@ const Navigation: React.FC<NavigationProps> = ({
             onClick={() => setCurrentPage(item.id)}
             className={`relative flex min-h-[3.75rem] flex-col items-center justify-center gap-1 border-r-2 border-pixel-border/30 px-1 py-1.5 transition last:border-r-0 max-[380px]:min-h-14 ${
               currentPage === item.id
-                ? "bg-pink-500/25 text-pink-400 shadow-[inset_0_0_0_2px_rgba(244,114,182,0.42)]"
+                ? "bg-pixel-highlight/15 text-pixel-highlight shadow-[inset_0_0_0_2px_var(--color-pixel-inset)]"
                 : "text-pixel-muted hover:bg-pixel-surface/40 hover:text-pixel-ink"
             }`}>
             <item.icon
               size={22}
               className={
-                currentPage === item.id ? "drop-shadow-[0_2px_0_#090412]" : ""
+                currentPage === item.id
+                  ? "drop-shadow-[0_2px_0_var(--color-pixel-shadow)]"
+                  : ""
               }
             />
             <span className="font-pixel text-[7px] uppercase leading-3">

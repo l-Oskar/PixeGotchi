@@ -20,13 +20,13 @@ import { canUseItemForStatus } from "@/utils/itemUsage";
 export interface ItemComponentProps {
   sorted?: string;
   searchQuery?: string;
-  showSortedPanel: boolean;
+  isFilterOpen: boolean;
 }
 
 const ItemComponent: React.FC<ItemComponentProps> = ({
   sorted,
   searchQuery = "",
-  showSortedPanel,
+  isFilterOpen,
 }) => {
   const getInventory = useDetailedInventory();
   const useItem = useUseItem();
@@ -165,12 +165,22 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
   return (
     <>
       <div>
-        {showSortedPanel && (
-          <SortedButtons initialFilter={sortedList} setFilter={setSortedList} />
-        )}
+        <div
+          className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out ${
+            isFilterOpen
+              ? "grid-rows-[1fr] opacity-100"
+              : "grid-rows-[0fr] opacity-0"
+          }`}>
+          <div className="overflow-hidden">
+            <SortedButtons
+              initialFilter={sortedList}
+              setFilter={setSortedList}
+            />
+          </div>
+        </div>
         {actionFlow.isBlocked && (
-          <div className="pixel-panel-soft mb-3 px-3 py-2 font-pixel text-[8px] leading-4 text-yellow-100">
-            Only revive items can be used while Pixegotchi is not active.
+          <div className="pixel-panel-soft mb-3 border-pixel-orange/70 px-3 py-2 font-pixel text-[8px] leading-4 text-pixel-orange">
+            Only revive items can be used while Pixegotchi is critical.
           </div>
         )}
         <div className="grid grid-cols-3 gap-2">

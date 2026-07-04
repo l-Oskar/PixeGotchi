@@ -58,9 +58,9 @@ const CompactStat: React.FC<CompactStatProps> = ({
               {displayValue}/{maxStats}
             </span>
           </div>
-          <div className="h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep shadow-[inset_0_0_0_1px_rgba(0,0,0,0.55)]">
+          <div className="h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep shadow-[inset_0_0_0_1px_var(--color-pixel-progress-shadow)]">
             <div
-              className={`h-full ${fillColor} shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] transition-all duration-500`}
+              className={`h-full ${fillColor} shadow-[inset_0_0_0_1px_var(--color-pixel-inset)] transition-all duration-500`}
               style={{ width: `${progressPercent}%` }}
             />
           </div>

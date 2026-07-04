@@ -26,7 +26,7 @@ const TABS: { id: TabType; icon: typeof HeartPlus; label: string }[] = [
 
 const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
   const [activeTab, setActiveTab] = useState<TabType>("items");
-  const [showSortedPanel, setShowSortedPanel] = useState<boolean>(false);
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
 
   const handleChangeTab = (tab: TabType) => {
@@ -75,7 +75,7 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
               </label>
 
               <button
-                onClick={() => setShowSortedPanel(!showSortedPanel)}
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
                 className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-ink"
                 type="button"
                 aria-label="Filter items">
@@ -90,7 +90,7 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
         <ItemComponent
           sorted={initialSort}
           searchQuery={searchText}
-          showSortedPanel={showSortedPanel}
+          isFilterOpen={isFilterOpen}
         />
       ) : (
         <ChestComponent searchQuery={searchText} />
