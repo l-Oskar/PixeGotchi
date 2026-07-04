@@ -26,7 +26,7 @@ const TABS: { id: TabType; icon: typeof HeartPlus; label: string }[] = [
 
 const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
   const [activeTab, setActiveTab] = useState<TabType>("items");
-  const [showSortedPanel, setShowSortedPanel] = useState<boolean>(true);
+  const [showSortedPanel, setShowSortedPanel] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
 
   const handleChangeTab = (tab: TabType) => {

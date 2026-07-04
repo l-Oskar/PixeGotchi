@@ -80,7 +80,11 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
               className="h-8 w-8 shrink-0 pixelated drop-shadow-[0_2px_0_#05030a]"
             />
             <span className="font-pixel text-[10px] leading-4 text-pixel-ink">
-              {user?.pgcBalance || "0"}
+              {(user?.pgcBalance
+                ? +user.pgcBalance > 99999
+                  ? "99999+"
+                  : user.pgcBalance
+                : "0") || "0"}
             </span>
             <button
               className={`-mt-1 mr-1 header-add-button grid h-6 w-6 place-items-center overflow-visible rounded-sm text-white transition-[transform,box-shadow] duration-75 ${

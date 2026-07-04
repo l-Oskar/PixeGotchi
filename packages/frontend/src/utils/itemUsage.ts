@@ -13,10 +13,7 @@ export const canUseItemForStatus = (
 
   const isReviveItem = hasReviveEffect(item);
 
-  if (
-    status === PixegotchiStatus.active ||
-    status === PixegotchiStatus.critical
-  ) {
+  if (status === PixegotchiStatus.active) {
     return !isReviveItem;
   }
 
