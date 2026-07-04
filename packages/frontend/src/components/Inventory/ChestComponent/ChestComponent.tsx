@@ -13,7 +13,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useOpenChest } from "@/services/queries/inventory.queries";
 import RewardModal from "../RewardsModal/RewardModal";
 
-const ChestComponent: React.FC = () => {
+export interface ChestComponentProps {
+  searchQuery?: string;
+}
+
+const ChestComponent: React.FC<ChestComponentProps> = ({
+  searchQuery = "",
+}) => {
   const [rewards, setRewards] = useState<ChestRewards | null>(null);
   const { data: sortedChestData } = useGetSortedChests();
   const openChest = useOpenChest();
@@ -35,6 +41,18 @@ const ChestComponent: React.FC = () => {
         : null,
     [selectedChestType, sortedChests],
   );
+  const visibleChests = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    if (!query) return sortedChests;
+
+    return sortedChests.filter((chest) => {
+      const rarity = CHEST_TYPE_TO_RARITY[chest.chestType];
+      const searchableText = [chest.chestType, rarity].join(" ").toLowerCase();
+
+      return searchableText.includes(query);
+    });
+  }, [searchQuery, sortedChests]);
 
   useEffect(() => {
     if (
@@ -70,7 +88,7 @@ const ChestComponent: React.FC = () => {
     <>
       <div>
         <div className="grid grid-cols-3 gap-2">
-          {sortedChests?.map((sortedChest: ChestInventory) => {
+          {visibleChests.map((sortedChest: ChestInventory) => {
             const rarity = CHEST_TYPE_TO_RARITY[sortedChest.chestType];
 
             return (
@@ -95,6 +113,11 @@ const ChestComponent: React.FC = () => {
             );
           })}
         </div>
+        {visibleChests.length === 0 && (
+          <div className="pixel-panel-soft mt-2 px-3 py-4 text-center font-pixel text-[8px] leading-4 text-pixel-muted">
+            No chests found
+          </div>
+        )}
 
         <ChestModal
           chest={currentChest}

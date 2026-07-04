@@ -1,8 +1,4 @@
-import {
-  ItemBuffsType,
-  PixegotchiStatus,
-  type Item,
-} from "@pixegotchi/shared";
+import { ItemBuffsType, PixegotchiStatus, type Item } from "@pixegotchi/shared";
 
 export const hasReviveEffect = (item: Item | null | undefined) =>
   Boolean(
@@ -17,7 +13,10 @@ export const canUseItemForStatus = (
 
   const isReviveItem = hasReviveEffect(item);
 
-  if (status === PixegotchiStatus.active) {
+  if (
+    status === PixegotchiStatus.active ||
+    status === PixegotchiStatus.critical
+  ) {
     return !isReviveItem;
   }
 

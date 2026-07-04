@@ -3,6 +3,7 @@ import {
   ChestInventory,
   RARITY_COLORS,
   ITEMS_IMG,
+  ITEM_COLORS,
 } from "@pixegotchi/shared";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
@@ -29,17 +30,12 @@ const ChestModal: React.FC<ChestModalProps> = ({
   const [isUsing, setIsUsing] = useState(false);
   const [isItemPoolOpen, setIsItemPoolOpen] = useState(false);
   const chestDescription = useMemo(
-    () =>
-      chest
-        ? ChestGenerator.getChestDescription(chest.chestType)
-        : null,
+    () => (chest ? ChestGenerator.getChestDescription(chest.chestType) : null),
     [chest],
   );
   const chestItems = useMemo(
     () =>
-      chest
-        ? ChestGenerator.getItemsWithProbabilities(chest.chestType)
-        : [],
+      chest ? ChestGenerator.getItemsWithProbabilities(chest.chestType) : [],
     [chest],
   );
 
@@ -111,21 +107,24 @@ const ChestModal: React.FC<ChestModalProps> = ({
               {chestDescription && (
                 <div className="mb-4 grid gap-2 font-pixel text-[8px] leading-4 text-pixel-muted">
                   <p>
-                    Egg chance:{" "}
+                    Guaranteed items:{" "}
                     <span className="text-[10px] text-pixel-ink">
-                      {chestDescription.eggChance}%
+                      {chestDescription.guaranteed_items}{" "}
                     </span>
                   </p>
                   <p>
-                    Boost item chance:{" "}
+                    Bonus{" "}
+                    <span className={`${ITEM_COLORS["boost"]}`}>boost</span>{" "}
+                    item chance:{" "}
                     <span className="text-[10px] text-pixel-ink">
                       {chestDescription.boostChance}%
                     </span>
                   </p>
                   <p>
-                    Guaranteed items:{" "}
+                    <span className={`${RARITY_COLORS["legendary"]}`}>Egg</span>{" "}
+                    chance:{" "}
                     <span className="text-[10px] text-pixel-ink">
-                      {chestDescription.guaranteed_items}
+                      {chestDescription.eggChance}%
                     </span>
                   </p>
 
@@ -140,10 +139,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
                       <motion.div
                         animate={{ rotate: isItemPoolOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}>
-                        <ChevronDown
-                          size={14}
-                          className="text-pixel-muted"
-                        />
+                        <ChevronDown size={14} className="text-pixel-muted" />
                       </motion.div>
                     </button>
 
@@ -155,10 +151,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="overflow-hidden mt-2">
-                          <ChestItems
-                            chest={chest}
-                            chestItems={chestItems}
-                          />
+                          <ChestItems chest={chest} chestItems={chestItems} />
                         </motion.div>
                       )}
                     </AnimatePresence>

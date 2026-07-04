@@ -31,7 +31,8 @@
   --color-pixel-highlight: #ffd166;
   --color-pixel-green: #65d66e;
   --color-pixel-blue: #5cc8ff;
-  --color-pixel-red: #ff6868;
+  --color-pixel-red: #fc5858;
+  --color-pixel-orange: #ff9068;
 
   --shadow-pixel: 0 4px 0 #05030a, 0 0 0 2px #3c286b;
   --shadow-pixel-inset: inset 0 0 0 2px rgba(248, 244, 216, 0.12);
@@ -42,6 +43,24 @@ body {
   background: var(--color-pixel-bg);
   padding: 0;
   margin: 0;
+}
+
+.pixel-light-theme {
+  --color-pixel-ink: #2d173f;
+  --color-pixel-muted: #7f6598;
+  --color-pixel-bg: #f7edff;
+  --color-pixel-bg-deep: #dec4f2;
+  --color-pixel-surface: #efe0ff;
+  --color-pixel-surface-soft: #f9f0ff;
+  --color-pixel-border: #9f6bc6;
+  --color-pixel-highlight: #8f3fb0;
+  --color-pixel-green: #338b65;
+  --color-pixel-blue: #4b70bd;
+  --color-pixel-red: #c84f84;
+  --color-pixel-orange: #b45e8d;
+
+  --shadow-pixel: 0 4px 0 #b487cf, 0 0 0 2px #cfa9e7;
+  --shadow-pixel-inset: inset 0 0 0 2px rgba(255, 255, 255, 0.56);
 }
 
 @utility pixelated {
@@ -152,6 +171,20 @@ body {
       var(--color-pixel-green),
       var(--color-pixel-highlight)
     );
+  }
+
+  .header-add-sprite {
+    background-position: -168px -56px;
+  }
+
+  .header-add-button:active {
+    transform: translateY(0.125rem);
+    box-shadow: 0 1px 0 #05030a;
+  }
+
+  .header-add-button:active .header-add-sprite,
+  .header-add-sprite.is-pressed {
+    background-position: -196px -56px;
   }
 }
 

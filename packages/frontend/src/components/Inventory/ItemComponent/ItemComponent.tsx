@@ -19,9 +19,15 @@ import { canUseItemForStatus } from "@/utils/itemUsage";
 
 export interface ItemComponentProps {
   sorted?: string;
+  searchQuery?: string;
+  showSortedPanel: boolean;
 }
 
-const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
+const ItemComponent: React.FC<ItemComponentProps> = ({
+  sorted,
+  searchQuery = "",
+  showSortedPanel,
+}) => {
   const getInventory = useDetailedInventory();
   const useItem = useUseItem();
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
@@ -135,18 +141,40 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
     () => handleSortItems(inventory, sortedList),
     [inventory, sortedList],
   );
+  const visibleInventory = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    if (!query) return sortedInventory;
+
+    return sortedInventory.filter((item) => {
+      const searchableText = [
+        item.details?.name,
+        item.details?.description,
+        item.itemId,
+        item.itemType,
+        item.rarity,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(query);
+    });
+  }, [searchQuery, sortedInventory]);
 
   return (
     <>
       <div>
-        <SortedButtons initialFilter={sortedList} setFilter={setSortedList} />
+        {showSortedPanel && (
+          <SortedButtons initialFilter={sortedList} setFilter={setSortedList} />
+        )}
         {actionFlow.isBlocked && (
           <div className="pixel-panel-soft mb-3 px-3 py-2 font-pixel text-[8px] leading-4 text-yellow-100">
             Only revive items can be used while Pixegotchi is not active.
           </div>
         )}
         <div className="grid grid-cols-3 gap-2">
-          {sortedInventory.map((item) => {
+          {visibleInventory.map((item) => {
             const canUseItem = canUseItemForStatus(item.details, currentStatus);
 
             return (
@@ -176,6 +204,11 @@ const ItemComponent: React.FC<ItemComponentProps> = ({ sorted }) => {
             );
           })}
         </div>
+        {visibleInventory.length === 0 && (
+          <div className="pixel-panel-soft mt-2 px-3 py-4 text-center font-pixel text-[8px] leading-4 text-pixel-muted">
+            No items found
+          </div>
+        )}
 
         <ItemModal
           item={currentItem}

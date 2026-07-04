@@ -105,7 +105,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => onNavigate("data")}
+              onClick={() => {}}
               className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-muted"
               aria-label="Pixegotchi details">
               <MoreHorizontal size={18} />
@@ -186,11 +186,18 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         </div>
         <span className="font-pixel text-[8px] whitespace-nowrap">
           Status:{" "}
-          <span className="text-pixel-green capitalize">{statusLabel}</span>
+          <span
+            className={`${statusLabel === "dead" ? "text-pixel-red" : statusLabel === "critical" ? "text-pixel-orange" : "text-pixel-green"} capitalize`}>
+            {statusLabel === "active" ? "Happy" : statusLabel}
+          </span>
         </span>
-        <span className="pixel-icon-button hidden h-9 min-h-9 w-9 min-w-9 shrink-0 text-pixel-border min-[390px]:grid">
+        <button
+          type="button"
+          onClick={() => onNavigate("data")}
+          className="pixel-icon-button hidden h-9 min-h-9 w-9 min-w-9 shrink-0 text-pixel-border min-[390px]:grid"
+          aria-label="Pixegotchi details">
           <Smile size={16} />
-        </span>
+        </button>
       </section>
 
       <section className="grid grid-cols-3 gap-2 max-[380px]:gap-1.5">

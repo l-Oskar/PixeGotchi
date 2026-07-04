@@ -12,8 +12,11 @@ Home chrome, cards, buttons, and icon replacements only.
 
 - Layout is implemented with reusable pixel CSS/Tailwind primitives.
 - Home pet card uses a temporary room background and current pet sprite.
-- Header, stats, actions, daily/streak, and bottom nav still use lucide icons or
-  simple CSS frames.
+- Header uses `assets/header/frame.png` for the avatar frame,
+  `assets/header/coin.png` for PGC, and the plus sprite from
+  `assets/header/FreeUI.png`.
+- Header wallet/menu, stats, actions, daily/streak, and bottom nav still use
+  lucide icons or simple CSS frames.
 - Action routing and Inventory one-shot sort/filter behavior must stay as-is.
 
 ## Priority 1 - High Impact Replacements
@@ -21,15 +24,19 @@ Home chrome, cards, buttons, and icon replacements only.
 These assets most affect visual similarity to the reference.
 
 - Header player avatar portrait.
-  - Current: `UserRound` lucide placeholder in a red pixel frame.
-  - Needed: square pixel portrait with pink/red frame and small crown badge.
+  - Current: `UserRound` lucide placeholder inside `assets/header/frame.png`.
+  - Needed: square pixel portrait; current frame can stay unless replaced by a
+    closer frame.
 - Coin / PGC icon.
-  - Current: `Coins` lucide placeholder.
-  - Needed: gold coin sprite with `G` mark, sized for the balance pill.
+  - Current: `assets/header/coin.png`.
+  - Needed: verify scale in browser and keep if visually close enough.
 - Top-right controls.
-  - Current: lucide plus, wallet, menu.
-  - Needed: purple square plus button and purple square menu button matching the
-    reference. Wallet access must remain available unless product scope changes.
+  - Current: plus sprite from `assets/header/FreeUI.png` with a pressed-state
+    sprite switch to the adjacent right button; wallet/menu remain lucide
+    placeholders.
+  - Needed: verify plus normal/pressed positions, find or crop a purple
+    hamburger/menu button matching the reference. Wallet access must remain
+    available unless product scope changes.
 - Stat icons.
   - Current: lucide heart/apple/zap/smile/droplets with CSS boxes.
   - Needed: pixel heart, pumpkin/hunger, lightning, smiley, and water drop.

@@ -35,8 +35,7 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
   const sortedRarities = useMemo(
     () =>
       Object.keys(groupedByRarity).sort(
-        (a, b) =>
-          RarityOrder[a as RarityType] - RarityOrder[b as RarityType],
+        (a, b) => RarityOrder[a as RarityType] - RarityOrder[b as RarityType],
       ),
     [groupedByRarity],
   );
@@ -48,7 +47,7 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
       {sortedRarities.map((rarity) => (
         <div key={rarity} className="mb-4">
           {/* Заголовок рідкості (опціонально) */}
-          <div className="sticky top-0 z-10 mb-2 bg-pixel-panel px-2 py-1">
+          <div className="sticky top-0 z-10 mb-2 bg-pixel-panel px-2 py-1 bg-purple-950/80">
             <span
               className={`font-pixel text-[8px] leading-3 ${RARITY_BORDER_COLORS[rarity].replace("border", "text")}`}>
               {`${rarity.toUpperCase()} - ${CHEST_CONFIG[chest.chestType as ChestType].item_rarity_distribution[rarity as RarityType]}%`}

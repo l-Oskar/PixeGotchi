@@ -26,6 +26,8 @@ const TABS: { id: TabType; icon: typeof HeartPlus; label: string }[] = [
 
 const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
   const [activeTab, setActiveTab] = useState<TabType>("items");
+  const [showSortedPanel, setShowSortedPanel] = useState<boolean>(true);
+  const [searchText, setSearchText] = useState("");
 
   const handleChangeTab = (tab: TabType) => {
     setActiveTab(tab);
@@ -35,9 +37,7 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
     <div className="space-y-2.5 p-2.5">
       <div className="pixel-panel p-2.5">
         <div className="mb-2.5 flex items-center justify-between gap-2">
-          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
-            Items
-          </h1>
+          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">Items</h1>
         </div>
 
         <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
@@ -61,31 +61,39 @@ const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
             })}
           </div>
 
-          <div className="grid min-w-0 grid-cols-[1fr_auto] gap-2">
-            <label className="pixel-panel-soft flex min-h-9 min-w-0 items-center gap-2 px-2.5 py-1.5">
-              <Search size={15} className="shrink-0 text-pixel-muted" />
-              <input
-                aria-label="Search items"
-                className="min-w-0 flex-1 bg-transparent font-pixel text-[9px] leading-4 text-pixel-ink outline-none placeholder:text-pixel-muted"
-                placeholder="Search..."
-                readOnly
-              />
-            </label>
+          {activeTab === "items" && (
+            <div className="grid min-w-0 grid-cols-[1fr_auto] gap-2">
+              <label className="pixel-panel-soft flex min-h-9 min-w-0 items-center gap-2 px-2.5 py-1.5">
+                <Search size={15} className="shrink-0 text-pixel-muted" />
+                <input
+                  aria-label={`Search ${activeTab}`}
+                  className="min-w-0 flex-1 bg-transparent font-pixel text-[9px] leading-4 text-pixel-ink outline-none placeholder:text-pixel-muted"
+                  placeholder={`Search ${activeTab}...`}
+                  value={searchText}
+                  onChange={(event) => setSearchText(event.target.value)}
+                />
+              </label>
 
-            <button
-              className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-ink"
-              type="button"
-              aria-label="Filter items">
-              <Funnel size={15} />
-            </button>
-          </div>
+              <button
+                onClick={() => setShowSortedPanel(!showSortedPanel)}
+                className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-ink"
+                type="button"
+                aria-label="Filter items">
+                <Funnel size={15} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {activeTab === "items" ? (
-        <ItemComponent sorted={initialSort} />
+        <ItemComponent
+          sorted={initialSort}
+          searchQuery={searchText}
+          showSortedPanel={showSortedPanel}
+        />
       ) : (
-        <ChestComponent />
+        <ChestComponent searchQuery={searchText} />
       )}
     </div>
   );
