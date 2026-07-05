@@ -167,7 +167,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
               <button
                 onClick={handleUse}
                 disabled={!canUse}
-                className="pixel-button w-full bg-linear-to-br from-green-500 to-emerald-600 py-3 font-pixel text-[9px] leading-4 text-white hover:scale-105 disabled:bg-none disabled:text-pixel-muted disabled:hover:scale-100">
+                className="pixel-button w-full bg-pixel-green py-3 font-pixel text-[9px] leading-4 text-pixel-accent-ink hover:scale-105 disabled:bg-none disabled:text-pixel-muted disabled:hover:scale-100">
                 {isUsing ? "Opening..." : "Open chest"}
               </button>
             </motion.div>

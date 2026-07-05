@@ -36,28 +36,30 @@ export const GameShell: React.FC<GameShellProps> = ({
 
   return (
     <section
-      className="fixed inset-0 z-100 bg-[#121528] text-white overflow-hidden"
+      className="fixed inset-0 z-100 overflow-hidden bg-[linear-gradient(180deg,var(--color-pixel-bg)_0%,var(--color-pixel-bg-deep)_100%)] text-pixel-ink"
       style={{ paddingTop: `${topInset}px` }}>
       <div className="flex h-full min-h-0 flex-col">
-        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-2 bg-black/55 backdrop-blur-md border-b border-white/10">
+        <div className="pixel-panel mx-2 mt-2 grid grid-cols-[auto_1fr_auto] items-center gap-3 bg-pixel-bg-deep/80 px-2 py-2">
           <button
             type="button"
             onClick={onExit}
-            className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center justify-center"
+            className="pixel-icon-button h-10 w-10 bg-pixel-surface-soft transition hover:border-pixel-highlight/70"
             aria-label="Exit game">
             <X size={20} />
           </button>
 
           <div className="min-w-0 text-center">
-            <h1 className="text-sm font-semibold truncate">{title}</h1>
+            <h1 className="truncate font-pixel text-[10px] leading-4 text-pixel-ink">
+              {title}
+            </h1>
             {score && (
-              <div className="mt-0.5 text-xs text-white/75 truncate">
+              <div className="theme-readable-muted mt-0.5 truncate font-pixel text-[8px] leading-3">
                 {score}
               </div>
             )}
           </div>
 
-          <div className="min-w-10 text-right text-sm font-mono text-white/90">
+          <div className="min-w-10 text-right font-pixel text-[9px] leading-4 text-pixel-highlight">
             {timer}
           </div>
         </div>

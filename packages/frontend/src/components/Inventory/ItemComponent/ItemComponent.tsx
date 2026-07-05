@@ -57,8 +57,6 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
   }, [actionFlow, currentInventoryItem, getInventory.isSuccess]);
 
   const handleItemClick = (item: InventoryWithDetails) => {
-    if (!canUseItemForStatus(item.details, currentStatus)) return;
-
     actionFlow.requestAction(item.itemId, currentStatus !== "active");
   };
 
@@ -186,13 +184,17 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
         <div className="grid grid-cols-3 gap-2">
           {visibleInventory.map((item) => {
             const canUseItem = canUseItemForStatus(item.details, currentStatus);
+            const cannotUseWhileBlocked =
+              currentStatus !== "active" && !canUseItem;
 
             return (
               <button
                 key={item.id}
-                disabled={!canUseItem}
+                aria-disabled={cannotUseWhileBlocked}
                 onClick={() => handleItemClick(item)}
-                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group relative flex min-h-32 flex-col items-center justify-between gap-1.5 p-2 pt-3 transition hover:border-pixel-highlight/70 disabled:opacity-50 max-[380px]:min-h-30`}>
+                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group relative flex min-h-32 flex-col items-center justify-between gap-1.5 p-2 pt-3 transition hover:border-pixel-highlight/70 max-[380px]:min-h-30 ${
+                  cannotUseWhileBlocked ? "opacity-70" : ""
+                }`}>
                 <span className="absolute right-1.5 top-1.5 min-w-6 rounded-sm border-2 border-pixel-border bg-pixel-surface-soft px-1.5 py-0.5 text-center font-pixel text-[8px] leading-3 text-pixel-ink">
                   {item.quantity}
                 </span>
@@ -224,6 +226,14 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
           item={currentItem}
           quantity={currentInventoryItem?.quantity ?? 0}
           isOpen={actionFlow.isModalOpen}
+          canUseItem={canUseItemForStatus(currentItem, currentStatus)}
+          disabledReason={
+            currentStatus === "critical"
+              ? "Only revive items can be used while Pixegotchi is critical."
+              : currentStatus
+                ? `This item cannot be used while Pixegotchi is ${currentStatus}.`
+                : undefined
+          }
           onClose={actionFlow.cancel}
           onUse={handleUseItem}
         />

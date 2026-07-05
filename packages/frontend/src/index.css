@@ -33,6 +33,7 @@
   --color-pixel-blue: #5cc8ff;
   --color-pixel-red: #fc5858;
   --color-pixel-orange: #ff9068;
+  --color-pixel-accent-ink: #0b0714;
 
   --color-pixel-shadow: #05030a;
   --color-pixel-page-shadow: rgba(5, 3, 10, 0.65);
@@ -66,6 +67,7 @@ body {
   --color-pixel-blue: #4b70bd;
   --color-pixel-red: #c84f84;
   --color-pixel-orange: #b45e8d;
+  --color-pixel-accent-ink: #ffffff;
 
   --color-pixel-shadow: #b487cf;
   --color-pixel-page-shadow: rgba(137, 86, 172, 0.28);

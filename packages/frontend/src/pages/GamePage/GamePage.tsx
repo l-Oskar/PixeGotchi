@@ -117,15 +117,15 @@ const GamesPage: React.FC<GamePageProps> = ({
                   <span className="theme-readable-muted whitespace-nowrap rounded-sm border border-pixel-border bg-pixel-panel px-1.5 py-1 text-[7px] leading-3">
                     {game.difficulty}
                   </span>
-                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-orange-400/50 bg-orange-500/20 px-1.5 py-1 text-[7px] leading-3 text-orange-300">
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-pixel-orange/50 bg-pixel-orange/15 px-1.5 py-1 text-[7px] leading-3 text-pixel-orange">
                     {game.energy}
                     <Zap size={10} />
                   </span>
-                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-yellow-400/50 bg-yellow-500/20 px-1.5 py-1 text-[7px] leading-3 text-yellow-300">
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-pixel-highlight/50 bg-pixel-highlight/15 px-1.5 py-1 text-[7px] leading-3 text-pixel-highlight">
                     {game.reward}
                     <Coins size={10} />
                   </span>
-                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-green-400/50 bg-green-500/20 px-1.5 py-1 text-[7px] leading-3 text-green-300">
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-pixel-green/50 bg-pixel-green/15 px-1.5 py-1 text-[7px] leading-3 text-pixel-green">
                     {game.exp}
                     <StarPlus size={10} />
                   </span>

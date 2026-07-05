@@ -64,7 +64,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
       {isOpen && (
         <div
-          className={`pixel-panel absolute right-0 top-[calc(100%+0.5rem)] z-[60] w-48 p-1.5 ${panelClassName}`}
+          className={`pixel-panel absolute right-0 top-[calc(100%+0.5rem)] z-[60] w-25 p-1.5 ${panelClassName}`}
           role="menu"
           aria-label={menuLabel}>
           {children}

@@ -16,6 +16,7 @@ import "./mockEnv.ts";
 import { QueryProvider } from "./providers/QueryProvider.tsx";
 import { AutoLoginProvider } from "./providers/AutoLoginProvider.tsx";
 import { GameBootstrap } from "./providers/GameBootstrap.tsx";
+import { ThemeProvider } from "./providers/ThemeProvider.tsx";
 import {
   installClientErrorLogging,
   reportClientError,
@@ -43,13 +44,15 @@ try {
   }).then(() => {
     root.render(
       <StrictMode>
-        <QueryProvider>
-          <AutoLoginProvider>
-            <GameBootstrap>
-              <Root />
-            </GameBootstrap>
-          </AutoLoginProvider>
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <AutoLoginProvider>
+              <GameBootstrap>
+                <Root />
+              </GameBootstrap>
+            </AutoLoginProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </StrictMode>,
     );
   });

@@ -9,11 +9,37 @@ import {
   Grid2X2,
 } from "lucide-react";
 import SortedButton from "./SortedButton";
-import { ITEM_COLORS, ITEM_BG_COLORS } from "@pixegotchi/shared";
 export interface SortedButtonsProps {
   initialFilter?: string;
   setFilter: (filter: string) => void;
 }
+
+const itemFilterTheme = {
+  food: {
+    color: "text-pixel-orange",
+    bgColor: "bg-pixel-orange/15",
+  },
+  medicine: {
+    color: "text-pixel-red",
+    bgColor: "bg-pixel-red/15",
+  },
+  cleaning: {
+    color: "text-pixel-blue",
+    bgColor: "bg-pixel-blue/15",
+  },
+  toy: {
+    color: "text-pixel-highlight",
+    bgColor: "bg-pixel-highlight/15",
+  },
+  boost: {
+    color: "text-pixel-orange",
+    bgColor: "bg-pixel-orange/15",
+  },
+  special: {
+    color: "text-pixel-green",
+    bgColor: "bg-pixel-green/15",
+  },
+} as const;
 
 const SortedButtons: React.FC<SortedButtonsProps> = ({
   initialFilter,
@@ -33,7 +59,8 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         label="All"
         setFilter={handleFilter}
         icon={Grid2X2}
-        bgColor="bg-gray-50/15"
+        color="text-pixel-muted"
+        bgColor="bg-pixel-surface/50"
       />
       <SortedButton
         active={active === "food"}
@@ -41,8 +68,8 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         label="Food"
         setFilter={handleFilter}
         icon={Drumstick}
-        color={ITEM_COLORS["food"]}
-        bgColor={ITEM_BG_COLORS["food"]}
+        color={itemFilterTheme.food.color}
+        bgColor={itemFilterTheme.food.bgColor}
       />
       <SortedButton
         active={active === "medicine"}
@@ -50,8 +77,8 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         label="Medical"
         setFilter={handleFilter}
         icon={Pill}
-        color={ITEM_COLORS["medicine"]}
-        bgColor={ITEM_BG_COLORS["medicine"]}
+        color={itemFilterTheme.medicine.color}
+        bgColor={itemFilterTheme.medicine.bgColor}
       />
       <SortedButton
         active={active === "cleaning"}
@@ -59,8 +86,8 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         label="Care"
         setFilter={handleFilter}
         icon={Bubbles}
-        color={ITEM_COLORS["cleaning"]}
-        bgColor={ITEM_BG_COLORS["cleaning"]}
+        color={itemFilterTheme.cleaning.color}
+        bgColor={itemFilterTheme.cleaning.bgColor}
       />
       <SortedButton
         active={active === "toy"}
@@ -68,8 +95,8 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         label="Fun"
         setFilter={handleFilter}
         icon={Dices}
-        color={ITEM_COLORS["toy"]}
-        bgColor={ITEM_BG_COLORS["toy"]}
+        color={itemFilterTheme.toy.color}
+        bgColor={itemFilterTheme.toy.bgColor}
       />
       <SortedButton
         active={active === "boost"}
@@ -77,8 +104,8 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         label="Boost"
         setFilter={handleFilter}
         icon={Zap}
-        color={ITEM_COLORS["boost"]}
-        bgColor={ITEM_BG_COLORS["boost"]}
+        color={itemFilterTheme.boost.color}
+        bgColor={itemFilterTheme.boost.bgColor}
       />
       <SortedButton
         active={active === "special"}
@@ -86,8 +113,8 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
         label="Special"
         setFilter={handleFilter}
         icon={Clover}
-        color={ITEM_COLORS["special"]}
-        bgColor={ITEM_BG_COLORS["special"]}
+        color={itemFilterTheme.special.color}
+        bgColor={itemFilterTheme.special.bgColor}
       />
     </div>
   );

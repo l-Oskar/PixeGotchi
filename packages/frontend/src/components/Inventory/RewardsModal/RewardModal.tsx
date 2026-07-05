@@ -24,7 +24,7 @@ const RewardModal: React.FC<RewardModalProps> = ({
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            className="theme-modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

@@ -39,11 +39,11 @@ const StatBar: React.FC<{
         <span className="text-pixel-muted">{label}</span>
         <div>
           <span
-            className={`${currentValue === maxValue ? "text-green-500" : "text-yellow-500"}`}>
+            className={`${currentValue === maxValue ? "text-pixel-green" : "text-pixel-highlight"}`}>
             {displayValue}
           </span>
           {" / "}
-          <span className="text-green-500">{maxValue}</span>
+          <span className="text-pixel-green">{maxValue}</span>
         </div>
       </div>
       <div className="pixel-progress">
@@ -153,8 +153,8 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           }
           color={
             pixegotchi.gender === "male"
-              ? "text-blue-500 bg-blue-500/15 border-blue-500/90"
-              : "text-pink-400 bg-pink-500/20 border-pink-500/80"
+              ? "border-pixel-blue/80 bg-pixel-blue/15 text-pixel-blue"
+              : "border-pixel-red/70 bg-pixel-red/15 text-pixel-red"
           }
         />
       </div>
@@ -167,31 +167,31 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
         <StatBar
           label="❤️ Health"
           value={pixegotchi.health}
-          color="bg-gradient-to-r from-red-400 to-red-600"
+          color="bg-pixel-red"
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="🍖 Hunger"
           value={pixegotchi.hunger}
-          color="bg-gradient-to-r from-orange-400 to-orange-600"
+          color="bg-pixel-orange"
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="⚡ Energy"
           value={pixegotchi.energy}
-          color="bg-gradient-to-r from-yellow-400 to-yellow-600"
+          color="bg-pixel-highlight"
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="😊 Happiness"
           value={pixegotchi.happiness}
-          color="bg-gradient-to-r from-pink-400 to-pink-600"
+          color="bg-pixel-red"
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="✨ Cleanliness"
           value={pixegotchi.cleanliness}
-          color="bg-gradient-to-r from-cyan-400 to-cyan-600"
+          color="bg-pixel-blue"
           rarity={pixegotchi.rarity}
         />
       </div>
@@ -205,7 +205,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           <div className="grid gap-2">
             {pixegotchi.traits.map((trait, index) => (
               <div key={index} className="pixel-panel-soft p-2">
-                <span className="font-pixel text-[8px] leading-3 text-blue-300">
+                <span className="font-pixel text-[8px] leading-3 text-pixel-blue">
                   {trait.toUpperCase()}
                 </span>
                 <p className="mt-1 font-pixel text-[7px] leading-4 text-pixel-muted">

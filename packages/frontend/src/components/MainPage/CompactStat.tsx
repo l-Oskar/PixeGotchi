@@ -18,6 +18,11 @@ const statFillClassByStroke: Record<string, string> = {
   "text-yellow-500": "bg-yellow-500",
   "text-pink-500": "bg-pink-500",
   "text-blue-500": "bg-blue-500",
+  "text-pixel-red": "bg-pixel-red",
+  "text-pixel-orange": "bg-pixel-orange",
+  "text-pixel-highlight": "bg-pixel-highlight",
+  "text-pixel-blue": "bg-pixel-blue",
+  "text-pixel-green": "bg-pixel-green",
 };
 
 const CompactStat: React.FC<CompactStatProps> = ({

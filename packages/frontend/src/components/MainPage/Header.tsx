@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from "@/components/Link/Link.tsx";
+import React, { useRef, useState } from "react";
 import { User } from "@pixegotchi/shared";
-import { Wallet, UserRound, Crown } from "lucide-react";
+import { UserRound, Crown } from "lucide-react";
 import { useSignal } from "@tma.js/sdk-react";
 import { viewport } from "@tma.js/sdk";
 import { publicUrl } from "@/helpers/publicUrl";
-import { useUiStore } from "@/store/ui.store";
-import HeaderDropdown from "./HeaderDropdown";
+import HeaderDropdown from "../Dropdown/HeaderDropdown";
 
 export interface HeaderProps {
   user: User | null;
@@ -14,20 +12,12 @@ export interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ user }) => {
   const [isAddPressed, setIsAddPressed] = useState(false);
-  const isLightTheme = useUiStore((state) => state.isLightTheme);
   const addReleaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const safeAreaInsetTop = useSignal(viewport.safeAreaInsetTop);
   const contentSafeAreaInsetTop = useSignal(viewport.contentSafeAreaInsetTop);
 
   const topInset = (safeAreaInsetTop ?? 0) + (contentSafeAreaInsetTop ?? 0);
   const headerAssetPath = "assets/header";
-
-  useEffect(() => {
-    document.documentElement.classList.toggle(
-      "pixel-light-theme",
-      isLightTheme,
-    );
-  }, [isLightTheme]);
 
   const setAddButtonPressed = () => {
     if (addReleaseTimer.current) {
@@ -113,14 +103,6 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
               />
             </button>
           </div>
-          <Link to="/ton-connect">
-            <button
-              className="pixel-icon-button h-10 min-h-10 w-10 min-w-10 bg-pixel-surface text-pixel-ink"
-              type="button"
-              aria-label="Wallet">
-              <Wallet size={18} />
-            </button>
-          </Link>
           <HeaderDropdown />
         </div>
       </div>

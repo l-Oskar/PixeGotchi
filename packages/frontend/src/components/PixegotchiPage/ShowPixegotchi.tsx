@@ -82,7 +82,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 {pixegotchi.element}
               </span>
               <span
-                className={`rounded-sm border bg-pixel-bg-deep/50 px-2 py-1 text-[7px] leading-3 whitespace-nowrap ${pixegotchi.gender === "male" ? "border-blue-500 text-blue-400" : "border-pink-400 text-pink-400"}`}>
+                className={`rounded-sm border bg-pixel-bg-deep/50 px-2 py-1 text-[7px] leading-3 whitespace-nowrap ${pixegotchi.gender === "male" ? "border-pixel-blue text-pixel-blue" : "border-pixel-red text-pixel-red"}`}>
                 <span className="flex items-center gap-1">
                   {pixegotchi.gender === "male" ? (
                     <Mars size={10} />
@@ -122,8 +122,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               icon={Heart}
               label="Health"
               value={Number(pixegotchi.health)}
-              bgColor="bg-red-500/20"
-              strokeColor="text-red-500"
+              bgColor="bg-pixel-red/15"
+              strokeColor="text-pixel-red"
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -131,8 +131,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               icon={Apple}
               label="Hunger"
               value={Number(pixegotchi.hunger)}
-              bgColor="bg-orange-500/20"
-              strokeColor="text-orange-500"
+              bgColor="bg-pixel-orange/15"
+              strokeColor="text-pixel-orange"
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -140,8 +140,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               icon={Zap}
               label="Energy"
               value={Number(pixegotchi.energy)}
-              bgColor="bg-yellow-500/20"
-              strokeColor="text-yellow-500"
+              bgColor="bg-pixel-highlight/15"
+              strokeColor="text-pixel-highlight"
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -149,8 +149,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               icon={Smile}
               label="Happiness"
               value={Number(pixegotchi.happiness)}
-              bgColor="bg-pink-500/20"
-              strokeColor="text-pink-500"
+              bgColor="bg-pixel-red/15"
+              strokeColor="text-pixel-red"
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -158,8 +158,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               icon={Droplets}
               label="Cleanliness"
               value={Number(pixegotchi.cleanliness)}
-              bgColor="bg-blue-500/20"
-              strokeColor="text-blue-500"
+              bgColor="bg-pixel-blue/15"
+              strokeColor="text-pixel-blue"
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -257,7 +257,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               0 / 10
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep">
-              <div className="h-full w-1/3 bg-pink-500 shadow-[inset_0_0_0_1px_var(--color-pixel-inset)]" />
+              <div className="h-full w-1/3 bg-pixel-highlight shadow-[inset_0_0_0_1px_var(--color-pixel-inset)]" />
             </div>
           </div>
           <button
@@ -268,7 +268,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           </button>
         </div>
         <div className="pixel-panel flex min-h-[4.75rem] items-center gap-2 bg-pixel-bg-deep/75 p-2">
-          <span className="pixel-icon-box h-10 w-10 shrink-0 bg-pixel-surface-soft text-orange-500">
+          <span className="pixel-icon-box h-10 w-10 shrink-0 bg-pixel-surface-soft text-pixel-orange">
             <Flame size={21} />
           </span>
           <div className="min-w-0 flex-1">

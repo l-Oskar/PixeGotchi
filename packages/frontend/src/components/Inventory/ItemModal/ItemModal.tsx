@@ -8,6 +8,8 @@ export interface ItemModalProps {
   item: Item | null;
   quantity: number;
   isOpen: boolean;
+  canUseItem: boolean;
+  disabledReason?: string;
   onClose: () => void;
   onUse: (itemId: string, quantity: number) => Promise<void>;
 }
@@ -16,6 +18,8 @@ const ItemModal: React.FC<ItemModalProps> = ({
   item,
   quantity,
   isOpen,
+  canUseItem,
+  disabledReason,
   onClose,
   onUse,
 }) => {
@@ -33,6 +37,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
 
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
   const canUse =
+    canUseItem &&
     useQuantity >= 1 &&
     useQuantity <= quantity &&
     !isUsing &&
@@ -57,7 +62,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            className="theme-modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -121,8 +126,8 @@ const ItemModal: React.FC<ItemModalProps> = ({
                         <span
                           className={
                             item.effects.hunger > 0
-                              ? "text-green-400"
-                              : "text-red-400"
+                              ? "text-pixel-green"
+                              : "text-pixel-red"
                           }>
                           {item.effects.hunger > 0 ? "+" : ""}
                           {item.effects.hunger}
@@ -136,8 +141,8 @@ const ItemModal: React.FC<ItemModalProps> = ({
                         <span
                           className={
                             item.effects.happiness > 0
-                              ? "text-green-400"
-                              : "text-red-400"
+                              ? "text-pixel-green"
+                              : "text-pixel-red"
                           }>
                           {item.effects.happiness > 0 ? "+" : ""}
                           {item.effects.happiness}
@@ -151,8 +156,8 @@ const ItemModal: React.FC<ItemModalProps> = ({
                         <span
                           className={
                             item.effects.health > 0
-                              ? "text-green-400"
-                              : "text-red-400"
+                              ? "text-pixel-green"
+                              : "text-pixel-red"
                           }>
                           {item.effects.health > 0 ? "+" : ""}
                           {item.effects.health}
@@ -166,8 +171,8 @@ const ItemModal: React.FC<ItemModalProps> = ({
                         <span
                           className={
                             item.effects.cleanliness > 0
-                              ? "text-green-400"
-                              : "text-red-400"
+                              ? "text-pixel-green"
+                              : "text-pixel-red"
                           }>
                           {item.effects.cleanliness > 0 ? "+" : ""}
                           {item.effects.cleanliness}
@@ -181,8 +186,8 @@ const ItemModal: React.FC<ItemModalProps> = ({
                         <span
                           className={
                             item.effects.energy > 0
-                              ? "text-green-400"
-                              : "text-red-400"
+                              ? "text-pixel-green"
+                              : "text-pixel-red"
                           }>
                           {item.effects.energy > 0 ? "+" : ""}
                           {item.effects.energy}
@@ -202,6 +207,12 @@ const ItemModal: React.FC<ItemModalProps> = ({
                 </span>
               </div>
 
+              {!canUseItem && disabledReason && (
+                <div className="pixel-panel-soft mb-4 border-pixel-orange/70 px-3 py-2 font-pixel text-[8px] leading-4 text-pixel-orange">
+                  {disabledReason}
+                </div>
+              )}
+
               {/* Quantity Selector */}
               {item.isStackable &&
                 item.cooldownMinutes == 0 &&
@@ -215,7 +226,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
                         setUseQuantity(Math.max(1, useQuantity - 1))
                       }
                       className="pixel-button grid h-8 w-8 place-items-center p-0 font-pixel text-[10px]"
-                      disabled={isUsing}>
+                      disabled={isUsing || !canUseItem}>
                       −
                     </button>
                     <span className="w-8 text-center font-pixel text-[10px] leading-4 text-pixel-ink">
@@ -226,7 +237,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
                         setUseQuantity(Math.min(quantity, useQuantity + 1))
                       }
                       className="pixel-button grid h-8 w-8 place-items-center p-0 font-pixel text-[10px]"
-                      disabled={isUsing}>
+                      disabled={isUsing || !canUseItem}>
                       +
                     </button>
                   </div>
@@ -236,7 +247,7 @@ const ItemModal: React.FC<ItemModalProps> = ({
               <button
                 onClick={handleUse}
                 disabled={!canUse}
-                className="pixel-button w-full bg-linear-to-br from-green-500 to-emerald-600 py-3 font-pixel text-[9px] leading-4 text-white hover:scale-105 disabled:bg-none disabled:text-pixel-muted disabled:hover:scale-100">
+                className="pixel-button w-full bg-pixel-green py-3 font-pixel text-[9px] leading-4 text-pixel-accent-ink hover:scale-105 disabled:bg-none disabled:text-pixel-muted disabled:hover:scale-100">
                 {isUsing ? "Using..." : "Use item"}
               </button>
             </motion.div>

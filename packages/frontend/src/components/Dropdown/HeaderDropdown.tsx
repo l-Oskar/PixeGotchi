@@ -1,6 +1,7 @@
 import React from "react";
-import { Menu, Moon, Sun } from "lucide-react";
+import { Wallet, Menu, Moon, Sun } from "lucide-react";
 import { Dropdown } from "@/components/Dropdown/Dropdown";
+import DropDownButton from "@/components/Dropdown/DropDownButton";
 import { useUiStore } from "@/store/ui.store";
 
 const HeaderDropdown: React.FC = () => {
@@ -23,17 +24,22 @@ const HeaderDropdown: React.FC = () => {
           <Menu size={20} />
         </button>
       )}>
-      <button
-        className="flex w-full items-center justify-between gap-3 rounded-sm px-2.5 py-2 text-left font-pixel text-[8px] leading-4 text-pixel-ink transition hover:bg-pixel-highlight/15"
-        type="button"
-        role="menuitem"
-        onClick={() => {
-          toggleTheme();
-          setHeaderMenuOpen(false);
-        }}>
-        <span>{isLightTheme ? "Dark theme" : "Light theme"}</span>
-        {isLightTheme ? <Moon size={14} /> : <Sun size={14} />}
-      </button>
+      <div className="grid">
+        <DropDownButton
+          icon={isLightTheme ? <Moon size={14} /> : <Sun size={14} />}
+          onClick={() => {
+            toggleTheme();
+            setHeaderMenuOpen(false);
+          }}>
+          Theme
+        </DropDownButton>
+        <DropDownButton
+          icon={<Wallet size={14} />}
+          to="/ton-connect"
+          onClick={() => setHeaderMenuOpen(false)}>
+          Wallet
+        </DropDownButton>
+      </div>
     </Dropdown>
   );
 };

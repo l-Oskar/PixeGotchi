@@ -45,7 +45,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
           <div className="grid grid-cols-[1fr_auto] items-center gap-2.5">
             <div className="min-w-0">
               <div className="mb-1.5 flex items-center gap-2">
-                <Sparkles className="text-pink-300" size={15} />
+                <Sparkles className="text-pixel-highlight" size={15} />
                 <span className="font-pixel text-[9px] leading-3 text-pixel-ink">
                   Collection Progress
                 </span>

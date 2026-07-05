@@ -20,6 +20,8 @@ const SPECIAL_FRUIT_SPAWN_TIME = Math.round(Math.random() * 10 + 10); // Сек�
 const PIXEL_CHECK_STEP = 3;
 const GAME_DURATION = 30;
 const SCALE = 2;
+const FALLBACK_CANVAS_BACKGROUND = "#10091f";
+const FALLBACK_BASKET_COLOR = "#8b5a3c";
 
 interface GameObject {
   id: number;
@@ -69,6 +71,21 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   const shouldDisableSwipes = state.matches("playing");
 
   useTelegramSwipes(shouldDisableSwipes);
+
+  const getThemeColor = useCallback(
+    (variableName: string, fallback: string) => {
+      if (typeof document === "undefined") {
+        return fallback;
+      }
+
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue(variableName)
+        .trim();
+
+      return value || fallback;
+    },
+    [],
+  );
 
   // Завантаження спрайту
   useEffect(() => {
@@ -208,7 +225,10 @@ export const CatchGame: React.FC<CatchGameProps> = ({
 
     // --- Draw ---
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = "#1a1a2e";
+    ctx.fillStyle = getThemeColor(
+      "--color-pixel-bg-deep",
+      FALLBACK_CANVAS_BACKGROUND,
+    );
     ctx.fillRect(0, 0, W, H);
 
     ctx.font = `${OBJECT_SIZE}px monospace`;
@@ -241,14 +261,17 @@ export const CatchGame: React.FC<CatchGameProps> = ({
         BASKET_HEIGHT,
       );
     } else {
-      ctx.fillStyle = "#8B4513";
+      ctx.fillStyle = getThemeColor(
+        "--color-pixel-orange",
+        FALLBACK_BASKET_COLOR,
+      );
       ctx.fillRect(bktX, basketTop, BASKET_WIDTH, BASKET_HEIGHT);
     }
 
     if (isPlayingRef.current) {
       rafRef.current = requestAnimationFrame(gameLoop);
     }
-  }, [checkPixelCollision]);
+  }, [checkPixelCollision, getThemeColor]);
 
   // Спавн звичайних об'єктів
   useEffect(() => {
@@ -364,15 +387,17 @@ export const CatchGame: React.FC<CatchGameProps> = ({
       {state.matches("idle") && (
         <button
           onClick={startGame}
-          className="absolute inset-0 m-auto w-40 h-12 bg-green-600 rounded-lg text-white font-bold shadow-lg hover:bg-green-700 transition">
+          className="pixel-button absolute inset-0 m-auto h-12 w-40 bg-pixel-green font-pixel text-[9px] leading-4 text-pixel-accent-ink transition hover:scale-105">
           Start Game
         </button>
       )}
 
       {state.matches("gameOver") && (
-        <div className="absolute inset-0 w-70 h-45 items-center flex flex-col rounded-lg bg-gray-900 text-white font-pixel m-4 p-4">
-          <h2 className="text-2xl mb-4">Game Over</h2>
-          <p className="text-xl mb-4">
+        <div className="pixel-panel absolute inset-x-4 top-1/2 mx-auto flex max-w-xs -translate-y-1/2 flex-col items-center p-4 text-center font-pixel">
+          <h2 className="mb-4 text-sm leading-5 text-pixel-ink">
+            Game Over
+          </h2>
+          <p className="theme-readable-muted mb-4 text-[9px] leading-4">
             Your score: {finalScore ?? displayScore}
           </p>
           <button
@@ -380,7 +405,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
               onGameEnd?.(finalScore ?? displayScore);
               send({ type: "RESET" });
             }}
-            className="px-6 py-2 bg-green-600 rounded-lg hover:bg-green-700">
+            className="pixel-button bg-pixel-highlight px-6 py-2 text-[8px] leading-4 text-pixel-accent-ink hover:scale-105">
             Back to Games
           </button>
         </div>

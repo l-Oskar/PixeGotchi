@@ -153,8 +153,8 @@ const EggComponent: React.FC<EggPageProps> = ({
                 <span
                   className={`rounded-sm border px-2 py-1 font-pixel text-[8px] leading-3 ${
                     isReady
-                      ? "border-green-400/50 bg-green-500/20 text-green-200"
-                      : "border-orange-400/50 bg-orange-500/20 text-orange-200"
+                      ? "border-pixel-green/50 bg-pixel-green/15 text-pixel-green"
+                      : "border-pixel-orange/50 bg-pixel-orange/15 text-pixel-orange"
                   }`}>
                   {isReady ? "Ready to hatch!" : "Hatching"}
                 </span>

@@ -21,7 +21,7 @@ const LoadingScreenFrame: React.FC<LoadingScreenFrameProps> = ({
   return (
     <div
       className={`box-border min-h-[100dvh] w-full p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pl-[calc(0.75rem+env(safe-area-inset-left))] pr-[calc(0.75rem+env(safe-area-inset-right))] text-pixel-ink ${
-        withBackground ? "bg-pixel-bg" : ""
+        withBackground ? "bg-pixel-bg" : "bg-pixel-bg/95"
       }`}
       style={
         {
