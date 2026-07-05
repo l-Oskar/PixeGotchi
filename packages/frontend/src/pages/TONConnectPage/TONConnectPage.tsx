@@ -16,7 +16,7 @@ interface DataSectionProps {
 }
 
 const DataSection: FC<DataSectionProps> = ({ title, rows }) => (
-  <section className="pixel-panel p-3">
+  <section className="pixel-panel min-w-0 p-3">
     <h2 className="mb-3 font-pixel text-[10px] leading-4 text-pixel-ink">
       {title}
     </h2>
@@ -24,9 +24,11 @@ const DataSection: FC<DataSectionProps> = ({ title, rows }) => (
       {rows.map((row) => (
         <div
           key={row.title}
-          className="pixel-panel-soft grid gap-1 p-2 font-pixel text-[7px] leading-3">
+          className="pixel-panel-soft grid min-w-0 gap-1 p-2 font-pixel text-[8px] leading-4">
           <span className="text-pixel-muted">{row.title}</span>
-          <span className="break-words text-pixel-ink">{row.value}</span>
+          <span className="min-w-0 break-words text-pixel-ink [overflow-wrap:anywhere]">
+            {row.value}
+          </span>
         </div>
       ))}
     </div>
@@ -72,7 +74,7 @@ export const TONConnectPage: FC = () => {
     <Page>
       <div className="ton-connect-page" style={pageStyle}>
         {"imageUrl" in wallet && (
-          <section className="pixel-panel p-3">
+          <section className="pixel-panel min-w-0 p-3">
             <div className="flex items-center gap-3">
               <img
                 src={wallet.imageUrl}

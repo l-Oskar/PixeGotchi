@@ -1,4 +1,9 @@
-import { TonConnectUIProvider } from "@tonconnect/ui-react";
+import {
+  TonConnectUIProvider,
+  useTonConnectUI,
+  useTonWallet,
+} from "@tonconnect/ui-react";
+import { useEffect } from "react";
 
 import { App } from "@/components/App.tsx";
 import { ErrorBoundary } from "@/components/ErrorBoundary.tsx";
@@ -7,6 +12,7 @@ import { publicUrl } from "@/helpers/publicUrl.ts";
 const MODE = import.meta.env.MODE_ENV || "production";
 const MANIFEST_URL = import.meta.env.VITE_TON_MANIFEST_URL;
 const VERSION = "V2";
+const TON_TESTNET_CHAIN_ID = "-3";
 
 function ErrorBoundaryError({ error }: { error: unknown }) {
   return (
@@ -32,6 +38,23 @@ function ErrorBoundaryError({ error }: { error: unknown }) {
   );
 }
 
+function TonConnectNetworkGuard() {
+  const [tonConnectUI] = useTonConnectUI();
+  const wallet = useTonWallet();
+
+  useEffect(() => {
+    tonConnectUI.setConnectionNetwork(TON_TESTNET_CHAIN_ID);
+  }, [tonConnectUI]);
+
+  useEffect(() => {
+    if (wallet && wallet.account.chain !== TON_TESTNET_CHAIN_ID) {
+      void tonConnectUI.disconnect();
+    }
+  }, [tonConnectUI, wallet]);
+
+  return <App />;
+}
+
 export function Root() {
   return (
     <ErrorBoundary fallback={ErrorBoundaryError}>
@@ -41,7 +64,7 @@ export function Root() {
             ? `${MANIFEST_URL}${VERSION}.json`
             : publicUrl(`tonconnect-manifest-${VERSION}.json`)
         }>
-        <App />
+        <TonConnectNetworkGuard />
       </TonConnectUIProvider>
     </ErrorBoundary>
   );
