@@ -117,7 +117,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           <div className="[&_.pixel-room-bg]:h-full [&_.pixel-room-bg]:min-h-[15.75rem] max-[380px]:[&_.pixel-room-bg]:min-h-[15rem]">
             <Visual pet={pixegotchi} status={null} />
           </div>
-          <div className="pixel-panel-soft absolute bottom-0 left-0 top-0 z-20 flex w-[45%] flex-col justify-center gap-2 border-pixel-border bg-pixel-bg-deep/90 p-2 shadow-[0_4px_0_var(--color-pixel-shadow),inset_0_0_0_2px_var(--color-pixel-inset-soft)] max-[380px]:bottom-2 max-[380px]:left-2 max-[380px]:top-2 max-[380px]:w-[46%] max-[380px]:gap-1.5">
+          <div className="pixel-panel-soft theme-soft-overlay absolute bottom-0 left-0 top-0 z-20 flex w-[45%] flex-col justify-center gap-2 border-pixel-border bg-pixel-bg-deep/90 p-2 shadow-[0_4px_0_var(--color-pixel-shadow),inset_0_0_0_2px_var(--color-pixel-inset-soft)] max-[380px]:bottom-2 max-[380px]:left-2 max-[380px]:top-2 max-[380px]:w-[46%] max-[380px]:gap-1.5">
             <CompactStat
               icon={Heart}
               label="Health"

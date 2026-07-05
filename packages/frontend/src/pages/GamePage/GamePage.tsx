@@ -85,7 +85,7 @@ const GamesPage: React.FC<GamePageProps> = ({
           <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
             Mini Games
           </h1>
-          <span className="font-pixel text-[8px] leading-3 text-pixel-muted">
+          <span className="theme-readable-muted font-pixel text-[8px] leading-3">
             Coming soon
           </span>
         </div>
@@ -114,18 +114,18 @@ const GamesPage: React.FC<GamePageProps> = ({
                   {game.name}
                 </h3>
                 <div className="mt-1 flex flex-wrap gap-1.5 font-pixel">
-                  <span className="whitespace-nowrap rounded-sm border border-pixel-border bg-pixel-panel px-1.5 py-1 text-[7px] leading-3 text-pixel-muted">
+                  <span className="theme-readable-muted whitespace-nowrap rounded-sm border border-pixel-border bg-pixel-panel px-1.5 py-1 text-[7px] leading-3">
                     {game.difficulty}
                   </span>
-                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-orange-400/40 bg-orange-500/15 px-1.5 py-1 text-[7px] leading-3 text-orange-300">
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-orange-400/50 bg-orange-500/20 px-1.5 py-1 text-[7px] leading-3 text-orange-300">
                     {game.energy}
                     <Zap size={10} />
                   </span>
-                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-yellow-400/40 bg-yellow-500/15 px-1.5 py-1 text-[7px] leading-3 text-yellow-300">
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-yellow-400/50 bg-yellow-500/20 px-1.5 py-1 text-[7px] leading-3 text-yellow-300">
                     {game.reward}
                     <Coins size={10} />
                   </span>
-                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-green-400/40 bg-green-500/15 px-1.5 py-1 text-[7px] leading-3 text-green-300">
+                  <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-green-400/50 bg-green-500/20 px-1.5 py-1 text-[7px] leading-3 text-green-300">
                     {game.exp}
                     <StarPlus size={10} />
                   </span>

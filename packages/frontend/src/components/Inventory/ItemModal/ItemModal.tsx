@@ -196,9 +196,10 @@ const ItemModal: React.FC<ItemModalProps> = ({
               {/* Info */}
               <div className="mb-4 flex items-center justify-between gap-2 font-pixel text-[8px] leading-4 text-pixel-muted">
                 <span>Quantity: ×{quantity}</span>
-                {item.cooldownMinutes && (
-                  <span>Cooldown: {item.cooldownMinutes} min.</span>
-                )}
+                <span>
+                  Cooldown: {item.cooldownMinutes ? item.cooldownMinutes : 0}{" "}
+                  min.
+                </span>
               </div>
 
               {/* Quantity Selector */}

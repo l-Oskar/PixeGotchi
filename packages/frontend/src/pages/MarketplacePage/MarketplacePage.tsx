@@ -171,7 +171,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
           <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
             Marketplace
           </h1>
-          <span className="font-pixel text-[8px] leading-3 text-pixel-muted">
+          <span className="theme-readable-muted font-pixel text-[8px] leading-3">
             PGC shop
           </span>
         </div>
@@ -189,10 +189,10 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                 {listings.length} items
               </div>
               <div className="mt-1.5 flex flex-wrap gap-1.5">
-                <span className="rounded-sm border border-pixel-ink/15 bg-pixel-bg-deep/55 px-2 py-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+                <span className="rounded-sm border border-pixel-border/40 bg-pixel-surface-soft/85 px-2 py-1 font-pixel text-[7px] leading-3 text-pixel-ink">
                   {freeListingsCount} free
                 </span>
-                <span className="rounded-sm border border-pixel-ink/15 bg-pixel-bg-deep/55 px-2 py-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+                <span className="rounded-sm border border-pixel-border/40 bg-pixel-surface-soft/85 px-2 py-1 font-pixel text-[7px] leading-3 text-pixel-ink">
                   PGC market
                 </span>
               </div>
@@ -215,7 +215,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
             <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
               Featured Items
             </h2>
-            <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+            <div className="theme-readable-muted mt-1 font-pixel text-[7px] leading-3">
               Eggs, care items and chests
             </div>
           </div>
@@ -242,13 +242,13 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                   <h3 className="truncate font-pixel text-[9px] leading-3 text-pixel-ink max-[380px]:text-[8px]">
                     {listing.item}
                   </h3>
-                  <div className="mt-1 truncate font-pixel text-[7px] leading-3 text-pixel-muted">
+                  <div className="mt-1 truncate font-pixel text-[7px] leading-3 text-pixel-ink/80">
                     by {listing.seller}
                   </div>
                 </div>
 
                 <div className="mt-1.5 flex items-center justify-between gap-1.5 max-[380px]:mt-1 max-[380px]:gap-1">
-                  <div className="rounded-sm border border-pixel-highlight/35 bg-pixel-bg-deep/60 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-highlight max-[380px]:px-1 max-[380px]:py-0.5">
+                  <div className="rounded-sm border border-pixel-highlight/50 bg-pixel-surface-soft/90 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-highlight max-[380px]:px-1 max-[380px]:py-0.5">
                     {listing.price == 0
                       ? "Free"
                       : `${listing.price} ${listing.currency}`}

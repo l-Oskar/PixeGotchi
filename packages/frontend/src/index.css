@@ -28,7 +28,7 @@
   --color-pixel-surface: #211638;
   --color-pixel-surface-soft: #2c1f49;
   --color-pixel-border: #6a1b9a;
-  --color-pixel-highlight: #ffd166;
+  --color-pixel-highlight: #c084fc;
   --color-pixel-green: #65d66e;
   --color-pixel-blue: #5cc8ff;
   --color-pixel-red: #fc5858;
@@ -77,6 +77,48 @@ body {
 
   --shadow-pixel: 0 4px 0 var(--color-pixel-shadow), 0 0 0 2px #cfa9e7;
   --shadow-pixel-inset: inset 0 0 0 2px var(--color-pixel-inset);
+}
+
+.pixel-light-theme .text-gray-400 {
+  color: #5f526e;
+}
+
+.pixel-light-theme .text-cyan-300,
+.pixel-light-theme .text-sky-300 {
+  color: #287d9a;
+}
+
+.pixel-light-theme .text-yellow-300,
+.pixel-light-theme .text-yellow-400,
+.pixel-light-theme .text-orange-300 {
+  color: #9b5a00;
+}
+
+.pixel-light-theme .text-green-300,
+.pixel-light-theme .text-green-400 {
+  color: #287a4f;
+}
+
+.pixel-light-theme .border-gray-400 {
+  border-color: #81718f;
+}
+
+.pixel-light-theme .border-cyan-300\/50,
+.pixel-light-theme .border-sky-300\/50,
+.pixel-light-theme .border-yellow-300\/50 {
+  border-color: color-mix(in srgb, currentColor 58%, transparent);
+}
+
+.pixel-light-theme .theme-soft-overlay {
+  background: color-mix(
+    in srgb,
+    var(--color-pixel-surface-soft) 94%,
+    transparent
+  );
+}
+
+.pixel-light-theme .theme-modal-backdrop {
+  background: rgba(50, 31, 70, 0.36);
 }
 
 @utility pixelated {

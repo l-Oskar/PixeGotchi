@@ -62,7 +62,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            className="theme-modal-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -114,14 +114,18 @@ const ChestModal: React.FC<ChestModalProps> = ({
                   </p>
                   <p>
                     Bonus{" "}
-                    <span className={`${ITEM_COLORS["boost"]}`}>boost</span>{" "}
+                    <span className={`${ITEM_COLORS["boost"]} font-bold`}>
+                      boost
+                    </span>{" "}
                     item chance:{" "}
                     <span className="text-[10px] text-pixel-ink">
                       {chestDescription.boostChance}%
                     </span>
                   </p>
                   <p>
-                    <span className={`${RARITY_COLORS["legendary"]}`}>Egg</span>{" "}
+                    <span className={`${RARITY_COLORS["legendary"]} font-bold`}>
+                      Egg
+                    </span>{" "}
                     chance:{" "}
                     <span className="text-[10px] text-pixel-ink">
                       {chestDescription.eggChance}%

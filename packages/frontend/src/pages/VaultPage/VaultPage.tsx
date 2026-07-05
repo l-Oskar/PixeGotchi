@@ -59,7 +59,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
                   style={{ width: `${(collectedCount / totalCount) * 100}%` }}
                 />
               </div>
-              <div className="mt-2 max-w-48 font-pixel text-[7px] leading-3 text-pixel-muted">
+              <div className="theme-readable-muted mt-2 max-w-48 font-pixel text-[7px] leading-3">
                 Collect all elements with level 100 to get Unique rarity.
               </div>
             </div>
@@ -77,7 +77,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
             <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
               Elements Collection
             </h2>
-            <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+            <div className="theme-readable-muted mt-1 font-pixel text-[7px] leading-3">
               Best Pixegotchi by element
             </div>
           </div>
@@ -123,7 +123,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
                     {item.element}
                   </h3>
                   <div className="mt-1 flex items-center justify-between gap-1">
-                    <div className="font-pixel text-[8px] leading-3 text-pixel-muted">
+                    <div className="theme-readable-muted font-pixel text-[8px] leading-3">
                       Lv {item.highestLevel}
                     </div>
                     <div
@@ -153,7 +153,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
                 <div className="font-pixel text-[10px] leading-4 text-pixel-ink">
                   Add current Pixegotchi
                 </div>
-                <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+                <div className="theme-readable-muted mt-1 font-pixel text-[7px] leading-3">
                   Send it to the vault collection
                 </div>
               </div>
@@ -187,7 +187,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
                 <div className="font-pixel text-[10px] leading-4 text-pixel-highlight">
                   Complete Collection!
                 </div>
-                <div className="mt-1 font-pixel text-[8px] leading-4 text-pixel-muted">
+                <div className="theme-readable-muted mt-1 font-pixel text-[8px] leading-4">
                   Level them up to 100 for Unique rarity.
                 </div>
               </div>
