@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "@/components/Link/Link.tsx";
 import { User } from "@pixegotchi/shared";
-import { Wallet, Menu, UserRound, Crown } from "lucide-react";
+import { Wallet, UserRound, Crown } from "lucide-react";
 import { useSignal } from "@tma.js/sdk-react";
 import { viewport } from "@tma.js/sdk";
 import { publicUrl } from "@/helpers/publicUrl";
+import { useUiStore } from "@/store/ui.store";
+import HeaderDropdown from "./HeaderDropdown";
 
 export interface HeaderProps {
   user: User | null;
@@ -12,9 +14,7 @@ export interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ user }) => {
   const [isAddPressed, setIsAddPressed] = useState(false);
-  const [isLightTheme, setIsLightTheme] = useState(() =>
-    document.documentElement.classList.contains("pixel-light-theme"),
-  );
+  const isLightTheme = useUiStore((state) => state.isLightTheme);
   const addReleaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const safeAreaInsetTop = useSignal(viewport.safeAreaInsetTop);
   const contentSafeAreaInsetTop = useSignal(viewport.contentSafeAreaInsetTop);
@@ -121,16 +121,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
               <Wallet size={18} />
             </button>
           </Link>
-          <button
-            className="pixel-icon-button h-10 min-h-10 w-10 min-w-10 bg-pixel-surface text-pixel-ink"
-            type="button"
-            onClick={() => setIsLightTheme((current) => !current)}
-            aria-label={
-              isLightTheme ? "Switch to dark theme" : "Switch to light theme"
-            }
-            aria-pressed={isLightTheme}>
-            <Menu size={20} />
-          </button>
+          <HeaderDropdown />
         </div>
       </div>
     </header>
