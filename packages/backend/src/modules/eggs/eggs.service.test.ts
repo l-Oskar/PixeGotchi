@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { prisma } from "@/database/prisma";
 import { EggService } from "./eggs.service";
-import { createEgg, createPixegotchi, createUser } from "@/test/helpers/factories";
+import {
+  createEgg,
+  createPixegotchi,
+  createUser,
+} from "@/test/helpers/factories";
 import { EGG_CONSTANTS } from "@pixegotchi/shared";
 
 describe("EggService", () => {
@@ -19,7 +23,7 @@ describe("EggService", () => {
   });
 
   it("creates an egg and deducts user balance transactionally", async () => {
-    const user = await createUser({ pgcBalance: 250 });
+    const user = await createUser({ pgcBalance: 1250 });
     const eggService = createEggService();
 
     const egg = await eggService.createEgg(user.id);
@@ -28,8 +32,8 @@ describe("EggService", () => {
     });
 
     expect(egg.userId).toBe(user.id);
-    expect(egg.pgcBalance).toBe("150");
-    expect(updatedUser.pgcBalance.toString()).toBe("150");
+    expect(egg.pgcBalance).toBe("250");
+    expect(updatedUser.pgcBalance.toString()).toBe("250");
   });
 
   it("rejects egg creation when balance is insufficient", async () => {
@@ -39,9 +43,9 @@ describe("EggService", () => {
     await expect(eggService.createEgg(user.id)).rejects.toThrow(
       "Not enought funds",
     );
-    await expect(prisma.egg.count({ where: { userId: user.id } })).resolves.toBe(
-      0,
-    );
+    await expect(
+      prisma.egg.count({ where: { userId: user.id } }),
+    ).resolves.toBe(0);
   });
 
   it("does not start hatching for listed, hatched, or occupied-slot users", async () => {
