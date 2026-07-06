@@ -3,6 +3,7 @@ import {
   Cooldowns,
   ELEMENT_COLORS,
   HomePageProps,
+  ITEM_COLORS,
   RARITY_COLORS,
 } from "@pixegotchi/shared";
 import {
@@ -98,7 +99,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 {pixegotchi.element}
               </span>
               <span
-                className={`pixel-pill px-2 py-1 text-[7px] leading-3 whitespace-nowrap ${pixegotchi.gender === "male" ? "text-pixel-blue" : "text-pixel-red"}`}>
+                className={`pixel-pill px-2 py-1 text-[7px] leading-3 whitespace-nowrap ${pixegotchi.gender === "male" ? "text-[var(--color-pixel-male)]" : "text-[var(--color-pixel-female)]"}`}>
                 <span className="flex items-center gap-1">
                   {pixegotchi.gender === "male" ? (
                     <Mars size={10} />
@@ -155,7 +156,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               label="Health"
               value={Number(pixegotchi.health)}
               bgColor="bg-pixel-red/15"
-              strokeColor="text-pixel-red"
+              strokeColor={`${ITEM_COLORS.medicine}`}
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -164,7 +165,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               label="Hunger"
               value={Number(pixegotchi.hunger)}
               bgColor="bg-pixel-orange/15"
-              strokeColor="text-pixel-orange"
+              strokeColor={`${ITEM_COLORS.food}`}
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -173,7 +174,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               label="Energy"
               value={Number(pixegotchi.energy)}
               bgColor="bg-pixel-yellow/15"
-              strokeColor="text-pixel-yellow"
+              strokeColor={`${ITEM_COLORS.boost}`}
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -182,7 +183,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               label="Happiness"
               value={Number(pixegotchi.happiness)}
               bgColor="bg-pixel-pink/15"
-              strokeColor="text-pixel-pink"
+              strokeColor={`${ITEM_COLORS.toy}`}
               rarity={pixegotchi.rarity}
               variant="row"
             />
@@ -191,7 +192,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               label="Cleanliness"
               value={Number(pixegotchi.cleanliness)}
               bgColor="bg-pixel-blue/15"
-              strokeColor="text-pixel-blue"
+              strokeColor={`${ITEM_COLORS.cleaning}`}
               rarity={pixegotchi.rarity}
               variant="row"
             />

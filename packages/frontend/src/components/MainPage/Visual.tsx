@@ -49,7 +49,7 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   return (
     <RoomScene>
       <div
-        className={`-mb-12 translate-x-14 text-9xl max-[380px]:translate-x-12 ${isAnimating ? "animate-egg-wobble" : "animate-bounce"}`}>
+        className={`-mb-26 translate-x-23 text-9xl max-[380px]:translate-x-12 ${isAnimating ? "animate-egg-wobble" : "animate-pet-idle"}`}>
         <img
           className="h-40 w-40 cursor-pointer transition-transform hover:scale-105 pixelated max-[380px]:h-36 max-[380px]:w-36"
           src={`./${getImage(pixe)}`}

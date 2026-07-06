@@ -18,6 +18,8 @@ const statFillClassByStroke: Record<string, string> = {
   "text-yellow-500": "bg-yellow-500",
   "text-pink-500": "bg-pink-500",
   "text-blue-500": "bg-blue-500",
+  "text-fuchsia-500": "bg-fuchsia-500",
+  "text-sky-500": "bg-sky-500",
   "text-pixel-red": "bg-pixel-red",
   "text-pixel-orange": "bg-pixel-orange",
   "text-pixel-yellow": "bg-pixel-yellow",

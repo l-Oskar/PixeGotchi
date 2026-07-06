@@ -1,6 +1,7 @@
 import React from "react";
 import {
   ELEMENT_COLORS,
+  ITEM_COLORS,
   Pixegotchi,
   RARITY_COLORS,
   RARITY_STATS,
@@ -9,10 +10,7 @@ import {
   TraitType,
 } from "@pixegotchi/shared";
 import { Mars, Venus } from "lucide-react";
-import {
-  formatWholeStatValue,
-  toFiniteStatNumber,
-} from "@/utils/formatStats";
+import { formatWholeStatValue, toFiniteStatNumber } from "@/utils/formatStats";
 
 interface PixegothiDataProps {
   pixegotchi: Pixegotchi | null;
@@ -22,8 +20,9 @@ const StatBar: React.FC<{
   label: string;
   value: number | string;
   color: string;
+  textColor: string;
   rarity: RarityType;
-}> = ({ label, value, color, rarity }) => {
+}> = ({ label, value, color, textColor, rarity }) => {
   const numericValue = toFiniteStatNumber(value);
   const currentValue = Math.min(
     RARITY_STATS[rarity].maxStat,
@@ -39,7 +38,11 @@ const StatBar: React.FC<{
         <span className="text-pixel-muted">{label}</span>
         <div>
           <span
-            className={`${currentValue === maxValue ? "text-pixel-green" : "text-pixel-highlight"}`}>
+            className={
+              currentValue === maxValue
+                ? "text-pixel-green"
+                : "text-pixel-orange"
+            }>
             {displayValue}
           </span>
           {" / "}
@@ -153,8 +156,8 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           }
           color={
             pixegotchi.gender === "male"
-              ? "border-pixel-blue/80 bg-pixel-blue/15 text-pixel-blue"
-              : "border-pixel-red/70 bg-pixel-red/15 text-pixel-red"
+              ? "border-[var(--color-pixel-male)]/80 bg-[var(--color-pixel-male)]/15 text-[var(--color-pixel-male)]"
+              : "border-[var(--color-pixel-female)]/70 bg-[var(--color-pixel-female)]/15 text-[var(--color-pixel-female)]"
           }
         />
       </div>
@@ -167,31 +170,36 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
         <StatBar
           label="❤️ Health"
           value={pixegotchi.health}
-          color="bg-pixel-red"
+          color="bg-red-500"
+          textColor={ITEM_COLORS.medicine}
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="🍖 Hunger"
           value={pixegotchi.hunger}
-          color="bg-pixel-orange"
+          color="bg-orange-500"
+          textColor={ITEM_COLORS.food}
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="⚡ Energy"
           value={pixegotchi.energy}
-          color="bg-pixel-highlight"
+          color="bg-yellow-500"
+          textColor={ITEM_COLORS.boost}
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="😊 Happiness"
           value={pixegotchi.happiness}
-          color="bg-pixel-red"
+          color="bg-fuchsia-500"
+          textColor={ITEM_COLORS.toy}
           rarity={pixegotchi.rarity}
         />
         <StatBar
           label="✨ Cleanliness"
           value={pixegotchi.cleanliness}
-          color="bg-pixel-blue"
+          color="bg-sky-500"
+          textColor={ITEM_COLORS.cleaning}
           rarity={pixegotchi.rarity}
         />
       </div>

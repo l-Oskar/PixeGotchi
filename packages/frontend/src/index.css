@@ -34,13 +34,15 @@
   --color-pixel-border-light: #8e63cc;
   --color-pixel-highlight: #c084fc;
   --color-pixel-highlight-soft: #a855f7;
-  --color-pixel-green: #52d273;
-  --color-pixel-blue: #5cc8ff;
-  --color-pixel-red: #ff5c73;
-  --color-pixel-orange: #ffaa45;
-  --color-pixel-yellow: #ffd95a;
-  --color-pixel-pink: #ff6ad5;
+  --color-pixel-green: #84cc16;
+  --color-pixel-blue: #0ea5e9;
+  --color-pixel-red: #ef4444;
+  --color-pixel-orange: #f97316;
+  --color-pixel-yellow: #eab308;
+  --color-pixel-pink: #d946ef;
   --color-pixel-purple: #b980ff;
+  --color-pixel-male: #38bdf8;
+  --color-pixel-female: #f472b6;
   --color-pixel-accent-ink: #0b0714;
 
   --color-pixel-shadow: #05030a;
@@ -87,13 +89,15 @@ body {
   --color-pixel-border-light: #d4b4f0;
   --color-pixel-highlight: #9546c8;
   --color-pixel-highlight-soft: #b96ae6;
-  --color-pixel-green: #3aa16c;
-  --color-pixel-blue: #4b8ef2;
-  --color-pixel-red: #e05a74;
-  --color-pixel-orange: #f2994a;
-  --color-pixel-yellow: #efc94c;
-  --color-pixel-pink: #d957b6;
+  --color-pixel-green: #84cc16;
+  --color-pixel-blue: #0ea5e9;
+  --color-pixel-red: #ef4444;
+  --color-pixel-orange: #f97316;
+  --color-pixel-yellow: #eab308;
+  --color-pixel-pink: #d946ef;
   --color-pixel-purple: #a65eea;
+  --color-pixel-male: #38bdf8;
+  --color-pixel-female: #f472b6;
   --color-pixel-accent-ink: #ffffff;
 
   --color-pixel-shadow: #b487cf;
@@ -278,8 +282,8 @@ body {
   .pixel-progress {
     height: 0.75rem;
     overflow: hidden;
-    border: 1px solid
-      color-mix(in srgb, var(--color-pixel-border-light) 68%, transparent);
+    border: 0.5px solid
+      color-mix(in srgb, var(--color-pixel-progress-bg) 68%, transparent);
     border-radius: var(--radius-pixel);
     background: var(--color-pixel-progress-bg);
     box-shadow:
@@ -289,11 +293,7 @@ body {
 
   .pixel-progress-fill {
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      var(--color-pixel-green),
-      var(--color-pixel-highlight)
-    );
+    background: var(--color-pixel-highlight);
     box-shadow:
       inset 0 1px 0 var(--color-pixel-inset),
       0 0 10px color-mix(in srgb, currentColor 50%, transparent);
@@ -359,10 +359,37 @@ body {
   }
 }
 
+@keyframes petIdle {
+  0%,
+  72%,
+  100% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-1rem);
+  }
+  88% {
+    transform: translateY(0);
+  }
+}
+
 .animate-egg-wobble {
   display: inline-block;
   transform-origin: center bottom; /* Це ключовий момент! */
   animation: eggWobble 2s infinite ease-in-out;
+}
+
+.animate-pet-idle {
+  display: inline-block;
+  transform-origin: center bottom;
+  animation: petIdle 5s infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-egg-wobble,
+  .animate-pet-idle {
+    animation: none;
+  }
 }
 
 /* .bg {
