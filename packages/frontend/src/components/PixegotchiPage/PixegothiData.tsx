@@ -1,7 +1,6 @@
 import React from "react";
 import {
   ELEMENT_COLORS,
-  ITEM_COLORS,
   Pixegotchi,
   RARITY_COLORS,
   RARITY_STATS,
@@ -9,20 +8,43 @@ import {
   TRAIT_EFFECTS,
   TraitType,
 } from "@pixegotchi/shared";
-import { Mars, Venus } from "lucide-react";
+import {
+  Heart,
+  Apple,
+  Zap,
+  Smile,
+  Droplets,
+  LucideIcon,
+  Mars,
+  Venus,
+} from "lucide-react";
 import { formatWholeStatValue, toFiniteStatNumber } from "@/utils/formatStats";
 
 interface PixegothiDataProps {
   pixegotchi: Pixegotchi | null;
 }
 
+const formatStatusDate = (value: Date | string | null) => {
+  if (!value) return null;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return date.toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 const StatBar: React.FC<{
+  icon: LucideIcon;
   label: string;
   value: number | string;
   color: string;
-  textColor: string;
+  strokeColor: string;
   rarity: RarityType;
-}> = ({ label, value, color, textColor, rarity }) => {
+}> = ({ icon: Icon, label, value, color, strokeColor, rarity }) => {
   const numericValue = toFiniteStatNumber(value);
   const currentValue = Math.min(
     RARITY_STATS[rarity].maxStat,
@@ -33,27 +55,32 @@ const StatBar: React.FC<{
   const percentage = (currentValue / maxValue) * 100;
 
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between gap-2 font-pixel text-[8px] leading-3">
-        <span className="text-pixel-muted">{label}</span>
-        <div>
-          <span
-            className={
-              currentValue === maxValue
-                ? "text-pixel-green"
-                : "text-pixel-orange"
-            }>
-            {displayValue}
-          </span>
-          {" / "}
-          <span className="text-pixel-green">{maxValue}</span>
-        </div>
+    <div className="flex items-center gap-2">
+      <div className="pixel-icon-box h-7 w-7 shrink-0">
+        <Icon className={strokeColor} size={19} />
       </div>
-      <div className="pixel-progress">
-        <div
-          className={`h-full ${color} transition-all duration-500 ease-out`}
-          style={{ width: `${percentage}%` }}
-        />
+      <div className="space-y-1 w-full">
+        <div className="flex justify-between gap-2 font-pixel text-[8px] leading-3">
+          <span className="text-pixel-muted">{label}</span>
+          <div>
+            <span
+              className={
+                currentValue === maxValue
+                  ? "text-pixel-green"
+                  : "text-pixel-yellow"
+              }>
+              {displayValue}
+            </span>
+            {" / "}
+            <span className="text-pixel-green">{maxValue}</span>
+          </div>
+        </div>
+        <div className="pixel-progress">
+          <div
+            className={`h-full ${color} transition-all duration-500 ease-out`}
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -85,12 +112,51 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
     );
   }
 
+  const statusLabel = pixegotchi.status
+    ? String(pixegotchi.status).replace(/_/g, " ")
+    : "active";
+  const statusKey = statusLabel.toLowerCase();
+  const statusToneClass =
+    statusKey === "dead"
+      ? "text-[var(--status-critical)]"
+      : statusKey === "critical"
+        ? "text-[var(--status-critical)]"
+        : statusKey === "sleeping"
+          ? "text-[var(--status-sleeping)]"
+          : statusKey === "hungry"
+            ? "text-[var(--status-hungry)]"
+            : statusKey === "dirty"
+              ? "text-[var(--status-dirty)]"
+              : statusKey === "sick"
+                ? "text-[var(--status-sick)]"
+                : "text-[var(--status-happy)]";
+  const displayStatus = statusKey === "active" ? "Active" : statusLabel;
+  const statusDate =
+    statusKey === "critical"
+      ? formatStatusDate(pixegotchi.criticalSince ?? pixegotchi.healthZeroAt)
+      : statusKey === "dead"
+        ? formatStatusDate(pixegotchi.criticalSince ?? pixegotchi.healthZeroAt)
+        : statusKey === "vault"
+          ? formatStatusDate(pixegotchi.lastUpdateAt)
+          : null;
+
   return (
     <div className="space-y-3 p-3">
       {/* Header */}
       <div className="pixel-panel p-3">
         <div className="flex items-center justify-between mb-4">
           <div>
+            <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+              <span
+                className={`pixel-pill px-2 py-1 font-pixel text-[8px] leading-3 capitalize ${statusToneClass}`}>
+                {displayStatus}
+              </span>
+              {statusDate && (
+                <span className="font-pixel text-[7px] leading-3 text-pixel-muted">
+                  since {statusDate}
+                </span>
+              )}
+            </div>
             <h2 className="font-pixel text-sm leading-5 text-pixel-ink">
               {pixegotchi.name}
             </h2>
@@ -99,7 +165,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="text-right">
+            <div className="text-right space-y-1">
               <div className="font-pixel text-[7px] leading-3 text-pixel-muted">
                 Level
               </div>
@@ -168,38 +234,43 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           Stats
         </h3>
         <StatBar
-          label="❤️ Health"
+          icon={Heart}
+          label="Health"
           value={pixegotchi.health}
           color="bg-red-500"
-          textColor={ITEM_COLORS.medicine}
+          strokeColor="text-red-500"
           rarity={pixegotchi.rarity}
         />
         <StatBar
-          label="🍖 Hunger"
+          icon={Apple}
+          label="Hunger"
           value={pixegotchi.hunger}
           color="bg-orange-500"
-          textColor={ITEM_COLORS.food}
+          strokeColor="text-orange-500"
           rarity={pixegotchi.rarity}
         />
         <StatBar
-          label="⚡ Energy"
+          icon={Zap}
+          label="Energy"
           value={pixegotchi.energy}
           color="bg-yellow-500"
-          textColor={ITEM_COLORS.boost}
+          strokeColor="text-yellow-500"
           rarity={pixegotchi.rarity}
         />
         <StatBar
-          label="😊 Happiness"
+          icon={Smile}
+          label="Happiness"
           value={pixegotchi.happiness}
           color="bg-fuchsia-500"
-          textColor={ITEM_COLORS.toy}
+          strokeColor="text-fuchsia-500"
           rarity={pixegotchi.rarity}
         />
         <StatBar
-          label="✨ Cleanliness"
+          icon={Droplets}
+          label="Cleanliness"
           value={pixegotchi.cleanliness}
           color="bg-sky-500"
-          textColor={ITEM_COLORS.cleaning}
+          strokeColor="text-sky-500"
           rarity={pixegotchi.rarity}
         />
       </div>

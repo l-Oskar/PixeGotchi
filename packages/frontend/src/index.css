@@ -385,13 +385,6 @@ body {
   animation: petIdle 5s infinite ease-in-out;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-egg-wobble,
-  .animate-pet-idle {
-    animation: none;
-  }
-}
-
 /* .bg {
   background-image: url("./bg.png");
   background-size: "cover";

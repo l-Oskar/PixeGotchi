@@ -49,7 +49,7 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   return (
     <RoomScene>
       <div
-        className={`-mb-26 translate-x-23 text-9xl max-[380px]:translate-x-12 ${isAnimating ? "animate-egg-wobble" : "animate-pet-idle"}`}>
+        className={`-mb-22 translate-x-22 text-9xl max-[380px]:translate-x-12 ${isAnimating ? "animate-egg-wobble" : "animate-pet-idle"}`}>
         <img
           className="h-40 w-40 cursor-pointer transition-transform hover:scale-105 pixelated max-[380px]:h-36 max-[380px]:w-36"
           src={`./${getImage(pixe)}`}
@@ -60,7 +60,7 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
 
       {/* Сердечко */}
       {showHeart && (
-        <div className="absolute inset-0 flex mb-10 ml-30 items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex mb-20 ml-68 items-center justify-center pointer-events-none">
           <MessageCircleHeart size={30} className="animate-ping text-red-500" />
         </div>
       )}
