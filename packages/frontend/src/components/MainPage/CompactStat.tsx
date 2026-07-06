@@ -20,6 +20,8 @@ const statFillClassByStroke: Record<string, string> = {
   "text-blue-500": "bg-blue-500",
   "text-pixel-red": "bg-pixel-red",
   "text-pixel-orange": "bg-pixel-orange",
+  "text-pixel-yellow": "bg-pixel-yellow",
+  "text-pixel-pink": "bg-pixel-pink",
   "text-pixel-highlight": "bg-pixel-highlight",
   "text-pixel-blue": "bg-pixel-blue",
   "text-pixel-green": "bg-pixel-green",
@@ -45,30 +47,32 @@ const CompactStat: React.FC<CompactStatProps> = ({
 
   if (variant === "row") {
     return (
-      <div className="flex items-center gap-1.5">
-        <div
-          className={`pixel-icon-box h-[1.625rem] w-[1.625rem] shrink-0 max-[380px]:h-6 max-[380px]:w-6 ${bgColor}`}>
-          <Icon
-            size={15}
-            strokeWidth={2.4}
-            className={`${strokeColor} max-[380px]:h-3.5 max-[380px]:w-3.5`}
-          />
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="mb-1 flex items-center justify-between gap-1.5 font-pixel">
-            <span className="truncate text-[7px] leading-3 text-pixel-muted">
-              {label}
-            </span>
-            <span className="shrink-0 text-[7px] leading-3 text-pixel-ink">
-              {displayValue}/{maxStats}
-            </span>
-          </div>
-          <div className="h-2 overflow-hidden rounded-sm border-2 border-pixel-bg-deep bg-pixel-bg-deep shadow-[inset_0_0_0_1px_var(--color-pixel-progress-shadow)]">
-            <div
-              className={`h-full ${fillColor} shadow-[inset_0_0_0_1px_var(--color-pixel-inset)] transition-all duration-500`}
-              style={{ width: `${progressPercent}%` }}
+      <div className="rounded-[0.5rem] border border-pixel-border/45 bg-pixel-surface-soft/55 p-1 shadow-[inset_0_1px_0_var(--color-pixel-inset-soft)]">
+        <div className="mb-0.5 flex items-center gap-1">
+          <div
+            className={`pixel-icon-box h-5 w-5 shrink-0 max-[380px]:h-[1.125rem] max-[380px]:w-[1.125rem] ${bgColor}`}>
+            <Icon
+              size={12}
+              strokeWidth={2.4}
+              className={`${strokeColor} max-[380px]:h-2.5 max-[380px]:w-2.5`}
             />
           </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-1 font-pixel">
+              <span className="truncate text-[6px] leading-3 text-pixel-muted">
+                {label}
+              </span>
+              <span className="shrink-0 text-[6px] leading-3 text-pixel-ink">
+                {displayValue}/{maxStats}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="pixel-progress h-1.5">
+          <div
+            className={`h-full ${fillColor} shadow-[inset_0_1px_0_var(--color-pixel-inset),0_0_8px_currentColor] transition-all duration-500`}
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
       </div>
     );

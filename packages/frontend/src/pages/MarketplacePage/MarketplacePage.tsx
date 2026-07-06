@@ -78,7 +78,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 2,
       item: "Apple",
       itemId: "apple",
-      price: 0,
+      price: 100,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🍎",
@@ -87,7 +87,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 3,
       item: "Thermometer",
       itemId: "thermometer",
-      price: 0,
+      price: 100,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🌡",
@@ -96,7 +96,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 4,
       item: "Water",
       itemId: "water",
-      price: 0,
+      price: 100,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "💦",
@@ -105,7 +105,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 5,
       item: "Small toy",
       itemId: "small_toy",
-      price: 0,
+      price: 100,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🪀",
@@ -114,7 +114,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 6,
       item: "Coffee",
       itemId: "coffee",
-      price: 0,
+      price: 100,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "☕️",
@@ -123,7 +123,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 7,
       item: "Rare Candy",
       itemId: "rare_candy",
-      price: 0,
+      price: 200,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🍬",
@@ -132,7 +132,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 8,
       item: "Revive Stone",
       itemId: "revive_stone",
-      price: 0,
+      price: 500,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "💎",
@@ -141,7 +141,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
       id: 9,
       item: "Random Chest",
       itemId: "chest",
-      price: 0,
+      price: 500,
       currency: "PGC" as CurrencyType,
       seller: "Pixegotchi",
       icon: "🎁",
@@ -259,7 +259,7 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
                       handleBuy(listing);
                     }}
                     disabled={isPending}
-                    className="pixel-button min-h-0 px-2.5 py-1.5 font-pixel text-[7px] leading-3 hover:scale-105 disabled:cursor-wait disabled:opacity-70 disabled:hover:scale-100 max-[380px]:px-2 max-[380px]:py-1">
+                    className="pixel-button min-h-0 px-2.5 py-1.5 font-pixel text-[10px] leading-3 hover:scale-105 disabled:cursor-wait disabled:opacity-70 disabled:hover:scale-100 max-[380px]:px-2 max-[380px]:py-1">
                     {isPending ? "..." : "BUY"}
                   </button>
                 </div>

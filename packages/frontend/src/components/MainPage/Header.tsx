@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
   return (
     <header
       style={{ paddingTop: `${Math.max(0, topInset - 5)}px` }}
-      className="sticky top-0 z-50 bg-pixel-bg/95 shadow-[0_12px_28px_var(--color-pixel-page-shadow)]">
+      className="sticky top-0 z-50 border-b border-pixel-border/45 bg-pixel-bg/92 shadow-[0_12px_28px_var(--color-pixel-page-shadow),0_1px_0_var(--color-pixel-inset-soft)] backdrop-blur-[2px]">
       <div className="mx-auto flex h-16 max-w-md items-center justify-between gap-1.5 px-2 py-2">
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="relative grid -ml-1 h-18 w-18 shrink-0 place-items-center text-pixel-ink max-[430px]:h-[3.875rem] max-[430px]:w-[3.875rem] max-[380px]:h-[3.75rem] max-[380px]:w-[3.75rem]">
@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <div className="pixel-panel flex h-10 items-center bg-pixel-bg-deep/75 px-1 text-pixel-highlight">
+          <div className="pixel-panel flex h-10 items-center bg-pixel-surface-soft/85 px-1 text-pixel-highlight shadow-[0_3px_0_var(--color-pixel-shadow),0_0_12px_var(--color-pixel-glow),inset_0_0_0_2px_var(--color-pixel-inset-soft)]">
             <img
               src={publicUrl(`${headerAssetPath}/coin.png`)}
               alt=""

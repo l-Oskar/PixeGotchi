@@ -22,30 +22,49 @@
     "Liberation Mono", monospace;
 
   --color-pixel-ink: #f8f4d8;
-  --color-pixel-muted: #b9abc8;
-  --color-pixel-bg: #10091f;
-  --color-pixel-bg-deep: #0b0714;
-  --color-pixel-surface: #211638;
-  --color-pixel-surface-soft: #2c1f49;
-  --color-pixel-border: #6a1b9a;
+  --color-pixel-muted: #b8a8cc;
+  --color-pixel-disabled: #75698a;
+  --color-pixel-bg: #120a20;
+  --color-pixel-bg-deep: #0a0614;
+  --color-pixel-surface: #201535;
+  --color-pixel-surface-soft: #2a1d45;
+  --color-pixel-surface-hover: #322254;
+  --color-pixel-surface-light: #3b2a66;
+  --color-pixel-border: #5f3e97;
+  --color-pixel-border-light: #8e63cc;
   --color-pixel-highlight: #c084fc;
-  --color-pixel-green: #65d66e;
+  --color-pixel-highlight-soft: #a855f7;
+  --color-pixel-green: #52d273;
   --color-pixel-blue: #5cc8ff;
-  --color-pixel-red: #fc5858;
-  --color-pixel-orange: #ff9068;
+  --color-pixel-red: #ff5c73;
+  --color-pixel-orange: #ffaa45;
+  --color-pixel-yellow: #ffd95a;
+  --color-pixel-pink: #ff6ad5;
+  --color-pixel-purple: #b980ff;
   --color-pixel-accent-ink: #0b0714;
 
   --color-pixel-shadow: #05030a;
+  --color-pixel-glow: rgba(192, 132, 252, 0.22);
   --color-pixel-page-shadow: rgba(5, 3, 10, 0.65);
   --color-pixel-page-shadow-soft: rgba(5, 3, 10, 0.55);
-  --color-pixel-panel-sheen: rgba(255, 255, 255, 0.035);
-  --color-pixel-inset: rgba(248, 244, 216, 0.12);
-  --color-pixel-inset-soft: rgba(248, 244, 216, 0.08);
-  --color-pixel-progress-shadow: rgba(0, 0, 0, 0.55);
+  --color-pixel-panel-sheen: rgba(255, 255, 255, 0.045);
+  --color-pixel-inset: rgba(255, 255, 255, 0.08);
+  --color-pixel-inset-soft: rgba(255, 255, 255, 0.04);
+  --color-pixel-progress-bg: #171024;
+  --color-pixel-progress-shadow: rgba(0, 0, 0, 0.45);
 
-  --shadow-pixel: 0 4px 0 var(--color-pixel-shadow), 0 0 0 2px #3c286b;
+  --status-happy: #52d273;
+  --status-sleeping: #5cc8ff;
+  --status-hungry: #ffaa45;
+  --status-dirty: #a67c52;
+  --status-sick: #ff5c73;
+  --status-critical: #d7263d;
+
+  --shadow-pixel:
+    0 4px 0 var(--color-pixel-shadow), 0 0 0 2px #3c286b,
+    0 0 18px var(--color-pixel-glow);
   --shadow-pixel-inset: inset 0 0 0 2px var(--color-pixel-inset);
-  --radius-pixel: 0.7rem;
+  --radius-pixel: 0.4rem;
 }
 
 body {
@@ -56,28 +75,40 @@ body {
 
 .pixel-light-theme {
   --color-pixel-ink: #2d173f;
-  --color-pixel-muted: #7f6598;
-  --color-pixel-bg: #f7edff;
-  --color-pixel-bg-deep: #dec4f2;
-  --color-pixel-surface: #efe0ff;
-  --color-pixel-surface-soft: #f9f0ff;
-  --color-pixel-border: #9f6bc6;
-  --color-pixel-highlight: #8f3fb0;
-  --color-pixel-green: #338b65;
-  --color-pixel-blue: #4b70bd;
-  --color-pixel-red: #c84f84;
-  --color-pixel-orange: #b45e8d;
+  --color-pixel-muted: #7e6896;
+  --color-pixel-disabled: #a79ab8;
+  --color-pixel-bg: #f8f2ff;
+  --color-pixel-bg-deep: #e8d9f8;
+  --color-pixel-surface: #f3e7ff;
+  --color-pixel-surface-soft: #fbf6ff;
+  --color-pixel-surface-hover: #ffffff;
+  --color-pixel-surface-light: #ffffff;
+  --color-pixel-border: #ae82d8;
+  --color-pixel-border-light: #d4b4f0;
+  --color-pixel-highlight: #9546c8;
+  --color-pixel-highlight-soft: #b96ae6;
+  --color-pixel-green: #3aa16c;
+  --color-pixel-blue: #4b8ef2;
+  --color-pixel-red: #e05a74;
+  --color-pixel-orange: #f2994a;
+  --color-pixel-yellow: #efc94c;
+  --color-pixel-pink: #d957b6;
+  --color-pixel-purple: #a65eea;
   --color-pixel-accent-ink: #ffffff;
 
   --color-pixel-shadow: #b487cf;
+  --color-pixel-glow: rgba(149, 70, 200, 0.15);
   --color-pixel-page-shadow: rgba(137, 86, 172, 0.28);
   --color-pixel-page-shadow-soft: rgba(137, 86, 172, 0.22);
-  --color-pixel-panel-sheen: rgba(255, 255, 255, 0.42);
-  --color-pixel-inset: rgba(255, 255, 255, 0.56);
-  --color-pixel-inset-soft: rgba(255, 255, 255, 0.36);
-  --color-pixel-progress-shadow: rgba(99, 63, 126, 0.28);
+  --color-pixel-panel-sheen: rgba(174, 130, 216, 0.18);
+  --color-pixel-inset: rgba(149, 70, 200, 0.18);
+  --color-pixel-inset-soft: rgba(149, 70, 200, 0.1);
+  --color-pixel-progress-bg: #e0cdef;
+  --color-pixel-progress-shadow: rgba(0, 0, 0, 0.12);
 
-  --shadow-pixel: 0 4px 0 var(--color-pixel-shadow), 0 0 0 2px #cfa9e7;
+  --shadow-pixel:
+    0 4px 0 var(--color-pixel-shadow), 0 0 0 2px #cfa9e7,
+    0 0 16px var(--color-pixel-glow);
   --shadow-pixel-inset: inset 0 0 0 2px var(--color-pixel-inset);
 }
 
@@ -140,7 +171,7 @@ body {
     border: 1px solid var(--color-pixel-border);
     border-radius: var(--radius-pixel);
     background:
-      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 42%),
+      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 48%),
       var(--color-pixel-surface);
     color: var(--color-pixel-ink);
     box-shadow: var(--shadow-pixel), var(--shadow-pixel-inset);
@@ -162,18 +193,33 @@ body {
     min-height: 2rem;
     border: 1px solid var(--color-pixel-border);
     border-radius: var(--radius-pixel);
-    background: var(--color-pixel-surface);
+    background:
+      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 42%),
+      var(--color-pixel-surface);
     color: var(--color-pixel-ink);
-    box-shadow: 0 3px 0 var(--color-pixel-bg-deep);
+    box-shadow:
+      0 3px 0 var(--color-pixel-bg-deep),
+      inset 0 1px 0 var(--color-pixel-inset),
+      0 0 12px var(--color-pixel-glow);
     transition:
       transform 120ms ease,
       box-shadow 120ms ease,
-      filter 120ms ease;
+      filter 120ms ease,
+      background-color 120ms ease;
+  }
+
+  .pixel-button:hover:not(:disabled) {
+    background:
+      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 42%),
+      var(--color-pixel-surface-hover);
+    filter: brightness(1.06);
   }
 
   .pixel-button:active {
     transform: translateY(2px);
-    box-shadow: 0 1px 0 var(--color-pixel-bg-deep);
+    box-shadow:
+      0 1px 0 var(--color-pixel-bg-deep),
+      inset 0 1px 0 var(--color-pixel-inset-soft);
   }
 
   .pixel-button:disabled {
@@ -191,13 +237,26 @@ body {
     place-items: center;
     border: 1px solid var(--color-pixel-border);
     border-radius: var(--radius-pixel);
-    background: var(--color-pixel-surface);
+    background:
+      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 42%),
+      var(--color-pixel-surface);
     color: var(--color-pixel-ink);
-    box-shadow: 0 3px 0 var(--color-pixel-bg-deep);
+    box-shadow:
+      0 3px 0 var(--color-pixel-bg-deep),
+      inset 0 1px 0 var(--color-pixel-inset),
+      0 0 10px var(--color-pixel-glow);
     transition:
       transform 120ms ease,
       box-shadow 120ms ease,
-      filter 120ms ease;
+      filter 120ms ease,
+      background-color 120ms ease;
+  }
+
+  .pixel-icon-button:hover:not(:disabled) {
+    background:
+      linear-gradient(180deg, var(--color-pixel-panel-sheen), transparent 42%),
+      var(--color-pixel-surface-hover);
+    filter: brightness(1.06);
   }
 
   .pixel-icon-button:active {
@@ -217,11 +276,15 @@ body {
   }
 
   .pixel-progress {
-    height: 0.625rem;
+    height: 0.75rem;
     overflow: hidden;
-    border: 1px solid var(--color-pixel-bg-deep);
+    border: 1px solid
+      color-mix(in srgb, var(--color-pixel-border-light) 68%, transparent);
     border-radius: var(--radius-pixel);
-    background: color-mix(in srgb, var(--color-pixel-bg-deep) 74%, white);
+    background: var(--color-pixel-progress-bg);
+    box-shadow:
+      inset 0 1px 0 var(--color-pixel-progress-shadow),
+      0 1px 0 var(--color-pixel-inset-soft);
   }
 
   .pixel-progress-fill {
@@ -231,6 +294,27 @@ body {
       var(--color-pixel-green),
       var(--color-pixel-highlight)
     );
+    box-shadow:
+      inset 0 1px 0 var(--color-pixel-inset),
+      0 0 10px color-mix(in srgb, currentColor 50%, transparent);
+  }
+
+  .pixel-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid color-mix(in srgb, currentColor 64%, transparent);
+    border-radius: var(--radius-pixel);
+    box-shadow: inset 0 1px 0 var(--color-pixel-inset);
+  }
+
+  .pixel-pill::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    border-radius: calc(var(--radius-pixel) + 0.25rem);
+    box-shadow: 0 0 10px color-mix(in srgb, currentColor 26%, transparent);
   }
 
   .header-add-sprite {
@@ -239,7 +323,6 @@ body {
 
   .header-add-button:active {
     transform: translateY(0.125rem);
-    box-shadow: 0 1px 0 var(--color-pixel-shadow);
   }
 
   .header-add-button:active .header-add-sprite,
