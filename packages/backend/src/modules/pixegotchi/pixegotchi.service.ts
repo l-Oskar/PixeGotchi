@@ -147,7 +147,7 @@ export class PixegotchiService {
     if (pixegotchi.status !== "active")
       throw new Error("Pixegotchi is not active");
 
-    await this.addExp(userId, item, quantity, db);
+    await this.addItemExp(userId, item, quantity, db);
 
     const maxStat = RARITY_STATS[pixegotchi.rarity as RarityType].maxStat;
 
@@ -215,18 +215,12 @@ export class PixegotchiService {
     });
   }
 
-  async addExp(
+  async addItemExp(
     userId: number,
     item: Item,
     quantity: number = 1,
     db: PrismaExecutor = prisma,
   ) {
-    const pixegotchi = await this.findCurrent(userId, db);
-
-    if (!pixegotchi) throw new Error("Not active pixegotchi");
-    if (pixegotchi.status !== "active")
-      throw new Error("Pixegotchi is not active");
-
     let exp = 0;
 
     if (item.itemId === "rare_candy") {
@@ -234,6 +228,16 @@ export class PixegotchiService {
     } else {
       exp = ITEM_EXP[item.rarity] * quantity;
     }
+
+    return await this.addExp(userId, exp, db);
+  }
+
+  async addExp(userId: number, exp: number, db: PrismaExecutor = prisma) {
+    const pixegotchi = await this.findCurrent(userId, db);
+
+    if (!pixegotchi) throw new Error("Not active pixegotchi");
+    if (pixegotchi.status !== "active")
+      throw new Error("Pixegotchi is not active");
 
     if (pixegotchi.experience + exp < MAX_EXP) {
       return await db.pixegotchi.update({
