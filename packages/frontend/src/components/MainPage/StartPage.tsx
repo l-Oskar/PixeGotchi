@@ -2,6 +2,7 @@ import { useGetAllEggs, useStartHatching } from "@/services/queries/egg.queries"
 import { Egg, PageType } from "@pixegotchi/shared";
 import React, { useMemo } from "react";
 import Loader from "../Other/Loader";
+import { Egg as EggIcon, Sparkles } from "lucide-react";
 
 interface StartPageProps {
   onNavigate: (page: PageType) => void;
@@ -28,32 +29,88 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
 
   if (sortedEggs.length == 0)
     return (
-      <div className="p-4 space-y-4">
-        <div className="min-h-100 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl border border-white/10 backdrop-blur-sm">
-          <div className="p-4 grid gap-2 justify-center text-xl">
-            <span className="text-center">No eggs!</span>
-            <span>Buy some in the market.</span>
+      <div className="space-y-2.5 p-2.5">
+        <div className="pixel-panel p-2.5">
+          <div className="pixel-panel-soft overflow-hidden border-pixel-highlight/60 bg-linear-to-br from-pixel-highlight/20 via-pixel-surface-soft to-pixel-bg-deep p-3">
+            <div className="grid min-h-40 place-items-center gap-2.5 text-center">
+              <div className="pixel-panel-soft grid h-20 w-20 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
+                <EggIcon className="text-pixel-highlight" size={38} />
+              </div>
+              <div>
+                <div className="font-pixel text-xs leading-5 text-pixel-ink">
+                  No eggs!
+                </div>
+                <div className="mt-2 font-pixel text-[9px] leading-4 text-pixel-muted">
+                  Buy some in the market.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     );
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="min-h-100 p-6 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl border border-white/10 backdrop-blur-sm">
-        <div className="grid gap-2 text-xl">
-          <div>
-            You have {sortedEggs.length}{" "}
-            {sortedEggs.length > 1 ? "eggs" : "egg"}
+    <div className="space-y-2.5 p-2.5">
+      <div className="pixel-panel p-2.5">
+        <div className="pixel-panel-soft overflow-hidden border-pixel-highlight/60 bg-linear-to-br from-pixel-highlight/20 via-pixel-surface-soft to-pixel-bg-deep p-3">
+          <div className="flex items-center justify-between gap-2.5">
+            <div className="min-w-0">
+              <div className="mb-1.5 flex items-center gap-2">
+                <Sparkles className="text-pixel-highlight" size={15} />
+                <span className="font-pixel text-[9px] leading-3 text-pixel-ink">
+                  Hatchery
+                </span>
+              </div>
+              <div className="font-pixel text-xl leading-7 text-pixel-ink">
+                {sortedEggs.length} {sortedEggs.length > 1 ? "eggs" : "egg"}
+              </div>
+              <div className="mt-1.5 font-pixel text-[7px] leading-3 text-pixel-muted">
+                Choose an egg to start hatching.
+              </div>
+            </div>
+            <div className="pixel-panel-soft grid h-16 w-16 shrink-0 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
+              <EggIcon className="text-pixel-highlight" size={32} />
+            </div>
           </div>
+        </div>
+
+        <div className="mt-3 flex items-center justify-between gap-2">
+          <div>
+            <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
+              Available Eggs
+            </h2>
+            <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+              Start hatching one egg
+            </div>
+          </div>
+          <div className="pixel-panel-soft px-2 py-1 font-pixel text-[8px] leading-3 text-pixel-highlight">
+            {sortedEggs.length}
+          </div>
+        </div>
+
+        <div className="mt-2 grid grid-cols-2 gap-2">
           {sortedEggs.map((egg) => (
             <div
-              className="flex justify-between items-center bg-white/5 rounded-2xl p-4 border border-white/10"
+              className="pixel-panel-soft flex min-h-32 flex-col overflow-hidden bg-linear-to-b from-pixel-surface-soft to-pixel-bg-deep/60 p-2 max-[380px]:min-h-30"
               key={egg.id}>
-              <span>🥚 Egg-#{egg.id}</span>
+              <div className="grid h-16 place-items-center">
+                <div className="pixel-icon-box h-13 w-13 text-pixel-highlight max-[380px]:h-11 max-[380px]:w-11">
+                  <EggIcon size={28} />
+                </div>
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="truncate font-pixel text-[9px] leading-3 text-pixel-ink max-[380px]:text-[8px]">
+                  Egg-#{egg.id}
+                </div>
+                <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+                  Ready to hatch
+                </div>
+              </div>
               {/* <span>Is listed: {egg.isListed ? "Yes" : "No"} </span> */}
               <button
-                className="px-4 py-1.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-sm font-medium hover:scale-105 transition disabled:opacity-50 disabled:hover:scale-100"
+                className="pixel-button mt-1.5 min-h-0 w-full px-3 py-1.5 font-pixel text-[8px] leading-3 hover:scale-105 disabled:cursor-wait disabled:opacity-70 disabled:hover:scale-100 max-[380px]:px-2 max-[380px]:py-1"
+                type="button"
                 disabled={startHatchingEgg.isPending}
                 onClick={() => handleHatch(egg)}>
                 {startHatchingEgg.isPending ? "HATCHING..." : "HATCH"}

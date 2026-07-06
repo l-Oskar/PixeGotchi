@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Pixegotchi, Egg, EggHatchingStatus } from "@pixegotchi/shared";
 import { isEgg, isPixegotchi, getImage } from "@/utils/getImage";
 import { MessageCircleHeart } from "lucide-react";
+import { RoomScene } from "./RoomScene";
 
 interface VisualProps {
   pet: Pixegotchi | Egg;
@@ -13,19 +14,19 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
   status,
 }) => {
   return (
-    <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl min-h-56 flex items-center justify-center border border-white/5">
+    <RoomScene>
       <div
         className={
           `text-9xl ` +
           (!status.canHatchNow ? "animate-egg-wobble" : "animate-egg-wobble")
         }>
         <img
-          className="-mb-5 w-25 h-33"
+          className="-mb-4 h-30 w-23 pixelated"
           src={`./${getImage(egg, status)}`}
           alt={`Egg-${egg.id}`}
         />
       </div>
-    </div>
+    </RoomScene>
   );
 };
 
@@ -46,11 +47,11 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   };
 
   return (
-    <div className="relative bg-linear-to-b from-blue-500/10 to-purple-500/10 rounded-2xl h-56 flex items-center justify-center border border-white/5">
+    <RoomScene>
       <div
-        className={`-mb-15 text-9xl ${isAnimating ? "animate-egg-wobble" : "animate-bounce"}`}>
+        className={`-mb-22 translate-x-22 text-9xl max-[380px]:translate-x-12 ${isAnimating ? "animate-egg-wobble" : "animate-pet-idle"}`}>
         <img
-          className="w-50 h-50 cursor-pointer hover:scale-105 transition-transform"
+          className="h-40 w-40 cursor-pointer transition-transform hover:scale-105 pixelated max-[380px]:h-36 max-[380px]:w-36"
           src={`./${getImage(pixe)}`}
           alt={`Pixegotchi-${pixe.id}`}
           onClick={handleClick}
@@ -59,16 +60,24 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
 
       {/* Сердечко */}
       {showHeart && (
-        <div className="absolute inset-0 flex mb-10 ml-30 items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex mb-20 ml-68 items-center justify-center pointer-events-none">
           <MessageCircleHeart size={30} className="animate-ping text-red-500" />
         </div>
       )}
-    </div>
+    </RoomScene>
   );
 };
 
 export const Visual: React.FC<VisualProps> = ({ pet, status }) => {
-  if (!pet) return <div>No Pet/No egg</div>;
+  if (!pet) {
+    return (
+      <div className="pixel-panel-soft flex h-48 items-center justify-center">
+        <span className="font-pixel text-[9px] leading-4 text-pixel-muted">
+          No Pet / No egg
+        </span>
+      </div>
+    );
+  }
 
   if (isEgg(pet)) {
     if (!status) {

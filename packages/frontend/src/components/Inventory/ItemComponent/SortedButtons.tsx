@@ -6,14 +6,40 @@ import {
   Dices,
   Zap,
   Clover,
-  ArrowDown01,
+  Grid2X2,
 } from "lucide-react";
 import SortedButton from "./SortedButton";
-import { ITEM_COLORS, ITEM_BG_COLORS } from "@pixegotchi/shared";
 export interface SortedButtonsProps {
   initialFilter?: string;
   setFilter: (filter: string) => void;
 }
+
+const itemFilterTheme = {
+  food: {
+    color: "text-pixel-orange",
+    bgColor: "bg-pixel-orange/15",
+  },
+  medicine: {
+    color: "text-pixel-red",
+    bgColor: "bg-pixel-red/15",
+  },
+  cleaning: {
+    color: "text-pixel-blue",
+    bgColor: "bg-pixel-blue/15",
+  },
+  toy: {
+    color: "text-pixel-highlight",
+    bgColor: "bg-pixel-highlight/15",
+  },
+  boost: {
+    color: "text-pixel-orange",
+    bgColor: "bg-pixel-orange/15",
+  },
+  special: {
+    color: "text-pixel-green",
+    bgColor: "bg-pixel-green/15",
+  },
+} as const;
 
 const SortedButtons: React.FC<SortedButtonsProps> = ({
   initialFilter,
@@ -26,61 +52,69 @@ const SortedButtons: React.FC<SortedButtonsProps> = ({
   };
 
   return (
-    <div className="mb-2 flex justify-between">
+    <div className="pixel-panel-soft mb-2 grid grid-cols-7 gap-1 p-1">
       <SortedButton
         active={active === "rarity"}
         filter="rarity"
+        label="All"
         setFilter={handleFilter}
-        icon={ArrowDown01}
-        bgColor="bg-gray-50/15"
+        icon={Grid2X2}
+        color="text-pixel-muted"
+        bgColor="bg-pixel-surface/50"
       />
       <SortedButton
         active={active === "food"}
         filter="food"
+        label="Food"
         setFilter={handleFilter}
         icon={Drumstick}
-        color={ITEM_COLORS["food"]}
-        bgColor={ITEM_BG_COLORS["food"]}
+        color={itemFilterTheme.food.color}
+        bgColor={itemFilterTheme.food.bgColor}
       />
       <SortedButton
         active={active === "medicine"}
         filter="medicine"
+        label="Medical"
         setFilter={handleFilter}
         icon={Pill}
-        color={ITEM_COLORS["medicine"]}
-        bgColor={ITEM_BG_COLORS["medicine"]}
+        color={itemFilterTheme.medicine.color}
+        bgColor={itemFilterTheme.medicine.bgColor}
       />
       <SortedButton
         active={active === "cleaning"}
         filter="cleaning"
+        label="Care"
         setFilter={handleFilter}
         icon={Bubbles}
-        color={ITEM_COLORS["cleaning"]}
-        bgColor={ITEM_BG_COLORS["cleaning"]}
+        color={itemFilterTheme.cleaning.color}
+        bgColor={itemFilterTheme.cleaning.bgColor}
       />
       <SortedButton
         active={active === "toy"}
         filter="toy"
+        label="Fun"
         setFilter={handleFilter}
         icon={Dices}
-        color={ITEM_COLORS["toy"]}
-        bgColor={ITEM_BG_COLORS["toy"]}
+        color={itemFilterTheme.toy.color}
+        bgColor={itemFilterTheme.toy.bgColor}
       />
       <SortedButton
         active={active === "boost"}
         filter="boost"
+        label="Boost"
         setFilter={handleFilter}
         icon={Zap}
-        color={ITEM_COLORS["boost"]}
-        bgColor={ITEM_BG_COLORS["boost"]}
+        color={itemFilterTheme.boost.color}
+        bgColor={itemFilterTheme.boost.bgColor}
       />
       <SortedButton
         active={active === "special"}
         filter="special"
+        label="Special"
         setFilter={handleFilter}
         icon={Clover}
-        color={ITEM_COLORS["special"]}
-        bgColor={ITEM_BG_COLORS["special"]}
+        color={itemFilterTheme.special.color}
+        bgColor={itemFilterTheme.special.bgColor}
       />
     </div>
   );

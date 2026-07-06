@@ -27,6 +27,13 @@ npm run build --workspace=packages/frontend
 npm run deploy --workspace=packages/frontend
 ```
 
+## Frontend state ownership
+
+- Store UI/runtime state in Zustand stores under `packages/frontend/src/store`.
+- Use Zustand for app preferences, theme state, open menus, selected UI modes, and client-only state that should be shared across components.
+- Store API/server data in TanStack Query hooks under `packages/frontend/src/services/queries`.
+- Data returned by the backend should live in the TanStack Query cache. Update it with invalidation or `queryClient.setQueryData`; do not copy it into Zustand unless there is a deliberate compatibility bridge.
+
 ## Local backend without Docker
 
 Start PostgreSQL and Redis separately, configure `packages/backend/.env`, then run:

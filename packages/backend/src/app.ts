@@ -64,7 +64,7 @@ export async function buildApp() {
   app.addHook("onResponse", async (request, reply) => {
     const path = request.url.split("?", 1)[0] ?? request.url;
 
-    if (path === "/health") {
+    if (path === "/health" || request.method === "OPTIONS") {
       return;
     }
 

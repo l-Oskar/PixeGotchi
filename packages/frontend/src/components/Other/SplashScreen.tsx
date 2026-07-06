@@ -1,12 +1,17 @@
 import { Egg } from "lucide-react";
+import LoadingScreenFrame from "./LoadingScreenFrame";
 
 const SplashScreen = () => {
   return (
-    <div className="splash gap-5">
-      <Egg size={80} className="animate-spin" />
-      <h1 className="text-3xl">Pixegotchi</h1>
-      <p className="text-xl">Loading data...</p>
-    </div>
+    <LoadingScreenFrame withBackground>
+      <div className="mb-6 animate-spin text-pixel-highlight">
+        <Egg size={80} />
+      </div>
+      <h1 className="font-pixel text-sm leading-5">Pixegotchi</h1>
+      <p className="mt-2 animate-pulse font-pixel text-[10px] leading-4 text-pixel-muted">
+        Loading data...
+      </p>
+    </LoadingScreenFrame>
   );
 };
 

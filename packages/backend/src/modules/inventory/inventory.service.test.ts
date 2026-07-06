@@ -99,6 +99,41 @@ describe("Inventory", () => {
     ).resolves.toBe(1);
   });
 
+  it("uses only one item per request when the item has cooldown", async () => {
+    const user = await createUser();
+    await createItem({
+      itemId: "cooldown_food",
+      cooldownMinutes: 30,
+      effects: {
+        hunger: 10,
+        happiness: 0,
+        health: 0,
+        cleanliness: 0,
+        energy: 0,
+        buffs: [],
+      },
+    });
+    await createPixegotchi(user.id, { hunger: 50 });
+    const inventory = new Inventory();
+
+    await inventory.addItem(user.id, "cooldown_food", 5);
+    const pixegotchi = await inventory.useItem(user.id, "cooldown_food", 3);
+
+    expect(pixegotchi.hunger).toBe(60);
+    await expect(
+      prisma.inventory.findUnique({
+        where: {
+          userId_itemId: { userId: user.id, itemId: "cooldown_food" },
+        },
+      }),
+    ).resolves.toMatchObject({ quantity: 4 });
+    await expect(
+      prisma.itemUsageHistory.findFirstOrThrow({
+        where: { userId: user.id, itemId: "cooldown_food" },
+      }),
+    ).resolves.toMatchObject({ quantity: 1 });
+  });
+
   it("uses an item on top of lazy degraded stats", async () => {
     const user = await createUser();
     await createItem({

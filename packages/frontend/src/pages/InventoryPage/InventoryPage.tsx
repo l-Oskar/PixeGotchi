@@ -1,6 +1,6 @@
 import ChestComponent from "@/components/Inventory/ChestComponent/ChestComponent";
 import ItemComponent from "@/components/Inventory/ItemComponent/ItemComponent";
-import { HeartPlus, Gift } from "lucide-react";
+import { HeartPlus, Gift, Search, Funnel } from "lucide-react";
 import { PageType } from "@pixegotchi/shared";
 import { useState } from "react";
 
@@ -11,64 +11,89 @@ export interface InventoryPageProps {
 
 type TabType = "items" | "chests";
 
-const TABS: { id: TabType; label: any }[] = [
+const TABS: { id: TabType; icon: typeof HeartPlus; label: string }[] = [
   {
     id: "items",
-    label: (
-      <>
-        <div className="flex gap-1">
-          <HeartPlus height={19} />
-          <p>Items</p>
-        </div>
-      </>
-    ),
+    icon: HeartPlus,
+    label: "Items",
   },
   {
     id: "chests",
-    label: (
-      <div className="flex gap-1">
-        <Gift height={19} />
-        <p>Chests</p>
-      </div>
-    ),
+    icon: Gift,
+    label: "Chests",
   },
 ];
 
 const InventoryPage: React.FC<InventoryPageProps> = ({ initialSort }) => {
   const [activeTab, setActiveTab] = useState<TabType>("items");
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState("");
 
   const handleChangeTab = (tab: TabType) => {
     setActiveTab(tab);
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Inventory</h1>
+    <div className="space-y-2.5 p-2.5">
+      <div className="pixel-panel p-2.5">
+        <div className="mb-2.5 flex items-center justify-between gap-2">
+          <h1 className="font-pixel text-sm leading-5 text-pixel-ink">Items</h1>
+        </div>
 
-        <div className="flex gap-2">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleChangeTab(tab.id)}
-              className={`
-                px-4 py-2 text-sm font-medium rounded-t-lg transition-all border border-transparent
-                ${
-                  activeTab === tab.id
-                    ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                    : "text-white border-white"
-                }
-              `}>
-              {tab.label}
-            </button>
-          ))}
+        <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
+          <div className="pixel-panel-soft grid grid-cols-2 gap-1 p-1 sm:min-w-48">
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
+
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => handleChangeTab(tab.id)}
+                  className={`flex min-h-7 items-center justify-center gap-1.5 rounded-sm border-2 px-2 py-1 font-pixel text-[7px] leading-3 transition ${
+                    activeTab === tab.id
+                      ? "border-pixel-highlight bg-pixel-highlight/15 text-pixel-highlight"
+                      : "border-transparent text-pixel-muted hover:border-pixel-border hover:text-pixel-ink"
+                  }`}>
+                  <Icon size={13} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {activeTab === "items" && (
+            <div className="grid min-w-0 grid-cols-[1fr_auto] gap-2">
+              <label className="pixel-panel-soft flex min-h-9 min-w-0 items-center gap-2 px-2.5 py-1.5">
+                <Search size={15} className="shrink-0 text-pixel-muted" />
+                <input
+                  aria-label={`Search ${activeTab}`}
+                  className="min-w-0 flex-1 bg-transparent font-pixel text-[9px] leading-4 text-pixel-ink outline-none placeholder:text-pixel-muted"
+                  placeholder={`Search ${activeTab}...`}
+                  value={searchText}
+                  onChange={(event) => setSearchText(event.target.value)}
+                />
+              </label>
+
+              <button
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-ink"
+                type="button"
+                aria-label="Filter items">
+                <Funnel size={15} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {activeTab === "items" ? (
-        <ItemComponent sorted={initialSort} />
+        <ItemComponent
+          sorted={initialSort}
+          searchQuery={searchText}
+          isFilterOpen={isFilterOpen}
+        />
       ) : (
-        <ChestComponent />
+        <ChestComponent searchQuery={searchText} />
       )}
     </div>
   );

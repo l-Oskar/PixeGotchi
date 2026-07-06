@@ -22,6 +22,12 @@ function hasReviveEffect(item: Item) {
   return item.effects?.buffs?.some((buff) => buff[ItemBuffsType.REVIVE]);
 }
 
+function getEffectiveUseQuantity(item: Item, requestedQuantity: number) {
+  return item.cooldownMinutes && item.cooldownMinutes > 0
+    ? 1
+    : requestedQuantity;
+}
+
 export class Inventory {
   private itemService = new ItemsService();
   private chestService = new ChestService();
@@ -134,12 +140,13 @@ export class Inventory {
   }
 
   async useItem(userId: number, itemId: string, quantity?: number) {
-    const quantityToUse = quantity ?? 1;
+    const requestedQuantity = quantity ?? 1;
     const pixegotchi = await this.pixegotchiService.findCurrent(userId);
 
     if (!pixegotchi) throw new Error("No active pixegotchi");
 
     const item = await this.itemService.getItemDetails(itemId);
+    const quantityToUse = getEffectiveUseQuantity(item, requestedQuantity);
     const isReviveItem = hasReviveEffect(item);
 
     if (pixegotchi.status !== "active" && !isReviveItem)

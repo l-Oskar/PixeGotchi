@@ -1,8 +1,4 @@
-import {
-  ItemBuffsType,
-  PixegotchiStatus,
-  type Item,
-} from "@pixegotchi/shared";
+import { ItemBuffsType, PixegotchiStatus, type Item } from "@pixegotchi/shared";
 
 export const hasReviveEffect = (item: Item | null | undefined) =>
   Boolean(

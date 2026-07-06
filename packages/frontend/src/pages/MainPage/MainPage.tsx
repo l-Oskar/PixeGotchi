@@ -68,16 +68,9 @@ const MainPage: React.FC = () => {
     loader: <Loader />,
     start: <Empty onNavigate={handleNavigate} />,
     home: pixegotchi ? (
-      <ShowPixeGotchi
-        pixegotchi={pixegotchi}
-        onNavigate={handleNavigate}
-      />
+      <ShowPixeGotchi pixegotchi={pixegotchi} onNavigate={handleNavigate} />
     ) : null,
-    egg: egg ? (
-      <EggComponent
-        onNavigate={handleNavigate}
-      />
-    ) : null,
+    egg: egg ? <EggComponent onNavigate={handleNavigate} /> : null,
     inventory: (
       <InventoryPage onNavigate={handleNavigate} initialSort={sortParam} />
     ),
@@ -89,17 +82,15 @@ const MainPage: React.FC = () => {
       />
     ),
     marketplace: <MarketplacePage onNavigate={handleNavigate} />,
-    vault: (
-      <VaultPage onNavigate={handleNavigate} />
-    ),
+    vault: <VaultPage onNavigate={handleNavigate} />,
   };
   const renderedPage = pages[resolvedPage] ?? pages[derivedPage] ?? pages.start;
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-purple-900 via-blue-900 to-indigo-900 text-white">
+    <div className="min-h-screen bg-[linear-gradient(180deg,var(--color-pixel-bg)_0%,var(--color-pixel-bg-deep)_100%)] text-pixel-ink">
       {!isGameActive && <Header user={user} />}
       {/* Content */}
-      <main className="max-w-md mx-auto pb-20">{renderedPage}</main>
+      <main className="max-w-md mx-auto pb-24">{renderedPage}</main>
       {/* Bottom Navigation */}
       <Navigation
         currentPage={resolvedPage}

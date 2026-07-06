@@ -28,26 +28,35 @@ const Navigation: React.FC<NavigationProps> = ({
   };
   return (
     <nav
-      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 pb-1 bg-black/40 backdrop-blur-xl border-t border-white/10`}>
-      <div className="max-w-md mx-auto px-4 py-3 flex justify-around">
+      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2.5 pb-5 pt-1.5 shadow-[0_-12px_24px_var(--color-pixel-page-shadow-soft)]`}>
+      <div className="pixel-panel mx-auto grid max-w-md grid-cols-5 gap-0 overflow-hidden bg-pixel-bg-deep/75 p-0">
         {[
           navButton(),
           { id: "inventory" as PageType, icon: ShoppingBag, label: "Items" },
           { id: "games" as PageType, icon: Gamepad2, label: "Games" },
           { id: "marketplace" as PageType, icon: Store, label: "Market" },
           { id: "vault" as PageType, icon: Vault, label: "Vault" },
-          // { id: "loader" as PageType, icon: Archive, label: "Load" },
+          // { id: "loader" as PageType, icon: Vault, label: "Load" },
         ].map((item) => (
           <button
             key={item.id}
             onClick={() => setCurrentPage(item.id)}
-            className={`flex flex-col items-center gap-1 transition ${
+            className={`relative flex min-h-[3.75rem] flex-col items-center justify-center gap-1 border-r-2 border-pixel-border/30 px-1 py-1.5 transition last:border-r-0 max-[380px]:min-h-14 ${
               currentPage === item.id
-                ? "text-pink-400"
-                : "text-white/60 hover:text-white/90"
+                ? "bg-pixel-highlight/15 text-pixel-highlight shadow-[inset_0_0_0_2px_var(--color-pixel-inset)]"
+                : "theme-readable-muted hover:bg-pixel-surface/40 hover:text-pixel-ink"
             }`}>
-            <item.icon size={22} />
-            <span className="text-xs font-medium">{item.label}</span>
+            <item.icon
+              size={22}
+              className={
+                currentPage === item.id
+                  ? "drop-shadow-[0_2px_0_var(--color-pixel-shadow)]"
+                  : ""
+              }
+            />
+            <span className="font-pixel text-[7px] uppercase leading-3">
+              {item.label}
+            </span>
           </button>
         ))}
       </div>

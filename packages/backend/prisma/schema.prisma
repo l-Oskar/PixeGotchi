@@ -185,7 +185,7 @@ model Pixegotchi {
   lastSleptAt   DateTime?        @map("last_slept_at")
   lastCleanedAt DateTime?        @map("last_cleaned_at")
   lastHealedAt  DateTime?        @map("last_healed_at")
-  lastBoostedAt DateTime?        @map("Lact_boosted_at")
+  lastBoostedAt DateTime?        @map("last_boosted_at")
   lastUpdateAt  DateTime         @default(now()) @map("last_update_at")
   
   hatchedAt    DateTime          @default(now()) @map("hatched_at")

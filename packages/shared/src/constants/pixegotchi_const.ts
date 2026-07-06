@@ -67,8 +67,8 @@ export const CREATE_STATS: Record<string, number> = {
 };
 
 export const MAX_EXP: number = 1000;
-export const CRITICAL_TIME: number = 86400000;
-export const DEAD_TIME: number = 86400000;
+export const CRITICAL_TIME: number = 259200000;
+export const DEAD_TIME: number = 259200000;
 
 export const DEGRADATION_STATS: Record<
   PixegotchiStatsType,

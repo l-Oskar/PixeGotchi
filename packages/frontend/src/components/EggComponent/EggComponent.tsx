@@ -73,10 +73,17 @@ const EggComponent: React.FC<EggPageProps> = ({
   // Ранній вихід якщо немає яйця
   if (!egg) {
     return (
-      <div className="p-4 space-y-4">
-        <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-          <div className="flex justify-center items-center h-56">
-            <div className="text-white/60">No egg is hatching</div>
+      <div className="space-y-2.5 p-2.5">
+        <div className="pixel-panel p-3">
+          <div className="pixel-panel-soft grid min-h-40 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 p-3 text-center">
+            <div>
+              <div className="mx-auto mb-2.5 grid h-16 w-16 place-items-center rounded-sm border border-pixel-border/70 bg-pixel-surface/40">
+                <EggIcon className="text-pixel-muted" size={32} />
+              </div>
+              <div className="font-pixel text-[10px] leading-4 text-pixel-muted">
+                No egg is hatching
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,9 +98,13 @@ const EggComponent: React.FC<EggPageProps> = ({
   // Обробка помилки
   if (status.isError) {
     return (
-      <div className="mt-5 bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-        <div className="flex justify-center items-center h-56">
-          <div className="text-red-400">Failed to load egg status</div>
+      <div className="p-2.5">
+        <div className="pixel-panel p-3">
+          <div className="pixel-panel-soft flex min-h-40 items-center justify-center border-pixel-red/60 bg-pixel-bg-deep/40 p-3 text-center">
+            <div className="font-pixel text-[10px] leading-4 text-pixel-red">
+              Failed to load egg status
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -127,39 +138,44 @@ const EggComponent: React.FC<EggPageProps> = ({
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="bg-linear-to-br from-pink-500/20 to-purple-600/20 rounded-3xl p-6 border border-white/10 backdrop-blur-sm">
-        <div className="flex flex-col gap-1 mb-4">
-          <div className="flex justify-between">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              {`Egg-#${egg.id}`}
-            </h2>
-          </div>
-
-          <div className="flex gap-2 mt-1">
-            <div className="flex items-center gap-2">
-              <span
-                className={`text-xs px-2 py-0.5 rounded-full border capitalize ${
-                  isReady
-                    ? "bg-green-500/30 border-green-400/50"
-                    : "bg-orange-500/30 border-orange-400/50"
-                }`}>
-                {isReady ? "Ready to hatch!" : "Hatching"}
-              </span>
-
-              {!isReady && (
-                <span className="text-xs px-2 py-0.5 bg-purple-500/30 rounded-full border border-purple-400/50">
-                  Progress: {progress}%
+    <div className="space-y-2.5 p-2.5">
+      <div className="pixel-panel p-2.5">
+        <div className="pixel-panel-soft mb-2.5 overflow-hidden border-pixel-highlight/60 bg-linear-to-br from-pixel-highlight/20 via-pixel-surface-soft to-pixel-bg-deep p-3">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-2.5">
+            <div className="min-w-0">
+              <div className="mb-1.5 flex items-center gap-2">
+                <EggIcon className="text-pixel-highlight" size={15} />
+                <h2 className="truncate font-pixel text-xs leading-5 text-pixel-ink">
+                  {`Egg-#${egg.id}`}
+                </h2>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <span
+                  className={`rounded-sm border px-2 py-1 font-pixel text-[8px] leading-3 ${
+                    isReady
+                      ? "border-pixel-green/50 bg-pixel-green/15 text-pixel-green"
+                      : "border-pixel-orange/50 bg-pixel-orange/15 text-pixel-orange"
+                  }`}>
+                  {isReady ? "Ready to hatch!" : "Hatching"}
                 </span>
-              )}
+
+                {!isReady && (
+                  <span className="rounded-sm border border-pixel-highlight/35 bg-pixel-bg-deep/60 px-2 py-1 font-pixel text-[8px] leading-3 text-pixel-highlight">
+                    {progress}%
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="pixel-panel-soft grid h-16 w-16 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
+              <EggIcon className="text-pixel-highlight" size={32} />
             </div>
           </div>
 
-          {/* Прогрес бар для візуалізації */}
           {!isReady && (
-            <div className="mt-3 w-full h-2 bg-white/10 rounded-full overflow-hidden">
+            <div className="pixel-progress mt-2.5 h-2.5 w-full">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300"
+                className="pixel-progress-fill transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -169,7 +185,7 @@ const EggComponent: React.FC<EggPageProps> = ({
         {/* Visual компонент - передаємо egg та статус */}
         <Visual pet={egg} status={eggStatus ?? null} />
 
-        <div className="mt-5 grid grid-cols-3 gap-3">
+        <div className="mt-2.5 grid grid-cols-3 gap-2">
           <ActionButton
             icon={EggIcon}
             label={isReady ? "Hatch Now!" : "Hatch"}
@@ -195,7 +211,7 @@ const EggComponent: React.FC<EggPageProps> = ({
 
         {/* Підказка для користувача */}
         {!isReady && (
-          <div className="mt-4 text-xs text-white/40 text-center">
+          <div className="mt-2.5 text-center font-pixel text-[8px] leading-4 text-pixel-muted">
             Tap to interact with the egg and speed up hatching!
           </div>
         )}

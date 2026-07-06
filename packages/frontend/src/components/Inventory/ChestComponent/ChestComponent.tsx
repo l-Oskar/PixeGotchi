@@ -7,12 +7,19 @@ import {
   ChestType,
   ITEMS_IMG,
   RARITY_BORDER_COLORS,
+  RARITY_COLORS,
 } from "@pixegotchi/shared";
 import React, { useEffect, useMemo, useState } from "react";
 import { useOpenChest } from "@/services/queries/inventory.queries";
 import RewardModal from "../RewardsModal/RewardModal";
 
-const ChestComponent: React.FC = () => {
+export interface ChestComponentProps {
+  searchQuery?: string;
+}
+
+const ChestComponent: React.FC<ChestComponentProps> = ({
+  searchQuery = "",
+}) => {
   const [rewards, setRewards] = useState<ChestRewards | null>(null);
   const { data: sortedChestData } = useGetSortedChests();
   const openChest = useOpenChest();
@@ -34,6 +41,18 @@ const ChestComponent: React.FC = () => {
         : null,
     [selectedChestType, sortedChests],
   );
+  const visibleChests = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    if (!query) return sortedChests;
+
+    return sortedChests.filter((chest) => {
+      const rarity = CHEST_TYPE_TO_RARITY[chest.chestType];
+      const searchableText = [chest.chestType, rarity].join(" ").toLowerCase();
+
+      return searchableText.includes(query);
+    });
+  }, [searchQuery, sortedChests]);
 
   useEffect(() => {
     if (
@@ -68,24 +87,37 @@ const ChestComponent: React.FC = () => {
   return (
     <>
       <div>
-        <div className="grid grid-cols-3 gap-3">
-          {sortedChests?.map((sortedChest: ChestInventory) => (
-            <button
-              key={sortedChest.chestType}
-              onClick={() => handleChestClick(sortedChest.chestType)}
-              className={`bg-white/5 hover:bg-white/10 rounded-2xl p-4 border ${RARITY_BORDER_COLORS[CHEST_TYPE_TO_RARITY[sortedChest.chestType]]} transition flex flex-col items-center gap-2 group`}>
-              <div className="text-4xl group-hover:scale-110 transition">
-                {ITEMS_IMG.chest[sortedChest.chestType]}
-              </div>
-              <div className="text-xs font-medium text-center">
-                {sortedChest.chestType}
-              </div>
-              <div className="text-xs text-white/60">
-                {sortedChest.quantity}
-              </div>
-            </button>
-          ))}
+        <div className="grid grid-cols-3 gap-2">
+          {visibleChests.map((sortedChest: ChestInventory) => {
+            const rarity = CHEST_TYPE_TO_RARITY[sortedChest.chestType];
+
+            return (
+              <button
+                key={sortedChest.chestType}
+                onClick={() => handleChestClick(sortedChest.chestType)}
+                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[rarity]} group relative flex min-h-32 flex-col items-center justify-between gap-1.5 p-2 pt-3 transition hover:border-pixel-highlight/70 max-[380px]:min-h-30`}>
+                <span className="absolute right-1.5 top-1.5 min-w-6 rounded-sm border-2 border-pixel-border bg-pixel-surface-soft px-1.5 py-0.5 text-center font-pixel text-[8px] leading-3 text-pixel-ink">
+                  {sortedChest.quantity}
+                </span>
+                <div className="mt-1 text-3xl leading-none transition group-hover:scale-110">
+                  {ITEMS_IMG.chest[sortedChest.chestType]}
+                </div>
+                <div className="line-clamp-2 min-h-7 text-center font-pixel text-[7px] leading-3 capitalize text-pixel-ink">
+                  {sortedChest.chestType}
+                </div>
+                <span
+                  className={`rounded-sm border px-1.5 py-0.5 font-pixel text-[7px] uppercase leading-3 ${RARITY_BORDER_COLORS[rarity]} ${RARITY_COLORS[rarity]}`}>
+                  {rarity}
+                </span>
+              </button>
+            );
+          })}
         </div>
+        {visibleChests.length === 0 && (
+          <div className="pixel-panel-soft mt-2 px-3 py-4 text-center font-pixel text-[8px] leading-4 text-pixel-muted">
+            No chests found
+          </div>
+        )}
 
         <ChestModal
           chest={currentChest}
