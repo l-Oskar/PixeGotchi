@@ -10,6 +10,7 @@ node_modules/
 # builds
 dist/
 build/
+vault/
 .next/
 .cache/
 .cursor/

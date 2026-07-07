@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { PixegotchiService } from "./pixegotchi.service";
 import { createPixegotchi, createUser } from "@/test/helpers/factories";
 import { ItemType, RarityType } from "@pixegotchi/shared";
+import { prisma } from "@/database/prisma";
 
 describe("PixegotchiService", () => {
   it("applies item stats without exceeding rarity max", async () => {
@@ -39,7 +40,7 @@ describe("PixegotchiService", () => {
     await createPixegotchi(user.id, { experience: 950, level: 1 });
     const service = new PixegotchiService();
 
-    const updated = await service.addExp(user.id, {
+    const updated = await service.addItemExp(user.id, {
       itemId: "rare_candy",
       name: "Rare Candy",
       description: null,
@@ -63,6 +64,34 @@ describe("PixegotchiService", () => {
     const service = new PixegotchiService();
 
     await expect(service.checkStatus(user.id)).resolves.toBeNull();
+  });
+
+  it("persists critical status when computed health reaches zero", async () => {
+    const user = await createUser();
+    const pixegotchi = await createPixegotchi(user.id, {
+      status: "active",
+      health: 0,
+      healthZeroAt: null,
+      criticalSince: null,
+    });
+    const service = new PixegotchiService();
+
+    const current = await service.findCurrent(user.id);
+
+    expect(current).toMatchObject({
+      id: pixegotchi.id,
+      status: "critical",
+      health: 0,
+    });
+
+    const persisted = await prisma.pixegotchi.findUniqueOrThrow({
+      where: { id: pixegotchi.id },
+    });
+
+    expect(persisted.status).toBe("critical");
+    expect(Number(persisted.health)).toBe(0);
+    expect(persisted.healthZeroAt).toBeInstanceOf(Date);
+    expect(persisted.criticalSince).toBeInstanceOf(Date);
   });
 
   it("returns null-safe status diffs for an active pixegotchi", async () => {

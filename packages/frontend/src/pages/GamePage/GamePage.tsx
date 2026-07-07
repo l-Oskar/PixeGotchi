@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { PageType, GameStruct, Pixegotchi } from "@pixegotchi/shared";
+import {
+  PageType,
+  GameStruct,
+  Pixegotchi,
+  GAME_CONFIGS,
+} from "@pixegotchi/shared";
 import { Coins, StarPlus, Zap } from "lucide-react";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
@@ -13,10 +18,10 @@ const GamesPage: React.FC<GamePageProps> = ({
   onGameActiveChange,
   pixegotchi,
 }) => {
-  const [activeGameId, setActiveGameId] = useState<number | null>(null);
+  const [activeGameId, setActiveGameId] = useState<string | null>(null);
   const games: GameStruct[] = [
     {
-      id: 1,
+      id: "catch_fruits",
       name: "Catch Fruits",
       difficulty: "Easy",
       reward: "50-100",
@@ -25,7 +30,7 @@ const GamesPage: React.FC<GamePageProps> = ({
       icon: "🍌",
     },
     {
-      id: 2,
+      id: "quick_tap",
       name: "Quick Tap",
       difficulty: "Medium",
       reward: "100-200",
@@ -34,7 +39,7 @@ const GamesPage: React.FC<GamePageProps> = ({
       icon: "⚡",
     },
     {
-      id: 3,
+      id: "puzzle",
       name: "Puzzle Solver",
       difficulty: "Hard",
       reward: "200-500",
@@ -50,7 +55,7 @@ const GamesPage: React.FC<GamePageProps> = ({
     };
   }, [onGameActiveChange]);
 
-  const openGame = (gameId: number) => {
+  const openGame = (gameId: string) => {
     onGameActiveChange?.(true);
     setActiveGameId(gameId);
   };
@@ -68,7 +73,10 @@ const GamesPage: React.FC<GamePageProps> = ({
     closeGame();
   };
 
-  if (activeGameId === 1) {
+  if (
+    activeGameId === "catch_fruits" &&
+    Number(pixegotchi!.energy) >= GAME_CONFIGS.catch_fruits.energyCost
+  ) {
     return (
       <CatchGame
         onGameEnd={handleGameEnd}
@@ -95,7 +103,7 @@ const GamesPage: React.FC<GamePageProps> = ({
             <button
               key={game.id}
               onClick={() => {
-                if (game.id === 1) {
+                if (game.id === "catch_fruits") {
                   if (!pixegotchi) {
                     alert("You need active Pixegotchi");
                   } else {

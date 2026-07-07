@@ -29,7 +29,7 @@ export type CompleteGameSessionInput = CompleteGameSessionPayload & {
 };
 
 export interface GameStruct {
-  id: number;
+  id: string;
   name: string;
   difficulty: "Easy" | "Medium" | "Hard";
   energy: number;

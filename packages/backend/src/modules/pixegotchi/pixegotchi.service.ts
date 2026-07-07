@@ -26,8 +26,48 @@ const OCCUPIED_SLOT_STATUSES = ["active", "critical", "dead"] as const;
 const toPersistedStat = (value: number) => Math.round(value);
 
 export class PixegotchiService {
-  private toSnapshot(pixegotchi: PrismaPixegotchi): PixegotchiSnapshot {
-    return buildPixegotchiSnapshot(pixegotchi);
+  private async toSnapshot(
+    pixegotchi: PrismaPixegotchi,
+    db: PrismaExecutor = prisma,
+  ): Promise<PixegotchiSnapshot> {
+    const now = new Date();
+    const snapshot = buildPixegotchiSnapshot(pixegotchi, now);
+
+    if (snapshot.status === pixegotchi.status) {
+      return snapshot;
+    }
+
+    const enteredBlockedState =
+      snapshot.status === "critical" || snapshot.status === "dead";
+    const blockedSince =
+      pixegotchi.criticalSince ?? pixegotchi.healthZeroAt ?? now;
+
+    const updatedPixegotchi = await db.pixegotchi.update({
+      where: { id: pixegotchi.id },
+      data: {
+        status: snapshot.status,
+        health: toPersistedStat(snapshot.health),
+        hunger: toPersistedStat(snapshot.hunger),
+        energy: toPersistedStat(snapshot.energy),
+        happiness: toPersistedStat(snapshot.happiness),
+        cleanliness: toPersistedStat(snapshot.cleanliness),
+        lastUpdateAt: now,
+        healthZeroAt:
+          snapshot.status === "active"
+            ? null
+            : enteredBlockedState
+              ? blockedSince
+              : pixegotchi.healthZeroAt,
+        criticalSince:
+          snapshot.status === "active"
+            ? null
+            : enteredBlockedState
+              ? blockedSince
+              : pixegotchi.criticalSince,
+      },
+    });
+
+    return buildPixegotchiSnapshot(updatedPixegotchi, now);
   }
 
   async findByUserId(userId: number): Promise<PixegotchiSnapshot[]> {
@@ -36,7 +76,9 @@ export class PixegotchiService {
       orderBy: { hatchedAt: "desc" },
     });
 
-    return pixegotchis.map((pixegotchi) => this.toSnapshot(pixegotchi));
+    return await Promise.all(
+      pixegotchis.map((pixegotchi) => this.toSnapshot(pixegotchi)),
+    );
   }
 
   async findCurrent(
@@ -54,7 +96,7 @@ export class PixegotchiService {
     if (!OCCUPIED_SLOT_STATUSES.some((status) => status === current.status))
       return null;
 
-    return this.toSnapshot(current);
+    return await this.toSnapshot(current, db);
   }
 
   async findActive(userId: number): Promise<PixegotchiSnapshot | null> {
@@ -107,7 +149,7 @@ export class PixegotchiService {
       },
     });
 
-    return pixegotchi ? this.toSnapshot(pixegotchi) : null;
+    return pixegotchi ? await this.toSnapshot(pixegotchi) : null;
   }
 
   async storedInVault(id: number, userId: number) {

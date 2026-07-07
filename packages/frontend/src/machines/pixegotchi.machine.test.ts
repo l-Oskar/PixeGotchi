@@ -74,4 +74,18 @@ describe("pixegotchiUiMachine", () => {
 
     actor.stop();
   });
+
+  it("leaves the critical blocked state when active data is synced", () => {
+    const actor = startMachine();
+
+    actor.send({ type: "DATA_SYNCED", status: "critical" });
+    expect(actor.getSnapshot().matches({ blocked: "critical" })).toBe(true);
+
+    actor.send({ type: "DATA_SYNCED", status: "active" });
+
+    expect(actor.getSnapshot().matches({ ready: "idle" })).toBe(true);
+    expect(actor.getSnapshot().context.lastStatus).toBe("active");
+
+    actor.stop();
+  });
 });
