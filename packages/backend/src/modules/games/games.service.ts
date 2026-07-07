@@ -4,7 +4,6 @@ import {
   CompleteGameSessionPayload,
   GAME_CONFIGS,
   getEnergyCost,
-  getFinalPgc,
   StartGameSessionInput,
 } from "@pixegotchi/shared";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { PixegotchiService } from "./pixegotchi.service";
 import { createPixegotchi, createUser } from "@/test/helpers/factories";
-import { ItemType, RarityType } from "@pixegotchi/shared";
+import { CRITICAL_TIME, ItemType, RarityType } from "@pixegotchi/shared";
 import { prisma } from "@/database/prisma";
 
 describe("PixegotchiService", () => {
@@ -66,12 +66,41 @@ describe("PixegotchiService", () => {
     await expect(service.checkStatus(user.id)).resolves.toBeNull();
   });
 
-  it("persists critical status when computed health reaches zero", async () => {
+  it("starts the health zero timer while staying active", async () => {
     const user = await createUser();
     const pixegotchi = await createPixegotchi(user.id, {
       status: "active",
       health: 0,
       healthZeroAt: null,
+      criticalSince: null,
+    });
+    const service = new PixegotchiService();
+
+    const current = await service.findCurrent(user.id);
+
+    expect(current).toMatchObject({
+      id: pixegotchi.id,
+      status: "active",
+      health: 0,
+    });
+
+    const persisted = await prisma.pixegotchi.findUniqueOrThrow({
+      where: { id: pixegotchi.id },
+    });
+
+    expect(persisted.status).toBe("active");
+    expect(Number(persisted.health)).toBe(0);
+    expect(persisted.healthZeroAt).toBeInstanceOf(Date);
+    expect(persisted.criticalSince).toBeNull();
+  });
+
+  it("persists critical status after the health zero timer expires", async () => {
+    const user = await createUser();
+    const healthZeroAt = new Date(Date.now() - CRITICAL_TIME - 1_000);
+    const pixegotchi = await createPixegotchi(user.id, {
+      status: "active",
+      health: 0,
+      healthZeroAt,
       criticalSince: null,
     });
     const service = new PixegotchiService();
@@ -89,9 +118,10 @@ describe("PixegotchiService", () => {
     });
 
     expect(persisted.status).toBe("critical");
-    expect(Number(persisted.health)).toBe(0);
-    expect(persisted.healthZeroAt).toBeInstanceOf(Date);
-    expect(persisted.criticalSince).toBeInstanceOf(Date);
+    expect(persisted.healthZeroAt?.getTime()).toBe(healthZeroAt.getTime());
+    expect(persisted.criticalSince?.getTime()).toBe(
+      healthZeroAt.getTime() + CRITICAL_TIME,
+    );
   });
 
   it("returns null-safe status diffs for an active pixegotchi", async () => {

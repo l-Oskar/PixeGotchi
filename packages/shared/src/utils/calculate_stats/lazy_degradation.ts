@@ -39,6 +39,7 @@ const toTime = (value: Date | string | null) => {
 
 const clampStat = (value: number, maxStat: number) =>
   round(Math.min(maxStat, Math.max(0, value)));
+const DEGRADATION_STEP_MS = 3_600_000;
 
 const getElapsedMs = (pixegotchi: Pixegotchi, now: Date) => {
   const lastUpdateTime = toTime(pixegotchi.lastUpdateAt);
@@ -70,69 +71,72 @@ export function calculateCurrentStats(
   const elapsedMs = getElapsedMs(pixegotchi, now);
   if (elapsedMs === 0) return baseStats;
 
-  const hunger = clampStat(
-    baseStats.hunger +
-      calculateDelta(
-        getFinalHungerDelta(pixegotchi.level, pixegotchi.rarity),
-        elapsedMs,
-      ),
-    maxStat,
-  );
-  const cleanliness = clampStat(
-    baseStats.cleanliness +
-      calculateDelta(
-        getFinalCleanlinessDelta(pixegotchi.level, pixegotchi.rarity),
-        elapsedMs,
-      ),
-    maxStat,
-  );
-  const happiness = clampStat(
-    baseStats.happiness +
-      calculateDelta(
-        getFinalHappinessDelta(
-          pixegotchi.level,
-          hunger,
-          cleanliness,
-          pixegotchi.rarity,
-        ),
-        elapsedMs,
-      ),
-    maxStat,
-  );
-  const energy = clampStat(
-    baseStats.energy +
-      calculateDelta(
-        getFinalEnergyDelta(
-          pixegotchi.level,
-          hunger,
-          baseStats.health,
-          pixegotchi.rarity,
-        ),
-        elapsedMs,
-      ),
-    maxStat,
-  );
-  const health = clampStat(
-    baseStats.health +
-      calculateDelta(
-        getFinalHealthDelta(
-          pixegotchi.level,
-          hunger,
-          cleanliness,
-          pixegotchi.rarity,
-        ),
-        elapsedMs,
-      ),
-    maxStat,
-  );
+  const stats = { ...baseStats };
+  let remainingMs = elapsedMs;
 
-  return {
-    health,
-    hunger,
-    energy,
-    happiness,
-    cleanliness,
-  };
+  while (remainingMs > 0) {
+    const stepMs = Math.min(remainingMs, DEGRADATION_STEP_MS);
+
+    stats.hunger = clampStat(
+      stats.hunger +
+        calculateDelta(
+          getFinalHungerDelta(pixegotchi.level, pixegotchi.rarity),
+          stepMs,
+        ),
+      maxStat,
+    );
+    stats.cleanliness = clampStat(
+      stats.cleanliness +
+        calculateDelta(
+          getFinalCleanlinessDelta(pixegotchi.level, pixegotchi.rarity),
+          stepMs,
+        ),
+      maxStat,
+    );
+    stats.happiness = clampStat(
+      stats.happiness +
+        calculateDelta(
+          getFinalHappinessDelta(
+            pixegotchi.level,
+            stats.hunger,
+            stats.cleanliness,
+            pixegotchi.rarity,
+          ),
+          stepMs,
+        ),
+      maxStat,
+    );
+    stats.energy = clampStat(
+      stats.energy +
+        calculateDelta(
+          getFinalEnergyDelta(
+            pixegotchi.level,
+            stats.hunger,
+            stats.health,
+            pixegotchi.rarity,
+          ),
+          stepMs,
+        ),
+      maxStat,
+    );
+    stats.health = clampStat(
+      stats.health +
+        calculateDelta(
+          getFinalHealthDelta(
+            pixegotchi.level,
+            stats.hunger,
+            stats.cleanliness,
+            pixegotchi.rarity,
+          ),
+          stepMs,
+        ),
+      maxStat,
+    );
+
+    remainingMs -= stepMs;
+  }
+
+  return stats;
 }
 
 export function derivePixegotchiStatus(
@@ -149,21 +153,28 @@ export function derivePixegotchiStatus(
 
   if (stats.health > 0) return PixegotchiStatus.active;
 
-  const criticalStartedAt =
-    toTime(pixegotchi.criticalSince) ?? toTime(pixegotchi.healthZeroAt);
+  const criticalSince = toTime(pixegotchi.criticalSince);
+  if (criticalSince) {
+    if (now.getTime() - criticalSince >= DEAD_TIME) {
+      return PixegotchiStatus.dead;
+    }
 
-  if (criticalStartedAt && now.getTime() - criticalStartedAt >= DEAD_TIME) {
-    return PixegotchiStatus.dead;
-  }
-
-  if (
-    criticalStartedAt &&
-    now.getTime() - criticalStartedAt >= CRITICAL_TIME
-  ) {
     return PixegotchiStatus.critical;
   }
 
-  return PixegotchiStatus.critical;
+  const healthZeroAt = toTime(pixegotchi.healthZeroAt);
+  if (!healthZeroAt) return PixegotchiStatus.active;
+
+  const timeSinceHealthZero = now.getTime() - healthZeroAt;
+  if (timeSinceHealthZero >= CRITICAL_TIME + DEAD_TIME) {
+    return PixegotchiStatus.dead;
+  }
+
+  if (timeSinceHealthZero >= CRITICAL_TIME) {
+    return PixegotchiStatus.critical;
+  }
+
+  return PixegotchiStatus.active;
 }
 
 export function buildPixegotchiSnapshot(

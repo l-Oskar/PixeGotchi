@@ -137,6 +137,23 @@ describe("shared pure logic", () => {
     expect(stats.energy).toBeGreaterThanOrEqual(0);
   });
 
+  it("applies lazy degradation incrementally by hour", () => {
+    const mid = new Date("2026-01-01T10:00:00.000Z");
+    const end = new Date("2026-01-01T20:00:00.000Z");
+    const directStats = calculateCurrentStats(basePixegotchi, end);
+    const midStats = calculateCurrentStats(basePixegotchi, mid);
+    const steppedStats = calculateCurrentStats(
+      {
+        ...basePixegotchi,
+        ...midStats,
+        lastUpdateAt: mid,
+      },
+      end,
+    );
+
+    expect(directStats).toEqual(steppedStats);
+  });
+
   it("does not degrade vault or dead pixegotchis", () => {
     const now = new Date("2026-01-02T00:00:00.000Z");
 
@@ -160,8 +177,9 @@ describe("shared pure logic", () => {
     });
   });
 
-  it("derives critical and dead statuses from health timers", () => {
-    const criticalStartedAt = new Date("2026-01-01T00:00:00.000Z");
+  it("derives active, critical, and dead statuses from health timers", () => {
+    const healthZeroAt = new Date("2026-01-01T00:00:00.000Z");
+    const criticalSince = new Date(healthZeroAt.getTime() + CRITICAL_TIME);
     const stats = {
       health: 0,
       hunger: 0,
@@ -175,11 +193,35 @@ describe("shared pure logic", () => {
         {
           ...basePixegotchi,
           health: 0,
-          healthZeroAt: criticalStartedAt,
-          criticalSince: criticalStartedAt,
+          healthZeroAt: null,
+          criticalSince: null,
         },
         stats,
-        new Date(criticalStartedAt.getTime() + CRITICAL_TIME / 2),
+        new Date(healthZeroAt.getTime()),
+      ),
+    ).toBe("active");
+    expect(
+      derivePixegotchiStatus(
+        {
+          ...basePixegotchi,
+          health: 0,
+          healthZeroAt,
+          criticalSince: null,
+        },
+        stats,
+        new Date(healthZeroAt.getTime() + CRITICAL_TIME / 2),
+      ),
+    ).toBe("active");
+    expect(
+      derivePixegotchiStatus(
+        {
+          ...basePixegotchi,
+          health: 0,
+          healthZeroAt,
+          criticalSince,
+        },
+        stats,
+        new Date(criticalSince.getTime() + DEAD_TIME / 2),
       ),
     ).toBe("critical");
     expect(
@@ -187,11 +229,11 @@ describe("shared pure logic", () => {
         {
           ...basePixegotchi,
           health: 0,
-          healthZeroAt: criticalStartedAt,
-          criticalSince: criticalStartedAt,
+          healthZeroAt,
+          criticalSince,
         },
         stats,
-        new Date(criticalStartedAt.getTime() + DEAD_TIME),
+        new Date(criticalSince.getTime() + DEAD_TIME),
       ),
     ).toBe("dead");
   });

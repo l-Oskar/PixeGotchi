@@ -1,6 +1,7 @@
 import { prisma } from "@/database/prisma";
 import {
   buildPixegotchiSnapshot,
+  CRITICAL_TIME,
   Item,
   ITEM_EXP,
   MAX_EXP,
@@ -20,10 +21,26 @@ type StatEffectKey = Extract<
   keyof NonNullable<Item["effects"]>,
   "health" | "hunger" | "energy" | "happiness" | "cleanliness"
 >;
+type HealthTimerSource = {
+  healthZeroAt: Date | string | null;
+  criticalSince: Date | string | null;
+};
 
 const OCCUPIED_SLOT_STATUSES = ["active", "critical", "dead"] as const;
 
 const toPersistedStat = (value: number) => Math.round(value);
+const toDate = (value: Date | string | null) =>
+  value instanceof Date ? value : value ? new Date(value) : null;
+
+const getCriticalSince = (pixegotchi: HealthTimerSource, now: Date) => {
+  const criticalSince = toDate(pixegotchi.criticalSince);
+  if (criticalSince) return criticalSince;
+
+  const healthZeroAt = toDate(pixegotchi.healthZeroAt);
+  if (!healthZeroAt) return now;
+
+  return new Date(healthZeroAt.getTime() + CRITICAL_TIME);
+};
 
 export class PixegotchiService {
   private async toSnapshot(
@@ -32,15 +49,26 @@ export class PixegotchiService {
   ): Promise<PixegotchiSnapshot> {
     const now = new Date();
     const snapshot = buildPixegotchiSnapshot(pixegotchi, now);
+    const healthZeroStarted =
+      snapshot.status === "active" &&
+      snapshot.health <= 0 &&
+      !pixegotchi.healthZeroAt;
+    const criticalStarted =
+      (snapshot.status === "critical" || snapshot.status === "dead") &&
+      !pixegotchi.criticalSince;
 
-    if (snapshot.status === pixegotchi.status) {
+    if (
+      snapshot.status === pixegotchi.status &&
+      !healthZeroStarted &&
+      !criticalStarted
+    ) {
       return snapshot;
     }
 
     const enteredBlockedState =
       snapshot.status === "critical" || snapshot.status === "dead";
-    const blockedSince =
-      pixegotchi.criticalSince ?? pixegotchi.healthZeroAt ?? now;
+    const healthZeroAt = toDate(pixegotchi.healthZeroAt) ?? now;
+    const criticalSince = getCriticalSince(pixegotchi, now);
 
     const updatedPixegotchi = await db.pixegotchi.update({
       where: { id: pixegotchi.id },
@@ -53,16 +81,18 @@ export class PixegotchiService {
         cleanliness: toPersistedStat(snapshot.cleanliness),
         lastUpdateAt: now,
         healthZeroAt:
-          snapshot.status === "active"
+          snapshot.status === "active" && snapshot.health > 0
             ? null
             : enteredBlockedState
-              ? blockedSince
-              : pixegotchi.healthZeroAt,
+              ? healthZeroAt
+              : healthZeroStarted
+                ? now
+                : pixegotchi.healthZeroAt,
         criticalSince:
           snapshot.status === "active"
             ? null
             : enteredBlockedState
-              ? blockedSince
+              ? criticalSince
               : pixegotchi.criticalSince,
       },
     });
@@ -227,7 +257,8 @@ export class PixegotchiService {
     }
 
     const status = derivePixegotchiStatus(pixegotchi, nextStats, now);
-    const enteredCritical = status === "critical" && !pixegotchi.healthZeroAt;
+    const healthZeroAt = toDate(pixegotchi.healthZeroAt) ?? now;
+    const enteredBlockedState = status === "critical" || status === "dead";
 
     return await db.pixegotchi.update({
       where: {
@@ -242,16 +273,18 @@ export class PixegotchiService {
         cleanliness: toPersistedStat(nextStats.cleanliness),
         status,
         healthZeroAt:
-          status === "active"
+          status === "active" && nextStats.health > 0
             ? null
-            : enteredCritical
-              ? now
-              : pixegotchi.healthZeroAt,
+            : enteredBlockedState
+              ? healthZeroAt
+              : nextStats.health <= 0
+                ? healthZeroAt
+                : pixegotchi.healthZeroAt,
         criticalSince:
           status === "active"
             ? null
-            : enteredCritical
-              ? now
+            : enteredBlockedState
+              ? getCriticalSince(pixegotchi, now)
               : pixegotchi.criticalSince,
       },
     });
