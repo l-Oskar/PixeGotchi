@@ -136,15 +136,15 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
           </div>
           <div className="pixel-panel-soft theme-soft-overlay absolute bottom-0 left-0 top-0 z-20 flex w-[45%] flex-col justify-center gap-1 border-pixel-border/70 bg-pixel-bg-deep/82 p-1.5 shadow-[0_3px_0_var(--color-pixel-shadow),0_0_18px_var(--color-pixel-glow),inset_0_0_0_2px_var(--color-pixel-inset-soft)] backdrop-blur-[1px] max-[380px]:bottom-2 max-[380px]:left-2 max-[380px]:top-2 max-[380px]:w-[46%] max-[380px]:gap-1 max-[380px]:p-1">
             <div className="min-w-0 flex-1">
-              <div className="mb-1.5 grid grid-cols-[auto_1fr] items-center gap-2 font-pixel text-[9px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[7px]">
+              <div className="mb-1.5 grid grid-cols-[auto_1fr] items-center font-pixel text-[8px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[7px]">
                 <span className="whitespace-nowrap text-pixel-highlight">
                   Level {pixegotchi.level}
                 </span>
-                <span className="truncate text-[8px] text-end text-pixel-muted">
-                  {pixegotchi.experience} / {experienceTarget} EXP
+                <span className="truncate text-[7px] text-end text-pixel-muted">
+                  {pixegotchi.experience}/{experienceTarget} EXP
                 </span>
               </div>
-              <div className="pixel-progress h-2.5 w-50 max-w-full">
+              <div className="pixel-progress h-2 w-50 max-w-full">
                 <div
                   className="pixel-progress-fill transition-all duration-500"
                   style={{ width: `${experienceProgress}%` }}
