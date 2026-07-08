@@ -95,7 +95,7 @@ const InfoBadge: React.FC<{
     <div className="font-pixel text-[7px] leading-3 text-pixel-muted">
       {label}
     </div>
-    <div className="mt-1 font-pixel text-[8px] leading-3">{value}</div>
+    <div className="mt-1 font-pixel text-[9px] leading-3">{value}</div>
   </div>
 );
 
@@ -157,19 +157,19 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
                 </span>
               )}
             </div>
-            <h2 className="font-pixel text-sm leading-5 text-pixel-ink">
+            <h2 className="font-pixel text-md leading-5 text-pixel-ink">
               {pixegotchi.name}
             </h2>
             <p className="mt-1 font-pixel text-[8px] leading-3 text-pixel-muted">
-              ID #{pixegotchi.id}
+              User ID: {`#${pixegotchi.userId}`}
             </p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right space-y-1">
-              <div className="font-pixel text-[7px] leading-3 text-pixel-muted">
+              <div className="font-pixel text-[9px] leading-3 text-pixel-muted">
                 Level
               </div>
-              <div className="font-pixel text-sm leading-5 text-pixel-highlight">
+              <div className="font-pixel text-md leading-5 text-pixel-highlight">
                 {pixegotchi.level}
               </div>
             </div>
@@ -230,7 +230,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
 
       {/* Stats */}
       <div className="pixel-panel space-y-3 p-3">
-        <h3 className="font-pixel text-[10px] leading-4 text-pixel-ink">
+        <h3 className="font-pixel text-[12px] leading-4 text-pixel-ink">
           Stats
         </h3>
         <StatBar
@@ -278,13 +278,13 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
       {/* Traits */}
       {pixegotchi.traits && pixegotchi.traits.length > 0 && (
         <div className="pixel-panel p-3">
-          <h3 className="mb-3 font-pixel text-[10px] leading-4 text-pixel-ink">
+          <h3 className="mb-3 font-pixel text-[12px] leading-4 text-pixel-ink">
             Traits
           </h3>
           <div className="grid gap-2">
             {pixegotchi.traits.map((trait, index) => (
               <div key={index} className="pixel-panel-soft p-2">
-                <span className="font-pixel text-[8px] leading-3 text-pixel-blue">
+                <span className="font-pixel text-[9px] leading-3 text-pixel-blue">
                   {trait.toUpperCase()}
                 </span>
                 <p className="mt-1 font-pixel text-[7px] leading-4 text-pixel-muted">
@@ -298,7 +298,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
 
       {/* Meta Info */}
       <div className="pixel-panel p-3">
-        <h3 className="mb-3 font-pixel text-[10px] leading-4 text-pixel-ink">
+        <h3 className="mb-3 font-pixel text-[12px] leading-4 text-pixel-ink">
           Meta Information
         </h3>
         <div className="space-y-2 font-pixel text-[8px] leading-4">
@@ -315,6 +315,12 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
               {pixegotchi.hatchedAt
                 ? new Date(pixegotchi.hatchedAt).toLocaleString()
                 : "N/A"}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-pixel-muted">Pixegotchi ID</span>
+            <span className="text-pixel-ink">
+              {pixegotchi.id ? `#${pixegotchi.id}` : "N/A"}
             </span>
           </div>
           <div className="flex justify-between">
