@@ -27,6 +27,7 @@ type HealthTimerSource = {
 };
 
 const OCCUPIED_SLOT_STATUSES = ["active", "critical", "dead"] as const;
+const MAX_LEVEL = 100;
 
 const toPersistedStat = (value: number) => Math.round(value);
 const toDate = (value: Date | string | null) =>
@@ -314,27 +315,19 @@ export class PixegotchiService {
     if (pixegotchi.status !== "active")
       throw new Error("Pixegotchi is not active");
 
-    if (pixegotchi.experience + exp < MAX_EXP) {
-      return await db.pixegotchi.update({
-        where: {
-          id: pixegotchi.id,
-        },
-        data: {
-          experience: { increment: exp },
-        },
-      });
-    }
-
-    const addLvl = Math.floor((pixegotchi.experience + exp) / 1000);
-    const addExp = (pixegotchi.experience + exp) % 1000;
+    const totalExp = pixegotchi.experience + exp;
+    const gainedLevels = Math.floor(totalExp / MAX_EXP);
+    const nextLevel = Math.min(MAX_LEVEL, pixegotchi.level + gainedLevels);
+    const nextExperience =
+      nextLevel >= MAX_LEVEL ? MAX_EXP : totalExp % MAX_EXP;
 
     return await db.pixegotchi.update({
       where: {
         id: pixegotchi.id,
       },
       data: {
-        experience: addExp,
-        level: { increment: addLvl },
+        experience: nextExperience,
+        level: nextLevel,
       },
     });
   }

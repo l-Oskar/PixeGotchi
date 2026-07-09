@@ -2,7 +2,6 @@ import {
   ChestType,
   ChestInventory,
   RARITY_COLORS,
-  ITEMS_IMG,
   ITEM_COLORS,
 } from "@pixegotchi/shared";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +9,7 @@ import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator
 import ChestItems from "./ChestItems";
 import { X, ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
+import { getChestImg } from "@/utils/getImage";
 
 export interface ChestModalProps {
   chest: ChestInventory | null;
@@ -42,6 +42,7 @@ const ChestModal: React.FC<ChestModalProps> = ({
   if (!chest || !chestDescription) return null;
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
   const canUse = useQuantity >= 1 && useQuantity <= quantity && !isUsing;
+  const chestImage = getChestImg(chest.chestType);
 
   const handleUse = async () => {
     if (!canUse) return;
@@ -80,8 +81,21 @@ const ChestModal: React.FC<ChestModalProps> = ({
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="pixel-icon-box h-12 w-12 shrink-0 text-2xl">
-                    {ITEMS_IMG.chest[chest.chestType]}
+                  <div
+                    className="pixel-icon-box h-24 w-24 shrink-0"
+                    role="img"
+                    aria-label={`${chest.chestType} chest`}>
+                    <div
+                      style={{
+                        backgroundImage: `url("./${chestImage.src}")`,
+                        backgroundPosition: chestImage.backgroundPosition,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: chestImage.backgroundSize,
+                        height: chestImage.size,
+                        imageRendering: "pixelated",
+                        width: chestImage.size,
+                      }}
+                    />
                   </div>
                   <div>
                     <h2 className="font-pixel text-sm leading-5 text-pixel-ink">

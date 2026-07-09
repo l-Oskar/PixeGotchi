@@ -6,7 +6,7 @@ import {
   GAME_CONFIGS,
   getFinalEnergyCost,
 } from "@pixegotchi/shared";
-import { Coins, StarPlus, Zap } from "lucide-react";
+import { AlertCircle, Coins, StarPlus, Zap } from "lucide-react";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
@@ -20,6 +20,10 @@ const GamesPage: React.FC<GamePageProps> = ({
   pixegotchi,
 }) => {
   const [activeGameId, setActiveGameId] = useState<string | null>(null);
+  const canPlayGames = pixegotchi?.status === "active";
+  const activePetMessage = pixegotchi
+    ? "Потрібен активний пет, щоб запускати міні-ігри."
+    : "You need active pixegotchi to play minigames. Hatch or activate one!";
   const games: GameStruct[] = [
     {
       id: "catch_fruits",
@@ -56,7 +60,18 @@ const GamesPage: React.FC<GamePageProps> = ({
     };
   }, [onGameActiveChange]);
 
+  useEffect(() => {
+    if (!canPlayGames && activeGameId) {
+      setActiveGameId(null);
+      onGameActiveChange?.(false);
+    }
+  }, [activeGameId, canPlayGames, onGameActiveChange]);
+
   const openGame = (gameId: string) => {
+    if (!canPlayGames) {
+      return;
+    }
+
     onGameActiveChange?.(true);
     setActiveGameId(gameId);
   };
@@ -76,10 +91,11 @@ const GamesPage: React.FC<GamePageProps> = ({
 
   if (
     activeGameId === "catch_fruits" &&
-    Number(pixegotchi!.energy) >=
+    canPlayGames &&
+    Number(pixegotchi.energy) >=
       getFinalEnergyCost(
-        Number(pixegotchi!.health),
-        pixegotchi!.rarity,
+        Number(pixegotchi.health),
+        pixegotchi.rarity,
         GAME_CONFIGS.catch_fruits.energyCost,
       )
   ) {
@@ -87,7 +103,7 @@ const GamesPage: React.FC<GamePageProps> = ({
       <CatchGame
         onGameEnd={handleGameEnd}
         endGame={closeGame}
-        pixegotchi={pixegotchi!}
+        pixegotchi={pixegotchi}
       />
     );
   }
@@ -104,22 +120,37 @@ const GamesPage: React.FC<GamePageProps> = ({
           </span>
         </div>
 
+        {!canPlayGames && (
+          <div className="mb-3 flex items-start gap-2 rounded-sm border border-pixel-orange/50 bg-pixel-orange/15 px-2 py-2">
+            <AlertCircle
+              size={16}
+              className="mt-0.5 shrink-0 text-pixel-orange"
+            />
+            <p className="font-pixel text-[8px] leading-4 text-pixel-ink">
+              {activePetMessage}
+            </p>
+          </div>
+        )}
+
         <div className="space-y-2">
           {games.map((game) => (
             <button
               key={game.id}
+              disabled={!canPlayGames}
               onClick={() => {
+                if (!canPlayGames) {
+                  return;
+                }
+
                 if (game.id === "catch_fruits") {
-                  if (!pixegotchi) {
-                    alert("You need active Pixegotchi");
-                  } else {
-                    openGame(game.id);
-                  }
+                  openGame(game.id);
                 } else {
                   alert(`${game.name} is coming soon`);
                 }
               }}
-              className="pixel-panel-soft grid w-full grid-cols-[3rem_1fr] items-center gap-2 p-2 text-left transition hover:border-pixel-highlight/70">
+              className={`pixel-panel-soft grid w-full grid-cols-[3rem_1fr] items-center gap-2 p-2 text-left transition hover:border-pixel-highlight/70 disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:border-pixel-border ${
+                !canPlayGames ? "grayscale" : ""
+              }`}>
               <div className="pixel-icon-box h-11 w-11 shrink-0 text-2xl">
                 {game.icon}
               </div>

@@ -192,7 +192,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
                 key={item.id}
                 aria-disabled={cannotUseWhileBlocked}
                 onClick={() => handleItemClick(item)}
-                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group relative flex min-h-32 flex-col items-center justify-between gap-1.5 p-2 pt-3 transition hover:border-pixel-highlight/70 max-[380px]:min-h-30 ${
+                className={`pixel-panel-soft ${RARITY_BORDER_COLORS[item.rarity]} group relative flex min-h-36 flex-col items-center justify-between gap-1.5 p-2 pt-3 transition hover:border-pixel-highlight/70 max-[380px]:min-h-30 ${
                   cannotUseWhileBlocked ? "opacity-70" : ""
                 }`}>
                 <span
@@ -202,7 +202,7 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
                 <span className="absolute right-1 top-1 min-w-6 rounded-md border border-pixel-border bg-pixel-surface-soft px-1.5 py-0.5 text-center font-pixel text-[8px] leading-3 text-pixel-ink">
                   {item.quantity}
                 </span>
-                <div className="mt-3 text-5xl leading-none transition group-hover:scale-110">
+                <div className="mt-4 text-5xl leading-none transition group-hover:scale-110">
                   {item.details?.iconUrl ?? "?"}
                 </div>
                 <div className="line-clamp-2 min-h-4 text-center font-pixel text-[9px] leading-3 text-pixel-ink">
@@ -225,6 +225,9 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
         <ItemModal
           item={currentItem}
           quantity={currentInventoryItem?.quantity ?? 0}
+          cooldownRemainingMinutes={
+            currentInventoryItem?.cooldownRemainingMinutes ?? 0
+          }
           isOpen={actionFlow.isModalOpen}
           canUseItem={canUseItemForStatus(currentItem, currentStatus)}
           disabledReason={

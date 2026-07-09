@@ -28,6 +28,11 @@ function getEffectiveUseQuantity(item: Item, requestedQuantity: number) {
     : requestedQuantity;
 }
 
+function getCooldownRemainingMinutes(lastUsedAt: Date, cooldownMinutes: number) {
+  const minutesSinceUse = (Date.now() - lastUsedAt.getTime()) / (1000 * 60);
+  return Math.max(0, Math.ceil(cooldownMinutes - minutesSinceUse));
+}
+
 export class Inventory {
   private itemService = new ItemsService();
   private chestService = new ChestService();
@@ -47,14 +52,43 @@ export class Inventory {
       where: { userId },
       orderBy: { createdAt: "desc" },
     });
+    const currentPixegotchi = await this.pixegotchiService.findCurrent(userId);
+    const itemIds = inventory.map((item) => item.itemId);
+    const lastUsages =
+      currentPixegotchi && itemIds.length > 0
+        ? await prisma.itemUsageHistory.findMany({
+            where: {
+              userId,
+              pixegotchiId: currentPixegotchi.id,
+              itemId: { in: itemIds },
+            },
+            orderBy: { usedAt: "desc" },
+          })
+        : [];
+    const lastUsageByItemId = new Map<string, (typeof lastUsages)[number]>();
+
+    for (const usage of lastUsages) {
+      if (!lastUsageByItemId.has(usage.itemId)) {
+        lastUsageByItemId.set(usage.itemId, usage);
+      }
+    }
 
     const inventoryWithDetails = await Promise.all(
       inventory.map(async (item) => {
         try {
           const details = await this.itemService.getItemDetails(item.itemId);
-          return { ...item, details };
+          const lastUsage = lastUsageByItemId.get(item.itemId);
+          const cooldownRemainingMinutes =
+            details.cooldownMinutes && lastUsage
+              ? getCooldownRemainingMinutes(
+                  lastUsage.usedAt,
+                  details.cooldownMinutes,
+                )
+              : 0;
+
+          return { ...item, details, cooldownRemainingMinutes };
         } catch {
-          return { ...item, details: null };
+          return { ...item, details: null, cooldownRemainingMinutes: 0 };
         }
       }),
     );

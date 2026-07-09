@@ -4,12 +4,15 @@ import {
   ChestInventory,
   ITEMS_IMG,
   RARITY_BORDER_COLORS,
+  RARITY_COLORS,
   ITEM_COLORS,
   RarityOrder,
   RarityType,
   CHEST_CONFIG,
+  CHEST_REWARDS,
   ChestType,
 } from "@pixegotchi/shared";
+import { getEggImg } from "@/utils/getImage";
 
 export interface ChestPreviewProps {
   chestItems: ChestPreview[];
@@ -17,6 +20,12 @@ export interface ChestPreviewProps {
 }
 
 const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
+  const eggChance = chest
+    ? ((CHEST_REWARDS.EGG_DROP_CHANCE as Partial<Record<ChestType, number>>)[
+        chest.chestType
+      ] ?? 0)
+    : 0;
+  const hasEggDrop = eggChance > 0;
   const groupedByRarity = useMemo(
     () =>
       chestItems.reduce(
@@ -32,57 +41,97 @@ const ChestItems: React.FC<ChestPreviewProps> = ({ chest, chestItems }) => {
       ),
     [chestItems],
   );
-  const sortedRarities = useMemo(
-    () =>
-      Object.keys(groupedByRarity).sort(
-        (a, b) => RarityOrder[a as RarityType] - RarityOrder[b as RarityType],
-      ),
-    [groupedByRarity],
-  );
+  const sortedRarities = useMemo(() => {
+    const rarities = Object.keys(groupedByRarity);
+    if (hasEggDrop && !rarities.includes("legendary")) {
+      rarities.push("legendary");
+    }
 
-  if (!chest || chestItems.length === 0) return null;
+    return rarities.sort(
+      (a, b) => RarityOrder[a as RarityType] - RarityOrder[b as RarityType],
+    );
+  }, [groupedByRarity, hasEggDrop]);
+
+  if (!chest) return null;
 
   return (
     <div className="custom-scrollbar max-h-65 overflow-y-auto">
-      {sortedRarities.map((rarity) => (
-        <div key={rarity} className="mb-4">
-          {/* Заголовок рідкості (опціонально) */}
-          <div className="sticky top-0 z-10 mb-2 rounded-sm border border-pixel-border/50 bg-pixel-surface/95 px-2 py-1 shadow-[0_2px_0_var(--color-pixel-shadow)]">
-            <span
-              className={`font-pixel text-[8px] leading-3 ${RARITY_BORDER_COLORS[rarity].replace("border", "text")}`}>
-              {`${rarity.toUpperCase()} - ${CHEST_CONFIG[chest.chestType as ChestType].item_rarity_distribution[rarity as RarityType]}%`}
-            </span>
-          </div>
+      {sortedRarities.map((rarity) => {
+        const rarityItems = groupedByRarity[rarity] ?? [];
+        const showEggDrop = rarity === "legendary" && hasEggDrop;
+        const rarityChance =
+          rarityItems.length === 0 && showEggDrop
+            ? eggChance
+            : CHEST_CONFIG[chest.chestType as ChestType]
+                .item_rarity_distribution[rarity as RarityType];
 
-          {/* Грід для елементів цієї рідкості */}
-          <div className="grid grid-cols-3 gap-2">
-            {groupedByRarity[rarity].map((item) => (
-              <div
-                key={item.itemId}
-                className={`pixel-panel-soft cursor-pointer p-2 transition hover:border-pixel-highlight/70 ${RARITY_BORDER_COLORS[item.rarity]}`}>
-                <div className="flex flex-col items-center text-center gap-1">
-                  <div className="pixel-icon-box h-10 w-10 text-xl">
-                    {ITEMS_IMG[item.type]?.[item.itemId] || "📦"}
-                  </div>
-                  <p className="w-full truncate font-pixel text-[7px] leading-3 text-pixel-ink">
-                    {item.itemId.charAt(0).toUpperCase() +
-                      item.itemId.slice(1).split("_").join(" ")}
-                  </p>
-                  <p
-                    className={`${ITEM_COLORS[item.type]} font-pixel text-[7px] leading-3 capitalize`}>
-                    {item.type}
-                  </p>
-                  <div className="flex items-center justify-center">
-                    <span className="font-pixel text-[7px] leading-3 text-pixel-muted">
-                      {item.probability}%
-                    </span>
+        return (
+          <div key={rarity} className="mb-4">
+            {/* Заголовок рідкості (опціонально) */}
+            <div className="sticky top-0 z-10 mb-2 rounded-sm border border-pixel-border/50 bg-pixel-surface/95 px-2 py-1 shadow-[0_2px_0_var(--color-pixel-shadow)]">
+              <span
+                className={`font-pixel text-[8px] leading-3 ${RARITY_BORDER_COLORS[rarity].replace("border", "text")}`}>
+                {`${rarity.toUpperCase()} - ${rarityChance}%`}
+              </span>
+            </div>
+
+            {/* Грід для елементів цієї рідкості */}
+            <div className="grid grid-cols-3 gap-2">
+              {rarityItems.map((item) => (
+                <div
+                  key={item.itemId}
+                  className={`pixel-panel-soft cursor-pointer p-2 transition hover:border-pixel-highlight/70 ${RARITY_BORDER_COLORS[item.rarity]}`}>
+                  <div className="flex flex-col items-center text-center gap-1">
+                    <div className="pixel-icon-box h-10 w-10 text-xl">
+                      {ITEMS_IMG[item.type]?.[item.itemId] || "📦"}
+                    </div>
+                    <p className="w-full truncate font-pixel text-[7px] leading-3 text-pixel-ink">
+                      {item.itemId.charAt(0).toUpperCase() +
+                        item.itemId.slice(1).split("_").join(" ")}
+                    </p>
+                    <p
+                      className={`${ITEM_COLORS[item.type]} font-pixel text-[7px] leading-3 capitalize`}>
+                      {item.type}
+                    </p>
+                    <div className="flex items-center justify-center">
+                      <span className="font-pixel text-[7px] leading-3 text-pixel-muted">
+                        {item.probability}%
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              {showEggDrop && (
+                <div
+                  key="egg-drop"
+                  className={`pixel-panel-soft cursor-pointer p-2 transition hover:border-pixel-highlight/70 ${RARITY_BORDER_COLORS.legendary}`}>
+                  <div className="flex flex-col items-center text-center gap-1">
+                    <div className="pixel-icon-box h-10 w-10">
+                      <img
+                        className="h-7 w-6 object-contain [image-rendering:pixelated]"
+                        src={`./${getEggImg()}`}
+                        alt="Egg"
+                      />
+                    </div>
+                    <p className="w-full truncate font-pixel text-[7px] leading-3 text-pixel-ink">
+                      Egg
+                    </p>
+                    <p
+                      className={`font-pixel text-[7px] leading-3 capitalize ${RARITY_COLORS.legendary}`}>
+                      Unique
+                    </p>
+                    <div className="flex items-center justify-center">
+                      <span className="font-pixel text-[7px] leading-3 text-pixel-muted">
+                        {eggChance}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

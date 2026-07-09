@@ -1,12 +1,19 @@
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
-import { Item, ITEM_COLORS, RARITY_COLORS } from "@pixegotchi/shared";
+import {
+  Item,
+  ItemBuffsType,
+  ITEM_COLORS,
+  RARITY_COLORS,
+  RARITY_STATS,
+} from "@pixegotchi/shared";
+import { Heart, Apple, Zap, Smile, Droplets, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export interface ItemModalProps {
   item: Item | null;
   quantity: number;
+  cooldownRemainingMinutes?: number;
   isOpen: boolean;
   canUseItem: boolean;
   disabledReason?: string;
@@ -14,9 +21,46 @@ export interface ItemModalProps {
   onUse: (itemId: string, quantity: number) => Promise<void>;
 }
 
+const STAT_PREVIEW = [
+  {
+    key: "hunger",
+    label: "Hunger",
+    icon: <Apple size={10} className={`${ITEM_COLORS.food}`} />,
+  },
+  {
+    key: "health",
+    label: "Health",
+    icon: <Heart size={10} className={`${ITEM_COLORS.medicine}`} />,
+  },
+  {
+    key: "cleanliness",
+    label: "Cleanliness",
+    icon: <Droplets size={10} className={`${ITEM_COLORS.cleaning}`} />,
+  },
+  {
+    key: "happiness",
+    label: "Happiness",
+    icon: <Smile size={10} className={`${ITEM_COLORS.toy}`} />,
+  },
+  {
+    key: "energy",
+    label: "Energy",
+    icon: <Zap size={10} className={`${ITEM_COLORS.boost}`} />,
+  },
+] as const;
+
+const toStatNumber = (value: number | string | null | undefined) =>
+  Number(value) || 0;
+
+const clampStat = (value: number, maxStat: number) =>
+  Math.min(maxStat, Math.max(0, value));
+
+const formatStatValue = (value: number) => Math.floor(value).toString();
+
 const ItemModal: React.FC<ItemModalProps> = ({
   item,
   quantity,
+  cooldownRemainingMinutes = 0,
   isOpen,
   canUseItem,
   disabledReason,
@@ -25,6 +69,9 @@ const ItemModal: React.FC<ItemModalProps> = ({
 }) => {
   const [useQuantity, setUseQuantity] = useState(1);
   const [isUsing, setIsUsing] = useState(false);
+  const [displayCooldownRemaining, setDisplayCooldownRemaining] = useState(
+    cooldownRemainingMinutes,
+  );
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
 
   useEffect(() => {
@@ -33,9 +80,59 @@ const ItemModal: React.FC<ItemModalProps> = ({
     }
   }, [isOpen, item?.itemId]);
 
+  useEffect(() => {
+    setDisplayCooldownRemaining(cooldownRemainingMinutes);
+
+    if (!isOpen || cooldownRemainingMinutes <= 0) return;
+
+    const interval = window.setInterval(() => {
+      setDisplayCooldownRemaining((current) => Math.max(0, current - 1));
+    }, 60_000);
+
+    return () => window.clearInterval(interval);
+  }, [cooldownRemainingMinutes, isOpen, item?.itemId]);
+
   if (!item) return null;
 
   // const maxQuantity = item.isStackable ? (item.maxStack ?? quantity) : 1;
+  const effectiveUseQuantity = item.cooldownMinutes ? 1 : useQuantity;
+  const maxStat = currentPixegotchi
+    ? RARITY_STATS[currentPixegotchi.rarity].maxStat
+    : 100;
+  const isReviveItem = Boolean(
+    item.effects?.buffs?.some((buff) => Boolean(buff[ItemBuffsType.REVIVE])),
+  );
+  const itemCooldownMinutes = item.cooldownMinutes || 0;
+  const hasCooldown = itemCooldownMinutes > 0;
+  const hasActiveCooldown = displayCooldownRemaining > 0;
+  const statPreview = item.effects
+    ? STAT_PREVIEW.map((stat) => {
+        const currentValue = currentPixegotchi
+          ? toStatNumber(currentPixegotchi[stat.key])
+          : null;
+        const effectValue =
+          isReviveItem && stat.key === "health"
+            ? 50 - toStatNumber(currentPixegotchi?.health)
+            : item.effects?.[stat.key] || 0;
+        const totalEffect =
+          isReviveItem && stat.key === "health"
+            ? effectValue
+            : effectValue * effectiveUseQuantity;
+        const nextValue =
+          currentValue === null
+            ? null
+            : isReviveItem && stat.key === "health"
+              ? 50
+              : clampStat(currentValue + totalEffect, maxStat);
+
+        return {
+          ...stat,
+          currentValue,
+          nextValue,
+          totalEffect,
+        };
+      }).filter((stat) => stat.totalEffect !== 0)
+    : [];
   const canUse =
     canUseItem &&
     useQuantity >= 1 &&
@@ -113,87 +210,61 @@ const ItemModal: React.FC<ItemModalProps> = ({
               )}
 
               {/* Effects */}
-              {item.effects && (
+              {item.effects && statPreview.length > 0 && (
                 <div className="pixel-panel-soft mb-4 p-3">
                   <h3 className="mb-2 font-pixel text-[9px] leading-4 text-pixel-ink">
                     Effects:
                   </h3>
-                  <div className="grid grid-cols-2 gap-2 font-pixel text-[7px] leading-3">
-                    {item.effects.hunger !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>🍖</span>
-                        <span className="text-pixel-muted">Hunger:</span>
-                        <span
-                          className={
-                            item.effects.hunger > 0
-                              ? "text-pixel-green"
-                              : "text-pixel-red"
-                          }>
-                          {item.effects.hunger > 0 ? "+" : ""}
-                          {item.effects.hunger}
+                  <div className="grid gap-2 font-pixel text-[9px] leading-3">
+                    {statPreview.map((stat) => (
+                      <div
+                        key={stat.key}
+                        className="grid grid-cols-[auto_1fr_auto] items-center gap-1">
+                        <span>{stat.icon}</span>
+                        <span>
+                          <span className="text-pixel-muted">{stat.label}</span>{" "}
+                          <span
+                            className={
+                              stat.totalEffect > 0
+                                ? "text-pixel-green"
+                                : "text-pixel-red"
+                            }>
+                            ({stat.totalEffect > 0 ? "+" : ""}
+                            {formatStatValue(stat.totalEffect)})
+                          </span>
+                          <span className="text-pixel-muted">:</span>
+                        </span>
+                        <span className="text-right">
+                          {stat.currentValue === null ||
+                          stat.nextValue === null ? (
+                            <span
+                              className={
+                                stat.totalEffect > 0
+                                  ? "text-pixel-green"
+                                  : "text-pixel-red"
+                              }>
+                              {stat.totalEffect > 0 ? "+" : ""}
+                              {formatStatValue(stat.totalEffect)}
+                            </span>
+                          ) : (
+                            <>
+                              <span className="text-pixel-muted">
+                                {formatStatValue(stat.currentValue)}
+                              </span>
+                              <span className="text-pixel-muted"> → </span>
+                              <span
+                                className={
+                                  stat.nextValue >= stat.currentValue
+                                    ? "text-pixel-green"
+                                    : "text-pixel-red"
+                                }>
+                                {formatStatValue(stat.nextValue)}
+                              </span>
+                            </>
+                          )}
                         </span>
                       </div>
-                    )}
-                    {item.effects.happiness !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>😊</span>
-                        <span className="text-pixel-muted">Happiness:</span>
-                        <span
-                          className={
-                            item.effects.happiness > 0
-                              ? "text-pixel-green"
-                              : "text-pixel-red"
-                          }>
-                          {item.effects.happiness > 0 ? "+" : ""}
-                          {item.effects.happiness}
-                        </span>
-                      </div>
-                    )}
-                    {item.effects.health !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>❤️</span>
-                        <span className="text-pixel-muted">Health:</span>
-                        <span
-                          className={
-                            item.effects.health > 0
-                              ? "text-pixel-green"
-                              : "text-pixel-red"
-                          }>
-                          {item.effects.health > 0 ? "+" : ""}
-                          {item.effects.health}
-                        </span>
-                      </div>
-                    )}
-                    {item.effects.cleanliness !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>✨</span>
-                        <span className="text-pixel-muted">Cleanliness:</span>
-                        <span
-                          className={
-                            item.effects.cleanliness > 0
-                              ? "text-pixel-green"
-                              : "text-pixel-red"
-                          }>
-                          {item.effects.cleanliness > 0 ? "+" : ""}
-                          {item.effects.cleanliness}
-                        </span>
-                      </div>
-                    )}
-                    {item.effects.energy !== 0 && (
-                      <div className="flex items-center gap-2">
-                        <span>⚡</span>
-                        <span className="text-pixel-muted">Energy:</span>
-                        <span
-                          className={
-                            item.effects.energy > 0
-                              ? "text-pixel-green"
-                              : "text-pixel-red"
-                          }>
-                          {item.effects.energy > 0 ? "+" : ""}
-                          {item.effects.energy}
-                        </span>
-                      </div>
-                    )}
+                    ))}
                   </div>
                 </div>
               )}
@@ -202,10 +273,20 @@ const ItemModal: React.FC<ItemModalProps> = ({
               <div className="mb-4 flex items-center justify-between gap-2 font-pixel text-[8px] leading-4 text-pixel-muted">
                 <span>Quantity: ×{quantity}</span>
                 <span>
-                  Cooldown: {item.cooldownMinutes ? item.cooldownMinutes : 0}{" "}
-                  min.
+                  Cooldown: {itemCooldownMinutes} min.
                 </span>
               </div>
+
+              {hasCooldown && (
+                <div
+                  className={`pixel-panel-soft mb-4 px-3 py-2 font-pixel text-[8px] leading-4 ${
+                    hasActiveCooldown ? "text-pixel-orange" : "text-pixel-green"
+                  }`}>
+                  {hasActiveCooldown
+                    ? `Available in ${displayCooldownRemaining} min.`
+                    : "Available now"}
+                </div>
+              )}
 
               {!canUseItem && disabledReason && (
                 <div className="pixel-panel-soft mb-4 border-pixel-orange/70 px-3 py-2 font-pixel text-[8px] leading-4 text-pixel-orange">

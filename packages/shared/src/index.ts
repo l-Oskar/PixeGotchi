@@ -6,6 +6,7 @@ export {
   validateGenomeHash,
   assertValidGenomeHash,
 } from "./utils/genome-validator";
+export { round } from "./utils/calculate_stats/calculate_delta";
 export {
   calculateCurrentStats,
   derivePixegotchiStatus,

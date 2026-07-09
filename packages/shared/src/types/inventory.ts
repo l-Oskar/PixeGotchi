@@ -19,6 +19,7 @@ export interface InventoryWithDetails {
   quantity: number;
   createdAt: string | Date;
   details: Item | null;
+  cooldownRemainingMinutes?: number;
 }
 
 export interface Inventory {
