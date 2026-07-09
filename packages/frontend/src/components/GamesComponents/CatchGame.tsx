@@ -7,6 +7,7 @@ import { useTelegramSwipes } from "@/hooks/useTelegramSwipes";
 import { Pixegotchi } from "@pixegotchi/shared";
 import { getImage } from "@/utils/getImage";
 import { GameShell } from "./GameShell";
+import { useStartGameSession } from "@/services/queries/game.queries";
 
 const BASKET_WIDTH = 100;
 const BASKET_HEIGHT = 100;
@@ -48,6 +49,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const basketImageRef = useRef<HTMLImageElement | null>(null);
   const basketLoadedRef = useRef(false);
+  const startGameSession = useStartGameSession();
 
   // --- Весь ігровий стан у refs — жодних ре-рендерів під час гри ---
   const objectsRef = useRef<GameObject[]>([]);
@@ -366,6 +368,10 @@ export const CatchGame: React.FC<CatchGameProps> = ({
     specialFruitSpawnedRef.current = false; // Скидаємо флаг для нового раунду
     send({ type: "START" });
     rafRef.current = requestAnimationFrame(gameLoop);
+    startGameSession.mutateAsync({
+      pixegotchiId: pixegotchi.id,
+      gameId: "catch_fruits",
+    });
   }, [send, gameLoop]);
 
   // Cleanup
@@ -394,9 +400,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
 
       {state.matches("gameOver") && (
         <div className="pixel-panel absolute inset-x-4 top-1/2 mx-auto flex max-w-xs -translate-y-1/2 flex-col items-center p-4 text-center font-pixel">
-          <h2 className="mb-4 text-sm leading-5 text-pixel-ink">
-            Game Over
-          </h2>
+          <h2 className="mb-4 text-sm leading-5 text-pixel-ink">Game Over</h2>
           <p className="theme-readable-muted mb-4 text-[9px] leading-4">
             Your score: {finalScore ?? displayScore}
           </p>

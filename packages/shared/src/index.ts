@@ -12,7 +12,10 @@ export {
   buildPixegotchiSnapshot,
 } from "./utils/calculate_stats/lazy_degradation";
 export type { PixegotchiSnapshot } from "./utils/calculate_stats/lazy_degradation";
-export { getEnergyCost } from "./utils/calculate_stats/calculate_energy";
+export {
+  getEnergyCost,
+  getFinalEnergyCost,
+} from "./utils/calculate_stats/calculate_energy";
 export { getFinalExp } from "./utils/calculate_stats/calculate_exp";
 export { getFinalPgc } from "./utils/calculate_stats/calculate_pgc";
 

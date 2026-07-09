@@ -81,6 +81,14 @@ export function getEnergyCost(health: number, rarity: RarityType): number {
   return mult;
 }
 
+export function getFinalEnergyCost(
+  health: number,
+  rarity: RarityType,
+  energycost: number,
+) {
+  return energycost * getEnergyCost(health, rarity);
+}
+
 // for (const key of Object.keys(RarityType)) {
 //   console.log(
 //     `${key}`,

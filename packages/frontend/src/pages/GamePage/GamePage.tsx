@@ -4,6 +4,7 @@ import {
   GameStruct,
   Pixegotchi,
   GAME_CONFIGS,
+  getFinalEnergyCost,
 } from "@pixegotchi/shared";
 import { Coins, StarPlus, Zap } from "lucide-react";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
@@ -75,7 +76,12 @@ const GamesPage: React.FC<GamePageProps> = ({
 
   if (
     activeGameId === "catch_fruits" &&
-    Number(pixegotchi!.energy) >= GAME_CONFIGS.catch_fruits.energyCost
+    Number(pixegotchi!.energy) >=
+      getFinalEnergyCost(
+        Number(pixegotchi!.health),
+        pixegotchi!.rarity,
+        GAME_CONFIGS.catch_fruits.energyCost,
+      )
   ) {
     return (
       <CatchGame
@@ -114,11 +120,11 @@ const GamesPage: React.FC<GamePageProps> = ({
                 }
               }}
               className="pixel-panel-soft grid w-full grid-cols-[3rem_1fr] items-center gap-2 p-2 text-left transition hover:border-pixel-highlight/70">
-              <div className="pixel-icon-box h-11 w-11 shrink-0 text-xl">
+              <div className="pixel-icon-box h-11 w-11 shrink-0 text-2xl">
                 {game.icon}
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="truncate font-pixel text-[10px] leading-4 text-pixel-ink">
+                <h3 className="truncate font-pixel text-[12px] leading-4 text-pixel-ink">
                   {game.name}
                 </h3>
                 <div className="mt-1 flex flex-wrap gap-1.5 font-pixel">
