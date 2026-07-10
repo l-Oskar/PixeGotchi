@@ -12,6 +12,7 @@ import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
 import Loader from "../Other/Loader";
 import QuickInfo from "../Other/QuickInfo";
+import { getEggImg } from "@/utils/getImage";
 
 export interface EggPageProps {
   onNavigate?: (page: PageType) => void;
@@ -19,9 +20,7 @@ export interface EggPageProps {
 
 const TAP_INTERVAL = 2000; // 2 секунди
 
-const EggComponent: React.FC<EggPageProps> = ({
-  onNavigate,
-}) => {
+const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
   const egg = useEggStore((s) => s.hatchingEgg);
   const hatchEgg = useHatchEgg();
   const cancelHatching = useCancelHatchingEgg();
@@ -78,7 +77,7 @@ const EggComponent: React.FC<EggPageProps> = ({
           <div className="pixel-panel-soft grid min-h-40 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 p-3 text-center">
             <div>
               <div className="mx-auto mb-2.5 grid h-16 w-16 place-items-center rounded-sm border border-pixel-border/70 bg-pixel-surface/40">
-                <EggIcon className="text-pixel-muted" size={32} />
+                <img src={getEggImg()} className="w-10 h-13" alt="Egg" />
               </div>
               <div className="font-pixel text-[10px] leading-4 text-pixel-muted">
                 No egg is hatching
@@ -144,7 +143,7 @@ const EggComponent: React.FC<EggPageProps> = ({
           <div className="grid grid-cols-[1fr_auto] items-center gap-2.5">
             <div className="min-w-0">
               <div className="mb-1.5 flex items-center gap-2">
-                <EggIcon className="text-pixel-highlight" size={15} />
+                <img src={getEggImg()} className="w-10 h-13" alt="Egg" />
                 <h2 className="truncate font-pixel text-xs leading-5 text-pixel-ink">
                   {`Egg-#${egg.id}`}
                 </h2>
@@ -165,10 +164,6 @@ const EggComponent: React.FC<EggPageProps> = ({
                   </span>
                 )}
               </div>
-            </div>
-
-            <div className="pixel-panel-soft grid h-16 w-16 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
-              <EggIcon className="text-pixel-highlight" size={32} />
             </div>
           </div>
 

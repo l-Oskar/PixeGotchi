@@ -1,7 +1,11 @@
-import { useGetAllEggs, useStartHatching } from "@/services/queries/egg.queries";
+import {
+  useGetAllEggs,
+  useStartHatching,
+} from "@/services/queries/egg.queries";
 import { Egg, PageType } from "@pixegotchi/shared";
 import React, { useMemo } from "react";
 import Loader from "../Other/Loader";
+import { getEggImg } from "@/utils/getImage";
 import { Egg as EggIcon, Sparkles } from "lucide-react";
 
 interface StartPageProps {
@@ -34,11 +38,11 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
           <div className="pixel-panel-soft overflow-hidden border-pixel-highlight/60 bg-linear-to-br from-pixel-highlight/20 via-pixel-surface-soft to-pixel-bg-deep p-3">
             <div className="grid min-h-40 place-items-center gap-2.5 text-center">
               <div className="pixel-panel-soft grid h-20 w-20 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
-                <EggIcon className="text-pixel-highlight" size={38} />
+                <img src={getEggImg()} className="w-10 h-14" alt="Egg" />
               </div>
               <div>
                 <div className="font-pixel text-xs leading-5 text-pixel-ink">
-                  No eggs!
+                  No Element eggs!
                 </div>
                 <div className="mt-2 font-pixel text-[9px] leading-4 text-pixel-muted">
                   Buy some in the market.
@@ -63,14 +67,15 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
                 </span>
               </div>
               <div className="font-pixel text-xl leading-7 text-pixel-ink">
-                {sortedEggs.length} {sortedEggs.length > 1 ? "eggs" : "egg"}
+                {sortedEggs.length}{" "}
+                {sortedEggs.length > 1 ? "Element eggs" : "Element egg"}
               </div>
               <div className="mt-1.5 font-pixel text-[7px] leading-3 text-pixel-muted">
                 Choose an egg to start hatching.
               </div>
             </div>
             <div className="pixel-panel-soft grid h-16 w-16 shrink-0 place-items-center border-pixel-highlight/50 bg-pixel-bg-deep/40 shadow-pixel-inset">
-              <EggIcon className="text-pixel-highlight" size={32} />
+              <img src={getEggImg()} className="w-10 h-13" alt="Egg" />
             </div>
           </div>
         </div>
@@ -96,7 +101,7 @@ const StartPage: React.FC<StartPageProps> = ({ onNavigate }) => {
               key={egg.id}>
               <div className="grid h-16 place-items-center">
                 <div className="pixel-icon-box h-13 w-13 text-pixel-highlight max-[380px]:h-11 max-[380px]:w-11">
-                  <EggIcon size={28} />
+                  <img src={getEggImg()} className="w-8 h-10" alt="Egg" />
                 </div>
               </div>
               <div className="min-w-0 flex-1">
