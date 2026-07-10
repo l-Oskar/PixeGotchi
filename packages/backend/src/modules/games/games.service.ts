@@ -3,7 +3,7 @@ import { Prisma } from "@/generated/prisma/client";
 import {
   CompleteGameSessionPayload,
   GAME_CONFIGS,
-  getEnergyCost,
+  getFinalEnergyCost,
   StartGameSessionInput,
 } from "@pixegotchi/shared";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
@@ -45,8 +45,12 @@ export class GamesService {
       throw httpError(400, "Pixegotchi is not active");
     }
 
-    const energyCost =
-      config.energyCost * getEnergyCost(pixegotchi.health, pixegotchi.rarity);
+    const energyCost = getFinalEnergyCost(
+      pixegotchi.health,
+      pixegotchi.rarity,
+      config.energyCost,
+      pixegotchi.traits,
+    );
 
     return prisma.$transaction(async (tx) => {
       const energyUpdate = await tx.pixegotchi.updateMany({

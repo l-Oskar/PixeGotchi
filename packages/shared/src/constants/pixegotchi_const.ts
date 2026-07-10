@@ -51,7 +51,7 @@ export const RARITY_STATS: Record<RarityType, RarityStatsType> = {
     maxStat: 130,
     degradationReduce: 0.25,
     traits: {
-      min: 4,
+      min: 3,
       max: 4,
     },
     goldEarn: 1.5,

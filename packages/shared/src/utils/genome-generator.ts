@@ -3,6 +3,7 @@ import {
   RARITY_TRAIT_POOL,
   isNegativeTrait,
 } from "../constants/traits_const";
+import { RARITY_STATS } from "../constants/pixegotchi_const";
 import type { ElementType, PixegotchiGender, RarityType } from "../enums";
 import type { GenomeInfo } from "../types/pixegotchi";
 import type { TraitType } from "../types/traits";
@@ -80,19 +81,6 @@ export class GenomeGenerator {
     immortal_soul: 1,
   };
 
-  // Кількість трейтів за рідкістю
-  private static TRAIT_COUNT_BY_RARITY: Record<
-    RarityType,
-    { min: number; max: number }
-  > = {
-    common: { min: 0, max: 1 },
-    uncommon: { min: 1, max: 2 },
-    rare: { min: 1, max: 2 },
-    epic: { min: 2, max: 3 },
-    mythic: { min: 2, max: 3 },
-    legendary: { min: 3, max: 4 },
-  };
-
   // Шанс отримати негативний трейт залежно від rarity
   // Вища рідкість = менший шанс на негативний трейт
   private static NEGATIVE_TRAIT_CHANCE: Record<RarityType, number> = {
@@ -164,10 +152,7 @@ export class GenomeGenerator {
     const element = this.determineElement(hash);
     const rarity = this.determineRarity(hash);
 
-    const original = this.TRAIT_COUNT_BY_RARITY[rarity];
-    this.TRAIT_COUNT_BY_RARITY[rarity] = { min: traitCount, max: traitCount };
-    const traits = this.generateTraits(hash, rarity, element);
-    this.TRAIT_COUNT_BY_RARITY[rarity] = original;
+    const traits = this.generateTraits(hash, rarity, element, traitCount);
 
     return { genome_hash: hash, element, rarity, gender, traits };
   }
@@ -213,13 +198,16 @@ export class GenomeGenerator {
     hash: string,
     rarity: RarityType,
     element: ElementType,
+    fixedTraitCount?: number,
   ): TraitType[] {
-    const config = this.TRAIT_COUNT_BY_RARITY[rarity];
-    const traitCount = this.randomInRange(
-      config.min,
-      config.max,
-      this.hashToNumber(hash.split("-")[1] || hash),
-    );
+    const config = RARITY_STATS[rarity].traits;
+    const traitCount =
+      fixedTraitCount ??
+      this.randomInRange(
+        config.min,
+        config.max,
+        this.hashToNumber(hash.split("-")[1] || hash),
+      );
 
     const selected: TraitType[] = [];
     let currentHash = hash;

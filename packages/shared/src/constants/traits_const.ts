@@ -1,4 +1,8 @@
-import { TraitType, TraitEffect } from "../types/traits";
+import type {
+  TraitType,
+  TraitEffect,
+  TraitEffectKey,
+} from "../types/traits";
 import { RarityType } from "../enums";
 
 export const TRAIT_RARITY: Record<TraitType, RarityType> = {
@@ -35,21 +39,6 @@ export const TRAIT_RARITY: Record<TraitType, RarityType> = {
   immortal_soul: "legendary",
 };
 
-// ─────────────────────────────────────────────
-// Скільки трейтів може мати істота за rarity
-// Чим вища rarity — тим більше трейтів і доступ
-// до рідкісніших пулів. Негативні трейти можливі
-// на будь-якому рівні, але рідше на вищих.
-// ─────────────────────────────────────────────
-export const RARITY_TRAIT_COUNT: Record<RarityType, number> = {
-  common: 1,
-  uncommon: 2,
-  rare: 2,
-  epic: 3,
-  mythic: 3,
-  legendary: 4,
-};
-
 // Який пул трейтів доступний для кожної rarity
 // (включає всі нижчі + свій рівень)
 export const RARITY_TRAIT_POOL: Record<RarityType, RarityType[]> = {
@@ -77,9 +66,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     description: "Loves to lie around and does the bare minimum",
     effects: {
       energy_drain: 0.5, // ↓ повільніше витрачає енергію
-      sleep_requirement: 1.4, // ↑ потребує більше сну
-      play_requirement: 0.5, // ↓ не любить гратись
-      happiness_gain: 0.7, // ↓ важче зробити щасливим
+      game_energy_cost: 1.25, // ↑ важче змусити активно грати
     },
   },
 
@@ -89,9 +76,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: true,
     description: "Always hungry, eats everything in sight",
     effects: {
-      hunger_rate: 2.0, // ↑↑ дуже швидко голодніє
-      happiness_gain: 1.3, // ↑ їжа дає більше щастя
-      health_modifier: 0.9, // ↓ трохи слабше здоров'я
+      hunger_rate: 1.35, // ↑ швидше голодніє
+      feed_happiness_gain: 1.15, // ↑ їжа сильніше тішить
     },
   },
 
@@ -101,9 +87,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: true,
     description: "Leaves chaos everywhere it goes",
     effects: {
-      cleanliness_decay: 2.2, // ↑↑ дуже швидко бруднішає
-      happiness_gain: 1.1, // ↑ не переймається брудом — щасливий
-      health_modifier: 0.85, // ↓ бруд впливає на здоров'я
+      cleanliness_decay: 1.5, // ↑ швидше бруднішає
     },
   },
 
@@ -113,9 +97,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Timid and easily startled, warms up slowly",
     effects: {
-      happiness_gain: 0.65, // ↓↓ важко розвеселити
-      play_requirement: 0.8, // ↓ не прагне до ігор
-      energy_drain: 0.9, // ↓ тихо сидить, майже не витрачає енергію
+      play_requirement: 0.7, // ↓ рідше потребує соціальної гри
+      energy_drain: 0.9, // ↓ спокійніше витрачає енергію
     },
   },
 
@@ -125,10 +108,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Full of life and always ready to move",
     effects: {
-      energy_drain: 1.3, // ↑ активніше витрачає енергію
-      hunger_rate: 1.25, // ↑ активність = більший апетит
-      happiness_gain: 1.3, // ↑ легко радіє
-      play_requirement: 1.3, // ↑ потребує більше ігор
+      energy_drain: 1.2, // ↑ активніше витрачає енергію
+      game_energy_cost: 0.9, // ↓ легше включається в активні ігри
     },
   },
 
@@ -142,9 +123,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Turns everything into a game",
     effects: {
-      play_requirement: 1.8, // ↑↑ постійно потребує ігор
-      happiness_gain: 1.6, // ↑↑ гра дає багато щастя
-      energy_drain: 1.2, // ↑ гра витрачає енергію
+      play_requirement: 1.35, // ↑ частіше потребує гри
+      play_happiness_gain: 1.25, // ↑ гра дає більше щастя
     },
   },
 
@@ -154,10 +134,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Explores everything with wide eyes",
     effects: {
-      play_requirement: 1.4, // ↑ потребує нових вражень
-      happiness_gain: 1.2, // ↑ нові речі приносять щастя
-      energy_drain: 1.15, // ↑ дослідження забирає енергію
-      hunger_rate: 1.1, // ↑ активний мозок — більший апетит
+      happiness_gain: 1.15, // ↑ нові взаємодії приносять щастя
+      energy_drain: 1.1, // ↑ дослідження забирає енергію
     },
   },
 
@@ -167,9 +145,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: true,
     description: "Does only what it wants, when it wants",
     effects: {
-      happiness_gain: 0.55, // ↓↓ важко догодити
-      hunger_rate: 0.85, // ↓ їсть лише коли само хоче
-      health_modifier: 1.05, // ↑ впертість = стійкість
+      happiness_gain: 0.8, // ↓ важче догодити
+      health_resilience: 1.1, // ↑ характер додає стійкості
     },
   },
 
@@ -179,9 +156,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: true,
     description: "Delicate constitution, needs extra care",
     effects: {
-      health_modifier: 0.55, // ↓↓ значно менше здоров'я
-      energy_drain: 1.2, // ↑ швидше втомлюється
-      cleanliness_decay: 1.3, // ↑ чистота впливає на самопочуття
+      health_resilience: 0.75, // ↓ швидше втрачає здоров'я
+      game_energy_cost: 1.15, // ↑ активні ігри даються важче
     },
   },
 
@@ -195,10 +171,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Boundless energy that never stops",
     effects: {
-      energy_drain: 1.9, // ↑↑ дуже швидко витрачає енергію
-      play_requirement: 2.0, // ↑↑ постійно хоче рухатись
-      hunger_rate: 1.6, // ↑↑ величезний апетит
-      happiness_gain: 1.5, // ↑↑ але дуже радісний
+      energy_drain: 1.35, // ↑ швидше витрачає енергію
+      play_happiness_gain: 1.35, // ↑↑ активна гра сильніше тішить
     },
   },
 
@@ -208,10 +182,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: true,
     description: "Prefers its own company above all else",
     effects: {
-      happiness_gain: 0.5, // ↓↓ взаємодія не радує
-      play_requirement: 0.4, // ↓↓ майже не потребує ігор
-      energy_drain: 0.8, // ↓ спокійний, економить енергію
-      health_modifier: 1.05, // ↑ самотність = стабільність
+      play_requirement: 0.55, // ↓↓ майже не потребує компанії
+      energy_drain: 0.85, // ↓ спокійно економить енергію
     },
   },
 
@@ -221,9 +193,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Iron constitution, rarely gets sick",
     effects: {
-      health_modifier: 1.6, // ↑↑ дуже міцне здоров'я
-      hunger_rate: 0.85, // ↓ ефективний обмін речовин
-      cleanliness_decay: 0.85, // ↓ менш схильний до брудного шкоди
+      health_resilience: 1.3, // ↑↑ повільніше втрачає здоров'я
     },
   },
 
@@ -233,10 +203,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Untamed spirit, thrives on freedom",
     effects: {
-      health_modifier: 1.3, // ↑ природна витривалість
-      happiness_gain: 0.6, // ↓ важко зробити щасливим в неволі
-      play_requirement: 1.6, // ↑↑ потребує активного руху
-      cleanliness_decay: 1.5, // ↑ дика природа = бруд
+      play_requirement: 1.35, // ↑ потребує активного руху
+      cleanliness_decay: 1.25, // ↑ активність приносить більше бруду
     },
   },
 
@@ -250,9 +218,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Fearless and resilient in any situation",
     effects: {
-      health_modifier: 1.35, // ↑↑ сміливість = міцність
-      happiness_gain: 1.25, // ↑ не боїться — радіє більше
-      energy_drain: 0.9, // ↓ не витрачає енергію на страх
+      health_resilience: 1.2, // ↑ сміливість додає стійкості
+      game_energy_cost: 0.95, // ↓ сміливіше бере участь в іграх
     },
   },
 
@@ -262,9 +229,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Deeply devoted, bonds strengthen everything",
     effects: {
-      happiness_gain: 1.7, // ↑↑ прив'язаність = щастя
-      health_modifier: 1.2, // ↑ любов зміцнює здоров'я
-      hunger_rate: 0.9, // ↓ задоволений — менше потреби в їжі
+      happiness_gain: 1.35, // ↑↑ взаємодія з власником дає більше щастя
     },
   },
 
@@ -274,10 +239,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Forever young at heart, pure joy in everything",
     effects: {
-      play_requirement: 2.1, // ↑↑ обожнює гратись
-      happiness_gain: 1.6, // ↑↑ радіє всьому
-      energy_drain: 1.5, // ↑↑ невичерпна дитяча енергія
-      hunger_rate: 1.2, // ↑ постійно в русі = апетит
+      play_requirement: 1.6, // ↑↑ обожнює гратись
+      play_happiness_gain: 1.25, // ↑ гра приносить більше радості
     },
   },
 
@@ -287,10 +250,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: true,
     description: "Always expects the worst, hard to cheer up",
     effects: {
-      happiness_gain: 0.4, // ↓↓↓ дуже важко зробити щасливим
-      energy_drain: 0.75, // ↓ апатія зберігає енергію
-      sleep_requirement: 1.3, // ↑ депресивний сон
-      health_modifier: 0.9, // ↓ негатив впливає на здоров'я
+      happiness_gain: 0.65, // ↓↓ важко зробити щасливим
+      energy_drain: 0.85, // ↓ апатія зберігає енергію
     },
   },
 
@@ -304,10 +265,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Radiates joy, everything is wonderful",
     effects: {
-      happiness_gain: 2.0, // ↑↑↑ щастя росте вдвічі швидше
-      health_modifier: 1.3, // ↑↑ позитив зміцнює здоров'я
-      energy_drain: 0.85, // ↓ оптимізм зберігає енергію
-      hunger_rate: 0.9, // ↓ задоволений собою — менш голодний
+      happiness_gain: 1.5, // ↑↑ швидше отримує щастя
     },
   },
 
@@ -317,11 +275,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Peak physical form, body is a temple",
     effects: {
-      health_modifier: 1.5, // ↑↑↑ максимальне здоров'я
-      energy_drain: 1.4, // ↑ тренування забирають енергію
-      hunger_rate: 1.5, // ↑↑ спортсмен їсть багато
-      happiness_gain: 1.4, // ↑↑ тренування = ендорфіни = щастя
-      cleanliness_decay: 1.2, // ↑ піт і активність = бруд
+      health_resilience: 1.35, // ↑↑ висока фізична стійкість
+      game_energy_cost: 0.75, // ↓ значно ефективніше витрачає енергію в іграх
     },
   },
 
@@ -336,11 +291,10 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     description:
       "Ancient soul that transcends mortality — health never drops below 1",
     effects: {
-      health_modifier: 2.0, // ↑↑↑↑ подвійне здоров'я
-      happiness_gain: 1.5, // ↑↑ мудрість приносить спокій
-      hunger_rate: 0.7, // ↓↓ потребує мало їжі
-      energy_drain: 0.7, // ↓↓ невичерпна душа
-      cleanliness_decay: 0.8, // ↓ ефірна природа — майже не бруднить
+      health_resilience: 1.5, // ↑↑ виняткова стійкість до занепаду
+    },
+    special: {
+      minimumHealth: 1,
     },
   },
 };
@@ -367,4 +321,61 @@ export function getTraitPool(rarity: RarityType): TraitType[] {
 /** Перевірити чи трейт є негативним */
 export function isNegativeTrait(trait: TraitType): boolean {
   return TRAIT_EFFECTS[trait].isNegative;
+}
+
+const DEFAULT_TRAIT_MODIFIER_LIMITS = { min: 0.5, max: 1.75 } as const;
+const HEALTH_TRAIT_MODIFIER_LIMITS = { min: 0.75, max: 1.5 } as const;
+
+/** Перемножити ефекти унікальних трейтів і обмежити крайні комбінації. */
+export function getTraitModifier(
+  traits: readonly string[],
+  effect: TraitEffectKey,
+): number {
+  const modifier = [...new Set(traits)].reduce(
+    (result, trait) =>
+      result * (TRAIT_EFFECTS[trait as TraitType]?.effects[effect] ?? 1),
+    1,
+  );
+  const limits =
+    effect === "health_resilience"
+      ? HEALTH_TRAIT_MODIFIER_LIMITS
+      : DEFAULT_TRAIT_MODIFIER_LIMITS;
+
+  return Math.min(limits.max, Math.max(limits.min, modifier));
+}
+
+export type HappinessGainSource = "feed" | "play" | "general";
+
+/** Об'єднати глобальний бонус щастя з бонусом конкретної дії. */
+export function getHappinessGainModifier(
+  traits: readonly string[],
+  source: HappinessGainSource,
+): number {
+  const globalModifier = getTraitModifier(traits, "happiness_gain");
+  const sourceModifier =
+    source === "feed"
+      ? getTraitModifier(traits, "feed_happiness_gain")
+      : source === "play"
+        ? getTraitModifier(traits, "play_happiness_gain")
+        : 1;
+
+  return Math.min(
+    DEFAULT_TRAIT_MODIFIER_LIMITS.max,
+    Math.max(
+      DEFAULT_TRAIT_MODIFIER_LIMITS.min,
+      globalModifier * sourceModifier,
+    ),
+  );
+}
+
+/** Найвище мінімальне здоров'я, гарантоване спеціальними трейтами. */
+export function getTraitMinimumHealth(traits: readonly string[]): number {
+  return [...new Set(traits)].reduce(
+    (minimum, trait) =>
+      Math.max(
+        minimum,
+        TRAIT_EFFECTS[trait as TraitType]?.special?.minimumHealth ?? 0,
+      ),
+    0,
+  );
 }

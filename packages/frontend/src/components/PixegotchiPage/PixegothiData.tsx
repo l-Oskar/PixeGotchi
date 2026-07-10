@@ -6,6 +6,7 @@ import {
   RARITY_STATS,
   RarityType,
   TRAIT_EFFECTS,
+  TraitEffectKey,
   TraitType,
 } from "@pixegotchi/shared";
 import {
@@ -36,6 +37,48 @@ const formatStatusDate = (value: Date | string | null) => {
     year: "numeric",
   });
 };
+
+const TRAIT_EFFECT_LABELS: Record<TraitEffectKey, string> = {
+  hunger_rate: "Hunger loss",
+  energy_drain: "Energy recovery",
+  game_energy_cost: "Game energy cost",
+  happiness_gain: "Happiness gained",
+  feed_happiness_gain: "Food happiness",
+  play_happiness_gain: "Play happiness",
+  cleanliness_decay: "Dirt buildup",
+  health_resilience: "Health loss",
+  play_requirement: "Happiness decay",
+};
+
+const POSITIVE_WHEN_INCREASED = new Set<TraitEffectKey>([
+  "energy_drain",
+  "happiness_gain",
+  "feed_happiness_gain",
+  "play_happiness_gain",
+]);
+
+const getTraitDisplayEffects = (trait: TraitType) =>
+  (Object.entries(TRAIT_EFFECTS[trait].effects) as Array<
+    [TraitEffectKey, number]
+  >).map(([key, modifier]) => {
+    const change =
+      key === "health_resilience" || key === "energy_drain"
+        ? (1 / modifier - 1) * 100
+        : (modifier - 1) * 100;
+    const isBenefit =
+      key === "health_resilience"
+        ? change < 0
+        : POSITIVE_WHEN_INCREASED.has(key)
+          ? change > 0
+          : change < 0;
+
+    return {
+      key,
+      label: TRAIT_EFFECT_LABELS[key],
+      value: `${change > 0 ? "+" : ""}${Math.round(change)}%`,
+      color: isBenefit ? "text-pixel-green" : "text-pixel-red",
+    };
+  });
 
 const StatBar: React.FC<{
   icon: LucideIcon;
@@ -282,16 +325,41 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
             Traits
           </h3>
           <div className="grid gap-2">
-            {pixegotchi.traits.map((trait, index) => (
-              <div key={index} className="pixel-panel-soft p-2">
-                <span className="font-pixel text-[9px] leading-3 text-pixel-blue">
-                  {trait.toUpperCase()}
-                </span>
-                <p className="mt-1 font-pixel text-[7px] leading-4 text-pixel-muted">
-                  {TRAIT_EFFECTS[trait as TraitType].description}
-                </p>
-              </div>
-            ))}
+            {pixegotchi.traits.map((trait) => {
+              const traitConfig = TRAIT_EFFECTS[trait as TraitType];
+              if (!traitConfig) return null;
+
+              const effects = getTraitDisplayEffects(trait as TraitType);
+
+              return (
+                <div key={trait} className="pixel-panel-soft p-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-pixel text-[9px] leading-3 text-pixel-blue">
+                      {trait.replace(/_/g, " ").toUpperCase()}
+                    </span>
+                    <span
+                      className={`font-pixel text-[7px] leading-3 uppercase ${RARITY_COLORS[traitConfig.rarity]}`}>
+                      {traitConfig.rarity}
+                    </span>
+                  </div>
+                  <p className="mt-1 font-pixel text-[7px] leading-4 text-pixel-muted">
+                    {traitConfig.description}
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-pixel text-[7px] leading-3">
+                    {effects.map((effect) => (
+                      <span key={effect.key} className={effect.color}>
+                        {effect.label} {effect.value}
+                      </span>
+                    ))}
+                    {traitConfig.special?.minimumHealth !== undefined && (
+                      <span className="text-pixel-blue">
+                        Minimum health {traitConfig.special.minimumHealth}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

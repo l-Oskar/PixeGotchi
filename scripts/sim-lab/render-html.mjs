@@ -76,13 +76,23 @@ function renderLineGrid(width, height, padding, maxHour, maxStat) {
   return `${horizontal.join("")}${vertical.join("")}`;
 }
 
-function renderBarGrid() {
-  const lines = [];
+function formatBarGridValue(value) {
+  if (Math.abs(value) >= 100) return String(Math.round(value));
+  if (Math.abs(value) >= 10) return String(Number(value.toFixed(1)));
+  return String(Number(value.toFixed(2)));
+}
 
-  for (let value = 0; value <= 100; value += 10) {
+function renderBarGrid(maxValue, options = {}) {
+  const lines = [];
+  const scaleMax = Math.max(Math.abs(Number(maxValue)), 1);
+  const sign = options.negative ? -1 : 1;
+
+  for (let step = 0; step <= 10; step += 1) {
+    const percent = step * 10;
+    const labelValue = sign * scaleMax * (step / 10);
     lines.push(`
-      <div class="bar-grid-line" style="bottom:${value}%">
-        <span>${value}</span>
+      <div class="bar-grid-line" style="bottom:${percent}%">
+        <span>${escapeHtml(formatBarGridValue(labelValue))}</span>
       </div>
     `);
   }
@@ -302,6 +312,7 @@ function renderScenario(scenario) {
         <div>
           <h2>${escapeHtml(scenario.label)}</h2>
           <p>${escapeHtml(scenario.rarity)} / level ${escapeHtml(scenario.level)}</p>
+          ${(scenario.traits?.length ?? 0) > 0 ? `<p class="notes">Traits: ${escapeHtml(scenario.traits.join(", "))}</p>` : ""}
           ${scenario.notes ? `<p class="notes">${escapeHtml(scenario.notes)}</p>` : ""}
         </div>
         <div class="status ${outcomeClass(scenario.summary.outcome)}">${escapeHtml(scenario.summary.outcome)}</div>
@@ -322,6 +333,8 @@ function renderScenario(scenario) {
         <summary>Final stats and starting stats</summary>
         <pre>${escapeHtml(JSON.stringify({
           startingStats: scenario.startingStats,
+          traits: scenario.traits,
+          checkpoints: scenario.checkpoints,
           notes: scenario.notes,
           careActions: scenario.careActions,
           finalStats: scenario.summary.finalStats,
@@ -683,7 +696,7 @@ function renderDistributionTable(title, rows, options = {}) {
       <span>Max: ${escapeHtml(maxCount)}</span>
     </div>
     <div class="bar-chart" aria-label="${escapeAttr(title)} chart">
-      ${renderBarGrid()}
+      ${renderBarGrid(maxCount)}
       ${rows.map((row) => {
         const height = Math.max((Number(row.count) / maxCount) * 100, 2);
         return `
@@ -1089,7 +1102,7 @@ function renderEffectBars(title, rows, mode) {
         <span>Max: ${escapeHtml(rawMaxValue)}</span>
       </div>
       <div class="bar-chart effect-chart ${mode === "negative" ? "negative-chart" : ""}" aria-label="${escapeAttr(title)} chart">
-        ${renderBarGrid()}
+        ${renderBarGrid(maxValue, { negative: mode === "negative" })}
         ${rows.map((row) => {
           const height = Math.max((Math.abs(Number(row.value)) / maxValue) * 100, 2);
           return `

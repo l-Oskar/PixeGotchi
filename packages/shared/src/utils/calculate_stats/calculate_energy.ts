@@ -4,6 +4,7 @@ import {
   RARITY_STATS,
 } from "../../constants/pixegotchi_const";
 import { RarityType } from "../../enums";
+import { getTraitModifier } from "../../constants/traits_const";
 import {
   applyTraitModifier,
   percentToValue,
@@ -85,8 +86,13 @@ export function getFinalEnergyCost(
   health: number,
   rarity: RarityType,
   energycost: number,
+  traits: readonly string[] = [],
 ) {
-  return energycost * getEnergyCost(health, rarity);
+  return Math.ceil(
+    energycost *
+      getEnergyCost(health, rarity) *
+      getTraitModifier(traits, "game_energy_cost"),
+  );
 }
 
 // for (const key of Object.keys(RarityType)) {

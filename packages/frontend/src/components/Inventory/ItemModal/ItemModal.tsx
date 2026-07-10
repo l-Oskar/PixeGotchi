@@ -2,9 +2,11 @@ import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import {
   Item,
   ItemBuffsType,
+  ItemType,
   ITEM_COLORS,
   RARITY_COLORS,
   RARITY_STATS,
+  getHappinessGainModifier,
 } from "@pixegotchi/shared";
 import { Heart, Apple, Zap, Smile, Droplets, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -55,7 +57,8 @@ const toStatNumber = (value: number | string | null | undefined) =>
 const clampStat = (value: number, maxStat: number) =>
   Math.min(maxStat, Math.max(0, value));
 
-const formatStatValue = (value: number) => Math.floor(value).toString();
+const formatStatValue = (value: number) =>
+  (Math.round(value * 10) / 10).toString();
 
 const ItemModal: React.FC<ItemModalProps> = ({
   item,
@@ -118,18 +121,37 @@ const ItemModal: React.FC<ItemModalProps> = ({
           isReviveItem && stat.key === "health"
             ? effectValue
             : effectValue * effectiveUseQuantity;
+        const happinessSource =
+          item.itemType === ItemType.food
+            ? "feed"
+            : item.itemType === ItemType.toy
+              ? "play"
+              : "general";
+        const traitModifier =
+          stat.key === "happiness" &&
+          effectValue > 0 &&
+          currentPixegotchi
+            ? getHappinessGainModifier(
+                currentPixegotchi.traits,
+                happinessSource,
+              )
+            : 1;
+        const modifiedTotalEffect = totalEffect * traitModifier;
+        const traitEffect = modifiedTotalEffect - totalEffect;
         const nextValue =
           currentValue === null
             ? null
             : isReviveItem && stat.key === "health"
               ? 50
-              : clampStat(currentValue + totalEffect, maxStat);
+              : clampStat(currentValue + modifiedTotalEffect, maxStat);
 
         return {
           ...stat,
           currentValue,
           nextValue,
-          totalEffect,
+          totalEffect: modifiedTotalEffect,
+          baseEffect: totalEffect,
+          traitEffect,
         };
       }).filter((stat) => stat.totalEffect !== 0)
     : [];
@@ -225,13 +247,19 @@ const ItemModal: React.FC<ItemModalProps> = ({
                           <span className="text-pixel-muted">{stat.label}</span>{" "}
                           <span
                             className={
-                              stat.totalEffect > 0
+                              stat.baseEffect > 0
                                 ? "text-pixel-green"
                                 : "text-pixel-red"
                             }>
-                            ({stat.totalEffect > 0 ? "+" : ""}
-                            {formatStatValue(stat.totalEffect)})
+                            ({stat.baseEffect > 0 ? "+" : ""}
+                            {formatStatValue(stat.baseEffect)})
                           </span>
+                          {stat.traitEffect !== 0 && (
+                            <span className="text-pixel-blue">
+                              {" "}(trait {stat.traitEffect > 0 ? "+" : ""}
+                              {formatStatValue(stat.traitEffect)})
+                            </span>
+                          )}
                           <span className="text-pixel-muted">:</span>
                         </span>
                         <span className="text-right">
@@ -239,9 +267,11 @@ const ItemModal: React.FC<ItemModalProps> = ({
                           stat.nextValue === null ? (
                             <span
                               className={
-                                stat.totalEffect > 0
-                                  ? "text-pixel-green"
-                                  : "text-pixel-red"
+                                stat.traitEffect !== 0
+                                  ? "text-pixel-blue"
+                                  : stat.totalEffect > 0
+                                    ? "text-pixel-green"
+                                    : "text-pixel-red"
                               }>
                               {stat.totalEffect > 0 ? "+" : ""}
                               {formatStatValue(stat.totalEffect)}
@@ -254,9 +284,11 @@ const ItemModal: React.FC<ItemModalProps> = ({
                               <span className="text-pixel-muted"> → </span>
                               <span
                                 className={
-                                  stat.nextValue >= stat.currentValue
-                                    ? "text-pixel-green"
-                                    : "text-pixel-red"
+                                  stat.traitEffect !== 0
+                                    ? "text-pixel-blue"
+                                    : stat.nextValue >= stat.currentValue
+                                      ? "text-pixel-green"
+                                      : "text-pixel-red"
                                 }>
                                 {formatStatValue(stat.nextValue)}
                               </span>

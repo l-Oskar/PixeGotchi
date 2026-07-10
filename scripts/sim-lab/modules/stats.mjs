@@ -120,6 +120,7 @@ function applyCareActions(state, snapshot, scenario, hour, now, shared) {
   }
 
   const maxStat = shared.RARITY_STATS[snapshot.rarity].maxStat;
+  const minimumHealth = shared.getTraitMinimumHealth(snapshot.traits);
   const next = { ...snapshot };
   const appliedActions = [];
 
@@ -127,7 +128,23 @@ function applyCareActions(state, snapshot, scenario, hour, now, shared) {
     for (const key of STAT_KEYS) {
       const effect = Number(action.effects?.[key] ?? 0);
       if (!Number.isFinite(effect) || effect === 0) continue;
-      next[key] = round(Math.min(maxStat, Math.max(0, Number(next[key]) + effect)));
+      const happinessSource =
+        action.type === "feed"
+          ? "feed"
+          : action.type === "play"
+            ? "play"
+            : "general";
+      const traitModifier =
+        key === "happiness" && effect > 0
+          ? shared.getHappinessGainModifier(snapshot.traits, happinessSource)
+          : 1;
+      const minimum = key === "health" ? minimumHealth : 0;
+      next[key] = round(
+        Math.min(
+          maxStat,
+          Math.max(minimum, Number(next[key]) + effect * traitModifier),
+        ),
+      );
     }
 
     const timestampKey = ACTION_TIMESTAMP_MAP[action.type];
@@ -321,11 +338,18 @@ function simulateScenario(scenario, config, context, constantOverrides) {
     notes: scenario.notes ?? "",
     level: state.level,
     rarity: state.rarity,
+    traits: state.traits,
     startingStats: {
       ...shared.CREATE_STATS,
       ...(scenario.stats ?? {}),
     },
     careActions: scenario.careActions ?? [],
+    checkpoints: Object.fromEntries(
+      (config.checkpointHours ?? []).map((checkpointHour) => {
+        const point = series.find((entry) => entry.hour === checkpointHour);
+        return [checkpointHour, point ?? null];
+      }),
+    ),
     summary: summarizeSeries(series, startMs),
     series,
   };
@@ -354,6 +378,7 @@ export const simulationModule = {
         hours: Number(config.hours ?? 168),
         stepMinutes: Number(config.stepMinutes ?? (config.stepHours ?? 1) * 60),
         startAt: config.startAt ?? "2026-01-01T00:00:00.000Z",
+        checkpointHours: config.checkpointHours ?? [],
       },
       constants: constantsSnapshot(context.shared),
       constantOverrides: config.constantOverrides ?? null,

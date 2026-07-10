@@ -29,6 +29,8 @@ Current modules:
   item type distribution, item rarity distribution, and top items.
 - `items` — item catalog, care effects, cooldowns, limits, and positive/negative
   stat impact charts.
+- `traits` — every trait plus selected combinations, using the same care loop
+  with 24-hour and 72-hour checkpoints.
 
 Generated files:
 
@@ -46,6 +48,8 @@ reports/sim-lab/
   chests-report.json
   items-report.html
   items-report.json
+  traits-report.html
+  traits-report.json
 ```
 
 `reports/sim-lab/` is generated output and is ignored by git.
@@ -92,6 +96,12 @@ Generate only items:
 
 ```bash
 npm run items:sim
+```
+
+Generate only trait balance:
+
+```bash
+npm run traits:sim
 ```
 
 The commands build `packages/shared` first. This is intentional because sim-lab

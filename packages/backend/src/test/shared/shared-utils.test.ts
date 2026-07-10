@@ -9,6 +9,10 @@ import {
   calculateCurrentStats,
   derivePixegotchiStatus,
   GenomeGenerator,
+  getHappinessGainModifier,
+  getFinalEnergyCost,
+  getTraitMinimumHealth,
+  getTraitModifier,
   parseItem,
   parseItemEffects,
   validateGenomeHash,
@@ -191,6 +195,95 @@ describe("shared pure logic", () => {
     expect(stats.happiness).toBeLessThan(Number(basePixegotchi.happiness));
     expect(stats.health).toBeGreaterThanOrEqual(0);
     expect(stats.energy).toBeGreaterThanOrEqual(0);
+  });
+
+  it("combines trait modifiers with caps and ignores duplicates", () => {
+    expect(getTraitModifier(["energetic", "hyperactive"], "energy_drain")).toBe(
+      1.62,
+    );
+    expect(getTraitModifier(["lazy", "lazy"], "energy_drain")).toBe(0.5);
+    expect(
+      getTraitModifier(["unknown_legacy_trait"], "hunger_rate"),
+    ).toBe(1);
+    expect(getTraitModifier(["fragile"], "health_resilience")).toBe(0.75);
+  });
+
+  it("combines global and action-specific happiness modifiers", () => {
+    expect(getHappinessGainModifier(["glutton"], "feed")).toBe(1.15);
+    expect(getHappinessGainModifier(["glutton"], "play")).toBe(1);
+    expect(getHappinessGainModifier(["playful", "loyal"], "play")).toBe(
+      1.6875,
+    );
+    expect(getHappinessGainModifier(["optimist", "loyal"], "general")).toBe(
+      1.75,
+    );
+  });
+
+  it("calculates integer game energy cost with health and traits", () => {
+    expect(getFinalEnergyCost(100, RarityType.common, 10)).toBe(10);
+    expect(getFinalEnergyCost(100, RarityType.common, 10, ["athlete"])).toBe(8);
+    expect(getFinalEnergyCost(100, RarityType.common, 10, ["lazy"])).toBe(13);
+    expect(getFinalEnergyCost(10, RarityType.common, 10, ["fragile"])).toBe(18);
+  });
+
+  it("applies passive trait effects to stat degradation", () => {
+    const now = new Date("2026-01-01T02:00:00.000Z");
+    const baseline = calculateCurrentStats(
+      { ...basePixegotchi, energy: 50 },
+      now,
+    );
+
+    expect(
+      calculateCurrentStats(
+        { ...basePixegotchi, energy: 50, traits: ["glutton"] },
+        now,
+      ).hunger,
+    ).toBeLessThan(baseline.hunger);
+    expect(
+      calculateCurrentStats(
+        { ...basePixegotchi, energy: 50, traits: ["messy"] },
+        now,
+      ).cleanliness,
+    ).toBeLessThan(baseline.cleanliness);
+    expect(
+      calculateCurrentStats(
+        { ...basePixegotchi, energy: 50, traits: ["lazy"] },
+        now,
+      ).energy,
+    ).toBeGreaterThan(baseline.energy);
+    expect(
+      calculateCurrentStats(
+        { ...basePixegotchi, energy: 50, traits: ["fragile"] },
+        now,
+      ).health,
+    ).toBeLessThan(baseline.health);
+    expect(
+      calculateCurrentStats(
+        { ...basePixegotchi, energy: 50, traits: ["hardy"] },
+        now,
+      ).health,
+    ).toBeGreaterThan(baseline.health);
+  });
+
+  it("keeps immortal soul alive at one health without reviving the dead", () => {
+    const now = new Date("2026-01-08T00:00:00.000Z");
+    const immortal = {
+      ...basePixegotchi,
+      health: 1,
+      hunger: 0,
+      cleanliness: 0,
+      traits: ["immortal_soul"],
+    };
+    const snapshot = buildPixegotchiSnapshot(immortal, now);
+    const deadStats = calculateCurrentStats(
+      { ...immortal, status: "dead", health: 0 },
+      now,
+    );
+
+    expect(getTraitMinimumHealth(immortal.traits)).toBe(1);
+    expect(snapshot.health).toBe(1);
+    expect(snapshot.status).toBe("active");
+    expect(deadStats.health).toBe(0);
   });
 
   it("keeps lifecycle timers at three days per stage", () => {

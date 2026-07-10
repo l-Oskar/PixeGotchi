@@ -1,0 +1,30 @@
+{
+  "title": "Traitі",
+  "startAt": "2026-01-01T00:00:00.000Z",
+  "combinations": [
+    {
+      "id": "calm-survivor",
+      "label": "Calm Survivor",
+      "traits": ["lazy", "brave", "loyal"],
+      "notes": "Low energy pressure with resilience and global happiness gain."
+    },
+    {
+      "id": "active-athlete",
+      "label": "Active Athlete",
+      "traits": ["energetic", "playful", "athlete"],
+      "notes": "High activity costs balanced by play happiness and resilience."
+    },
+    {
+      "id": "difficult-care",
+      "label": "Difficult Care",
+      "traits": ["glutton", "messy", "pessimist"],
+      "notes": "Stacked hunger, cleanliness, and happiness pressure."
+    },
+    {
+      "id": "immortal-optimist",
+      "label": "Immortal Optimist",
+      "traits": ["immortal_soul", "optimist", "loyal"],
+      "notes": "Legendary survival floor with capped global happiness gains."
+    }
+  ]
+}

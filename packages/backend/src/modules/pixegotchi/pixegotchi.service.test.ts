@@ -5,6 +5,30 @@ import { CRITICAL_TIME, ItemType, RarityType } from "@pixegotchi/shared";
 import { prisma } from "@/database/prisma";
 
 describe("PixegotchiService", () => {
+  const happinessItem = (
+    itemType: typeof ItemType.food | typeof ItemType.toy,
+  ) => ({
+    itemId: itemType === ItemType.food ? "test_food" : "test_toy",
+    name: "Trait test item",
+    description: null,
+    itemType,
+    rarity: RarityType.common,
+    effects: {
+      hunger: 0,
+      happiness: 10,
+      health: 0,
+      cleanliness: 0,
+      energy: 0,
+      buffs: [],
+    },
+    cooldownMinutes: null,
+    maxPerDay: null,
+    minLevel: 1,
+    iconUrl: null,
+    isStackable: true,
+    maxStack: 99,
+  });
+
   it("applies item stats without exceeding rarity max", async () => {
     const user = await createUser();
     await createPixegotchi(user.id, { hunger: 95 });
@@ -33,6 +57,54 @@ describe("PixegotchiService", () => {
     });
 
     expect(updated.hunger).toBe(100);
+  });
+
+  it("applies food and play happiness trait modifiers", async () => {
+    const foodUser = await createUser();
+    await createPixegotchi(foodUser.id, {
+      happiness: 50,
+      traits: ["glutton"],
+    });
+    const playUser = await createUser();
+    await createPixegotchi(playUser.id, {
+      happiness: 50,
+      traits: ["playful"],
+    });
+    const service = new PixegotchiService();
+
+    const afterFood = await service.applyStats(
+      foodUser.id,
+      happinessItem(ItemType.food),
+    );
+    const afterPlay = await service.applyStats(
+      playUser.id,
+      happinessItem(ItemType.toy),
+    );
+
+    expect(afterFood.happiness).toBe(62);
+    expect(afterPlay.happiness).toBe(63);
+  });
+
+  it("keeps immortal soul at one health after negative item effects", async () => {
+    const user = await createUser();
+    await createPixegotchi(user.id, {
+      health: 10,
+      traits: ["immortal_soul"],
+    });
+    const service = new PixegotchiService();
+    const item = happinessItem(ItemType.food);
+
+    const updated = await service.applyStats(user.id, {
+      ...item,
+      effects: {
+        ...item.effects,
+        happiness: 0,
+        health: -100,
+      },
+    });
+
+    expect(updated.health).toBe(1);
+    expect(updated.status).toBe("active");
   });
 
   it("adds exp and increments level when exp crosses max", async () => {

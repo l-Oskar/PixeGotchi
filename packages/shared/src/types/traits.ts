@@ -41,10 +41,17 @@ export interface TraitEffect {
   effects: {
     hunger_rate?: number; // множник швидкості голоду (>1 = швидше голодніє)
     energy_drain?: number; // множник витрати енергії  (>1 = швидше втомлюється)
-    happiness_gain?: number; // множник приросту щастя   (<1 = важче радіє)
+    game_energy_cost?: number; // множник вартості запуску мініігор
+    happiness_gain?: number; // множник будь-якого приросту щастя
+    feed_happiness_gain?: number; // множник щастя від годування
+    play_happiness_gain?: number; // множник щастя від гри
     cleanliness_decay?: number; // множник забруднення      (>1 = швидше бруднішає)
-    health_modifier?: number; // множник базового здоров'я (>1 = міцніший)
-    sleep_requirement?: number; // множник потреби в сні
-    play_requirement?: number; // множник потреби в іграх
+    health_resilience?: number; // стійкість до пасивної втрати здоров'я
+    play_requirement?: number; // множник пасивної втрати щастя
+  };
+  special?: {
+    minimumHealth?: number;
   };
 }
+
+export type TraitEffectKey = keyof TraitEffect["effects"];

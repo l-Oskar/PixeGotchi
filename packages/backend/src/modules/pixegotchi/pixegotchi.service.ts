@@ -5,11 +5,14 @@ import {
   Item,
   ITEM_EXP,
   MAX_EXP,
+  ItemType,
   PixegotchiSnapshot,
   RARE_CANDY_EXP,
   RARITY_STATS,
   RarityType,
   derivePixegotchiStatus,
+  getHappinessGainModifier,
+  getTraitMinimumHealth,
 } from "@pixegotchi/shared";
 import type {
   Pixegotchi as PrismaPixegotchi,
@@ -223,6 +226,13 @@ export class PixegotchiService {
     await this.addItemExp(userId, item, quantity, db);
 
     const maxStat = RARITY_STATS[pixegotchi.rarity as RarityType].maxStat;
+    const minimumHealth = getTraitMinimumHealth(pixegotchi.traits);
+    const happinessSource =
+      item.itemType === ItemType.food
+        ? "feed"
+        : item.itemType === ItemType.toy
+          ? "play"
+          : "general";
 
     const TIMESTAMP_MAP: Record<StatEffectKey, string> = {
       hunger: "lastFedAt",
@@ -250,9 +260,17 @@ export class PixegotchiService {
       const effectValue = item.effects?.[stat];
       if (!effectValue || typeof effectValue !== "number") continue;
 
+      const traitModifier =
+        stat === "happiness" && effectValue > 0
+          ? getHappinessGainModifier(pixegotchi.traits, happinessSource)
+          : 1;
+      const statMinimum = stat === "health" ? minimumHealth : 0;
       nextStats[stat] = Math.min(
         maxStat,
-        Math.max(0, nextStats[stat] + effectValue * quantity),
+        Math.max(
+          statMinimum,
+          nextStats[stat] + effectValue * quantity * traitModifier,
+        ),
       );
       data[TIMESTAMP_MAP[stat]!] = now;
     }

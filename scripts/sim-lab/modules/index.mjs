@@ -4,6 +4,7 @@ const moduleLoaders = {
   genome: () => import("./genome.mjs"),
   chests: () => import("./chests.mjs"),
   items: () => import("./items.mjs"),
+  traits: () => import("./traits.mjs"),
 };
 
 export function listSimulationModules() {

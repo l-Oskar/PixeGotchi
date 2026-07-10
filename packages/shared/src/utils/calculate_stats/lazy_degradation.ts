@@ -4,13 +4,16 @@ import {
   DEGRADATION_STATS,
   RARITY_STATS,
 } from "../../constants/pixegotchi_const";
+import {
+  getTraitMinimumHealth,
+  getTraitModifier,
+} from "../../constants/traits_const";
 import { PixegotchiStatus } from "../../enums";
 import type {
   Pixegotchi,
   PixegotchiStats,
 } from "../../types/pixegotchi";
 import {
-  applyTraitModifier,
   calculateDelta,
   percentToValue,
   round,
@@ -106,26 +109,29 @@ const applyRarityReduction = (
 const getFinalHungerDelta = (
   level: number,
   rarity: keyof typeof RARITY_STATS,
+  traits: readonly string[],
   constants: StatEngineConstants,
 ) => {
   const deltaHunger =
     constants.degradationStats.hunger.DECAY +
     level * constants.degradationStats.hunger.DECAY_LVL;
   const applyRarity = applyRarityReduction(deltaHunger, rarity, constants);
-  const applyTrait = applyTraitModifier(applyRarity);
+  const applyTrait = applyRarity * getTraitModifier(traits, "hunger_rate");
   return -percentToValue(applyTrait, constants.rarityStats[rarity].maxStat);
 };
 
 const getFinalCleanlinessDelta = (
   level: number,
   rarity: keyof typeof RARITY_STATS,
+  traits: readonly string[],
   constants: StatEngineConstants,
 ) => {
   const deltaCleanliness =
     constants.degradationStats.cleanliness.DECAY +
     level * constants.degradationStats.cleanliness.DECAY_LVL;
   const applyRarity = applyRarityReduction(deltaCleanliness, rarity, constants);
-  const applyTrait = applyTraitModifier(applyRarity);
+  const applyTrait =
+    applyRarity * getTraitModifier(traits, "cleanliness_decay");
   return -percentToValue(applyTrait, constants.rarityStats[rarity].maxStat);
 };
 
@@ -162,6 +168,7 @@ const getFinalHappinessDelta = (
   hunger: number,
   cleanliness: number,
   rarity: keyof typeof RARITY_STATS,
+  traits: readonly string[],
   constants: StatEngineConstants,
 ) => {
   const happinessDelta =
@@ -170,7 +177,7 @@ const getFinalHappinessDelta = (
     hungerToHappiness(hunger, rarity, constants) +
     cleanlinessToHappiness(cleanliness, rarity, constants);
   const applyRarity = applyRarityReduction(happinessDelta, rarity, constants);
-  const applyTrait = applyTraitModifier(applyRarity);
+  const applyTrait = applyRarity * getTraitModifier(traits, "play_requirement");
   return -percentToValue(applyTrait, constants.rarityStats[rarity].maxStat);
 };
 
@@ -217,13 +224,15 @@ const getFinalEnergyDelta = (
   hunger: number,
   health: number,
   rarity: keyof typeof RARITY_STATS,
+  traits: readonly string[],
   constants: StatEngineConstants,
 ) => {
   const energyConst = constants.degradationStats.energy;
   const baseEnergyDelta = energyConst.REGEN_BASE + level * energyConst.REGEN_LVL;
   const hungerMult = hungerToEnergy(hunger, rarity, constants);
   const healthMult = healthToEnergy(health, rarity, constants);
-  const traitMult = applyTraitModifier(baseEnergyDelta);
+  const traitMult =
+    baseEnergyDelta / getTraitModifier(traits, "energy_drain");
   return percentToValue(
     traitMult * hungerMult * healthMult,
     constants.rarityStats[rarity].maxStat,
@@ -279,6 +288,7 @@ const getFinalHealthDelta = (
   hunger: number,
   cleanliness: number,
   rarity: keyof typeof RARITY_STATS,
+  traits: readonly string[],
   constants: StatEngineConstants,
 ) => {
   const healthDelta =
@@ -287,7 +297,8 @@ const getFinalHealthDelta = (
     hungerToHealth(hunger, rarity, constants) +
     cleanlinessToHealth(cleanliness, rarity, constants);
   const applyRarity = applyRarityReduction(healthDelta, rarity, constants);
-  const applyTrait = applyTraitModifier(applyRarity);
+  const applyTrait =
+    applyRarity / getTraitModifier(traits, "health_resilience");
   return -percentToValue(applyTrait, constants.rarityStats[rarity].maxStat);
 };
 
@@ -305,8 +316,15 @@ export function calculateCurrentStats(
 ): PixegotchiStats {
   const constants = getStatEngineConstants(options.constants);
   const maxStat = constants.rarityStats[pixegotchi.rarity].maxStat;
+  const minimumHealth =
+    pixegotchi.status === PixegotchiStatus.dead
+      ? 0
+      : getTraitMinimumHealth(pixegotchi.traits);
   const baseStats: PixegotchiStats = {
-    health: clampStat(toNumber(pixegotchi.health), maxStat),
+    health: Math.max(
+      minimumHealth,
+      clampStat(toNumber(pixegotchi.health), maxStat),
+    ),
     hunger: clampStat(toNumber(pixegotchi.hunger), maxStat),
     energy: clampStat(toNumber(pixegotchi.energy), maxStat),
     happiness: clampStat(toNumber(pixegotchi.happiness), maxStat),
@@ -335,6 +353,7 @@ export function calculateCurrentStats(
           getFinalHungerDelta(
             pixegotchi.level,
             pixegotchi.rarity,
+            pixegotchi.traits,
             constants,
           ),
           stepMs,
@@ -347,6 +366,7 @@ export function calculateCurrentStats(
           getFinalCleanlinessDelta(
             pixegotchi.level,
             pixegotchi.rarity,
+            pixegotchi.traits,
             constants,
           ),
           stepMs,
@@ -361,6 +381,7 @@ export function calculateCurrentStats(
             stats.hunger,
             stats.cleanliness,
             pixegotchi.rarity,
+            pixegotchi.traits,
             constants,
           ),
           stepMs,
@@ -375,6 +396,7 @@ export function calculateCurrentStats(
             stats.hunger,
             stats.health,
             pixegotchi.rarity,
+            pixegotchi.traits,
             constants,
           ),
           stepMs,
@@ -382,17 +404,21 @@ export function calculateCurrentStats(
       maxStat,
     );
     stats.health = clampStat(
-      stats.health +
-        calculateDelta(
-          getFinalHealthDelta(
-            pixegotchi.level,
-            stats.hunger,
-            stats.cleanliness,
-            pixegotchi.rarity,
-            constants,
+      Math.max(
+        minimumHealth,
+        stats.health +
+          calculateDelta(
+            getFinalHealthDelta(
+              pixegotchi.level,
+              stats.hunger,
+              stats.cleanliness,
+              pixegotchi.rarity,
+              pixegotchi.traits,
+              constants,
+            ),
+            stepMs,
           ),
-          stepMs,
-        ),
+      ),
       maxStat,
     );
 

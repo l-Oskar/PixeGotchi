@@ -67,7 +67,11 @@ export type {
   ChestRewards,
   ChestConfig,
 } from "./types/chest";
-export type { TraitType, TraitEffect } from "./types/traits";
+export type {
+  TraitType,
+  TraitEffect,
+  TraitEffectKey,
+} from "./types/traits";
 export type { ApiSuccess, ApiError, ApiResponse } from "./types/api";
 export type { HomePageProps } from "./types/pages";
 export type {
