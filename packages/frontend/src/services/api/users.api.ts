@@ -21,7 +21,7 @@ export const usersApi = {
   },
 
   updateUserPgc: async (amount: number): Promise<UserProfile> => {
-    const { data } = await apiClient.post(USER_URL_KEYS.balance, amount);
+    const { data } = await apiClient.post(USER_URL_KEYS.balance, { amount });
     return data;
   },
 };

@@ -35,7 +35,7 @@ export class UserService {
   }
 
   async updatePGCBalance(userId: number, amount: number) {
-    return await prisma.user.update({
+    const user = await prisma.user.update({
       where: { id: userId },
       data: {
         pgcBalance: {
@@ -43,6 +43,8 @@ export class UserService {
         },
       },
     });
+
+    return { ...user, telegramId: user.telegramId.toString() };
   }
 
   async getProfile(userId: number) {
