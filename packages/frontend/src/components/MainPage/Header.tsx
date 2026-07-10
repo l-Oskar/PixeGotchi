@@ -5,6 +5,7 @@ import { useSignal } from "@tma.js/sdk-react";
 import { viewport } from "@tma.js/sdk";
 import { publicUrl } from "@/helpers/publicUrl";
 import HeaderDropdown from "../Dropdown/HeaderDropdown";
+import { useUpdateUserPgc } from "@/services/queries/users.queries";
 
 export interface HeaderProps {
   user: User | null;
@@ -15,6 +16,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
   const addReleaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const safeAreaInsetTop = useSignal(viewport.safeAreaInsetTop);
   const contentSafeAreaInsetTop = useSignal(viewport.contentSafeAreaInsetTop);
+  const addPgc = useUpdateUserPgc();
 
   const topInset = (safeAreaInsetTop ?? 0) + (contentSafeAreaInsetTop ?? 0);
   const headerAssetPath = "assets/header";
@@ -83,9 +85,10 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
               type="button"
               aria-label="Add PGC"
               onBlur={() => setIsAddPressed(false)}
-              onClick={() => {
+              onClick={async () => {
                 setAddButtonPressed();
                 releaseAddButton();
+                await addPgc.mutateAsync(100);
               }}
               onPointerCancel={releaseAddButton}
               onPointerDown={setAddButtonPressed}

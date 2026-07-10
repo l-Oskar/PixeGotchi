@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { type PageType } from "@pixegotchi/shared";
 import VaultPage from "../VaultPage/VaultPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
@@ -85,6 +91,23 @@ const MainPage: React.FC = () => {
     vault: <VaultPage onNavigate={handleNavigate} />,
   };
   const renderedPage = pages[resolvedPage] ?? pages[derivedPage] ?? pages.start;
+  const previousPageRef = useRef<PageType>(resolvedPage);
+
+  useLayoutEffect(() => {
+    if (previousPageRef.current === resolvedPage) {
+      return;
+    }
+
+    previousPageRef.current = resolvedPage;
+    window.scrollTo(0, 0);
+
+    if (document.scrollingElement) {
+      document.scrollingElement.scrollTop = 0;
+    }
+
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }, [resolvedPage]);
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,var(--color-pixel-bg)_0%,var(--color-pixel-bg-deep)_100%)] text-pixel-ink">

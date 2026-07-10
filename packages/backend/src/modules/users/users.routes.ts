@@ -8,4 +8,5 @@ export async function usersRoutes(app: FastifyInstance) {
 
   app.get("/me", controller.getProfile.bind(controller));
   app.patch("/me", controller.updateProfile.bind(controller));
+  app.post("/add_balance", controller.updateUserPgc.bind(controller));
 }

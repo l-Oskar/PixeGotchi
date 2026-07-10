@@ -27,3 +27,14 @@ export const useUpdateProfile = () => {
     },
   });
 };
+
+export const useUpdateUserPgc = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (amount: number) => usersApi.updateUserPgc(amount),
+    onSuccess: (data) => {
+      queryClient.setQueryData(USER_KEYS.profile, data);
+    },
+  });
+};

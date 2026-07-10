@@ -1,6 +1,10 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserService } from "./users.service";
+import { z } from "zod";
 
+const amountSchema = z.object({
+  amount: z.number().int().positive(),
+});
 export class UsersController {
   private userService = new UserService();
 
@@ -13,6 +17,14 @@ export class UsersController {
     }
 
     return reply.send(profile);
+  }
+
+  async updateUserPgc(request: FastifyRequest, reply: FastifyReply) {
+    const userId = (request.user as any).userId;
+    const { amount } = amountSchema.parse(request.body);
+    const balance = await this.userService.updatePGCBalance(userId, amount);
+
+    return reply.send(balance);
   }
 
   async updateProfile(_request: FastifyRequest, reply: FastifyReply) {
