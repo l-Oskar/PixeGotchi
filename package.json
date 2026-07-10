@@ -36,7 +36,19 @@
     "prisma:dev": "npm run prisma:studio --workspace=packages/backend",
     "frontend:dev": "npm run dev --workspace=packages/frontend",
     "frontend:deploy": "npm run deploy --workspace=packages/frontend",
-    "shared:build": "npm run build --workspace=packages/shared"
+    "shared:build": "npm run build --workspace=packages/shared",
+    "care:sim": "npm run shared:build && node scripts/sim-lab/run.mjs care-balance",
+    "chests:sim": "npm run shared:build && node scripts/sim-lab/run.mjs chests",
+    "genome:sim": "npm run shared:build && node scripts/sim-lab/run.mjs genome",
+    "items:sim": "npm run shared:build && node scripts/sim-lab/run.mjs items",
+    "stats:sim": "npm run shared:build && node scripts/sim-lab/run.mjs stats",
+    "sim:all": "npm run shared:build && node scripts/sim-lab/run.mjs all",
+    "sim:care": "npm run care:sim",
+    "sim:chests": "npm run chests:sim",
+    "sim:genome": "npm run genome:sim",
+    "sim:items": "npm run items:sim",
+    "sim:stats": "npm run stats:sim",
+    "sim:list": "node scripts/sim-lab/run.mjs --list"
   },
   "devDependencies": {
     "@swc/core": "^1.15.43",

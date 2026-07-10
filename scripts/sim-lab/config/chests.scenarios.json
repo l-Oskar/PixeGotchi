@@ -1,0 +1,7 @@
+{
+  "title": "Chest Simulation",
+  "seed": "chests-v1",
+  "randomChestSampleSize": 10000,
+  "openPerChestType": 5000,
+  "topItems": 12
+}

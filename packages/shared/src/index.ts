@@ -6,13 +6,22 @@ export {
   validateGenomeHash,
   assertValidGenomeHash,
 } from "./utils/genome-validator";
+export { GenomeGenerator } from "./utils/genome-generator";
+export type { GenomeGeneratorOptions } from "./utils/genome-generator";
+export { ChestGenerator } from "./utils/chest-generator";
+export type { ChestGeneratorOptions } from "./utils/chest-generator";
 export { round } from "./utils/calculate_stats/calculate_delta";
 export {
   calculateCurrentStats,
   derivePixegotchiStatus,
   buildPixegotchiSnapshot,
 } from "./utils/calculate_stats/lazy_degradation";
-export type { PixegotchiSnapshot } from "./utils/calculate_stats/lazy_degradation";
+export type {
+  PixegotchiSnapshot,
+  StatEngineConstantOverrides,
+  StatEngineConstants,
+  StatEngineOptions,
+} from "./utils/calculate_stats/lazy_degradation";
 export {
   getEnergyCost,
   getFinalEnergyCost,

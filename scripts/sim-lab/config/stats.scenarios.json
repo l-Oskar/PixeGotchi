@@ -1,0 +1,307 @@
+{
+  "title": "PixeGotchi Stats Simulation",
+  "startAt": "2026-01-01T00:00:00.000Z",
+  "hours": 168,
+  "stepMinutes": 60,
+  "constantOverrides": {
+    "notes": "Example balance sandbox. These values affect only this report.",
+    "degradationStats": {
+      "hunger": {
+        "DECAY": 3
+      },
+      "cleanliness": {
+        "DECAY": 2.5
+      },
+      "health": {
+        "REGEN": 1.4
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "default-common",
+      "label": "Default Common",
+      "notes": "Baseline without player care. Use this to compare passive degradation.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      }
+    },
+    {
+      "id": "dirty-common",
+      "label": "Dirty Common",
+      "notes": "Starts below the cleanliness health penalty threshold.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 25
+      }
+    },
+    {
+      "id": "hungry-common",
+      "label": "Hungry Common",
+      "notes": "Starts below the hunger mid threshold and shows hunger-driven pressure.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 20,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      }
+    },
+    {
+      "id": "hungry-dirty-common",
+      "label": "Hungry + Dirty Common",
+      "notes": "Worst basic care state: hunger and cleanliness both start low.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 20,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 25
+      }
+    },
+    {
+      "id": "high-level-common",
+      "label": "High Level Common",
+      "notes": "Shows how level scaling changes degradation speed.",
+      "level": 20,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      }
+    },
+    {
+      "id": "default-legendary",
+      "label": "Default Legendary",
+      "notes": "Same starting stats as default common, but with legendary rarity modifiers.",
+      "level": 1,
+      "rarity": "legendary",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      }
+    },
+    {
+      "id": "casual-once-daily",
+      "label": "Casual Once Daily",
+      "notes": "Player returns once per day and performs basic feed + clean.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "careActions": [
+        {
+          "type": "feed",
+          "label": "Daily feed",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "effects": {
+            "hunger": 35,
+            "happiness": 5
+          }
+        },
+        {
+          "type": "clean",
+          "label": "Daily clean",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "effects": {
+            "cleanliness": 45,
+            "happiness": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "active-twice-daily",
+      "label": "Active Twice Daily",
+      "notes": "Player checks in every 12 hours. This scenario should ideally survive a week.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "careActions": [
+        {
+          "type": "feed",
+          "label": "Feed every 12h",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "effects": {
+            "hunger": 30,
+            "happiness": 5
+          }
+        },
+        {
+          "type": "clean",
+          "label": "Clean every 12h",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "effects": {
+            "cleanliness": 35,
+            "happiness": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "full-care-twice-daily",
+      "label": "Full Care Twice Daily",
+      "notes": "Player checks in every 12 hours and also heals. This is the survival control scenario.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "careActions": [
+        {
+          "type": "feed",
+          "label": "Feed every 12h",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "effects": {
+            "hunger": 30,
+            "happiness": 5
+          }
+        },
+        {
+          "type": "clean",
+          "label": "Clean every 12h",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "effects": {
+            "cleanliness": 35,
+            "happiness": 5
+          }
+        },
+        {
+          "type": "heal",
+          "label": "Heal every 12h",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "effects": {
+            "health": 35
+          }
+        }
+      ]
+    },
+    {
+      "id": "medicine-rescue",
+      "label": "Medicine Rescue",
+      "notes": "Player uses a stronger heal after the pet is already in danger.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "careActions": [
+        {
+          "type": "heal",
+          "label": "Emergency medicine",
+          "hour": 30,
+          "effects": {
+            "health": 45
+          }
+        },
+        {
+          "type": "feed",
+          "label": "Recovery feed",
+          "hour": 30,
+          "effects": {
+            "hunger": 45
+          }
+        },
+        {
+          "type": "clean",
+          "label": "Recovery clean",
+          "hour": 30,
+          "effects": {
+            "cleanliness": 55
+          }
+        }
+      ]
+    },
+    {
+      "id": "neglect-48h-then-care",
+      "label": "Neglect 48h Then Care",
+      "notes": "Player disappears for two days, then returns to regular 12h care.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "careActions": [
+        {
+          "type": "feed",
+          "label": "Return feed",
+          "startHour": 48,
+          "repeatEveryHours": 12,
+          "effects": {
+            "hunger": 40,
+            "happiness": 5
+          }
+        },
+        {
+          "type": "clean",
+          "label": "Return clean",
+          "startHour": 48,
+          "repeatEveryHours": 12,
+          "effects": {
+            "cleanliness": 50,
+            "happiness": 5
+          }
+        },
+        {
+          "type": "heal",
+          "label": "Return heal",
+          "hour": 48,
+          "effects": {
+            "health": 35
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "title": "PixeGotchi Care Balance Simulation",
+  "startAt": "2026-01-01T00:00:00.000Z",
+  "hours": 168,
+  "stepMinutes": 60,
+  "constantOverrides": {
+    "notes": "Sandbox-only overrides. Keep empty or tune constants here without touching production code."
+  },
+  "scenarios": [
+    {
+      "id": "no-care-common",
+      "label": "No Care Common",
+      "notes": "Baseline: no item usage, used as the pressure control.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "itemSchedule": []
+    },
+    {
+      "id": "cheap-daily-care",
+      "label": "Cheap Daily Care",
+      "notes": "One low-tier food and one low-tier cleaning item per day.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "itemSchedule": [
+        {
+          "itemId": "apple",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "untilHour": 168
+        },
+        {
+          "itemId": "water",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "untilHour": 168
+        }
+      ]
+    },
+    {
+      "id": "mid-tier-daily-care",
+      "label": "Mid-Tier Daily Care",
+      "notes": "Daily stronger food and cleaning. Useful for checking whether once-daily care is viable.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "itemSchedule": [
+        {
+          "itemId": "chicken",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "untilHour": 168
+        },
+        {
+          "itemId": "sponche",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "untilHour": 168
+        }
+      ]
+    },
+    {
+      "id": "active-two-times-daily",
+      "label": "Active Two Times Daily",
+      "notes": "Twice-daily food and cleaning with occasional medicine.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "itemSchedule": [
+        {
+          "itemId": "peach",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "untilHour": 168
+        },
+        {
+          "itemId": "tooth_brush",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "untilHour": 168
+        },
+        {
+          "itemId": "bandage",
+          "startHour": 48,
+          "repeatEveryHours": 48,
+          "untilHour": 168
+        }
+      ]
+    },
+    {
+      "id": "premium-full-care",
+      "label": "Premium Full Care",
+      "notes": "High-tier items. This should usually survive and shows the upper bound of item power.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "itemSchedule": [
+        {
+          "itemId": "lobster",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "untilHour": 168
+        },
+        {
+          "itemId": "bath",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "untilHour": 168
+        },
+        {
+          "itemId": "cure",
+          "startHour": 48,
+          "repeatEveryHours": 48,
+          "untilHour": 168
+        }
+      ]
+    },
+    {
+      "id": "toy-heavy-care",
+      "label": "Toy-Heavy Care",
+      "notes": "Shows hidden costs of happiness-focused play: toys can reduce hunger, cleanliness, and energy.",
+      "level": 1,
+      "rarity": "common",
+      "stats": {
+        "health": 100,
+        "hunger": 70,
+        "energy": 100,
+        "happiness": 50,
+        "cleanliness": 100
+      },
+      "itemSchedule": [
+        {
+          "itemId": "rubber_ball",
+          "startHour": 12,
+          "repeatEveryHours": 12,
+          "untilHour": 168
+        },
+        {
+          "itemId": "apple",
+          "startHour": 24,
+          "repeatEveryHours": 24,
+          "untilHour": 168
+        }
+      ]
+    }
+  ]
+}

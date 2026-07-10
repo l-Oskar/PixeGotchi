@@ -3,9 +3,9 @@ import {
   ChestInventory,
   RARITY_COLORS,
   ITEM_COLORS,
+  ChestGenerator,
 } from "@pixegotchi/shared";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChestGenerator } from "../../../../../backend/src/utils/chest-generator";
 import ChestItems from "./ChestItems";
 import { X, ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";

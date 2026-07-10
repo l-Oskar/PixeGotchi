@@ -2,11 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   CRITICAL_TIME,
   DEAD_TIME,
+  ChestGenerator,
   RarityType,
   assertValidGenomeHash,
   buildPixegotchiSnapshot,
   calculateCurrentStats,
   derivePixegotchiStatus,
+  GenomeGenerator,
   parseItem,
   parseItemEffects,
   validateGenomeHash,
@@ -60,6 +62,60 @@ describe("shared pure logic", () => {
     expect(() => assertValidGenomeHash("bad-hash")).toThrow(
       "Invalid genome hash format",
     );
+  });
+
+  it("generates deterministic genomes with injected rng", () => {
+    const createRng = () => {
+      let seed = 12345;
+      return () => {
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        return seed / 0x100000000;
+      };
+    };
+    const first = GenomeGenerator.generate({
+      now: new Date("2026-01-01T00:00:00.000Z"),
+      rng: createRng(),
+    });
+    const second = GenomeGenerator.generate({
+      now: new Date("2026-01-01T00:00:00.000Z"),
+      rng: createRng(),
+    });
+
+    expect(second).toEqual(first);
+    expect(validateGenomeHash(first.genome_hash)).toBe(true);
+  });
+
+  it("does not derive genome gender only from timestamp", () => {
+    let seed = 98765;
+    const rng = () => {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 0x100000000;
+    };
+    const genders = new Set(
+      Array.from({ length: 100 }, (_, index) =>
+        GenomeGenerator.generate({
+          now: new Date("2026-01-01T00:00:00.000Z").getTime() + index,
+          rng,
+        }),
+      ).map((genome) => genome.gender),
+    );
+
+    expect(genders).toEqual(new Set(["female", "male"]));
+  });
+
+  it("generates deterministic chest rewards with injected rng", () => {
+    const createRng = () => {
+      let seed = 24680;
+      return () => {
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        return seed / 0x100000000;
+      };
+    };
+    const first = ChestGenerator.openChest("golden", { rng: createRng() });
+    const second = ChestGenerator.openChest("golden", { rng: createRng() });
+
+    expect(second).toEqual(first);
+    expect(first.items.length).toBeGreaterThanOrEqual(2);
   });
 
   it("normalizes item effects from raw data", () => {
@@ -135,6 +191,31 @@ describe("shared pure logic", () => {
     expect(stats.happiness).toBeLessThan(Number(basePixegotchi.happiness));
     expect(stats.health).toBeGreaterThanOrEqual(0);
     expect(stats.energy).toBeGreaterThanOrEqual(0);
+  });
+
+  it("keeps lifecycle timers at three days per stage", () => {
+    const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
+
+    expect(CRITICAL_TIME).toBe(threeDaysMs);
+    expect(DEAD_TIME).toBe(threeDaysMs);
+  });
+
+  it("supports stat engine constant overrides", () => {
+    const now = new Date("2026-01-01T02:00:00.000Z");
+    const defaultStats = calculateCurrentStats(basePixegotchi, now);
+    const overriddenStats = calculateCurrentStats(basePixegotchi, now, {
+      constants: {
+        degradationStats: {
+          hunger: {
+            DECAY: 1,
+            DECAY_LVL: 0,
+          },
+        },
+      },
+    });
+
+    expect(overriddenStats.hunger).toBeGreaterThan(defaultStats.hunger);
+    expect(overriddenStats.cleanliness).toBe(defaultStats.cleanliness);
   });
 
   it("applies lazy degradation incrementally by hour", () => {

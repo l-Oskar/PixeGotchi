@@ -23,6 +23,7 @@ vault/
 .docs/*
 !.docs/ADD_LOGS.md
 runtime/
+reports/sim-lab/
 
 # OS
 .DS_Store

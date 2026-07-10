@@ -1,0 +1,7 @@
+{
+  "title": "PixeGotchi Genome Simulation",
+  "sampleSize": 10000,
+  "seed": "genome-v1",
+  "startAt": "2026-01-01T00:00:00.000Z",
+  "topCount": 20
+}
