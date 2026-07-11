@@ -3,8 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import axios from "axios";
 import type { ReactNode } from "react";
 
-// const enableQueryDevtools = import.meta.env.VITE_ENABLE_QUERY_DEVTOOLS === "1";
-const enableQueryDevtools = true;
+const enableQueryDevtools = import.meta.env.VITE_ENABLE_QUERY_DEVTOOLS === "1";
 
 const shouldRetryQuery = (failureCount: number, error: unknown) => {
   if (axios.isAxiosError(error)) {

@@ -157,7 +157,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               <MoreHorizontal size={18} />
             </button>
             {isRoomMenuOpen && (
-              <div className="pixel-panel-soft absolute right-0 top-11 z-40 w-40 space-y-1 bg-pixel-bg-deep/95 p-1.5 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_16px_var(--color-pixel-glow)] backdrop-blur-sm">
+              <div className="pixel-panel-soft absolute right-0 top-11 z-40 max-h-64 w-40 space-y-1 overflow-y-auto bg-pixel-bg-deep/95 p-1.5 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_16px_var(--color-pixel-glow)] backdrop-blur-sm">
                 <button
                   type="button"
                   onClick={cycleWall}

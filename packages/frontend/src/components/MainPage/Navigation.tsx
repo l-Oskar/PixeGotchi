@@ -3,6 +3,8 @@ import { Heart, ShoppingBag, Gamepad2, Vault, Store, Egg } from "lucide-react";
 import { PageType } from "@pixegotchi/shared";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { useEggStore } from "@/store/egg.store";
+import { viewport } from "@tma.js/sdk";
+import { useSignal } from "@tma.js/sdk-react";
 
 export interface NavigationProps {
   currentPage: PageType;
@@ -17,6 +19,14 @@ const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
   const hatchingEgg = useEggStore((s) => s.hatchingEgg);
+  const safeAreaInsetBottom = useSignal(viewport.safeAreaInsetBottom);
+  const contentSafeAreaInsetBottom = useSignal(
+    viewport.contentSafeAreaInsetBottom,
+  );
+  const bottomInset = Math.max(
+    0,
+    (safeAreaInsetBottom ?? 0) + (contentSafeAreaInsetBottom ?? 0),
+  );
   const navButton = () => {
     if (hatchingEgg) {
       return { id: "egg" as PageType, icon: Egg, label: "Egg" };
@@ -28,7 +38,10 @@ const Navigation: React.FC<NavigationProps> = ({
   };
   return (
     <nav
-      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2.5 pb-5 pt-1.5 shadow-[0_-12px_24px_var(--color-pixel-page-shadow-soft)]`}>
+      style={{
+        paddingBottom: `calc(0.375rem + max(0.875rem, ${bottomInset}px, env(safe-area-inset-bottom)))`,
+      }}
+      className={`${isHidden ? "hidden" : ""} fixed bottom-0 left-0 right-0 z-50 bg-pixel-bg/95 px-2.5 pt-1.5 shadow-[0_-12px_24px_var(--color-pixel-page-shadow-soft)]`}>
       <div className="pixel-panel mx-auto grid max-w-md grid-cols-5 gap-0 overflow-hidden bg-pixel-bg-deep/75 p-0">
         {[
           navButton(),

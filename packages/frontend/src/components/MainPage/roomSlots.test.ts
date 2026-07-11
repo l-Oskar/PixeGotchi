@@ -70,6 +70,24 @@ describe("room slot placements", () => {
     expect(resolveRoomAssetPlacements(placements)).toHaveLength(2);
   });
 
+  it("allows overlay cosmetics to share an occupied slot", () => {
+    const placements: RoomAssetPlacement[] = [
+      {
+        id: "window",
+        slot: 7,
+        node: "window",
+      },
+      {
+        id: "curtains",
+        slot: 7,
+        allowOverlap: true,
+        node: "curtains",
+      },
+    ];
+
+    expect(resolveRoomAssetPlacements(placements)).toHaveLength(2);
+  });
+
   it("keeps mirrored side slots vertically synchronized", () => {
     const leftTop = getRoomGuideSlotBounds(1);
     const rightTop = getRoomGuideSlotBounds(3);

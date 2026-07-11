@@ -10,6 +10,10 @@ import type {
   RoomFloorId,
   RoomWallId,
 } from "@/components/MainPage/roomSurfaces";
+import {
+  DEFAULT_HIDDEN_ROOM_ASSET_IDS,
+  ROOM_ASSETS,
+} from "@/components/MainPage/roomAssets";
 
 interface RoomState {
   wallId: RoomWallId;
@@ -28,7 +32,7 @@ export const useRoomStore = create<RoomState>()(
     (set) => ({
       wallId: DEFAULT_ROOM_WALL_ID,
       floorId: DEFAULT_ROOM_FLOOR_ID,
-      hiddenAssetIds: [],
+      hiddenAssetIds: [...DEFAULT_HIDDEN_ROOM_ASSET_IDS],
       cabinetSlot: 3,
       cycleWall: () =>
         set((state) => {
@@ -48,24 +52,44 @@ export const useRoomStore = create<RoomState>()(
           return { floorId: ROOM_FLOORS[nextIndex].id };
         }),
       toggleAsset: (assetId) =>
-        set((state) => ({
-          hiddenAssetIds: state.hiddenAssetIds.includes(assetId)
-            ? state.hiddenAssetIds.filter((id) => id !== assetId)
-            : [...state.hiddenAssetIds, assetId],
-        })),
+        set((state) => {
+          if (!state.hiddenAssetIds.includes(assetId)) {
+            return { hiddenAssetIds: [...state.hiddenAssetIds, assetId] };
+          }
+
+          const selectedAsset = ROOM_ASSETS.find((asset) => asset.id === assetId);
+          if (!selectedAsset) return state;
+
+          const competingAssetIds = ROOM_ASSETS.filter(
+            (asset) =>
+              asset.slot === selectedAsset.slot &&
+              asset.id !== assetId &&
+              !("allowOverlap" in asset && asset.allowOverlap) &&
+              !("allowOverlap" in selectedAsset && selectedAsset.allowOverlap),
+          ).map((asset) => asset.id);
+
+          return {
+            hiddenAssetIds: [
+              ...state.hiddenAssetIds.filter(
+                (id) => id !== assetId && !competingAssetIds.includes(id),
+              ),
+              ...competingAssetIds,
+            ],
+          };
+        }),
       toggleCabinetSide: () =>
         set((state) => ({ cabinetSlot: state.cabinetSlot === 1 ? 3 : 1 })),
       resetRoom: () =>
         set({
           wallId: DEFAULT_ROOM_WALL_ID,
           floorId: DEFAULT_ROOM_FLOOR_ID,
-          hiddenAssetIds: [],
+          hiddenAssetIds: [...DEFAULT_HIDDEN_ROOM_ASSET_IDS],
           cabinetSlot: 3,
         }),
     }),
     {
       name: "pixegotchi-room-loadout",
-      version: 1,
+      version: 4,
     },
   ),
 );

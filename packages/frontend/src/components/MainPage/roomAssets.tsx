@@ -8,6 +8,13 @@ export const ROOM_ASSETS = [
     slot: 7,
   },
   {
+    id: "pink-window-curtains",
+    label: "Pink curtains",
+    src: "assets/room/curtains/pink-window-curtains.png",
+    slot: 7,
+    allowOverlap: true,
+  },
+  {
     id: "tall-cabinet-wood",
     label: "Cabinet",
     src: "assets/room/furniture/tall-cabinet-wood.png",
@@ -16,19 +23,54 @@ export const ROOM_ASSETS = [
   },
   {
     id: "purple-sofa",
-    label: "Sofa",
+    label: "Purple sofa",
     src: "assets/room/furniture/purple-sofa.png",
     slot: 8,
   },
   {
+    id: "blue-sofa",
+    label: "Blue sofa",
+    src: "assets/room/furniture/blue-sofa.png",
+    slot: 8,
+  },
+  {
     id: "purple-oval-rug",
-    label: "Rug",
+    label: "Purple rug",
     src: "assets/room/rugs/purple-oval-rug.png",
     slot: 9,
+  },
+  {
+    id: "blue-oval-rug",
+    label: "Blue rug",
+    src: "assets/room/rugs/blue-oval-rug.png",
+    slot: 9,
+  },
+  {
+    id: "botanical-frame",
+    label: "Wall art",
+    src: "assets/room/wall-art/botanical-frame.png",
+    slot: 1,
+  },
+  {
+    id: "yellow-lantern",
+    label: "Lantern",
+    src: "assets/room/decor/yellow-lantern.png",
+    slot: 10,
+  },
+  {
+    id: "bonsai-pot",
+    label: "Bonsai",
+    src: "assets/room/decor/bonsai-pot.png",
+    slot: 11,
   },
 ] as const;
 
 export type RoomAssetId = (typeof ROOM_ASSETS)[number]["id"];
+
+export const DEFAULT_HIDDEN_ROOM_ASSET_IDS: RoomAssetId[] = [
+  "blue-sofa",
+  "blue-oval-rug",
+];
 
 export const buildRoomAssetPlacements = (
   hiddenAssetIds: string[],
@@ -51,6 +93,8 @@ export const buildRoomAssetPlacements = (
         : {
             id: asset.id,
             slot: asset.slot,
+            allowOverlap:
+              "allowOverlap" in asset ? asset.allowOverlap : undefined,
             node: (
               <img
                 src={`${import.meta.env.BASE_URL}${asset.src}`}

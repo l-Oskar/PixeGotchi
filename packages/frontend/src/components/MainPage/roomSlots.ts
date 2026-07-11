@@ -12,6 +12,7 @@ type SingleRoomAssetPlacement = {
   node: ReactNode;
   slot: RoomSlotId;
   span?: 1;
+  allowOverlap?: boolean;
 };
 
 type DoubleRoomAssetPlacement = {
@@ -19,6 +20,7 @@ type DoubleRoomAssetPlacement = {
   node: ReactNode;
   slot: 1 | 3;
   span: 2;
+  allowOverlap?: boolean;
 };
 
 export type RoomAssetPlacement =
@@ -91,6 +93,7 @@ export const resolveRoomAssetPlacements = (
 
   return placements.filter((placement) => {
     const slots = getOccupiedRoomSlots(placement);
+    if (placement.allowOverlap) return true;
     if (slots.some((slot) => occupiedSlots.has(slot))) return false;
 
     slots.forEach((slot) => occupiedSlots.add(slot));

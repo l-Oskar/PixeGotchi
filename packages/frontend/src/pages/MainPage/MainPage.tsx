@@ -20,11 +20,21 @@ import Empty from "@/components/MainPage/StartPage";
 import { useEggStore } from "@/store/egg.store";
 import Loader from "@/components/Other/Loader";
 import PixegothiData from "@/components/PixegotchiPage/PixegothiData";
+import { viewport } from "@tma.js/sdk";
+import { useSignal } from "@tma.js/sdk-react";
 
 const MainPage: React.FC = () => {
   const user = useUserStore((s) => s.user);
   const egg = useEggStore((s) => s.hatchingEgg);
   const pixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
+  const safeAreaInsetBottom = useSignal(viewport.safeAreaInsetBottom);
+  const contentSafeAreaInsetBottom = useSignal(
+    viewport.contentSafeAreaInsetBottom,
+  );
+  const bottomInset = Math.max(
+    0,
+    (safeAreaInsetBottom ?? 0) + (contentSafeAreaInsetBottom ?? 0),
+  );
 
   const [currentPage, setCurrentPage] = useState<PageType>("start");
   const [sortParam, setSortParam] = useState<string | undefined>(undefined);
@@ -113,7 +123,13 @@ const MainPage: React.FC = () => {
     <div className="min-h-screen bg-[linear-gradient(180deg,var(--color-pixel-bg)_0%,var(--color-pixel-bg-deep)_100%)] text-pixel-ink">
       {!isGameActive && <Header user={user} />}
       {/* Content */}
-      <main className="max-w-md mx-auto pb-24">{renderedPage}</main>
+      <main
+        className="mx-auto max-w-md"
+        style={{
+          paddingBottom: `calc(6rem + max(${bottomInset}px, env(safe-area-inset-bottom)))`,
+        }}>
+        {renderedPage}
+      </main>
       {/* Bottom Navigation */}
       <Navigation
         currentPage={resolvedPage}
