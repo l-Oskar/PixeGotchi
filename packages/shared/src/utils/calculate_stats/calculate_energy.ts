@@ -6,7 +6,6 @@ import {
 import { RarityType } from "../../enums";
 import { getTraitModifier } from "../../constants/traits_const";
 import {
-  applyTraitModifier,
   percentToValue,
   valueToPercent,
 } from "./calculate_delta";
@@ -55,11 +54,13 @@ export function getFinalEnergyDelta(
   hunger: number,
   health: number,
   rarity: RarityType,
+  traits: readonly string[] = [],
 ): number {
   const baseEnergyDelta = getBaseEnergyDelta(level);
   const hungerMult = hungerToEnergy(hunger, rarity);
   const healthMult = healthToEnergy(health, rarity);
-  const traitMult = applyTraitModifier(baseEnergyDelta);
+  const traitMult =
+    baseEnergyDelta / getTraitModifier(traits, "energy_drain");
   const finalDelta = percentToValue(
     traitMult * hungerMult * healthMult,
     RARITY_STATS[rarity].maxStat,

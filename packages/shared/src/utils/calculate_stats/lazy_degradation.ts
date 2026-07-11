@@ -250,7 +250,7 @@ const cleanlinessToHealth = (
   );
   const cleanlinessConst = constants.degradationStats.cleanliness;
   if (cleanlinessPercent >= cleanlinessConst.HEALTH_PLUS_PERCENT) {
-    return cleanlinessConst.HEALTH_PLUS;
+    return -cleanlinessConst.HEALTH_PLUS;
   }
   if (cleanlinessPercent >= cleanlinessConst.HEALTH_MINUS_PERCENT) {
     return 0;
@@ -269,10 +269,10 @@ const hungerToHealth = (
   );
   const hungerConst = constants.degradationStats.hunger;
   if (hungerPercent >= hungerConst.HEALTH_PLUS_DOUBLE_PERCENT) {
-    return hungerConst.HEALTH_PLUS_DOUBLE;
+    return -hungerConst.HEALTH_PLUS_DOUBLE;
   }
   if (hungerPercent >= hungerConst.HEALTH_PLUS_PERCENT) {
-    return hungerConst.HEALTH_PLUS;
+    return -hungerConst.HEALTH_PLUS;
   }
   if (
     hungerPercent > hungerConst.HEALTH_MINUS_PERCENT &&

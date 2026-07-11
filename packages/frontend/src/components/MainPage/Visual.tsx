@@ -3,10 +3,17 @@ import { Pixegotchi, Egg, EggHatchingStatus } from "@pixegotchi/shared";
 import { isEgg, isPixegotchi, getImage } from "@/utils/getImage";
 import { MessageCircleHeart } from "lucide-react";
 import { RoomScene } from "./RoomScene";
+import type { RoomFloorId, RoomWallId } from "./roomSurfaces";
+import type { RoomAssetPlacement } from "./roomSlots";
 
 interface VisualProps {
   pet: Pixegotchi | Egg;
   status: EggHatchingStatus | null;
+  centerPet?: boolean;
+  wallId?: RoomWallId;
+  floorId?: RoomFloorId;
+  assets?: RoomAssetPlacement[];
+  showSlotGuides?: boolean;
 }
 
 const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
@@ -30,7 +37,21 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
   );
 };
 
-const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
+const PixegotchiDisplay: React.FC<{
+  pixe: Pixegotchi;
+  centered?: boolean;
+  wallId?: RoomWallId;
+  floorId?: RoomFloorId;
+  assets?: RoomAssetPlacement[];
+  showSlotGuides?: boolean;
+}> = ({
+  pixe,
+  centered = false,
+  wallId,
+  floorId,
+  assets,
+  showSlotGuides = false,
+}) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
 
@@ -47,15 +68,24 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   };
 
   return (
-    <RoomScene>
+    <RoomScene
+      wallId={wallId}
+      floorId={floorId}
+      assets={assets}
+      showSlotGuides={showSlotGuides}>
       <div
-        className={`translate-y-13 translate-x-19 text-9xl max-[380px]:translate-x-12 ${isAnimating ? "animate-egg-wobble" : "animate-pet-idle"}`}>
-        <img
-          className="h-40 w-40 cursor-pointer transition-transform hover:scale-105 pixelated max-[380px]:h-36 max-[380px]:w-36"
-          src={`./${getImage(pixe)}`}
-          alt={`Pixegotchi-${pixe.id}`}
-          onClick={handleClick}
-        />
+        className={`translate-y-[clamp(2.5rem,12vw,3.25rem)] text-9xl transition-transform duration-300 ${centered ? "translate-x-0" : "translate-x-[clamp(3rem,18vw,4.75rem)]"}`}>
+        <div
+          className={
+            isAnimating ? "animate-egg-wobble" : "animate-pet-idle"
+          }>
+          <img
+            className="h-[clamp(9rem,38vw,10rem)] w-[clamp(9rem,38vw,10rem)] cursor-pointer transition-transform hover:scale-105 pixelated"
+            src={`./${getImage(pixe)}`}
+            alt={`Pixegotchi-${pixe.id}`}
+            onClick={handleClick}
+          />
+        </div>
       </div>
 
       {/* Сердечко */}
@@ -68,7 +98,15 @@ const PixegotchiDisplay: React.FC<{ pixe: Pixegotchi }> = ({ pixe }) => {
   );
 };
 
-export const Visual: React.FC<VisualProps> = ({ pet, status }) => {
+export const Visual: React.FC<VisualProps> = ({
+  pet,
+  status,
+  centerPet = false,
+  wallId,
+  floorId,
+  assets,
+  showSlotGuides = false,
+}) => {
   if (!pet) {
     return (
       <div className="pixel-panel-soft flex h-48 items-center justify-center">
@@ -87,7 +125,16 @@ export const Visual: React.FC<VisualProps> = ({ pet, status }) => {
   }
 
   if (isPixegotchi(pet)) {
-    return <PixegotchiDisplay pixe={pet} />;
+    return (
+      <PixegotchiDisplay
+        pixe={pet}
+        centered={centerPet}
+        wallId={wallId}
+        floorId={floorId}
+        assets={assets}
+        showSlotGuides={showSlotGuides}
+      />
+    );
   }
 
   return null;

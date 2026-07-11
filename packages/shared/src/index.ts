@@ -76,7 +76,6 @@ export type { ApiSuccess, ApiError, ApiResponse } from "./types/api";
 export type { HomePageProps } from "./types/pages";
 export type {
   GameConfig,
-  GameStruct,
   GameSession,
   StartGameSessionInput,
   CompleteGameSessionPayload,

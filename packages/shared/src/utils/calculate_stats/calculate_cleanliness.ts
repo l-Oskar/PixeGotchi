@@ -3,9 +3,9 @@ import {
   RARITY_STATS,
 } from "../../constants/pixegotchi_const";
 import { RarityType } from "../../enums";
+import { getTraitModifier } from "../../constants/traits_const";
 import {
   applyRarityReduction,
-  applyTraitModifier,
   percentToValue,
 } from "./calculate_delta";
 
@@ -19,10 +19,12 @@ export function getBaseCleanlinessDelta(level: number): number {
 export function getFinalCleanlinessDelta(
   level: number,
   rarity: RarityType,
+  traits: readonly string[] = [],
 ): number {
   const deltaCleanliness = getBaseCleanlinessDelta(level);
   const applyRarity = applyRarityReduction(deltaCleanliness, rarity);
-  const applyTrait = applyTraitModifier(applyRarity);
+  const applyTrait =
+    applyRarity * getTraitModifier(traits, "cleanliness_decay");
   const finalDelta = -percentToValue(applyTrait, RARITY_STATS[rarity].maxStat);
   return finalDelta;
 }

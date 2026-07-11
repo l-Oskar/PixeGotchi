@@ -2,8 +2,10 @@ import { prisma } from "@/database/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import {
   CompleteGameSessionPayload,
+  ChestGenerator,
   GAME_CONFIGS,
   getFinalEnergyCost,
+  getTraitModifier,
   StartGameSessionInput,
 } from "@pixegotchi/shared";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
@@ -89,6 +91,11 @@ export class GamesService {
   ) {
     const session = await prisma.gameSession.findUnique({
       where: { id: sessionId },
+      include: {
+        pixegotchi: {
+          select: { traits: true },
+        },
+      },
     });
 
     if (!session) {
@@ -115,9 +122,29 @@ export class GamesService {
     );
     const maxPossibleScore = actualDurationSec * config.maxScorePerSecond;
     const safeScore = Math.min(input.score, maxPossibleScore);
-    const pgcEarned = new Prisma.Decimal(safeScore).mul(config.pgcPerPoint);
-    const experienceGained = Math.floor(safeScore * config.expPerPoint);
-    const chestDropped = Math.random() < config.chestDropChance;
+    const pgcModifier = getTraitModifier(
+      session.pixegotchi.traits,
+      "game_pgc_gain",
+    );
+    const expModifier = getTraitModifier(
+      session.pixegotchi.traits,
+      "game_exp_gain",
+    );
+    const chestModifier = getTraitModifier(
+      session.pixegotchi.traits,
+      "game_chest_chance",
+    );
+    const pgcEarned = new Prisma.Decimal(safeScore)
+      .mul(config.pgcPerPoint)
+      .mul(pgcModifier);
+    const experienceGained = Math.floor(
+      safeScore * config.expPerPoint * expModifier,
+    );
+    const chestChance = Math.min(1, config.chestDropChance * chestModifier);
+    const chestDropped = Math.random() < chestChance;
+    const droppedChest = chestDropped
+      ? ChestGenerator.generateRandomChest()
+      : null;
 
     return prisma.$transaction(async (tx) => {
       const completionUpdate = await tx.gameSession.updateMany({
@@ -132,6 +159,9 @@ export class GamesService {
           pgcEarned,
           experienceGained,
           chestDropped,
+          itemsDropped: droppedChest
+            ? { chestType: droppedChest.chestType }
+            : undefined,
           completed: true,
           completedAt: new Date(),
         },
@@ -148,10 +178,21 @@ export class GamesService {
         },
       });
 
-      const experienceUpdate = await this.pixegotchiService.addExp(
+      if (droppedChest) {
+        await tx.chest.create({
+          data: {
+            userId,
+            chestType: droppedChest.chestType,
+          },
+        });
+      }
+
+      const experienceUpdate = await this.pixegotchiService.addExpToPixegotchi(
         userId,
+        session.pixegotchiId,
         experienceGained,
         tx,
+        false,
       );
 
       if (!experienceUpdate) {

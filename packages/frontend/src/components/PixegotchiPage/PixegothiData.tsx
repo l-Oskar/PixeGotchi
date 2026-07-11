@@ -42,6 +42,9 @@ const TRAIT_EFFECT_LABELS: Record<TraitEffectKey, string> = {
   hunger_rate: "Hunger loss",
   energy_drain: "Energy recovery",
   game_energy_cost: "Game energy cost",
+  game_pgc_gain: "Game PGC",
+  game_exp_gain: "Game experience",
+  game_chest_chance: "Game chest chance",
   happiness_gain: "Happiness gained",
   feed_happiness_gain: "Food happiness",
   play_happiness_gain: "Play happiness",
@@ -55,12 +58,17 @@ const POSITIVE_WHEN_INCREASED = new Set<TraitEffectKey>([
   "happiness_gain",
   "feed_happiness_gain",
   "play_happiness_gain",
+  "game_pgc_gain",
+  "game_exp_gain",
+  "game_chest_chance",
 ]);
 
 const getTraitDisplayEffects = (trait: TraitType) =>
-  (Object.entries(TRAIT_EFFECTS[trait].effects) as Array<
-    [TraitEffectKey, number]
-  >).map(([key, modifier]) => {
+  (
+    Object.entries(TRAIT_EFFECTS[trait].effects) as Array<
+      [TraitEffectKey, number]
+    >
+  ).map(([key, modifier]) => {
     const change =
       key === "health_resilience" || key === "energy_drain"
         ? (1 / modifier - 1) * 100

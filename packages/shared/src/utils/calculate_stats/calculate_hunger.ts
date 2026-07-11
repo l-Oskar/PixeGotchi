@@ -3,9 +3,9 @@ import {
   RARITY_STATS,
 } from "../../constants/pixegotchi_const";
 import { RarityType } from "../../enums";
+import { getTraitModifier } from "../../constants/traits_const";
 import {
   applyRarityReduction,
-  applyTraitModifier,
   percentToValue,
 } from "./calculate_delta";
 
@@ -15,10 +15,14 @@ export function getBaseHungerDelta(level: number): number {
   );
 }
 
-export function getFinalHungerDelta(level: number, rarity: RarityType): number {
+export function getFinalHungerDelta(
+  level: number,
+  rarity: RarityType,
+  traits: readonly string[] = [],
+): number {
   const deltaHunger = getBaseHungerDelta(level);
   const applyRarity = applyRarityReduction(deltaHunger, rarity);
-  const applyTrait = applyTraitModifier(applyRarity);
+  const applyTrait = applyRarity * getTraitModifier(traits, "hunger_rate");
   const finalDelta = -percentToValue(applyTrait, RARITY_STATS[rarity].maxStat);
   return finalDelta;
 }

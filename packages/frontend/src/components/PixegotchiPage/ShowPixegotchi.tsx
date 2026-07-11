@@ -10,6 +10,9 @@ import {
   Apple,
   Bubbles,
   CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Grid2X2,
   Flame,
   Gamepad2,
   Gift,
@@ -25,10 +28,20 @@ import {
   Venus,
   Zap,
   Droplets,
+  Wallpaper,
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
+import {
+  getRoomFloor,
+  getRoomWall,
+} from "../MainPage/roomSurfaces";
+import {
+  buildRoomAssetPlacements,
+  ROOM_ASSETS,
+} from "../MainPage/roomAssets";
+import { useRoomStore } from "@/store/room.store";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,
@@ -41,6 +54,20 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     clean: false,
     heal: false,
   });
+  const [isStatsOpen, setIsStatsOpen] = useState(true);
+  const [isRoomMenuOpen, setIsRoomMenuOpen] = useState(false);
+  const [showRoomSlotGuides, setShowRoomSlotGuides] = useState(false);
+  const {
+    wallId,
+    floorId,
+    hiddenAssetIds,
+    cabinetSlot,
+    cycleWall,
+    cycleFloor,
+    toggleAsset,
+    toggleCabinetSide,
+    resetRoom,
+  } = useRoomStore();
 
   const handleAction = (action: string) => {
     console.log(action);
@@ -72,11 +99,12 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 ? "text-[var(--status-sick)]"
                 : "text-[var(--status-happy)]";
   const displayStatus = statusKey === "active" ? "Happy" : statusLabel;
+  const roomAssets = buildRoomAssetPlacements(hiddenAssetIds, cabinetSlot);
 
   return (
     <div className="space-y-2 p-2.5">
-      <section className="pixel-panel overflow-hidden bg-pixel-bg-deep/65 p-2 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_0_2px_var(--color-pixel-border),0_0_24px_var(--color-pixel-glow),inset_0_0_0_2px_var(--color-pixel-inset)]">
-        <div className="mb-2 flex items-start justify-between gap-2">
+      <section className="pixel-panel relative h-[clamp(20.75rem,88vw,22.5rem)] overflow-hidden bg-pixel-bg-deep/65 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_0_2px_var(--color-pixel-border),0_0_24px_var(--color-pixel-glow),inset_0_0_0_2px_var(--color-pixel-inset)]">
+        <div className="absolute inset-x-0 top-0 z-30 flex items-start justify-between gap-2 bg-linear-to-b from-pixel-bg-deep/90 via-pixel-bg-deep/55 to-transparent p-2 pb-7">
           <div className="min-w-0">
             <div className="flex min-w-0 items-center gap-2">
               <h2 className="truncate font-pixel text-[15px] leading-6 text-pixel-ink max-[380px]:text-sm">
@@ -113,7 +141,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               </span>
             </div>
           </div>
-          <div className="flex shrink-0 gap-1.5">
+          <div className="relative flex shrink-0 gap-1.5">
             <button
               type="button"
               className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-red"
@@ -122,81 +150,174 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => {}}
+              onClick={() => setIsRoomMenuOpen((current) => !current)}
               className="pixel-icon-button h-9 min-h-9 w-9 min-w-9 text-pixel-muted"
-              aria-label="Pixegotchi details">
+              aria-label="Room customization"
+              aria-expanded={isRoomMenuOpen}>
               <MoreHorizontal size={18} />
             </button>
+            {isRoomMenuOpen && (
+              <div className="pixel-panel-soft absolute right-0 top-11 z-40 w-40 space-y-1 bg-pixel-bg-deep/95 p-1.5 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_16px_var(--color-pixel-glow)] backdrop-blur-sm">
+                <button
+                  type="button"
+                  onClick={cycleWall}
+                  className="pixel-button flex min-h-0 w-full items-center justify-start gap-2 px-2 py-1.5 text-left font-pixel text-[7px] leading-3">
+                  <Wallpaper size={13} />
+                  <span className="truncate">
+                    Wall: {getRoomWall(wallId).label}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={cycleFloor}
+                  className="pixel-button flex min-h-0 w-full items-center justify-start gap-2 px-2 py-1.5 text-left font-pixel text-[7px] leading-3">
+                  <Grid2X2 size={13} />
+                  <span className="truncate">
+                    Floor: {getRoomFloor(floorId).label}
+                  </span>
+                </button>
+                {ROOM_ASSETS.map((asset) => {
+                  const isVisible = !hiddenAssetIds.includes(asset.id);
+
+                  return (
+                    <button
+                      key={asset.id}
+                      type="button"
+                      onClick={() => toggleAsset(asset.id)}
+                      className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
+                      <span>{asset.label}</span>
+                      <span
+                        className={
+                          isVisible ? "text-pixel-green" : "text-pixel-muted"
+                        }>
+                        {isVisible ? "ON" : "OFF"}
+                      </span>
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  onClick={toggleCabinetSide}
+                  className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
+                  <span>Cabinet side</span>
+                  <span className="text-pixel-highlight">
+                    {cabinetSlot === 1 ? "LEFT" : "RIGHT"}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={resetRoom}
+                  className="pixel-button min-h-0 w-full px-2 py-1.5 font-pixel text-[7px] leading-3 text-pixel-red">
+                  RESET ROOM
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowRoomSlotGuides((current) => !current)}
+                  className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
+                  <span>Edit slots</span>
+                  <span className="text-pixel-highlight">
+                    {showRoomSlotGuides ? "ON" : "OFF"}
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="relative min-h-[15.75rem] overflow-hidden max-[380px]:min-h-[15rem]">
-          <div className="[&_.pixel-room-bg]:h-full [&_.pixel-room-bg]:min-h-[15.75rem] max-[380px]:[&_.pixel-room-bg]:min-h-[15rem]">
-            <Visual pet={pixegotchi} status={null} />
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="h-full w-full [&_.pixel-room-bg]:h-full">
+            <Visual
+              pet={pixegotchi}
+              status={null}
+              centerPet={!isStatsOpen}
+              wallId={wallId}
+              floorId={floorId}
+              assets={roomAssets}
+              showSlotGuides={showRoomSlotGuides}
+            />
           </div>
-          <div className="pixel-panel-soft theme-soft-overlay absolute bottom-0 left-0 top-0 z-20 flex w-[45%] flex-col justify-center gap-1 border-pixel-border/70 bg-pixel-bg-deep/82 p-1.5 shadow-[0_3px_0_var(--color-pixel-shadow),0_0_18px_var(--color-pixel-glow),inset_0_0_0_2px_var(--color-pixel-inset-soft)] backdrop-blur-[1px] max-[380px]:bottom-2 max-[380px]:left-2 max-[380px]:top-2 max-[380px]:w-[46%] max-[380px]:gap-1 max-[380px]:p-1">
-            <div className="min-w-0 flex-1">
-              <div className="mb-1.5 grid grid-cols-[auto_1fr] items-center font-pixel text-[8px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[7px]">
-                <span className="whitespace-nowrap text-pixel-highlight">
-                  Level {pixegotchi.level}
-                </span>
-                <span className="truncate text-[7px] text-end text-pixel-muted">
-                  {pixegotchi.experience}/{experienceTarget} EXP
-                </span>
+          {isStatsOpen ? (
+            <div className="pixel-panel-soft theme-soft-overlay absolute bottom-2 left-2 top-[5.25rem] z-20 flex w-[45%] flex-col justify-center gap-1 border-pixel-border/70 bg-pixel-bg-deep/82 p-1.5 shadow-[0_3px_0_var(--color-pixel-shadow),0_0_18px_var(--color-pixel-glow),inset_0_0_0_2px_var(--color-pixel-inset-soft)] backdrop-blur-[1px] max-[380px]:w-[46%] max-[380px]:gap-1 max-[380px]:p-1">
+              <button
+                type="button"
+                onClick={() => setIsStatsOpen(false)}
+                className="pixel-icon-button absolute left-full top-2 z-10 h-6 min-h-6 w-6 min-w-6 text-pixel-highlight"
+                aria-label="Hide stats"
+                aria-expanded={isStatsOpen}>
+                <ChevronLeft size={14} />
+              </button>
+              <div className="min-w-0 flex-1">
+                <div className="mb-1.5 grid grid-cols-[auto_1fr] items-center font-pixel text-[8px] leading-3 max-[380px]:gap-1.5 max-[380px]:text-[7px]">
+                  <span className="whitespace-nowrap text-pixel-highlight">
+                    Level {pixegotchi.level}
+                  </span>
+                  <span className="truncate text-[7px] text-end text-pixel-muted">
+                    {pixegotchi.experience}/{experienceTarget} EXP
+                  </span>
+                </div>
+                <div className="pixel-progress h-2 w-50 max-w-full">
+                  <div
+                    className="pixel-progress-fill transition-all duration-500"
+                    style={{ width: `${experienceProgress}%` }}
+                  />
+                </div>
               </div>
-              <div className="pixel-progress h-2 w-50 max-w-full">
-                <div
-                  className="pixel-progress-fill transition-all duration-500"
-                  style={{ width: `${experienceProgress}%` }}
-                />
-              </div>
+              <CompactStat
+                icon={Heart}
+                label="Health"
+                value={Number(pixegotchi.health)}
+                bgColor="bg-pixel-red/15"
+                strokeColor={`${ITEM_COLORS.medicine}`}
+                rarity={pixegotchi.rarity}
+                variant="row"
+              />
+              <CompactStat
+                icon={Apple}
+                label="Hunger"
+                value={Number(pixegotchi.hunger)}
+                bgColor="bg-pixel-orange/15"
+                strokeColor={`${ITEM_COLORS.food}`}
+                rarity={pixegotchi.rarity}
+                variant="row"
+              />
+              <CompactStat
+                icon={Zap}
+                label="Energy"
+                value={Number(pixegotchi.energy)}
+                bgColor="bg-pixel-yellow/15"
+                strokeColor={`${ITEM_COLORS.boost}`}
+                rarity={pixegotchi.rarity}
+                variant="row"
+              />
+              <CompactStat
+                icon={Smile}
+                label="Happiness"
+                value={Number(pixegotchi.happiness)}
+                bgColor="bg-pixel-pink/15"
+                strokeColor={`${ITEM_COLORS.toy}`}
+                rarity={pixegotchi.rarity}
+                variant="row"
+              />
+              <CompactStat
+                icon={Droplets}
+                label="Cleanliness"
+                value={Number(pixegotchi.cleanliness)}
+                bgColor="bg-pixel-blue/15"
+                strokeColor={`${ITEM_COLORS.cleaning}`}
+                rarity={pixegotchi.rarity}
+                variant="row"
+              />
             </div>
-            <CompactStat
-              icon={Heart}
-              label="Health"
-              value={Number(pixegotchi.health)}
-              bgColor="bg-pixel-red/15"
-              strokeColor={`${ITEM_COLORS.medicine}`}
-              rarity={pixegotchi.rarity}
-              variant="row"
-            />
-            <CompactStat
-              icon={Apple}
-              label="Hunger"
-              value={Number(pixegotchi.hunger)}
-              bgColor="bg-pixel-orange/15"
-              strokeColor={`${ITEM_COLORS.food}`}
-              rarity={pixegotchi.rarity}
-              variant="row"
-            />
-            <CompactStat
-              icon={Zap}
-              label="Energy"
-              value={Number(pixegotchi.energy)}
-              bgColor="bg-pixel-yellow/15"
-              strokeColor={`${ITEM_COLORS.boost}`}
-              rarity={pixegotchi.rarity}
-              variant="row"
-            />
-            <CompactStat
-              icon={Smile}
-              label="Happiness"
-              value={Number(pixegotchi.happiness)}
-              bgColor="bg-pixel-pink/15"
-              strokeColor={`${ITEM_COLORS.toy}`}
-              rarity={pixegotchi.rarity}
-              variant="row"
-            />
-            <CompactStat
-              icon={Droplets}
-              label="Cleanliness"
-              value={Number(pixegotchi.cleanliness)}
-              bgColor="bg-pixel-blue/15"
-              strokeColor={`${ITEM_COLORS.cleaning}`}
-              rarity={pixegotchi.rarity}
-              variant="row"
-            />
-          </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsStatsOpen(true)}
+              className="pixel-icon-button absolute left-2 top-[5.25rem] z-20 h-6 min-h-6 w-6 min-w-6 text-pixel-highlight"
+              aria-label="Show stats"
+              aria-expanded={isStatsOpen}>
+              <ChevronRight size={14} />
+            </button>
+          )}
         </div>
       </section>
 

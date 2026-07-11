@@ -4,10 +4,13 @@ import { gameMachine } from "../../machines/game.machine";
 import { useDrag } from "@use-gesture/react";
 import { usePixelMask } from "../../hooks/usePixelMask";
 import { useTelegramSwipes } from "@/hooks/useTelegramSwipes";
-import { Pixegotchi } from "@pixegotchi/shared";
+import { getTraitModifier, Pixegotchi } from "@pixegotchi/shared";
 import { getImage } from "@/utils/getImage";
 import { GameShell } from "./GameShell";
-import { useStartGameSession } from "@/services/queries/game.queries";
+import {
+  useCompleteGameSession,
+  useStartGameSession,
+} from "@/services/queries/game.queries";
 
 const BASKET_WIDTH = 100;
 const BASKET_HEIGHT = 100;
@@ -23,6 +26,12 @@ const GAME_DURATION = 30;
 const SCALE = 2;
 const FALLBACK_CANVAS_BACKGROUND = "#10091f";
 const FALLBACK_BASKET_COLOR = "#8b5a3c";
+
+const getDroppedChestType = (itemsDropped: unknown) => {
+  if (!itemsDropped || typeof itemsDropped !== "object") return null;
+  const chestType = (itemsDropped as Record<string, unknown>).chestType;
+  return typeof chestType === "string" ? chestType : null;
+};
 
 interface GameObject {
   id: number;
@@ -50,6 +59,9 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   const basketImageRef = useRef<HTMLImageElement | null>(null);
   const basketLoadedRef = useRef(false);
   const startGameSession = useStartGameSession();
+  const completeGameSession = useCompleteGameSession();
+  const sessionIdRef = useRef<number | null>(null);
+  const completionStartedRef = useRef(false);
 
   // --- Весь ігровий стан у refs — жодних ре-рендерів під час гри ---
   const objectsRef = useRef<GameObject[]>([]);
@@ -66,13 +78,42 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   const [displayScore, setDisplayScore] = useState(0);
   const [displayTime, setDisplayTime] = useState(GAME_DURATION);
   const [finalScore, setFinalScore] = useState<number | null>(null);
+  const [startError, setStartError] = useState<string | null>(null);
 
   const { maskRef, buildMask, checkPixel } = usePixelMask();
   const [state, send] = useMachine(gameMachine);
   const isGameOver = state.matches("gameOver");
   const shouldDisableSwipes = state.matches("playing");
+  const pgcTraitModifier = getTraitModifier(
+    pixegotchi.traits,
+    "game_pgc_gain",
+  );
+  const expTraitModifier = getTraitModifier(
+    pixegotchi.traits,
+    "game_exp_gain",
+  );
+  const chestTraitModifier = getTraitModifier(
+    pixegotchi.traits,
+    "game_chest_chance",
+  );
 
   useTelegramSwipes(shouldDisableSwipes);
+
+  useEffect(() => {
+    if (
+      finalScore === null ||
+      sessionIdRef.current === null ||
+      completionStartedRef.current
+    ) {
+      return;
+    }
+
+    completionStartedRef.current = true;
+    completeGameSession.mutate({
+      sessionId: sessionIdRef.current,
+      score: finalScore,
+    });
+  }, [completeGameSession, finalScore]);
 
   const getThemeColor = useCallback(
     (variableName: string, fallback: string) => {
@@ -356,23 +397,76 @@ export const CatchGame: React.FC<CatchGameProps> = ({
     { pointer: { touch: true }, preventDefault: true },
   );
 
-  const startGame = useCallback(() => {
-    objectsRef.current = [];
-    scoreRef.current = 0;
-    timeLeftRef.current = GAME_DURATION;
-    setDisplayScore(0);
-    setDisplayTime(GAME_DURATION);
-    setFinalScore(null);
-    basketXRef.current = canvasWidthRef.current / 2 - BASKET_WIDTH / 2;
-    isPlayingRef.current = true;
-    specialFruitSpawnedRef.current = false; // Скидаємо флаг для нового раунду
-    send({ type: "START" });
-    rafRef.current = requestAnimationFrame(gameLoop);
-    startGameSession.mutateAsync({
-      pixegotchiId: pixegotchi.id,
-      gameId: "catch_fruits",
-    });
-  }, [send, gameLoop]);
+  const startGame = useCallback(async () => {
+    setStartError(null);
+
+    try {
+      const session = await startGameSession.mutateAsync({
+        pixegotchiId: pixegotchi.id,
+        gameId: "catch_fruits",
+      });
+      sessionIdRef.current = session.id;
+      completionStartedRef.current = false;
+      objectsRef.current = [];
+      scoreRef.current = 0;
+      timeLeftRef.current = GAME_DURATION;
+      setDisplayScore(0);
+      setDisplayTime(GAME_DURATION);
+      setFinalScore(null);
+      completeGameSession.reset();
+      basketXRef.current = canvasWidthRef.current / 2 - BASKET_WIDTH / 2;
+      isPlayingRef.current = true;
+      specialFruitSpawnedRef.current = false;
+      send({ type: "START" });
+      rafRef.current = requestAnimationFrame(gameLoop);
+    } catch {
+      setStartError("Could not start the game. Check your energy and try again.");
+    }
+  }, [completeGameSession, gameLoop, pixegotchi.id, send, startGameSession]);
+
+  const finishGame = async () => {
+    const score = finalScore ?? displayScore;
+
+    if (
+      !completeGameSession.isSuccess &&
+      sessionIdRef.current !== null
+    ) {
+      try {
+        await completeGameSession.mutateAsync({
+          sessionId: sessionIdRef.current,
+          score,
+        });
+      } catch {
+        return;
+      }
+    }
+
+    onGameEnd?.(score);
+    send({ type: "RESET" });
+  };
+
+  const exitGame = async () => {
+    isPlayingRef.current = false;
+    cancelAnimationFrame(rafRef.current);
+
+    if (
+      sessionIdRef.current !== null &&
+      !completionStartedRef.current &&
+      !completeGameSession.isSuccess
+    ) {
+      completionStartedRef.current = true;
+      try {
+        await completeGameSession.mutateAsync({
+          sessionId: sessionIdRef.current,
+          score: 0,
+        });
+      } catch {
+        // Energy remains spent even if the abandonment request cannot be saved.
+      }
+    }
+
+    endGame();
+  };
 
   // Cleanup
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
@@ -382,7 +476,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
       title="Catch Fruits"
       score={`Score: ${displayScore}`}
       timer={`${isGameOver ? 0 : displayTime}s`}
-      onExit={endGame}>
+      onExit={exitGame}>
       <canvas
         ref={canvasRef}
         className="w-full h-full touch-none cursor-pointer"
@@ -393,9 +487,16 @@ export const CatchGame: React.FC<CatchGameProps> = ({
       {state.matches("idle") && (
         <button
           onClick={startGame}
+          disabled={startGameSession.isPending}
           className="pixel-button absolute inset-0 m-auto h-12 w-40 bg-pixel-green font-pixel text-[9px] leading-4 text-pixel-accent-ink transition hover:scale-105">
-          Start Game
+          {startGameSession.isPending ? "Starting..." : "Start Game"}
         </button>
+      )}
+
+      {state.matches("idle") && startError && (
+        <p className="absolute inset-x-4 top-[calc(50%+3.75rem)] mx-auto max-w-xs text-center font-pixel text-[8px] leading-4 text-pixel-red">
+          {startError}
+        </p>
       )}
 
       {state.matches("gameOver") && (
@@ -404,14 +505,52 @@ export const CatchGame: React.FC<CatchGameProps> = ({
           <p className="theme-readable-muted mb-4 text-[9px] leading-4">
             Your score: {finalScore ?? displayScore}
           </p>
+          {completeGameSession.data && (
+            <div className="mb-4 grid gap-1 text-[8px] leading-4">
+              <span className="text-pixel-green">
+                +{completeGameSession.data.pgcEarned} PGC
+              </span>
+              <span className="text-pixel-green">
+                +{completeGameSession.data.experienceGained} EXP
+              </span>
+              {completeGameSession.data.chestDropped && (
+                <span className="text-pixel-highlight">
+                  {getDroppedChestType(completeGameSession.data.itemsDropped)
+                    ?.replace(/_/g, " ")
+                    .toUpperCase() ?? "CHEST"}{" "}
+                  found
+                </span>
+              )}
+            </div>
+          )}
+          <div className="mb-4 flex flex-wrap justify-center gap-2 text-[7px] leading-3 text-pixel-blue">
+            {pgcTraitModifier !== 1 && (
+              <span>PGC trait +{Math.round((pgcTraitModifier - 1) * 100)}%</span>
+            )}
+            {expTraitModifier !== 1 && (
+              <span>EXP trait +{Math.round((expTraitModifier - 1) * 100)}%</span>
+            )}
+            {chestTraitModifier !== 1 && (
+              <span>
+                Chest trait +{Math.round((chestTraitModifier - 1) * 100)}%
+              </span>
+            )}
+          </div>
           <button
-            onClick={() => {
-              onGameEnd?.(finalScore ?? displayScore);
-              send({ type: "RESET" });
-            }}
+            onClick={finishGame}
+            disabled={completeGameSession.isPending}
             className="pixel-button bg-pixel-highlight px-6 py-2 text-[8px] leading-4 text-pixel-accent-ink hover:scale-105">
-            Back to Games
+            {completeGameSession.isPending
+              ? "Saving..."
+              : completeGameSession.isError
+                ? "Retry Save"
+                : "Back to Games"}
           </button>
+          {completeGameSession.isError && (
+            <p className="mt-3 text-[7px] leading-4 text-pixel-red">
+              Could not save the result.
+            </p>
+          )}
         </div>
       )}
     </GameShell>

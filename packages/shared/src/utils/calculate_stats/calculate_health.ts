@@ -3,10 +3,10 @@ import {
   RARITY_STATS,
 } from "../../constants/pixegotchi_const";
 import { RarityType } from "../../enums";
+import { getTraitModifier } from "../../constants/traits_const";
 import {
   applyRarityReduction,
   valueToPercent,
-  applyTraitModifier,
   percentToValue,
 } from "./calculate_delta";
 
@@ -21,7 +21,7 @@ export function cleanlinessToHealth(
   const cleanlinessConst = DEGRADATION_STATS.cleanliness;
   let healthRegenDelta = 0;
   if (cleanlinessPercent >= cleanlinessConst.HEALTH_PLUS_PERCENT) {
-    healthRegenDelta = cleanlinessConst.HEALTH_PLUS;
+    healthRegenDelta = -cleanlinessConst.HEALTH_PLUS;
   } else if (cleanlinessPercent >= cleanlinessConst.HEALTH_MINUS_PERCENT) {
     healthRegenDelta = 0;
   } else {
@@ -35,9 +35,9 @@ export function hungerToHealth(hunger: number, rarity: RarityType): number {
   const hungerConst = DEGRADATION_STATS.hunger;
   let healthRegenDelta = 0;
   if (hungerPercent >= hungerConst.HEALTH_PLUS_DOUBLE_PERCENT) {
-    healthRegenDelta = hungerConst.HEALTH_PLUS_DOUBLE;
+    healthRegenDelta = -hungerConst.HEALTH_PLUS_DOUBLE;
   } else if (hungerPercent >= hungerConst.HEALTH_PLUS_PERCENT) {
-    healthRegenDelta = hungerConst.HEALTH_PLUS;
+    healthRegenDelta = -hungerConst.HEALTH_PLUS;
   } else if (
     hungerPercent > hungerConst.HEALTH_MINUS_PERCENT &&
     hungerPercent < hungerConst.HEALTH_PLUS_PERCENT
@@ -60,13 +60,15 @@ export function getFinalHealthDelta(
   hunger: number,
   cleanliness: number,
   rarity: RarityType,
+  traits: readonly string[] = [],
 ): number {
   let healthRegenDelta =
     getBaseHealthDelta(level) +
     hungerToHealth(hunger, rarity) +
     cleanlinessToHealth(cleanliness, rarity);
   const applyRarity = applyRarityReduction(healthRegenDelta, rarity);
-  const applyTrait = applyTraitModifier(applyRarity);
+  const applyTrait =
+    applyRarity / getTraitModifier(traits, "health_resilience");
   const finalDelta = -percentToValue(applyTrait, RARITY_STATS[rarity].maxStat);
   return finalDelta;
 }

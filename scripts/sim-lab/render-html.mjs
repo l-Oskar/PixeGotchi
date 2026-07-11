@@ -305,6 +305,21 @@ function outcomeClass(outcome) {
   return `outcome-${String(outcome ?? "unknown").replaceAll(" ", "-")}`;
 }
 
+function renderGameImpact(scenario) {
+  const impact = scenario.gameImpact;
+  if (!impact) return "";
+
+  return `
+    <h3>Game impact</h3>
+    <div class="summary-grid">
+      <div><strong>Energy cost</strong><span>${escapeHtml(impact.energyCost)}</span></div>
+      <div><strong>PGC at score ${escapeHtml(impact.score)}</strong><span>${escapeHtml(impact.pgcEarned)}</span></div>
+      <div><strong>EXP at score ${escapeHtml(impact.score)}</strong><span>${escapeHtml(impact.experienceGained)}</span></div>
+      <div><strong>Chest chance</strong><span>${escapeHtml(impact.chestChancePercent)}%</span></div>
+    </div>
+  `;
+}
+
 function renderScenario(scenario) {
   return `
     <section class="scenario">
@@ -326,6 +341,7 @@ function renderScenario(scenario) {
         <div><strong>Outcome</strong><span>${escapeHtml(scenario.summary.outcome)}</span></div>
       </div>
       ${renderActionSummary(scenario)}
+      ${renderGameImpact(scenario)}
       ${renderVerdictReasons(scenario)}
       ${renderThresholdGrid(scenario)}
       ${renderActionEventsTable(scenario)}
@@ -337,6 +353,7 @@ function renderScenario(scenario) {
           checkpoints: scenario.checkpoints,
           notes: scenario.notes,
           careActions: scenario.careActions,
+          gameImpact: scenario.gameImpact,
           finalStats: scenario.summary.finalStats,
           outcome: scenario.summary.outcome,
           verdictReasons: scenario.summary.verdictReasons,
@@ -382,6 +399,39 @@ function renderScenarioTable(scenarios) {
         ).join("")}
       </tbody>
     </table>
+  `;
+}
+
+function renderCombinationAudit(audit) {
+  if (!audit) return "";
+
+  return `
+    <section class="panel">
+      <h2>Trait Combination Extremes</h2>
+      <p>Evaluated ${escapeHtml(audit.evaluated)} unique combinations with ${escapeHtml(audit.traitCounts.join(" or "))} traits.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Effect</th>
+            <th>Minimum</th>
+            <th>Minimum combination</th>
+            <th>Maximum</th>
+            <th>Maximum combination</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${Object.entries(audit.effects).map(([effect, range]) => `
+            <tr>
+              <td>${escapeHtml(effect)}</td>
+              <td>${escapeHtml(range.min.modifier)}</td>
+              <td>${escapeHtml(range.min.traits.join(", "))}</td>
+              <td>${escapeHtml(range.max.modifier)}</td>
+              <td>${escapeHtml(range.max.traits.join(", "))}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </section>
   `;
 }
 
@@ -664,6 +714,7 @@ function renderStatsHtml(result) {
     <section class="panel">
       ${renderScenarioTable(result.scenarios)}
     </section>
+    ${renderCombinationAudit(result.combinationAudit)}
     ${renderHealthComparison(result.scenarios)}
     ${result.scenarios.map(renderScenario).join("")}
     <section class="panel">

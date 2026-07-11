@@ -7,6 +7,8 @@ import {
 } from "@pixegotchi/shared";
 import { PIXEGOTCHI_KEYS } from "./pixegotchi.queries";
 import { USER_KEYS } from "./users.queries";
+import { usePixegotchiStore } from "@/store/pixegotchi.store";
+import type { Pixegotchi } from "@pixegotchi/shared";
 
 export const GAME_KEYS = {
   all: ["games"] as const,
@@ -23,11 +25,35 @@ export const useGameHistory = (gameId?: string) => {
 
 export const useStartGameSession = () => {
   const queryClient = useQueryClient();
+  const setCurrent = usePixegotchiStore((state) => state.setCurrent);
 
   return useMutation({
     mutationFn: (input: StartGameSessionInput) => gameApi.startSession(input),
-    onSuccess: async (session) => {
-      await Promise.all([
+    onSuccess: (session) => {
+      const updateEnergy = (pixegotchi: Pixegotchi) => ({
+        ...pixegotchi,
+        energy: Math.max(0, Number(pixegotchi.energy) - session.energySpent),
+      });
+      const current = usePixegotchiStore.getState().currentPixegotchi;
+      if (current?.id === session.pixegotchiId) {
+        setCurrent(updateEnergy(current));
+      }
+      queryClient.setQueryData<Pixegotchi | null | undefined>(
+        PIXEGOTCHI_KEYS.current,
+        (cached) =>
+          cached?.id === session.pixegotchiId ? updateEnergy(cached) : cached,
+      );
+      queryClient.setQueryData<Pixegotchi[] | undefined>(
+        PIXEGOTCHI_KEYS.all,
+        (cached) =>
+          cached?.map((pixegotchi) =>
+            pixegotchi.id === session.pixegotchiId
+              ? updateEnergy(pixegotchi)
+              : pixegotchi,
+          ),
+      );
+
+      void Promise.all([
         queryClient.invalidateQueries({ queryKey: GAME_KEYS.historyRoot }),
         queryClient.invalidateQueries({ queryKey: PIXEGOTCHI_KEYS.current }),
         queryClient.invalidateQueries({ queryKey: PIXEGOTCHI_KEYS.all }),
@@ -45,14 +71,14 @@ export const useCompleteGameSession = () => {
   return useMutation({
     mutationFn: (input: CompleteGameSessionInput) =>
       gameApi.completeSession(input),
-    onSuccess: async (session) => {
+    onSuccess: (session) => {
       queryClient.setQueryData<GameSession[] | undefined>(
         GAME_KEYS.history(session.gameId),
         (current) =>
           current?.map((item) => (item.id === session.id ? session : item)),
       );
 
-      await Promise.all([
+      void Promise.all([
         queryClient.invalidateQueries({ queryKey: GAME_KEYS.historyRoot }),
         queryClient.invalidateQueries({ queryKey: USER_KEYS.profile }),
         queryClient.invalidateQueries({ queryKey: PIXEGOTCHI_KEYS.current }),

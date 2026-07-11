@@ -27,7 +27,15 @@ let redis: Redis | undefined;
 async function getRedis() {
   if (!redis) {
     const RedisClient = (await import("ioredis")).default;
-    redis = new RedisClient(testRedisUrl);
+    redis = new RedisClient(testRedisUrl, {
+      lazyConnect: true,
+      connectTimeout: 2_000,
+      enableOfflineQueue: false,
+      maxRetriesPerRequest: 1,
+      retryStrategy: () => null,
+    });
+
+    await redis.connect();
   }
 
   return redis;
@@ -48,7 +56,14 @@ beforeEach(async (context) => {
 
   try {
     await redis.flushdb();
+  } catch (error) {
+    throw new Error(
+      `Failed to clean test Redis at ${testRedisUrl}. Start Redis or run the integration suite through docker-compose.test.yml.`,
+      { cause: error },
+    );
+  }
 
+  try {
     await prisma.$executeRawUnsafe(`
       TRUNCATE TABLE
         "active_effects",
@@ -68,7 +83,7 @@ beforeEach(async (context) => {
     `);
   } catch (error) {
     throw new Error(
-      "Failed to clean the test database. Make sure PostgreSQL is running and run `npm run test:db:push --workspace=packages/backend` before the test suite.",
+      "Failed to clean the test PostgreSQL database. Make sure PostgreSQL is running and run `npm run test:db:push --workspace=packages/backend` before the test suite.",
       { cause: error },
     );
   }

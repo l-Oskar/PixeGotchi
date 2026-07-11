@@ -42,6 +42,9 @@ export interface TraitEffect {
     hunger_rate?: number; // множник швидкості голоду (>1 = швидше голодніє)
     energy_drain?: number; // множник витрати енергії  (>1 = швидше втомлюється)
     game_energy_cost?: number; // множник вартості запуску мініігор
+    game_pgc_gain?: number; // множник PGC за мініігри
+    game_exp_gain?: number; // множник досвіду за мініігри
+    game_chest_chance?: number; // множник шансу скрині за мініігри
     happiness_gain?: number; // множник будь-якого приросту щастя
     feed_happiness_gain?: number; // множник щастя від годування
     play_happiness_gain?: number; // множник щастя від гри

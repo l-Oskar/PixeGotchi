@@ -141,6 +141,75 @@ describe("games routes", () => {
     expect(updatedPixegotchi.experience).toBe(8);
   });
 
+  it("applies PGC, EXP, and chest reward trait modifiers", async () => {
+    app = await buildApp();
+    const user = await createUser({ pgcBalance: 100 });
+    const pixegotchi = await createPixegotchi(user.id, {
+      energy: 50,
+      experience: 0,
+      traits: ["optimist", "loyal", "curious"],
+    });
+    const startResponse = await app.inject({
+      method: "POST",
+      url: "/api/games/start",
+      headers: authHeaders(app, user.id),
+      payload: {
+        pixegotchiId: pixegotchi.id,
+        gameId: "catch_fruits",
+      },
+    });
+    const session = startResponse.json();
+    const replacementPixegotchi = await createPixegotchi(user.id, {
+      experience: 0,
+    });
+    await prisma.pixegotchi.update({
+      where: { id: pixegotchi.id },
+      data: { status: "vault" },
+    });
+    const now = new Date("2026-01-01T00:00:10.000Z").getTime();
+
+    await prisma.gameSession.update({
+      where: { id: session.id },
+      data: { createdAt: new Date(now - 10_000) },
+    });
+    vi.spyOn(Date, "now").mockReturnValue(now);
+    vi.spyOn(Math, "random").mockReturnValue(0.8);
+
+    const response = await app.inject({
+      method: "POST",
+      url: `/api/games/${session.id}/complete`,
+      headers: authHeaders(app, user.id),
+      payload: { score: 80 },
+    });
+
+    expect(response.statusCode, response.body).toBe(200);
+    expect(response.json()).toMatchObject({
+      pgcEarned: "46",
+      experienceGained: 9,
+      chestDropped: true,
+      itemsDropped: { chestType: "golden" },
+    });
+
+    const updatedUser = await prisma.user.findUniqueOrThrow({
+      where: { id: user.id },
+    });
+    const updatedPixegotchi = await prisma.pixegotchi.findUniqueOrThrow({
+      where: { id: pixegotchi.id },
+    });
+    const unchangedReplacement = await prisma.pixegotchi.findUniqueOrThrow({
+      where: { id: replacementPixegotchi.id },
+    });
+    const droppedChests = await prisma.chest.findMany({
+      where: { userId: user.id, isOpened: false },
+    });
+
+    expect(updatedUser.pgcBalance.toString()).toBe("146");
+    expect(updatedPixegotchi.experience).toBe(9);
+    expect(unchangedReplacement.experience).toBe(0);
+    expect(droppedChests).toHaveLength(1);
+    expect(droppedChests[0]?.chestType).toBe("golden");
+  });
+
   it("does not award rewards twice for one session", async () => {
     app = await buildApp();
     const user = await createUser({ pgcBalance: 100 });

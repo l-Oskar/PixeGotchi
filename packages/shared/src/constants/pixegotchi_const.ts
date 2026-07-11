@@ -75,7 +75,7 @@ export const DEGRADATION_STATS: Record<
   Record<string, number>
 > = {
   health: {
-    REGEN: 2,
+    REGEN: 1.75,
     DELTA_LVL: 0.05,
   },
   hunger: {

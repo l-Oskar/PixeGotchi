@@ -26,8 +26,3 @@ export function applyRarityReduction(
 ): number {
   return delta * (1 - RARITY_STATS[rarity].degradationReduce);
 }
-
-export function applyTraitModifier(delta: number): number {
-  //TODO: Implement Train Modifier
-  return delta;
-}

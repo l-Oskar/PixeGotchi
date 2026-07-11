@@ -171,6 +171,106 @@ body {
 }
 
 @layer components {
+  .room-wall-surface {
+    background-color: #160d2d;
+  }
+
+  .room-wall-violet {
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.025), transparent),
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 1.45rem,
+        rgba(7, 4, 18, 0.3) 1.45rem 1.55rem
+      ),
+      linear-gradient(180deg, #21113f 0%, #160d2d 100%);
+  }
+
+  .room-wall-midnight {
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 1.45rem,
+        rgba(1, 3, 14, 0.5) 1.45rem 1.55rem
+      ),
+      linear-gradient(180deg, #121d43 0%, #090d25 100%);
+  }
+
+  .room-wall-warm {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255, 183, 112, 0.15), transparent 60%),
+      linear-gradient(180deg, #5a3040 0%, #351c30 100%);
+  }
+
+  .room-floor-surface {
+    background-color: #2b162c;
+  }
+
+  .room-floor-plum {
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 1.15rem,
+        rgba(6, 3, 13, 0.42) 1.15rem 1.28rem
+      ),
+      linear-gradient(90deg, #2b162c 0%, #3a1c32 48%, #261329 100%);
+  }
+
+  .room-floor-dark {
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 1.15rem,
+        rgba(0, 0, 0, 0.5) 1.15rem 1.28rem
+      ),
+      linear-gradient(90deg, #141322 0%, #21192a 48%, #11101d 100%);
+  }
+
+  .room-floor-honey {
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 1.15rem,
+        rgba(38, 15, 8, 0.48) 1.15rem 1.28rem
+      ),
+      linear-gradient(90deg, #5a3022 0%, #78442a 48%, #4b271d 100%);
+  }
+
+  .room-surface-seam {
+    height: 0.3rem;
+    background: #160b22;
+    border-top: 1px solid rgba(196, 91, 210, 0.28);
+    box-shadow: 0 2px 0 rgba(4, 2, 10, 0.55);
+  }
+
+  .room-asset-slot > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    image-rendering: pixelated;
+  }
+
+  .room-slot-guide {
+    border: 1px dashed rgba(246, 167, 255, 0.72);
+    border-radius: 0.4rem;
+    background: rgba(30, 11, 48, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(10, 4, 22, 0.48);
+  }
+
+  .room-slot-guide > span {
+    display: grid;
+    width: 1.25rem;
+    height: 1.25rem;
+    place-items: center;
+    border: 1px solid rgba(246, 167, 255, 0.7);
+    border-radius: 999px;
+    background: rgba(17, 7, 31, 0.82);
+    color: var(--color-pixel-highlight);
+    font-family: var(--font-pixel);
+    font-size: 0.45rem;
+  }
+
   .pixel-panel {
     border: 1px solid var(--color-pixel-border);
     border-radius: var(--radius-pixel);

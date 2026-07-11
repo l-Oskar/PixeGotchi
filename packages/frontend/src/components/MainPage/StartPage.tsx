@@ -6,7 +6,7 @@ import { Egg, PageType } from "@pixegotchi/shared";
 import React, { useMemo } from "react";
 import Loader from "../Other/Loader";
 import { getEggImg } from "@/utils/getImage";
-import { Egg as EggIcon, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 interface StartPageProps {
   onNavigate: (page: PageType) => void;

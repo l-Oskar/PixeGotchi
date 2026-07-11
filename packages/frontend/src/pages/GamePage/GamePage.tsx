@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   PageType,
-  GameStruct,
+  GameConfig,
   Pixegotchi,
   GAME_CONFIGS,
   getFinalEnergyCost,
@@ -24,49 +24,24 @@ const GamesPage: React.FC<GamePageProps> = ({
   const activePetMessage = pixegotchi
     ? "Потрібен активний пет, щоб запускати міні-ігри."
     : "You need active pixegotchi to play minigames. Hatch or activate one!";
-  const games: GameStruct[] = [
-    {
-      id: "catch_fruits",
-      name: "Catch Fruits",
-      difficulty: "Easy",
-      reward: "50-100",
-      energy: 10,
-      exp: "10-50",
-      icon: "🍌",
-    },
-    {
-      id: "quick_tap",
-      name: "Quick Tap",
-      difficulty: "Medium",
-      reward: "100-200",
-      energy: 15,
-      exp: "20-60",
-      icon: "⚡",
-    },
-    {
-      id: "puzzle",
-      name: "Puzzle Solver",
-      difficulty: "Hard",
-      reward: "200-500",
-      energy: 20,
-      exp: "30-70",
-      icon: "🧩",
-    },
-  ];
-  const getDisplayedEnergyCost = (game: GameStruct) => {
+  const games = Object.entries(GAME_CONFIGS).map(([id, config]) => ({
+    id,
+    ...config,
+  }));
+  const getDisplayedEnergyCost = (game: GameConfig) => {
     if (!pixegotchi) {
-      return { finalCost: game.energy, traitDelta: 0 };
+      return { finalCost: game.energyCost, traitDelta: 0 };
     }
 
     const baseCost = getFinalEnergyCost(
       Number(pixegotchi.health),
       pixegotchi.rarity,
-      game.energy,
+      game.energyCost,
     );
     const finalCost = getFinalEnergyCost(
       Number(pixegotchi.health),
       pixegotchi.rarity,
-      game.energy,
+      game.energyCost,
       pixegotchi.traits,
     );
 
@@ -103,25 +78,11 @@ const GamesPage: React.FC<GamePageProps> = ({
     onGameActiveChange?.(false);
   };
 
-  const handleGameEnd = async (score: number) => {
-    console.log(`Game score: ${score}`);
-
-    const rewardAmound = Math.floor(score * 2);
-    console.log(`Game reward: ${rewardAmound}pgc`);
+  const handleGameEnd = () => {
     closeGame();
   };
 
-  if (
-    activeGameId === "catch_fruits" &&
-    canPlayGames &&
-    Number(pixegotchi.energy) >=
-      getFinalEnergyCost(
-        Number(pixegotchi.health),
-        pixegotchi.rarity,
-        GAME_CONFIGS.catch_fruits.energyCost,
-        pixegotchi.traits,
-      )
-  ) {
+  if (activeGameId === "catch_fruits" && canPlayGames) {
     return (
       <CatchGame
         onGameEnd={handleGameEnd}
@@ -138,9 +99,6 @@ const GamesPage: React.FC<GamePageProps> = ({
           <h1 className="font-pixel text-sm leading-5 text-pixel-ink">
             Mini Games
           </h1>
-          <span className="theme-readable-muted font-pixel text-[8px] leading-3">
-            Coming soon
-          </span>
         </div>
 
         {!canPlayGames && (
@@ -207,11 +165,11 @@ const GamesPage: React.FC<GamePageProps> = ({
                       </span>
                     )}
                     <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-pixel-highlight/50 bg-pixel-highlight/15 px-1.5 py-1 text-[7px] leading-3 text-pixel-highlight">
-                      {game.reward}
+                      {game.rewardLabel}
                       <Coins size={10} />
                     </span>
                     <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-pixel-green/50 bg-pixel-green/15 px-1.5 py-1 text-[7px] leading-3 text-pixel-green">
-                      {game.exp}
+                      {game.expLabel}
                       <StarPlus size={10} />
                     </span>
                   </div>

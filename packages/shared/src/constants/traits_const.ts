@@ -123,8 +123,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Turns everything into a game",
     effects: {
-      play_requirement: 1.35, // ↑ частіше потребує гри
-      play_happiness_gain: 1.25, // ↑ гра дає більше щастя
+      play_requirement: 1.15, // ↑ трохи частіше потребує гри
+      play_happiness_gain: 1.35, // ↑ гра перекриває додаткову потребу
     },
   },
 
@@ -135,7 +135,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     description: "Explores everything with wide eyes",
     effects: {
       happiness_gain: 1.15, // ↑ нові взаємодії приносять щастя
-      energy_drain: 1.1, // ↑ дослідження забирає енергію
+      game_chest_chance: 1.25, // ↑ частіше знаходить скрині в іграх
     },
   },
 
@@ -200,7 +200,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
   wild: {
     trait: "wild",
     rarity: "rare",
-    isNegative: false,
+    isNegative: true,
     description: "Untamed spirit, thrives on freedom",
     effects: {
       play_requirement: 1.35, // ↑ потребує активного руху
@@ -219,7 +219,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     description: "Fearless and resilient in any situation",
     effects: {
       health_resilience: 1.2, // ↑ сміливість додає стійкості
-      game_energy_cost: 0.95, // ↓ сміливіше бере участь в іграх
+      game_energy_cost: 0.9, // ↓ сміливіше бере участь в іграх
     },
   },
 
@@ -230,6 +230,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     description: "Deeply devoted, bonds strengthen everything",
     effects: {
       happiness_gain: 1.35, // ↑↑ взаємодія з власником дає більше щастя
+      game_exp_gain: 1.15, // ↑ швидше навчається у спільних іграх
     },
   },
 
@@ -239,8 +240,8 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     isNegative: false,
     description: "Forever young at heart, pure joy in everything",
     effects: {
-      play_requirement: 1.6, // ↑↑ обожнює гратись
-      play_happiness_gain: 1.25, // ↑ гра приносить більше радості
+      play_requirement: 1.25, // ↑ частіше потребує гри
+      play_happiness_gain: 1.5, // ↑↑ гра перекриває додаткову потребу
     },
   },
 
@@ -266,6 +267,7 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     description: "Radiates joy, everything is wonderful",
     effects: {
       happiness_gain: 1.5, // ↑↑ швидше отримує щастя
+      game_pgc_gain: 1.15, // ↑ отримує більше PGC за ігри
     },
   },
 

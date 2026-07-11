@@ -28,17 +28,12 @@ export type CompleteGameSessionInput = CompleteGameSessionPayload & {
   sessionId: number;
 };
 
-export interface GameStruct {
-  id: string;
+export interface GameConfig {
   name: string;
   difficulty: "Easy" | "Medium" | "Hard";
-  energy: number;
-  exp: string;
-  reward: string;
+  rewardLabel: string;
+  expLabel: string;
   icon: string;
-}
-
-export interface GameConfig {
   energyCost: number;
   minDuration: number;
   maxScorePerSecond: number;

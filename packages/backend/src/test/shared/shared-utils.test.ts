@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   CRITICAL_TIME,
   DEAD_TIME,
+  GAME_CONFIGS,
+  RARITY_STATS,
+  TRAIT_EFFECTS,
   ChestGenerator,
   RarityType,
   assertValidGenomeHash,
@@ -13,6 +16,7 @@ import {
   getFinalEnergyCost,
   getTraitMinimumHealth,
   getTraitModifier,
+  isNegativeTrait,
   parseItem,
   parseItemEffects,
   validateGenomeHash,
@@ -23,6 +27,10 @@ import {
   valueToPercent,
 } from "../../../../shared/src/utils/calculate_stats/calculate_delta";
 import { getFinalExp } from "../../../../shared/src/utils/calculate_stats/calculate_exp";
+import {
+  cleanlinessToHealth,
+  hungerToHealth,
+} from "../../../../shared/src/utils/calculate_stats/calculate_health";
 
 describe("shared pure logic", () => {
   const basePixegotchi = {
@@ -182,6 +190,14 @@ describe("shared pure logic", () => {
     expect(getFinalExp(90, 10, 2)).toBe(252);
   });
 
+  it("reduces health decay when hunger and cleanliness are high", () => {
+    expect(hungerToHealth(100, RarityType.common)).toBe(-1);
+    expect(hungerToHealth(50, RarityType.common)).toBe(-0.5);
+    expect(hungerToHealth(0, RarityType.common)).toBe(2);
+    expect(cleanlinessToHealth(100, RarityType.common)).toBe(-1);
+    expect(cleanlinessToHealth(0, RarityType.common)).toBe(1);
+  });
+
   it("calculates lazy degraded stats from lastUpdateAt", () => {
     const stats = calculateCurrentStats(
       basePixegotchi,
@@ -212,7 +228,7 @@ describe("shared pure logic", () => {
     expect(getHappinessGainModifier(["glutton"], "feed")).toBe(1.15);
     expect(getHappinessGainModifier(["glutton"], "play")).toBe(1);
     expect(getHappinessGainModifier(["playful", "loyal"], "play")).toBe(
-      1.6875,
+      1.75,
     );
     expect(getHappinessGainModifier(["optimist", "loyal"], "general")).toBe(
       1.75,
@@ -224,6 +240,74 @@ describe("shared pure logic", () => {
     expect(getFinalEnergyCost(100, RarityType.common, 10, ["athlete"])).toBe(8);
     expect(getFinalEnergyCost(100, RarityType.common, 10, ["lazy"])).toBe(13);
     expect(getFinalEnergyCost(10, RarityType.common, 10, ["fragile"])).toBe(18);
+  });
+
+  it("resolves game reward trait modifiers", () => {
+    expect(getTraitModifier(["optimist"], "game_pgc_gain")).toBe(1.15);
+    expect(getTraitModifier(["loyal"], "game_exp_gain")).toBe(1.15);
+    expect(getTraitModifier(["curious"], "game_chest_chance")).toBe(1.25);
+  });
+
+  it("keeps every legendary trait combination inside balance guards", () => {
+    const traits = Object.keys(TRAIT_EFFECTS);
+    const combinations: string[][] = [];
+
+    const visit = (start: number, combination: string[], targetSize: number) => {
+      if (combination.length === targetSize) {
+        combinations.push(combination);
+        return;
+      }
+
+      for (
+        let index = start;
+        index <= traits.length - (targetSize - combination.length);
+        index += 1
+      ) {
+        visit(index + 1, [...combination, traits[index]], targetSize);
+      }
+    };
+
+    visit(0, [], RARITY_STATS.legendary.traits.min);
+    visit(0, [], RARITY_STATS.legendary.traits.max);
+
+    const game = GAME_CONFIGS.catch_fruits;
+    const maxHealth = RARITY_STATS.legendary.maxStat;
+    expect(combinations).toHaveLength(5_985);
+
+    for (const combination of combinations) {
+      const energyCost = getFinalEnergyCost(
+        maxHealth,
+        RarityType.legendary,
+        game.energyCost,
+        combination,
+      );
+      const chestChance =
+        game.chestDropChance *
+        getTraitModifier(combination, "game_chest_chance");
+
+      expect(energyCost).toBeGreaterThanOrEqual(7);
+      expect(energyCost).toBeLessThanOrEqual(15);
+      expect(chestChance).toBeLessThanOrEqual(0.9);
+      expect(getTraitModifier(combination, "game_pgc_gain")).toBeLessThanOrEqual(
+        1.25,
+      );
+      expect(getTraitModifier(combination, "game_exp_gain")).toBeLessThanOrEqual(
+        1.25,
+      );
+      expect(getTraitModifier(combination, "health_resilience")).toBeGreaterThanOrEqual(
+        0.75,
+      );
+      expect(getTraitModifier(combination, "health_resilience")).toBeLessThanOrEqual(
+        1.5,
+      );
+    }
+  });
+
+  it("classifies care-pressure traits as negative", () => {
+    expect(isNegativeTrait("fragile")).toBe(true);
+    expect(isNegativeTrait("wild")).toBe(true);
+    expect(isNegativeTrait("playful")).toBe(false);
+    expect(isNegativeTrait("childish")).toBe(false);
   });
 
   it("applies passive trait effects to stat degradation", () => {

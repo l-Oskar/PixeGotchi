@@ -330,8 +330,29 @@ export class PixegotchiService {
     const pixegotchi = await this.findCurrent(userId, db);
 
     if (!pixegotchi) throw new Error("Not active pixegotchi");
-    if (pixegotchi.status !== "active")
+    return await this.addExpToPixegotchi(
+      userId,
+      pixegotchi.id,
+      exp,
+      db,
+    );
+  }
+
+  async addExpToPixegotchi(
+    userId: number,
+    pixegotchiId: number,
+    exp: number,
+    db: PrismaExecutor = prisma,
+    requireActive = true,
+  ) {
+    const pixegotchi = await db.pixegotchi.findFirst({
+      where: { id: pixegotchiId, userId },
+    });
+
+    if (!pixegotchi) throw new Error("Pixegotchi not found");
+    if (requireActive && pixegotchi.status !== "active") {
       throw new Error("Pixegotchi is not active");
+    }
 
     const totalExp = pixegotchi.experience + exp;
     const gainedLevels = Math.floor(totalExp / MAX_EXP);
