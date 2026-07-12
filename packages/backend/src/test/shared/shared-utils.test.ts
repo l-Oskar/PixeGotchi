@@ -14,6 +14,7 @@ import {
   GenomeGenerator,
   getHappinessGainModifier,
   getFinalEnergyCost,
+  getFinalPgc,
   getTraitMinimumHealth,
   getTraitModifier,
   isNegativeTrait,
@@ -187,7 +188,9 @@ describe("shared pure logic", () => {
     expect(valueToPercent(25, 100)).toBe(25);
     expect(percentToValue(12.5, 200)).toBe(25);
     expect(calculateDelta(10, 1_800_000)).toBe(5);
-    expect(getFinalExp(90, 10, 2)).toBe(252);
+    expect(getFinalExp(90, 10, 0, 100, 2)).toBe(0);
+    expect(getFinalExp(90, 10, 100, 100, 2)).toBe(132);
+    expect(getFinalPgc(80, RarityType.legendary, ["optimist"])).toBe(69);
   });
 
   it("reduces health decay when hunger and cleanliness are high", () => {
@@ -244,7 +247,6 @@ describe("shared pure logic", () => {
 
   it("resolves game reward trait modifiers", () => {
     expect(getTraitModifier(["optimist"], "game_pgc_gain")).toBe(1.15);
-    expect(getTraitModifier(["loyal"], "game_exp_gain")).toBe(1.15);
     expect(getTraitModifier(["curious"], "game_chest_chance")).toBe(1.25);
   });
 
@@ -289,9 +291,6 @@ describe("shared pure logic", () => {
       expect(energyCost).toBeLessThanOrEqual(15);
       expect(chestChance).toBeLessThanOrEqual(0.9);
       expect(getTraitModifier(combination, "game_pgc_gain")).toBeLessThanOrEqual(
-        1.25,
-      );
-      expect(getTraitModifier(combination, "game_exp_gain")).toBeLessThanOrEqual(
         1.25,
       );
       expect(getTraitModifier(combination, "health_resilience")).toBeGreaterThanOrEqual(

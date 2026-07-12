@@ -101,11 +101,11 @@ describe("games routes", () => {
       },
     });
     const startedSession = startResponse.json();
-    const now = new Date("2026-01-01T00:00:10.000Z").getTime();
+    const now = new Date("2026-01-01T00:01:00.000Z").getTime();
 
     await prisma.gameSession.update({
       where: { id: startedSession.id },
-      data: { createdAt: new Date(now - 10_000) },
+      data: { createdAt: new Date(now - 60_000) },
     });
     vi.spyOn(Date, "now").mockReturnValue(now);
 
@@ -123,10 +123,10 @@ describe("games routes", () => {
     expect(completeResponse.statusCode, completeResponse.body).toBe(200);
     expect(completeResponse.json()).toMatchObject({
       id: startedSession.id,
-      score: 80,
-      duration: 10,
-      pgcEarned: "40",
-      experienceGained: 8,
+      score: 150,
+      duration: 60,
+      pgcEarned: "75",
+      experienceGained: 56,
       completed: true,
     });
 
@@ -137,17 +137,20 @@ describe("games routes", () => {
       where: { id: pixegotchi.id },
     });
 
-    expect(updatedUser.pgcBalance.toString()).toBe("140");
-    expect(updatedPixegotchi.experience).toBe(8);
+    expect(updatedUser.pgcBalance.toString()).toBe("175");
+    expect(updatedPixegotchi.experience).toBe(56);
   });
 
-  it("applies PGC, EXP, and chest reward trait modifiers", async () => {
+  it("applies score, rarity, traits, happiness, and level to rewards", async () => {
     app = await buildApp();
     const user = await createUser({ pgcBalance: 100 });
     const pixegotchi = await createPixegotchi(user.id, {
       energy: 50,
       experience: 0,
-      traits: ["optimist", "loyal", "curious"],
+      rarity: "legendary",
+      happiness: 104,
+      level: 10,
+      traits: ["optimist", "curious"],
     });
     const startResponse = await app.inject({
       method: "POST",
@@ -166,11 +169,11 @@ describe("games routes", () => {
       where: { id: pixegotchi.id },
       data: { status: "vault" },
     });
-    const now = new Date("2026-01-01T00:00:10.000Z").getTime();
+    const now = new Date("2026-01-01T00:01:00.000Z").getTime();
 
     await prisma.gameSession.update({
       where: { id: session.id },
-      data: { createdAt: new Date(now - 10_000) },
+      data: { createdAt: new Date(now - 60_000) },
     });
     vi.spyOn(Date, "now").mockReturnValue(now);
     vi.spyOn(Math, "random").mockReturnValue(0.8);
@@ -184,8 +187,8 @@ describe("games routes", () => {
 
     expect(response.statusCode, response.body).toBe(200);
     expect(response.json()).toMatchObject({
-      pgcEarned: "46",
-      experienceGained: 9,
+      pgcEarned: "69",
+      experienceGained: 59,
       chestDropped: true,
       itemsDropped: { chestType: "golden" },
     });
@@ -203,8 +206,8 @@ describe("games routes", () => {
       where: { userId: user.id, isOpened: false },
     });
 
-    expect(updatedUser.pgcBalance.toString()).toBe("146");
-    expect(updatedPixegotchi.experience).toBe(9);
+    expect(updatedUser.pgcBalance.toString()).toBe("169");
+    expect(updatedPixegotchi.experience).toBe(59);
     expect(unchangedReplacement.experience).toBe(0);
     expect(droppedChests).toHaveLength(1);
     expect(droppedChests[0]?.chestType).toBe("golden");
@@ -224,7 +227,7 @@ describe("games routes", () => {
       },
     });
     vi.spyOn(Date, "now").mockReturnValue(
-      new Date("2026-01-01T00:00:10.000Z").getTime(),
+      new Date("2026-01-01T00:01:00.000Z").getTime(),
     );
 
     const responses = await Promise.all(
@@ -251,7 +254,45 @@ describe("games routes", () => {
     });
 
     expect(updatedUser.pgcBalance.toString()).toBe("140");
-    expect(updatedPixegotchi.experience).toBe(8);
+    expect(updatedPixegotchi.experience).toBe(45);
+  });
+
+  it("rejects an early scored completion but allows abandoning with zero rewards", async () => {
+    app = await buildApp();
+    const user = await createUser({ pgcBalance: 100 });
+    const pixegotchi = await createPixegotchi(user.id, { experience: 0 });
+    const now = new Date("2026-01-01T00:00:10.000Z").getTime();
+    const session = await prisma.gameSession.create({
+      data: {
+        userId: user.id,
+        pixegotchiId: pixegotchi.id,
+        gameId: "catch_fruits",
+        energySpent: 10,
+        createdAt: new Date(now - 10_000),
+      },
+    });
+    vi.spyOn(Date, "now").mockReturnValue(now);
+
+    const earlyResponse = await app.inject({
+      method: "POST",
+      url: `/api/games/${session.id}/complete`,
+      headers: authHeaders(app, user.id),
+      payload: { score: 80 },
+    });
+    expect(earlyResponse.statusCode, earlyResponse.body).toBe(400);
+
+    const abandonResponse = await app.inject({
+      method: "POST",
+      url: `/api/games/${session.id}/complete`,
+      headers: authHeaders(app, user.id),
+      payload: { score: 0 },
+    });
+    expect(abandonResponse.statusCode, abandonResponse.body).toBe(200);
+    expect(abandonResponse.json()).toMatchObject({
+      pgcEarned: "0",
+      experienceGained: 0,
+      completed: true,
+    });
   });
 
   it("returns only the authenticated user's latest game history", async () => {

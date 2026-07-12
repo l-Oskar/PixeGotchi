@@ -131,7 +131,7 @@ export const EXP_MULT: Record<string, number> = {
 } as const;
 
 export const EXP: Record<string, number> = {
-  BASE_EXP: 100,
+  BASE_EXP: 50,
   LVL_MULT: 0.5,
 } as const;
 

@@ -2,10 +2,14 @@ import { prisma } from "@/database/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import {
   CompleteGameSessionPayload,
+  buildPixegotchiSnapshot,
   ChestGenerator,
   GAME_CONFIGS,
   getFinalEnergyCost,
+  getFinalExp,
+  getFinalPgc,
   getTraitModifier,
+  RARITY_STATS,
   StartGameSessionInput,
 } from "@pixegotchi/shared";
 import { PixegotchiService } from "../pixegotchi/pixegotchi.service";
@@ -47,25 +51,43 @@ export class GamesService {
       throw httpError(400, "Pixegotchi is not active");
     }
 
-    const energyCost = getFinalEnergyCost(
-      pixegotchi.health,
-      pixegotchi.rarity,
-      config.energyCost,
-      pixegotchi.traits,
-    );
-
     return prisma.$transaction(async (tx) => {
+      const currentPixegotchi = await tx.pixegotchi.findUniqueOrThrow({
+        where: { id: input.pixegotchiId },
+      });
+      const now = new Date();
+      const snapshot = buildPixegotchiSnapshot(currentPixegotchi, now);
+
+      if (snapshot.status !== "active") {
+        throw httpError(400, "Pixegotchi is not active");
+      }
+
+      const energyCost = getFinalEnergyCost(
+        snapshot.health,
+        snapshot.rarity,
+        config.energyCost,
+        snapshot.traits,
+      );
+
+      if (snapshot.energy < energyCost) {
+        throw httpError(400, "Insufficient energy");
+      }
+
       const energyUpdate = await tx.pixegotchi.updateMany({
         where: {
           id: input.pixegotchiId,
           userId,
           status: "active",
-          energy: { gte: energyCost },
+          lastUpdateAt: currentPixegotchi.lastUpdateAt,
         },
         data: {
-          energy: { decrement: energyCost },
-          lastPlayedAt: new Date(),
-          lastUpdateAt: new Date(),
+          health: Math.round(snapshot.health),
+          hunger: Math.round(snapshot.hunger),
+          energy: Math.round(snapshot.energy - energyCost),
+          happiness: Math.round(snapshot.happiness),
+          cleanliness: Math.round(snapshot.cleanliness),
+          lastPlayedAt: now,
+          lastUpdateAt: now,
         },
       });
 
@@ -92,9 +114,7 @@ export class GamesService {
     const session = await prisma.gameSession.findUnique({
       where: { id: sessionId },
       include: {
-        pixegotchi: {
-          select: { traits: true },
-        },
+        pixegotchi: true,
       },
     });
 
@@ -116,31 +136,49 @@ export class GamesService {
       throw httpError(400, "Unknown game");
     }
 
+    const completionTime = new Date(Date.now());
     const actualDurationSec = Math.max(
       1,
-      Math.floor((Date.now() - session.createdAt.getTime()) / 1000),
+      Math.floor(
+        (completionTime.getTime() - session.createdAt.getTime()) / 1000,
+      ),
     );
+    if (input.score > 0 && actualDurationSec < config.minDuration) {
+      throw httpError(400, "Game session finished too quickly");
+    }
     const maxPossibleScore = actualDurationSec * config.maxScorePerSecond;
-    const safeScore = Math.min(input.score, maxPossibleScore);
-    const pgcModifier = getTraitModifier(
-      session.pixegotchi.traits,
-      "game_pgc_gain",
+    const safeScore = Math.min(
+      input.score,
+      maxPossibleScore,
+      config.maxScore ?? Number.POSITIVE_INFINITY,
     );
-    const expModifier = getTraitModifier(
-      session.pixegotchi.traits,
-      "game_exp_gain",
+    const pixegotchiSnapshot = buildPixegotchiSnapshot(
+      session.pixegotchi,
+      completionTime,
     );
     const chestModifier = getTraitModifier(
       session.pixegotchi.traits,
       "game_chest_chance",
     );
-    const pgcEarned = new Prisma.Decimal(safeScore)
-      .mul(config.pgcPerPoint)
-      .mul(pgcModifier);
-    const experienceGained = Math.floor(
-      safeScore * config.expPerPoint * expModifier,
+    const pgcEarned = new Prisma.Decimal(
+      getFinalPgc(
+        safeScore,
+        pixegotchiSnapshot.rarity,
+        pixegotchiSnapshot.traits,
+        config.difficultyMultiplier,
+      ),
     );
-    const chestChance = Math.min(1, config.chestDropChance * chestModifier);
+    const experienceGained = getFinalExp(
+      pixegotchiSnapshot.happiness,
+      pixegotchiSnapshot.level,
+      safeScore,
+      RARITY_STATS[pixegotchiSnapshot.rarity].maxStat,
+      config.difficultyMultiplier,
+    );
+    const chestChance =
+      safeScore > 0
+        ? Math.min(1, config.chestDropChance * chestModifier)
+        : 0;
     const chestDropped = Math.random() < chestChance;
     const droppedChest = chestDropped
       ? ChestGenerator.generateRandomChest()
@@ -163,7 +201,7 @@ export class GamesService {
             ? { chestType: droppedChest.chestType }
             : undefined,
           completed: true,
-          completedAt: new Date(),
+          completedAt: completionTime,
         },
       });
 

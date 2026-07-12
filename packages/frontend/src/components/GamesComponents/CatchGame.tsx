@@ -22,7 +22,7 @@ const SPECIAL_FRUIT_EMOJI = "🫐";
 const SPECIAL_FRUIT_SCORE = 50;
 const SPECIAL_FRUIT_SPAWN_TIME = Math.round(Math.random() * 10 + 10); // Секунда, коли з'явиться спеціальний фрукт
 const PIXEL_CHECK_STEP = 3;
-const GAME_DURATION = 30;
+const GAME_DURATION = 60;
 const SCALE = 2;
 const FALLBACK_CANVAS_BACKGROUND = "#10091f";
 const FALLBACK_BASKET_COLOR = "#8b5a3c";
@@ -87,10 +87,6 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   const pgcTraitModifier = getTraitModifier(
     pixegotchi.traits,
     "game_pgc_gain",
-  );
-  const expTraitModifier = getTraitModifier(
-    pixegotchi.traits,
-    "game_exp_gain",
   );
   const chestTraitModifier = getTraitModifier(
     pixegotchi.traits,
@@ -526,9 +522,6 @@ export const CatchGame: React.FC<CatchGameProps> = ({
           <div className="mb-4 flex flex-wrap justify-center gap-2 text-[7px] leading-3 text-pixel-blue">
             {pgcTraitModifier !== 1 && (
               <span>PGC trait +{Math.round((pgcTraitModifier - 1) * 100)}%</span>
-            )}
-            {expTraitModifier !== 1 && (
-              <span>EXP trait +{Math.round((expTraitModifier - 1) * 100)}%</span>
             )}
             {chestTraitModifier !== 1 && (
               <span>

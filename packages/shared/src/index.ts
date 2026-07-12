@@ -13,6 +13,7 @@ export type { ChestGeneratorOptions } from "./utils/chest-generator";
 export { round } from "./utils/calculate_stats/calculate_delta";
 export {
   calculateCurrentStats,
+  calculateHourlyStatChanges,
   derivePixegotchiStatus,
   buildPixegotchiSnapshot,
 } from "./utils/calculate_stats/lazy_degradation";
@@ -85,4 +86,22 @@ export { GAME_CONFIGS } from "./constants/games/games_const ";
 export type { MarketplaceListing } from "./types/marketplace";
 export type { Egg, UpdatedEgg, EggHatchingStatus } from "./types/egg";
 export type { ElementStats, VaultStats } from "./types/vault";
+export type {
+  RoomCosmeticSlot,
+  RoomSurfaceCosmeticSlot,
+  RoomPositionedCosmeticSlot,
+  RoomCosmeticPosition,
+  RoomCosmeticAsset,
+  RoomSurfaceCosmeticAsset,
+  RoomPositionedCosmeticAsset,
+  UserRoomCosmetic,
+  EquippedRoomCosmetic,
+  RoomLoadout,
+  RoomCosmeticsCatalogResponse,
+  UserRoomCosmeticsResponse,
+  UserRoomLoadoutResponse,
+  EquipRoomCosmeticInput,
+  UnequipRoomCosmeticInput,
+  UpdateRoomCosmeticResponse,
+} from "./types/room_cosmetics";
 export { isApiError } from "./types/api";

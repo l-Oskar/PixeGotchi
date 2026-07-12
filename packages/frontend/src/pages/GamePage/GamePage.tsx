@@ -5,6 +5,9 @@ import {
   Pixegotchi,
   GAME_CONFIGS,
   getFinalEnergyCost,
+  getFinalExp,
+  getFinalPgc,
+  RARITY_STATS,
 } from "@pixegotchi/shared";
 import { AlertCircle, Coins, StarPlus, Zap } from "lucide-react";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
@@ -46,6 +49,38 @@ const GamesPage: React.FC<GamePageProps> = ({
     );
 
     return { finalCost, traitDelta: finalCost - baseCost };
+  };
+  const getDisplayedRewards = (game: GameConfig) => {
+    if (!pixegotchi) {
+      return null;
+    }
+
+    const scoreRange = [80, 110] as const;
+    const maxStat = RARITY_STATS[pixegotchi.rarity].maxStat;
+    const pgcRange = scoreRange.map((score) =>
+      Math.round(
+        getFinalPgc(
+          score,
+          pixegotchi.rarity,
+          pixegotchi.traits,
+          game.difficultyMultiplier,
+        ),
+      ),
+    );
+    const expRange = scoreRange.map((score) =>
+      getFinalExp(
+        Number(pixegotchi.happiness),
+        pixegotchi.level,
+        score,
+        maxStat,
+        game.difficultyMultiplier,
+      ),
+    );
+
+    return {
+      pgc: `${pgcRange[0]}-${pgcRange[1]}`,
+      exp: `${expRange[0]}-${expRange[1]}`,
+    };
   };
 
   useEffect(() => {
@@ -116,6 +151,7 @@ const GamesPage: React.FC<GamePageProps> = ({
         <div className="space-y-2">
           {games.map((game) => {
             const { finalCost, traitDelta } = getDisplayedEnergyCost(game);
+            const rewards = getDisplayedRewards(game);
             const lacksEnergy =
               game.id === "catch_fruits" &&
               Number(pixegotchi?.energy ?? 0) < finalCost;
@@ -165,11 +201,11 @@ const GamesPage: React.FC<GamePageProps> = ({
                       </span>
                     )}
                     <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-pixel-highlight/50 bg-pixel-highlight/15 px-1.5 py-1 text-[7px] leading-3 text-pixel-highlight">
-                      {game.rewardLabel}
+                      {rewards?.pgc ?? "Score based"}
                       <Coins size={10} />
                     </span>
                     <span className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-pixel-green/50 bg-pixel-green/15 px-1.5 py-1 text-[7px] leading-3 text-pixel-green">
-                      {game.expLabel}
+                      {rewards?.exp ?? "Stats based"}
                       <StarPlus size={10} />
                     </span>
                   </div>

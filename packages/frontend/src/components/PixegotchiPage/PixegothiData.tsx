@@ -1,7 +1,9 @@
 import React from "react";
 import {
+  calculateHourlyStatChanges,
   ELEMENT_COLORS,
   Pixegotchi,
+  PixegotchiStats,
   RARITY_COLORS,
   RARITY_STATS,
   RarityType,
@@ -43,7 +45,6 @@ const TRAIT_EFFECT_LABELS: Record<TraitEffectKey, string> = {
   energy_drain: "Energy recovery",
   game_energy_cost: "Game energy cost",
   game_pgc_gain: "Game PGC",
-  game_exp_gain: "Game experience",
   game_chest_chance: "Game chest chance",
   happiness_gain: "Happiness gained",
   feed_happiness_gain: "Food happiness",
@@ -59,7 +60,6 @@ const POSITIVE_WHEN_INCREASED = new Set<TraitEffectKey>([
   "feed_happiness_gain",
   "play_happiness_gain",
   "game_pgc_gain",
-  "game_exp_gain",
   "game_chest_chance",
 ]);
 
@@ -150,6 +150,23 @@ const InfoBadge: React.FC<{
   </div>
 );
 
+const HOURLY_STAT_CONFIG: Array<{
+  key: keyof PixegotchiStats;
+  label: string;
+  icon: LucideIcon;
+}> = [
+  { key: "health", label: "Health", icon: Heart },
+  { key: "hunger", label: "Hunger", icon: Apple },
+  { key: "happiness", label: "Happiness", icon: Smile },
+  { key: "cleanliness", label: "Cleanliness", icon: Droplets },
+  { key: "energy", label: "Energy", icon: Zap },
+];
+
+const formatHourlyChange = (value: number) => {
+  const roundedValue = Number(value.toFixed(2));
+  return `${roundedValue > 0 ? "+" : ""}${roundedValue}`;
+};
+
 const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
   if (!pixegotchi) {
     return (
@@ -190,6 +207,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
         : statusKey === "vault"
           ? formatStatusDate(pixegotchi.lastUpdateAt)
           : null;
+  const hourlyStatChanges = calculateHourlyStatChanges(pixegotchi);
 
   return (
     <div className="space-y-3 p-3">
@@ -301,14 +319,6 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           rarity={pixegotchi.rarity}
         />
         <StatBar
-          icon={Zap}
-          label="Energy"
-          value={pixegotchi.energy}
-          color="bg-yellow-500"
-          strokeColor="text-yellow-500"
-          rarity={pixegotchi.rarity}
-        />
-        <StatBar
           icon={Smile}
           label="Happiness"
           value={pixegotchi.happiness}
@@ -324,6 +334,57 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           strokeColor="text-sky-500"
           rarity={pixegotchi.rarity}
         />
+        <StatBar
+          icon={Zap}
+          label="Energy"
+          value={pixegotchi.energy}
+          color="bg-yellow-500"
+          strokeColor="text-yellow-500"
+          rarity={pixegotchi.rarity}
+        />
+      </div>
+
+      {/* Hourly degradation */}
+      <div className="pixel-panel p-3">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h3 className="font-pixel text-[12px] leading-4 text-pixel-ink">
+            Degradation per hour
+          </h3>
+          <span className="font-pixel text-[7px] leading-3 text-pixel-muted">
+            / 1H
+          </span>
+        </div>
+        <p className="mb-3 font-pixel text-[7px] leading-4 text-pixel-muted">
+          Includes level, rarity, traits, current stats and status
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {HOURLY_STAT_CONFIG.map(({ key, label, icon: Icon }) => {
+            const change = hourlyStatChanges[key];
+            const changeColor =
+              change > 0
+                ? "text-pixel-green"
+                : change < 0
+                  ? "text-pixel-red"
+                  : "text-pixel-muted";
+
+            return (
+              <div
+                key={key}
+                className="pixel-panel-soft flex items-center justify-between gap-2 p-2">
+                <div className="flex min-w-0 items-center gap-2">
+                  <Icon className="shrink-0 text-pixel-muted" size={15} />
+                  <span className="truncate font-pixel text-[7px] leading-3 text-pixel-muted">
+                    {label}
+                  </span>
+                </div>
+                <span
+                  className={`shrink-0 font-pixel text-[8px] leading-3 ${changeColor}`}>
+                  {formatHourlyChange(change)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Traits */}

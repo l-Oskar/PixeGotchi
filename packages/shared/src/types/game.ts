@@ -31,14 +31,11 @@ export type CompleteGameSessionInput = CompleteGameSessionPayload & {
 export interface GameConfig {
   name: string;
   difficulty: "Easy" | "Medium" | "Hard";
-  rewardLabel: string;
-  expLabel: string;
+  difficultyMultiplier: number;
   icon: string;
   energyCost: number;
   minDuration: number;
   maxScorePerSecond: number;
-  pgcPerPoint: number;
-  expPerPoint: number;
   chestDropChance: number;
 
   maxScore?: number;

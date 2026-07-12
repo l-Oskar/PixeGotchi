@@ -82,6 +82,15 @@ enum CurrencyType {
   ton
 }
 
+enum RoomCosmeticSlot {
+  environment
+  floor
+  rug
+  wallArt
+  furniture
+  decor
+}
+
 // ============================================
 // MODELS
 // ============================================
@@ -109,10 +118,97 @@ model User {
   vault               Vault[]
   listings            MarketplaceListing[] @relation("SellerListings")
   purchases           MarketplaceListing[] @relation("BuyerPurchases")
+  cosmetics           UserCosmetic[]
+  roomLoadout         UserRoomLoadout?
 
   @@index([telegramId])
   @@index([walletAddress])
   @@map("users")
+}
+
+// ============================================
+// ROOM COSMETICS
+// ============================================
+
+model CosmeticAsset {
+  id               String           @id @db.VarChar(64)
+  name             String           @db.VarChar(100)
+  slot             RoomCosmeticSlot
+  rarity           RarityType       @default(common)
+  assetUrl         String?          @map("asset_url") @db.VarChar(255)
+  environmentId    String?          @map("environment_id") @db.VarChar(64)
+  allowedPositions Int[]            @default([]) @map("allowed_positions")
+  span             Int              @default(1)
+  allowOverlap     Boolean          @default(false) @map("allow_overlap")
+  isDefault        Boolean          @default(false) @map("is_default")
+  isLimited        Boolean          @default(false) @map("is_limited")
+  isTradable       Boolean          @default(true) @map("is_tradable")
+  isActive         Boolean          @default(true) @map("is_active")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  environment             CosmeticAsset?          @relation("CosmeticEnvironmentCompatibility", fields: [environmentId], references: [id], onDelete: SetNull)
+  compatibleAssets        CosmeticAsset[]         @relation("CosmeticEnvironmentCompatibility")
+  ownerships              UserCosmetic[]
+  placements              RoomCosmeticPlacement[]
+  environmentLoadouts     UserRoomLoadout[]       @relation("RoomLoadoutEnvironment")
+  floorLoadouts           UserRoomLoadout[]       @relation("RoomLoadoutFloor")
+
+  @@index([slot, isActive])
+  @@index([rarity])
+  @@index([environmentId])
+  @@map("cosmetic_assets")
+}
+
+model UserCosmetic {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @map("user_id")
+  cosmeticAssetId String   @map("cosmetic_asset_id") @db.VarChar(64)
+  quantity        Int      @default(1)
+  acquiredAt      DateTime @default(now()) @map("acquired_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset CosmeticAsset @relation(fields: [cosmeticAssetId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, cosmeticAssetId])
+  @@index([userId])
+  @@index([cosmeticAssetId])
+  @@map("user_cosmetics")
+}
+
+model UserRoomLoadout {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @unique @map("user_id")
+  environmentId String   @map("environment_id") @db.VarChar(64)
+  floorId       String?  @map("floor_id") @db.VarChar(64)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  environment CosmeticAsset           @relation("RoomLoadoutEnvironment", fields: [environmentId], references: [id], onDelete: Restrict)
+  floor       CosmeticAsset?          @relation("RoomLoadoutFloor", fields: [floorId], references: [id], onDelete: Restrict)
+  placements RoomCosmeticPlacement[]
+
+  @@index([environmentId])
+  @@index([floorId])
+  @@map("user_room_loadouts")
+}
+
+model RoomCosmeticPlacement {
+  id              Int      @id @default(autoincrement())
+  loadoutId       Int      @map("loadout_id")
+  cosmeticAssetId String   @map("cosmetic_asset_id") @db.VarChar(64)
+  position        Int
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  loadout UserRoomLoadout @relation(fields: [loadoutId], references: [id], onDelete: Cascade)
+  asset   CosmeticAsset   @relation(fields: [cosmeticAssetId], references: [id], onDelete: Restrict)
+
+  @@unique([loadoutId, cosmeticAssetId, position])
+  @@index([loadoutId])
+  @@index([cosmeticAssetId])
+  @@map("room_cosmetic_placements")
 }
 
 // ============================================

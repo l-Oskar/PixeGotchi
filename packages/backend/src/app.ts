@@ -22,6 +22,7 @@ import { chestRoutes } from "./modules/chest/chest.routes";
 import { ChestGenerator } from "./utils/chest-generator";
 import { logger } from "@/config/logger";
 import { clientLogsRoutes } from "@/modules/client-logs/client-logs.routes";
+import { roomCosmeticsRoutes } from "@/modules/room-cosmetics/room-cosmetics.routes";
 
 function isZodValidationError(error: unknown): error is Error {
   if (!error || typeof error !== "object") {
@@ -194,6 +195,9 @@ export async function buildApp() {
       });
       await apiInstance.register(vaultRoutes, { prefix: "/vault" });
       await apiInstance.register(chestRoutes, { prefix: "/chest" });
+      await apiInstance.register(roomCosmeticsRoutes, {
+        prefix: "/room-cosmetics",
+      });
       await apiInstance.register(clientLogsRoutes, { prefix: "/logs" });
     },
     { prefix: "/api" },

@@ -230,7 +230,6 @@ export const TRAIT_EFFECTS: Record<TraitType, TraitEffect> = {
     description: "Deeply devoted, bonds strengthen everything",
     effects: {
       happiness_gain: 1.35, // ↑↑ взаємодія з власником дає більше щастя
-      game_exp_gain: 1.15, // ↑ швидше навчається у спільних іграх
     },
   },
 

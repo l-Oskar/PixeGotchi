@@ -428,6 +428,52 @@ export function calculateCurrentStats(
   return stats;
 }
 
+export function calculateHourlyStatChanges(
+  pixegotchi: Pixegotchi,
+  options: StatEngineOptions = {},
+): PixegotchiStats {
+  const currentStats = calculateCurrentStats(
+    {
+      ...pixegotchi,
+      lastUpdateAt: null,
+    },
+    undefined,
+    options,
+  );
+
+  if (
+    pixegotchi.status === PixegotchiStatus.vault ||
+    pixegotchi.status === PixegotchiStatus.dead
+  ) {
+    return {
+      health: 0,
+      hunger: 0,
+      energy: 0,
+      happiness: 0,
+      cleanliness: 0,
+    };
+  }
+
+  const referenceTime = new Date("2000-01-01T00:00:00.000Z");
+  const nextHourStats = calculateCurrentStats(
+    {
+      ...pixegotchi,
+      ...currentStats,
+      lastUpdateAt: referenceTime.toISOString(),
+    },
+    new Date(referenceTime.getTime() + DEGRADATION_STEP_MS),
+    options,
+  );
+
+  return {
+    health: round(nextHourStats.health - currentStats.health),
+    hunger: round(nextHourStats.hunger - currentStats.hunger),
+    energy: round(nextHourStats.energy - currentStats.energy),
+    happiness: round(nextHourStats.happiness - currentStats.happiness),
+    cleanliness: round(nextHourStats.cleanliness - currentStats.cleanliness),
+  };
+}
+
 export function derivePixegotchiStatus(
   pixegotchi: Pixegotchi,
   stats: PixegotchiStats,

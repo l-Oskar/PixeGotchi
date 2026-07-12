@@ -68,6 +68,10 @@ beforeEach(async (context) => {
       TRUNCATE TABLE
         "active_effects",
         "chests",
+        "room_cosmetic_placements",
+        "user_room_loadouts",
+        "user_cosmetics",
+        "cosmetic_assets",
         "eggs",
         "game_sessions",
         "inventory",
@@ -92,6 +96,10 @@ beforeEach(async (context) => {
 afterAll(async () => {
   const prisma = await getPrisma();
 
-  await redis?.quit();
+  if (redis?.status === "ready") {
+    await redis.quit();
+  } else {
+    redis?.disconnect();
+  }
   await prisma.$disconnect();
 });

@@ -36,12 +36,24 @@ import { Visual } from "../MainPage/Visual";
 import {
   getRoomFloor,
   getRoomWall,
+  ROOM_FLOORS,
+  ROOM_WALLS,
+} from "../MainPage/roomSurfaces";
+import type {
+  RoomFloorId,
+  RoomWallId,
 } from "../MainPage/roomSurfaces";
 import {
   buildRoomAssetPlacements,
   ROOM_ASSETS,
 } from "../MainPage/roomAssets";
+import type { RoomAssetId } from "../MainPage/roomAssets";
 import { useRoomStore } from "@/store/room.store";
+import {
+  useEquipRoomCosmetic,
+  useRoomCosmeticsLoadout,
+  useUnequipRoomCosmetic,
+} from "@/services/queries/room-cosmetics.queries";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,
@@ -57,17 +69,178 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   const [isStatsOpen, setIsStatsOpen] = useState(true);
   const [isRoomMenuOpen, setIsRoomMenuOpen] = useState(false);
   const [showRoomSlotGuides, setShowRoomSlotGuides] = useState(false);
+  const [roomSaveError, setRoomSaveError] = useState<string | null>(null);
   const {
-    wallId,
-    floorId,
-    hiddenAssetIds,
-    cabinetSlot,
-    cycleWall,
-    cycleFloor,
-    toggleAsset,
-    toggleCabinetSide,
+    wallId: localWallId,
+    floorId: localFloorId,
+    hiddenAssetIds: localHiddenAssetIds,
+    cabinetSlot: localCabinetSlot,
+    cycleWall: cycleLocalWall,
+    cycleFloor: cycleLocalFloor,
+    toggleAsset: toggleLocalAsset,
+    toggleCabinetSide: toggleLocalCabinetSide,
     resetRoom,
   } = useRoomStore();
+  const loadoutQuery = useRoomCosmeticsLoadout(isRoomMenuOpen);
+  const equipRoomCosmetic = useEquipRoomCosmetic();
+  const unequipRoomCosmetic = useUnequipRoomCosmetic();
+  const serverLoadout = loadoutQuery.data?.loadout ?? null;
+  const hasServerLoadout = loadoutQuery.isSuccess && serverLoadout !== null;
+  const serverAssetIds = new Set(
+    serverLoadout?.placements.map((placement) => placement.cosmeticAssetId) ??
+      [],
+  );
+  const serverCabinetPlacement = serverLoadout?.placements.find(
+    (placement) => placement.cosmeticAssetId === "tall-cabinet-wood",
+  );
+  const wallId =
+    hasServerLoadout &&
+    ROOM_WALLS.some((wall) => wall.id === serverLoadout.environmentId)
+      ? (serverLoadout.environmentId as RoomWallId)
+      : localWallId;
+  const floorId =
+    hasServerLoadout &&
+    serverLoadout.floorId &&
+    ROOM_FLOORS.some((floor) => floor.id === serverLoadout.floorId)
+      ? (serverLoadout.floorId as RoomFloorId)
+      : localFloorId;
+  const hiddenAssetIds: RoomAssetId[] = hasServerLoadout
+    ? ROOM_ASSETS.filter((asset) => !serverAssetIds.has(asset.id)).map(
+        (asset) => asset.id,
+      )
+    : localHiddenAssetIds;
+  const cabinetSlot =
+    serverCabinetPlacement?.position === 1 ||
+    serverCabinetPlacement?.position === 3
+      ? serverCabinetPlacement.position
+      : localCabinetSlot;
+  const canUseServerRoom = loadoutQuery.isSuccess;
+  const isRoomSaving =
+    equipRoomCosmetic.isPending || unequipRoomCosmetic.isPending;
+
+  const persistRoomChange = async (change: () => Promise<unknown>) => {
+    setRoomSaveError(null);
+    try {
+      await change();
+      return true;
+    } catch {
+      setRoomSaveError("SAVE FAILED");
+      return false;
+    }
+  };
+
+  const handleCycleWall = async () => {
+    const currentIndex = ROOM_WALLS.findIndex((wall) => wall.id === wallId);
+    const nextWall =
+      ROOM_WALLS[(Math.max(0, currentIndex) + 1) % ROOM_WALLS.length];
+
+    if (!canUseServerRoom) {
+      cycleLocalWall();
+      return;
+    }
+
+    await persistRoomChange(() =>
+      equipRoomCosmetic.mutateAsync({ cosmeticAssetId: nextWall.id }),
+    );
+  };
+
+  const handleCycleFloor = async () => {
+    const currentIndex = ROOM_FLOORS.findIndex((floor) => floor.id === floorId);
+    const nextFloor =
+      ROOM_FLOORS[(Math.max(0, currentIndex) + 1) % ROOM_FLOORS.length];
+
+    if (!canUseServerRoom) {
+      cycleLocalFloor();
+      return;
+    }
+
+    await persistRoomChange(() =>
+      equipRoomCosmetic.mutateAsync({ cosmeticAssetId: nextFloor.id }),
+    );
+  };
+
+  const handleToggleAsset = async (assetId: RoomAssetId) => {
+    if (!canUseServerRoom) {
+      toggleLocalAsset(assetId);
+      return;
+    }
+
+    const asset = ROOM_ASSETS.find((candidate) => candidate.id === assetId);
+    if (!asset) return;
+
+    const placement = serverLoadout?.placements.find(
+      (candidate) => candidate.cosmeticAssetId === assetId,
+    );
+    const position =
+      assetId === "tall-cabinet-wood"
+        ? cabinetSlot
+        : (placement?.position ?? asset.slot);
+    const isVisible = !hiddenAssetIds.includes(assetId);
+
+    if (isVisible) {
+      await persistRoomChange(() =>
+        unequipRoomCosmetic.mutateAsync({
+          cosmeticAssetId: assetId,
+          position,
+        }),
+      );
+      return;
+    }
+
+    const assetAllowsOverlap =
+      "allowOverlap" in asset && asset.allowOverlap;
+    const competingAssets = ROOM_ASSETS.filter((candidate) => {
+      const candidateAllowsOverlap =
+        "allowOverlap" in candidate && candidate.allowOverlap;
+      return (
+        candidate.id !== asset.id &&
+        candidate.slot === asset.slot &&
+        !hiddenAssetIds.includes(candidate.id) &&
+        !assetAllowsOverlap &&
+        !candidateAllowsOverlap
+      );
+    });
+
+    await persistRoomChange(async () => {
+      for (const competingAsset of competingAssets) {
+        const competingPlacement = serverLoadout?.placements.find(
+          (candidate) =>
+            candidate.cosmeticAssetId === competingAsset.id,
+        );
+        await unequipRoomCosmetic.mutateAsync({
+          cosmeticAssetId: competingAsset.id,
+          position:
+            competingAsset.id === "tall-cabinet-wood"
+              ? cabinetSlot
+              : (competingPlacement?.position ?? competingAsset.slot),
+        });
+      }
+
+      await equipRoomCosmetic.mutateAsync({
+        cosmeticAssetId: assetId,
+        position,
+      });
+    });
+  };
+
+  const handleToggleCabinetSide = async () => {
+    if (!canUseServerRoom || hiddenAssetIds.includes("tall-cabinet-wood")) {
+      toggleLocalCabinetSide();
+      return;
+    }
+
+    const nextPosition = cabinetSlot === 1 ? 3 : 1;
+    await persistRoomChange(async () => {
+      await unequipRoomCosmetic.mutateAsync({
+        cosmeticAssetId: "tall-cabinet-wood",
+        position: cabinetSlot,
+      });
+      await equipRoomCosmetic.mutateAsync({
+        cosmeticAssetId: "tall-cabinet-wood",
+        position: nextPosition,
+      });
+    });
+  };
 
   const handleAction = (action: string) => {
     console.log(action);
@@ -158,9 +331,15 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
             </button>
             {isRoomMenuOpen && (
               <div className="pixel-panel-soft absolute right-0 top-11 z-40 max-h-64 w-40 space-y-1 overflow-y-auto bg-pixel-bg-deep/95 p-1.5 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_16px_var(--color-pixel-glow)] backdrop-blur-sm">
+                {roomSaveError && (
+                  <div className="px-2 py-1 font-pixel text-[7px] text-pixel-red">
+                    {roomSaveError}
+                  </div>
+                )}
                 <button
                   type="button"
-                  onClick={cycleWall}
+                  onClick={handleCycleWall}
+                  disabled={loadoutQuery.isLoading || isRoomSaving}
                   className="pixel-button flex min-h-0 w-full items-center justify-start gap-2 px-2 py-1.5 text-left font-pixel text-[7px] leading-3">
                   <Wallpaper size={13} />
                   <span className="truncate">
@@ -169,7 +348,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={cycleFloor}
+                  onClick={handleCycleFloor}
+                  disabled={loadoutQuery.isLoading || isRoomSaving}
                   className="pixel-button flex min-h-0 w-full items-center justify-start gap-2 px-2 py-1.5 text-left font-pixel text-[7px] leading-3">
                   <Grid2X2 size={13} />
                   <span className="truncate">
@@ -183,7 +363,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                     <button
                       key={asset.id}
                       type="button"
-                      onClick={() => toggleAsset(asset.id)}
+                      onClick={() => handleToggleAsset(asset.id)}
+                      disabled={loadoutQuery.isLoading || isRoomSaving}
                       className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
                       <span>{asset.label}</span>
                       <span
@@ -197,7 +378,8 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 })}
                 <button
                   type="button"
-                  onClick={toggleCabinetSide}
+                  onClick={handleToggleCabinetSide}
+                  disabled={loadoutQuery.isLoading || isRoomSaving}
                   className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
                   <span>Cabinet side</span>
                   <span className="text-pixel-highlight">
@@ -207,6 +389,12 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 <button
                   type="button"
                   onClick={resetRoom}
+                  disabled={canUseServerRoom || isRoomSaving}
+                  title={
+                    canUseServerRoom
+                      ? "Server room reset will be added separately"
+                      : undefined
+                  }
                   className="pixel-button min-h-0 w-full px-2 py-1.5 font-pixel text-[7px] leading-3 text-pixel-red">
                   RESET ROOM
                 </button>

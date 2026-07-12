@@ -14,15 +14,16 @@ import {
   DEFAULT_HIDDEN_ROOM_ASSET_IDS,
   ROOM_ASSETS,
 } from "@/components/MainPage/roomAssets";
+import type { RoomAssetId } from "@/components/MainPage/roomAssets";
 
 interface RoomState {
   wallId: RoomWallId;
   floorId: RoomFloorId;
-  hiddenAssetIds: string[];
+  hiddenAssetIds: RoomAssetId[];
   cabinetSlot: 1 | 3;
   cycleWall: () => void;
   cycleFloor: () => void;
-  toggleAsset: (assetId: string) => void;
+  toggleAsset: (assetId: RoomAssetId) => void;
   toggleCabinetSide: () => void;
   resetRoom: () => void;
 }

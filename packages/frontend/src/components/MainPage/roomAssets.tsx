@@ -73,7 +73,7 @@ export const DEFAULT_HIDDEN_ROOM_ASSET_IDS: RoomAssetId[] = [
 ];
 
 export const buildRoomAssetPlacements = (
-  hiddenAssetIds: string[],
+  hiddenAssetIds: RoomAssetId[],
   cabinetSlot: 1 | 3,
 ): RoomAssetPlacement[] =>
   ROOM_ASSETS.filter((asset) => !hiddenAssetIds.includes(asset.id)).map(
