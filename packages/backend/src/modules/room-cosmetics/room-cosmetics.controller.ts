@@ -1,6 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type {
   EquipRoomCosmeticInput,
+  PurchaseRoomCosmeticInput,
   SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
 } from "@pixegotchi/shared";
@@ -19,6 +20,12 @@ const roomCosmeticMutationSchema = z
         "Invalid room position",
       )
       .optional(),
+  })
+  .strict();
+
+const purchaseRoomCosmeticSchema = z
+  .object({
+    cosmeticAssetId: z.string().trim().min(1).max(64),
   })
   .strict();
 
@@ -69,6 +76,11 @@ export class RoomCosmeticsController {
     return reply.send(inventory);
   }
 
+  async getShop(request: FastifyRequest, reply: FastifyReply) {
+    const shop = await this.roomCosmeticsService.getShop(request.user.userId);
+    return reply.send(shop);
+  }
+
   async getCurrentLoadout(request: FastifyRequest, reply: FastifyReply) {
     const loadout = await this.roomCosmeticsService.getOrCreateCurrentLoadout(
       request.user.userId,
@@ -81,6 +93,17 @@ export class RoomCosmeticsController {
       request.body,
     ) as SaveRoomLoadoutInput;
     const result = await this.roomCosmeticsService.saveLoadout(
+      request.user.userId,
+      input,
+    );
+    return reply.send(result);
+  }
+
+  async purchase(request: FastifyRequest, reply: FastifyReply) {
+    const input = purchaseRoomCosmeticSchema.parse(
+      request.body,
+    ) as PurchaseRoomCosmeticInput;
+    const result = await this.roomCosmeticsService.purchase(
       request.user.userId,
       input,
     );

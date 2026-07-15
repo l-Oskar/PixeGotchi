@@ -1,6 +1,11 @@
 import { useCreateEgg } from "@/services/queries/egg.queries";
 import { useAddItem } from "@/services/queries/inventory.queries";
 import { useGetRandomChest } from "@/services/queries/chest.queries";
+import {
+  usePurchaseRoomCosmetic,
+  useRoomCosmeticsShop,
+} from "@/services/queries/room-cosmetics.queries";
+import { useUserStore } from "@/store/user.store";
 import { Package, ShoppingBag, Sparkles } from "lucide-react";
 import {
   PageType,
@@ -17,6 +22,11 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const createEgg = useCreateEgg();
   const addItem = useAddItem();
   const getRandomChest = useGetRandomChest();
+  const roomCosmeticsShop = useRoomCosmeticsShop();
+  const purchaseRoomCosmetic = usePurchaseRoomCosmetic();
+  const pgcBalance = Number(
+    useUserStore((state) => state.user?.pgcBalance ?? 0),
+  );
 
   const handleCreateEgg = () => {
     createEgg.mutate(undefined, {
@@ -267,6 +277,102 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
             );
           })}
         </div>
+
+        <div className="mt-4 flex items-center justify-between gap-2">
+          <div>
+            <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
+              Room Cosmetics
+            </h2>
+            <div className="theme-readable-muted mt-1 font-pixel text-[7px] leading-3">
+              Permanent room assets
+            </div>
+          </div>
+          <div className="pixel-panel-soft px-2 py-1 font-pixel text-[8px] leading-3 text-pixel-highlight">
+            {roomCosmeticsShop.data?.offers.length ?? 0}
+          </div>
+        </div>
+
+        {roomCosmeticsShop.isLoading ? (
+          <div className="pixel-panel-soft mt-2 p-4 text-center font-pixel text-[8px] text-pixel-ink/70">
+            LOADING...
+          </div>
+        ) : roomCosmeticsShop.isError ? (
+          <div className="pixel-panel-soft mt-2 border-pixel-red/60 p-4 text-center font-pixel text-[8px] text-pixel-red">
+            ROOM SHOP UNAVAILABLE
+          </div>
+        ) : (
+          <>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {roomCosmeticsShop.data?.offers.map((offer) => {
+                const price = Number(offer.pgcPrice);
+                const isPending =
+                  purchaseRoomCosmetic.isPending &&
+                  purchaseRoomCosmetic.variables?.cosmeticAssetId ===
+                    offer.asset.id;
+                const cannotAfford = pgcBalance < price;
+
+                return (
+                  <div
+                    key={offer.asset.id}
+                    className="pixel-panel-soft flex min-h-40 flex-col overflow-hidden bg-linear-to-b from-pixel-surface-soft to-pixel-bg-deep/60 p-2">
+                    <div className="grid h-20 place-items-center overflow-hidden rounded-sm bg-pixel-bg-deep/35 p-1">
+                      {offer.asset.assetUrl ? (
+                        <img
+                          src={`${import.meta.env.BASE_URL}${offer.asset.assetUrl}`}
+                          alt={offer.asset.name}
+                          className="h-full w-full object-contain pixelated"
+                        />
+                      ) : (
+                        <Sparkles className="text-pixel-highlight" size={28} />
+                      )}
+                    </div>
+
+                    <div className="mt-2 min-w-0 flex-1">
+                      <h3 className="truncate font-pixel text-[9px] leading-3 text-pixel-ink">
+                        {offer.asset.name}
+                      </h3>
+                      <div className="mt-1 font-pixel text-[7px] uppercase leading-3 text-pixel-ink/70">
+                        {offer.asset.slot} · {offer.asset.rarity}
+                      </div>
+                    </div>
+
+                    <div className="mt-2 flex items-center justify-between gap-1.5">
+                      <div className="rounded-sm border border-pixel-highlight/50 bg-pixel-surface-soft/90 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-highlight">
+                        {price} PGC
+                      </div>
+                      <button
+                        type="button"
+                        disabled={offer.owned || isPending || cannotAfford}
+                        onClick={() =>
+                          purchaseRoomCosmetic.mutate({
+                            cosmeticAssetId: offer.asset.id,
+                          })
+                        }
+                        className={`pixel-button min-h-0 px-2 py-1.5 font-pixel text-[8px] leading-3 disabled:cursor-not-allowed disabled:opacity-65 ${
+                          offer.owned
+                            ? "border-pixel-green text-pixel-green"
+                            : ""
+                        }`}>
+                        {offer.owned
+                          ? "OWNED"
+                          : isPending
+                            ? "..."
+                            : cannotAfford
+                              ? "NO PGC"
+                              : "BUY"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {purchaseRoomCosmetic.isError && (
+              <div className="pixel-panel-soft mt-2 border-pixel-red/60 p-2 text-center font-pixel text-[7px] text-pixel-red">
+                PURCHASE FAILED
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

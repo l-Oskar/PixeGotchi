@@ -136,6 +136,99 @@ describe("RoomCosmeticsService", () => {
     expect(assetIds).not.toContain(inactiveDefaultAsset.id);
   });
 
+  it("lists active purchasable cosmetics with ownership state", async () => {
+    const user = await createUser();
+    const offer = await createAsset({
+      isDefault: false,
+      isPurchasable: true,
+      pgcPrice: 400,
+    });
+    await createAsset({
+      isDefault: false,
+      isPurchasable: false,
+      pgcPrice: null,
+    });
+    const service = new RoomCosmeticsService();
+
+    await expect(service.getShop(user.id)).resolves.toMatchObject({
+      offers: [
+        {
+          asset: { id: offer.id },
+          pgcPrice: "400",
+          owned: false,
+        },
+      ],
+    });
+  });
+
+  it("purchases a cosmetic atomically and exposes it in editor inventory", async () => {
+    const user = await createUser({ pgcBalance: 500 });
+    const offer = await createAsset({
+      isDefault: false,
+      isPurchasable: true,
+      pgcPrice: 400,
+    });
+    const service = new RoomCosmeticsService();
+
+    const purchase = await service.purchase(user.id, {
+      cosmeticAssetId: offer.id,
+    });
+
+    expect(purchase.pgcBalance).toBe("100");
+    expect(purchase.cosmetic).toMatchObject({
+      cosmeticAssetId: offer.id,
+      quantity: 1,
+    });
+    await expect(service.getEditorInventory(user.id)).resolves.toMatchObject({
+      assets: [expect.objectContaining({ id: offer.id })],
+    });
+  });
+
+  it("does not charge for an already owned cosmetic", async () => {
+    const user = await createUser({ pgcBalance: 500 });
+    const offer = await createAsset({
+      isDefault: false,
+      isPurchasable: true,
+      pgcPrice: 400,
+    });
+    await prisma.userCosmetic.create({
+      data: { userId: user.id, cosmeticAssetId: offer.id },
+    });
+    const service = new RoomCosmeticsService();
+
+    await expect(
+      service.purchase(user.id, { cosmeticAssetId: offer.id }),
+    ).rejects.toMatchObject({ statusCode: 409 });
+    const unchangedUser = await prisma.user.findUniqueOrThrow({
+      where: { id: user.id },
+    });
+    expect(unchangedUser.pgcBalance.toString()).toBe("500");
+  });
+
+  it("does not create ownership when the balance is insufficient", async () => {
+    const user = await createUser({ pgcBalance: 399 });
+    const offer = await createAsset({
+      isDefault: false,
+      isPurchasable: true,
+      pgcPrice: 400,
+    });
+    const service = new RoomCosmeticsService();
+
+    await expect(
+      service.purchase(user.id, { cosmeticAssetId: offer.id }),
+    ).rejects.toMatchObject({ statusCode: 402 });
+    await expect(
+      prisma.userCosmetic.findUnique({
+        where: {
+          userId_cosmeticAssetId: {
+            userId: user.id,
+            cosmeticAssetId: offer.id,
+          },
+        },
+      }),
+    ).resolves.toBeNull();
+  });
+
   it("creates the default server loadout when a user opens room data", async () => {
     const user = await createUser();
     await createDefaultSurfaces();

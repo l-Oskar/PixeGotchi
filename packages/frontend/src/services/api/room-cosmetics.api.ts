@@ -1,7 +1,10 @@
 import type {
   EquipRoomCosmeticInput,
+  PurchaseRoomCosmeticInput,
+  PurchaseRoomCosmeticResponse,
   RoomCosmeticsCatalogResponse,
   RoomCosmeticsInventoryResponse,
+  RoomCosmeticsShopResponse,
   SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
   UpdateRoomCosmeticResponse,
@@ -35,6 +38,12 @@ export const roomCosmeticsApi = {
     return data;
   },
 
+  getShop: async (): Promise<RoomCosmeticsShopResponse> => {
+    const { data } =
+      await apiClient.get<RoomCosmeticsShopResponse>("/room-cosmetics/shop");
+    return data;
+  },
+
   getLoadout: async (): Promise<UserRoomLoadoutResponse> => {
     const { data } =
       await apiClient.get<UserRoomLoadoutResponse>(
@@ -48,6 +57,16 @@ export const roomCosmeticsApi = {
   ): Promise<UpdateRoomCosmeticResponse> => {
     const { data } = await apiClient.put<UpdateRoomCosmeticResponse>(
       "/room-cosmetics/loadout",
+      input,
+    );
+    return data;
+  },
+
+  purchase: async (
+    input: PurchaseRoomCosmeticInput,
+  ): Promise<PurchaseRoomCosmeticResponse> => {
+    const { data } = await apiClient.post<PurchaseRoomCosmeticResponse>(
+      "/room-cosmetics/purchase",
       input,
     );
     return data;

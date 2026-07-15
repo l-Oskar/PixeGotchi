@@ -16,6 +16,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -31,6 +33,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -46,6 +50,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -61,6 +67,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -76,6 +84,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -91,6 +101,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -106,6 +118,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -121,6 +135,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -136,6 +152,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -151,6 +169,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -163,9 +183,11 @@ export const DEFAULT_ROOM_COSMETICS = [
     allowedPositions: [8],
     span: 1,
     allowOverlap: false,
-    isDefault: true,
+    isDefault: false,
     isLimited: false,
-    isTradable: false,
+    isTradable: true,
+    isPurchasable: true,
+    pgcPrice: 400,
     isActive: true,
   },
   {
@@ -181,6 +203,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -196,6 +220,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -211,6 +237,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -226,6 +254,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
   {
@@ -241,6 +271,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isDefault: true,
     isLimited: false,
     isTradable: false,
+    isPurchasable: false,
+    pgcPrice: null,
     isActive: true,
   },
 ] satisfies Prisma.CosmeticAssetCreateManyInput[];

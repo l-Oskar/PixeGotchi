@@ -146,6 +146,8 @@ model CosmeticAsset {
   isDefault        Boolean          @default(false) @map("is_default")
   isLimited        Boolean          @default(false) @map("is_limited")
   isTradable       Boolean          @default(true) @map("is_tradable")
+  isPurchasable    Boolean          @default(false) @map("is_purchasable")
+  pgcPrice         Decimal?         @map("pgc_price") @db.Decimal(20, 8)
   isActive         Boolean          @default(true) @map("is_active")
   createdAt        DateTime         @default(now()) @map("created_at")
   updatedAt        DateTime         @updatedAt @map("updated_at")
@@ -158,6 +160,7 @@ model CosmeticAsset {
   floorLoadouts           UserRoomLoadout[]       @relation("RoomLoadoutFloor")
 
   @@index([slot, isActive])
+  @@index([isPurchasable, isActive])
   @@index([rarity])
   @@index([environmentId])
   @@map("cosmetic_assets")

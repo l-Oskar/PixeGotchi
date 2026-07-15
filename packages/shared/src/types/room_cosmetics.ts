@@ -93,6 +93,25 @@ export interface RoomCosmeticsInventoryResponse {
   assets: RoomCosmeticAsset[];
 }
 
+export interface RoomCosmeticsShopOffer {
+  asset: RoomCosmeticAsset;
+  pgcPrice: string;
+  owned: boolean;
+}
+
+export interface RoomCosmeticsShopResponse {
+  offers: RoomCosmeticsShopOffer[];
+}
+
+export interface PurchaseRoomCosmeticInput {
+  cosmeticAssetId: string;
+}
+
+export interface PurchaseRoomCosmeticResponse {
+  cosmetic: UserRoomCosmetic;
+  pgcBalance: string;
+}
+
 export interface UserRoomLoadoutResponse {
   loadout: RoomLoadout | null;
 }

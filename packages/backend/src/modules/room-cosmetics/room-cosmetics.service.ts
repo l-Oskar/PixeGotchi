@@ -1,9 +1,12 @@
 import type {
   EquipRoomCosmeticInput,
+  PurchaseRoomCosmeticInput,
+  PurchaseRoomCosmeticResponse,
   RoomCosmeticAsset,
   RoomCosmeticPosition,
   RoomCosmeticsCatalogResponse,
   RoomCosmeticsInventoryResponse,
+  RoomCosmeticsShopResponse,
   SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
   UpdateRoomCosmeticResponse,
@@ -158,6 +161,111 @@ export class RoomCosmeticsService {
     });
 
     return { assets: assets.map(mapCosmeticAsset) };
+  }
+
+  async getShop(userId: number): Promise<RoomCosmeticsShopResponse> {
+    const assets = await prisma.cosmeticAsset.findMany({
+      where: {
+        isActive: true,
+        isDefault: false,
+        isPurchasable: true,
+        pgcPrice: { not: null },
+      },
+      include: {
+        ownerships: {
+          where: { userId, quantity: { gt: 0 } },
+          select: { id: true },
+          take: 1,
+        },
+      },
+      orderBy: [{ pgcPrice: "asc" }, { name: "asc" }, { id: "asc" }],
+    });
+
+    return {
+      offers: assets.map((asset) => ({
+        asset: mapCosmeticAsset(asset),
+        pgcPrice: asset.pgcPrice!.toString(),
+        owned: asset.ownerships.length > 0,
+      })),
+    };
+  }
+
+  async purchase(
+    userId: number,
+    input: PurchaseRoomCosmeticInput,
+  ): Promise<PurchaseRoomCosmeticResponse> {
+    return prisma.$transaction(
+      async (transaction) => {
+        const asset = await transaction.cosmeticAsset.findFirst({
+          where: {
+            id: input.cosmeticAssetId,
+            isActive: true,
+            isDefault: false,
+            isPurchasable: true,
+            pgcPrice: { not: null },
+          },
+        });
+        if (!asset || !asset.pgcPrice) {
+          throw roomCosmeticsError(404, "Room cosmetic is not for sale");
+        }
+
+        const existingOwnership = await transaction.userCosmetic.findUnique({
+          where: {
+            userId_cosmeticAssetId: {
+              userId,
+              cosmeticAssetId: asset.id,
+            },
+          },
+        });
+        if (existingOwnership?.quantity && existingOwnership.quantity > 0) {
+          throw roomCosmeticsError(409, "Room cosmetic is already owned");
+        }
+
+        const balanceUpdate = await transaction.user.updateMany({
+          where: {
+            id: userId,
+            pgcBalance: { gte: asset.pgcPrice },
+          },
+          data: {
+            pgcBalance: { decrement: asset.pgcPrice },
+          },
+        });
+        if (balanceUpdate.count !== 1) {
+          throw roomCosmeticsError(402, "Not enough PGC");
+        }
+
+        const ownership = await transaction.userCosmetic.upsert({
+          where: {
+            userId_cosmeticAssetId: {
+              userId,
+              cosmeticAssetId: asset.id,
+            },
+          },
+          create: {
+            userId,
+            cosmeticAssetId: asset.id,
+            quantity: 1,
+          },
+          update: { quantity: 1 },
+        });
+        const user = await transaction.user.findUniqueOrThrow({
+          where: { id: userId },
+          select: { pgcBalance: true },
+        });
+
+        return {
+          cosmetic: {
+            userId,
+            cosmeticAssetId: asset.id,
+            quantity: ownership.quantity,
+            acquiredAt: ownership.acquiredAt.toISOString(),
+            asset: mapCosmeticAsset(asset),
+          },
+          pgcBalance: user.pgcBalance.toString(),
+        };
+      },
+      { isolationLevel: "Serializable" },
+    );
   }
 
   async getCurrentLoadout(
