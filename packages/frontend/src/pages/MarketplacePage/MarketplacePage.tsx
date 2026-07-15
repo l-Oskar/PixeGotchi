@@ -3,9 +3,17 @@ import { useAddItem } from "@/services/queries/inventory.queries";
 import { useGetRandomChest } from "@/services/queries/chest.queries";
 import {
   usePurchaseRoomCosmetic,
+  useRoomCosmeticsOwnership,
   useRoomCosmeticsShop,
 } from "@/services/queries/room-cosmetics.queries";
+import {
+  useBuyMarketplaceListing,
+  useCancelMarketplaceListing,
+  useCreateMarketplaceListing,
+  useMarketplaceListings,
+} from "@/services/queries/marketplace.queries";
 import { useUserStore } from "@/store/user.store";
+import { useState } from "react";
 import { Package, ShoppingBag, Sparkles } from "lucide-react";
 import {
   PageType,
@@ -23,10 +31,23 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const addItem = useAddItem();
   const getRandomChest = useGetRandomChest();
   const roomCosmeticsShop = useRoomCosmeticsShop();
+  const roomCosmeticsOwnership = useRoomCosmeticsOwnership();
   const purchaseRoomCosmetic = usePurchaseRoomCosmetic();
-  const pgcBalance = Number(
-    useUserStore((state) => state.user?.pgcBalance ?? 0),
-  );
+  const marketplaceListings = useMarketplaceListings();
+  const createMarketplaceListing = useCreateMarketplaceListing();
+  const buyMarketplaceListing = useBuyMarketplaceListing();
+  const cancelMarketplaceListing = useCancelMarketplaceListing();
+  const user = useUserStore((state) => state.user);
+  const pgcBalance = Number(user?.pgcBalance ?? 0);
+  const [sellCosmeticAssetId, setSellCosmeticAssetId] = useState("");
+  const [sellPrice, setSellPrice] = useState("250");
+  const sellableCosmetics =
+    roomCosmeticsOwnership.data?.cosmetics.filter(
+      ({ quantity, asset }) =>
+        quantity > 0 &&
+        asset?.isTradable === true &&
+        asset.isDefault === false,
+    ) ?? [];
 
   const handleCreateEgg = () => {
     createEgg.mutate(undefined, {
@@ -372,6 +393,164 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
               </div>
             )}
           </>
+        )}
+
+        <div className="mt-4 flex items-center justify-between gap-2">
+          <div>
+            <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
+              Player Listings
+            </h2>
+            <div className="theme-readable-muted mt-1 font-pixel text-[7px] leading-3">
+              Room cosmetics sold for PGC
+            </div>
+          </div>
+          <div className="pixel-panel-soft px-2 py-1 font-pixel text-[8px] leading-3 text-pixel-highlight">
+            {marketplaceListings.data?.listings.length ?? 0}
+          </div>
+        </div>
+
+        <div className="pixel-panel-soft mt-2 grid gap-2 p-2">
+          <div className="font-pixel text-[8px] text-pixel-ink">
+            SELL COSMETIC
+          </div>
+          <div className="grid grid-cols-[minmax(0,1fr)_5.5rem] gap-2">
+            <select
+              value={sellCosmeticAssetId}
+              onChange={(event) => setSellCosmeticAssetId(event.target.value)}
+              className="min-w-0 rounded-sm border border-pixel-border bg-pixel-bg-deep px-2 py-2 font-pixel text-[7px] text-pixel-ink">
+              <option value="">Choose asset</option>
+              {sellableCosmetics.map(({ cosmeticAssetId, asset }) => (
+                <option key={cosmeticAssetId} value={cosmeticAssetId}>
+                  {asset?.name ?? cosmeticAssetId}
+                </option>
+              ))}
+            </select>
+            <input
+              type="number"
+              min="1"
+              max="1000000000"
+              step="1"
+              value={sellPrice}
+              onChange={(event) => setSellPrice(event.target.value)}
+              className="min-w-0 rounded-sm border border-pixel-border bg-pixel-bg-deep px-2 py-2 font-pixel text-[7px] text-pixel-ink"
+              aria-label="Listing price in PGC"
+            />
+          </div>
+          <button
+            type="button"
+            disabled={
+              !sellCosmeticAssetId ||
+              !Number.isFinite(Number(sellPrice)) ||
+              Number(sellPrice) <= 0 ||
+              createMarketplaceListing.isPending
+            }
+            onClick={() =>
+              createMarketplaceListing.mutate(
+                {
+                  listingType: "cosmetic",
+                  cosmeticAssetId: sellCosmeticAssetId,
+                  price: Number(sellPrice),
+                  currency: "pgc",
+                },
+                { onSuccess: () => setSellCosmeticAssetId("") },
+              )
+            }
+            className="pixel-button min-h-0 py-2 font-pixel text-[8px] disabled:cursor-not-allowed disabled:opacity-60">
+            {createMarketplaceListing.isPending ? "LISTING..." : "CREATE LISTING"}
+          </button>
+          {createMarketplaceListing.isError && (
+            <div className="font-pixel text-[7px] leading-3 text-pixel-red">
+              LISTING FAILED — UNEQUIP THE ASSET FIRST
+            </div>
+          )}
+        </div>
+
+        {marketplaceListings.isLoading ? (
+          <div className="pixel-panel-soft mt-2 p-4 text-center font-pixel text-[8px] text-pixel-ink/70">
+            LOADING LISTINGS...
+          </div>
+        ) : marketplaceListings.isError ? (
+          <div className="pixel-panel-soft mt-2 border-pixel-red/60 p-4 text-center font-pixel text-[8px] text-pixel-red">
+            MARKETPLACE UNAVAILABLE
+          </div>
+        ) : marketplaceListings.data?.listings.length === 0 ? (
+          <div className="pixel-panel-soft mt-2 p-4 text-center font-pixel text-[8px] text-pixel-ink/70">
+            NO ACTIVE LISTINGS
+          </div>
+        ) : (
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            {marketplaceListings.data?.listings.map((listing) => {
+              const price = Number(listing.price);
+              const isOwnListing = listing.seller.id === user?.id;
+              const isBuying =
+                buyMarketplaceListing.isPending &&
+                buyMarketplaceListing.variables === listing.id;
+              const isCancelling =
+                cancelMarketplaceListing.isPending &&
+                cancelMarketplaceListing.variables === listing.id;
+
+              return (
+                <div
+                  key={listing.id}
+                  className="pixel-panel-soft flex min-h-40 flex-col p-2">
+                  <div className="grid h-20 place-items-center overflow-hidden rounded-sm bg-pixel-bg-deep/35 p-1">
+                    {listing.asset.assetUrl ? (
+                      <img
+                        src={`${import.meta.env.BASE_URL}${listing.asset.assetUrl}`}
+                        alt={listing.asset.name}
+                        className="h-full w-full object-contain pixelated"
+                      />
+                    ) : (
+                      <Sparkles className="text-pixel-highlight" size={28} />
+                    )}
+                  </div>
+                  <div className="mt-2 min-w-0 flex-1">
+                    <div className="truncate font-pixel text-[9px] text-pixel-ink">
+                      {listing.asset.name}
+                    </div>
+                    <div className="mt-1 truncate font-pixel text-[7px] text-pixel-ink/70">
+                      by {listing.seller.username ?? `User ${listing.seller.id}`}
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-1">
+                    <span className="font-pixel text-[7px] text-pixel-highlight">
+                      {price} PGC
+                    </span>
+                    <button
+                      type="button"
+                      disabled={
+                        isBuying ||
+                        isCancelling ||
+                        (!isOwnListing && pgcBalance < price)
+                      }
+                      onClick={() =>
+                        isOwnListing
+                          ? cancelMarketplaceListing.mutate(listing.id)
+                          : buyMarketplaceListing.mutate(listing.id)
+                      }
+                      className="pixel-button min-h-0 px-2 py-1.5 font-pixel text-[7px] disabled:cursor-not-allowed disabled:opacity-60">
+                      {isOwnListing
+                        ? isCancelling
+                          ? "..."
+                          : "CANCEL"
+                        : isBuying
+                          ? "..."
+                          : pgcBalance < price
+                            ? "NO PGC"
+                            : "BUY"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {(buyMarketplaceListing.isError ||
+          cancelMarketplaceListing.isError) && (
+          <div className="pixel-panel-soft mt-2 border-pixel-red/60 p-2 text-center font-pixel text-[7px] text-pixel-red">
+            MARKETPLACE ACTION FAILED
+          </div>
         )}
       </div>
     </div>

@@ -75,6 +75,7 @@ enum ListingType {
   pixegotchi
   chest
   item
+  cosmetic
 }
 
 enum CurrencyType {
@@ -160,6 +161,7 @@ model CosmeticAsset {
   placements              RoomCosmeticPlacement[]
   environmentLoadouts     UserRoomLoadout[]       @relation("RoomLoadoutEnvironment")
   floorLoadouts           UserRoomLoadout[]       @relation("RoomLoadoutFloor")
+  marketplaceListings     MarketplaceListing[]
 
   @@index([slot, isActive])
   @@index([isPurchasable, isActive])
@@ -454,6 +456,7 @@ model MarketplaceListing {
   
   // Для items
   itemId       String?      @map("item_id") @db.VarChar(50)
+  cosmeticAssetId String?   @map("cosmetic_asset_id") @db.VarChar(64)
   quantity     Int          @default(1)
   
   price        Decimal      @db.Decimal(20, 8)
@@ -466,11 +469,13 @@ model MarketplaceListing {
   // Relations
   seller       User         @relation("SellerListings", fields: [sellerId], references: [id], onDelete: Cascade)
   buyer        User?        @relation("BuyerPurchases", fields: [buyerId], references: [id])
+  cosmeticAsset CosmeticAsset? @relation(fields: [cosmeticAssetId], references: [id], onDelete: Restrict)
 
   @@index([isActive, listingType])
   @@index([sellerId])
   @@index([eggId])
   @@index([pixegotchiId])
+  @@index([cosmeticAssetId])
   @@map("marketplace_listings")
 }
 

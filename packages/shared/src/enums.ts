@@ -113,6 +113,7 @@ export const ListingType = {
   pixegotchi: "pixegotchi",
   item: "item",
   chest: "chest",
+  cosmetic: "cosmetic",
 } as const;
 
 export type ListingType = (typeof ListingType)[keyof typeof ListingType];

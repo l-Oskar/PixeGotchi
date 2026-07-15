@@ -82,7 +82,7 @@ const ensureRoomLoadout = async (
   return loadout;
 };
 
-const mapCosmeticAsset = (asset: CosmeticAsset): RoomCosmeticAsset => {
+export const mapCosmeticAsset = (asset: CosmeticAsset): RoomCosmeticAsset => {
   const baseAsset = {
     id: asset.id,
     name: asset.name,

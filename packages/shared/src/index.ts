@@ -85,6 +85,13 @@ export type {
 } from "./types/game";
 export { GAME_CONFIGS } from "./constants/games/games_const ";
 export type { MarketplaceListing } from "./types/marketplace";
+export type {
+  MarketplaceSeller,
+  CosmeticMarketplaceListing,
+  CosmeticMarketplaceListingsResponse,
+  CreateCosmeticMarketplaceListingInput,
+  BuyCosmeticMarketplaceListingResponse,
+} from "./types/marketplace";
 export type { Egg, UpdatedEgg, EggHatchingStatus } from "./types/egg";
 export type { ElementStats, VaultStats } from "./types/vault";
 export type {
