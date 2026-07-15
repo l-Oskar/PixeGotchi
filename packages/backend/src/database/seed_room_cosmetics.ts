@@ -1,4 +1,5 @@
 import type { Prisma } from "../generated/prisma/client";
+import { pathToFileURL } from "node:url";
 import { prisma } from "@/database/prisma";
 
 export const DEFAULT_ROOM_COSMETICS = [
@@ -262,11 +263,17 @@ async function main() {
   console.log(`Seeded ${DEFAULT_ROOM_COSMETICS.length} Room Cosmetics assets.`);
 }
 
-main()
-  .catch((error) => {
-    console.error("Room Cosmetics seed failed:", error);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+const isDirectExecution =
+  process.argv[1] !== undefined &&
+  import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isDirectExecution) {
+  main()
+    .catch((error) => {
+      console.error("Room Cosmetics seed failed:", error);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}

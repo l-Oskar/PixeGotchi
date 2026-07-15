@@ -1,10 +1,12 @@
 import type {
   EquipRoomCosmeticInput,
+  RoomLoadout,
   SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
   UserRoomLoadoutResponse,
 } from "@pixegotchi/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
 import { roomCosmeticsApi } from "../api/room-cosmetics.api";
 
 export const ROOM_COSMETICS_KEYS = {
@@ -13,6 +15,16 @@ export const ROOM_COSMETICS_KEYS = {
   ownership: ["room-cosmetics", "ownership"] as const,
   inventory: ["room-cosmetics", "inventory"] as const,
   loadout: ["room-cosmetics", "loadout"] as const,
+};
+
+export const updateRoomCosmeticsLoadoutCache = (
+  queryClient: QueryClient,
+  loadout: RoomLoadout,
+) => {
+  queryClient.setQueryData<UserRoomLoadoutResponse>(
+    ROOM_COSMETICS_KEYS.loadout,
+    { loadout },
+  );
 };
 
 export const useRoomCosmeticsCatalog = () =>
@@ -48,10 +60,7 @@ export const useSaveRoomCosmeticsLoadout = () => {
     mutationFn: (input: SaveRoomLoadoutInput) =>
       roomCosmeticsApi.saveLoadout(input),
     onSuccess: ({ loadout }) => {
-      queryClient.setQueryData<UserRoomLoadoutResponse>(
-        ROOM_COSMETICS_KEYS.loadout,
-        { loadout },
-      );
+      updateRoomCosmeticsLoadoutCache(queryClient, loadout);
     },
   });
 };

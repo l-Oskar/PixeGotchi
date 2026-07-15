@@ -67,47 +67,6 @@ export const ROOM_ASSETS = [
   },
 ] as const;
 
-export type RoomAssetId = (typeof ROOM_ASSETS)[number]["id"];
-
-export const DEFAULT_HIDDEN_ROOM_ASSET_IDS: RoomAssetId[] = [
-  "blue-sofa",
-  "blue-oval-rug",
-];
-
-export const buildRoomAssetPlacements = (
-  hiddenAssetIds: RoomAssetId[],
-  cabinetSlot: 1 | 3,
-): RoomAssetPlacement[] =>
-  ROOM_ASSETS.filter((asset) => !hiddenAssetIds.includes(asset.id)).map(
-    (asset): RoomAssetPlacement => {
-      return asset.id === "tall-cabinet-wood"
-        ? {
-            id: asset.id,
-            slot: cabinetSlot,
-            span: 2,
-            node: (
-              <img
-                src={`${import.meta.env.BASE_URL}${asset.src}`}
-                alt={asset.label}
-              />
-            ),
-          }
-        : {
-            id: asset.id,
-            slot: asset.slot,
-            layer: "layer" in asset ? asset.layer : undefined,
-            allowOverlap:
-              "allowOverlap" in asset ? asset.allowOverlap : undefined,
-            node: (
-              <img
-                src={`${import.meta.env.BASE_URL}${asset.src}`}
-                alt={asset.label}
-              />
-            ),
-          };
-    },
-  );
-
 export const buildRoomAssetPlacementsFromLoadout = (
   placements: EquippedRoomCosmetic[],
 ): RoomAssetPlacement[] =>

@@ -31,17 +31,17 @@ import {
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
-import { ROOM_FLOORS, ROOM_WALLS } from "../MainPage/roomSurfaces";
+import {
+  DEFAULT_ROOM_FLOOR_ID,
+  DEFAULT_ROOM_WALL_ID,
+  ROOM_FLOORS,
+  ROOM_WALLS,
+} from "../MainPage/roomSurfaces";
 import type {
   RoomFloorId,
   RoomWallId,
 } from "../MainPage/roomSurfaces";
-import {
-  buildRoomAssetPlacements,
-  ROOM_ASSETS,
-} from "../MainPage/roomAssets";
-import type { RoomAssetId } from "../MainPage/roomAssets";
-import { useRoomStore } from "@/store/room.store";
+import { buildRoomAssetPlacementsFromLoadout } from "../MainPage/roomAssets";
 import {
   useRoomCosmeticsInventory,
   useRoomCosmeticsLoadout,
@@ -64,46 +64,21 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   const [isRoomMenuOpen, setIsRoomMenuOpen] = useState(false);
   const [isEditorRequested, setIsEditorRequested] = useState(false);
   const [editorLoadError, setEditorLoadError] = useState<string | null>(null);
-  const {
-    wallId: localWallId,
-    floorId: localFloorId,
-    hiddenAssetIds: localHiddenAssetIds,
-    cabinetSlot: localCabinetSlot,
-  } = useRoomStore();
   const isRoomEditing = useRoomEditorStore((state) => state.isEditing);
   const startRoomEditing = useRoomEditorStore((state) => state.startEditing);
   const loadoutQuery = useRoomCosmeticsLoadout();
   const inventoryQuery = useRoomCosmeticsInventory(isEditorRequested);
   const serverLoadout = loadoutQuery.data?.loadout ?? null;
-  const hasServerLoadout = loadoutQuery.isSuccess && serverLoadout !== null;
-  const serverAssetIds = new Set(
-    serverLoadout?.placements.map((placement) => placement.cosmeticAssetId) ??
-      [],
-  );
-  const serverCabinetPlacement = serverLoadout?.placements.find(
-    (placement) => placement.cosmeticAssetId === "tall-cabinet-wood",
-  );
   const wallId =
-    hasServerLoadout &&
+    serverLoadout &&
     ROOM_WALLS.some((wall) => wall.id === serverLoadout.environmentId)
       ? (serverLoadout.environmentId as RoomWallId)
-      : localWallId;
+      : DEFAULT_ROOM_WALL_ID;
   const floorId =
-    hasServerLoadout &&
-    serverLoadout.floorId &&
+    serverLoadout?.floorId &&
     ROOM_FLOORS.some((floor) => floor.id === serverLoadout.floorId)
       ? (serverLoadout.floorId as RoomFloorId)
-      : localFloorId;
-  const hiddenAssetIds: RoomAssetId[] = hasServerLoadout
-    ? ROOM_ASSETS.filter((asset) => !serverAssetIds.has(asset.id)).map(
-        (asset) => asset.id,
-      )
-    : localHiddenAssetIds;
-  const cabinetSlot =
-    serverCabinetPlacement?.position === 1 ||
-    serverCabinetPlacement?.position === 3
-      ? serverCabinetPlacement.position
-      : localCabinetSlot;
+      : DEFAULT_ROOM_FLOOR_ID;
 
   useEffect(() => {
     if (!isEditorRequested) return;
@@ -179,7 +154,9 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 ? "text-[var(--status-sick)]"
                 : "text-[var(--status-happy)]";
   const displayStatus = statusKey === "active" ? "Happy" : statusLabel;
-  const roomAssets = buildRoomAssetPlacements(hiddenAssetIds, cabinetSlot);
+  const roomAssets = serverLoadout
+    ? buildRoomAssetPlacementsFromLoadout(serverLoadout.placements)
+    : [];
 
   return (
     <div className="space-y-2 p-2.5">
@@ -265,6 +242,11 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               floorId={floorId}
               assets={roomAssets}
             />
+            {!serverLoadout && (
+              <div className="pointer-events-none absolute inset-x-0 bottom-3 z-20 text-center font-pixel text-[7px] text-pixel-muted">
+                {loadoutQuery.isError ? "ROOM OFFLINE" : "ROOM LOADING..."}
+              </div>
+            )}
           </div>
           {isStatsOpen ? (
             <div className="pixel-panel-soft theme-soft-overlay absolute bottom-2 left-2 top-[5.25rem] z-20 flex w-[45%] flex-col justify-center gap-1 border-pixel-border/70 bg-pixel-bg-deep/82 p-1.5 shadow-[0_3px_0_var(--color-pixel-shadow),0_0_18px_var(--color-pixel-glow),inset_0_0_0_2px_var(--color-pixel-inset-soft)] backdrop-blur-[1px] max-[380px]:w-[46%] max-[380px]:gap-1 max-[380px]:p-1">

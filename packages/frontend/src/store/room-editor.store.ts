@@ -43,11 +43,23 @@ interface RoomEditorState {
   togglePetVisibility: () => void;
   setSelectedCategory: (category: RoomEditorCategory) => void;
   setSelectedAssetId: (assetId: string | null) => void;
-  finishEditing: () => void;
+  saveEditing: (
+    saveDraft: (draft: SaveRoomLoadoutInput) => Promise<unknown>,
+  ) => Promise<void>;
   cancelEditing: () => void;
 }
 
-export const useRoomEditorStore = create<RoomEditorState>((set) => ({
+const closedEditorState = {
+  isEditing: false,
+  initialDraft: null,
+  draft: null,
+  isDirty: false,
+  isPetVisible: true,
+  selectedCategory: "all" as const,
+  selectedAssetId: null,
+};
+
+export const useRoomEditorStore = create<RoomEditorState>((set, get) => ({
   isEditing: false,
   initialDraft: null,
   draft: null,
@@ -79,24 +91,12 @@ export const useRoomEditorStore = create<RoomEditorState>((set) => ({
   setSelectedCategory: (selectedCategory) =>
     set({ selectedCategory, selectedAssetId: null }),
   setSelectedAssetId: (selectedAssetId) => set({ selectedAssetId }),
-  finishEditing: () =>
-    set({
-      isEditing: false,
-      initialDraft: null,
-      draft: null,
-      isDirty: false,
-      isPetVisible: true,
-      selectedCategory: "all",
-      selectedAssetId: null,
-    }),
-  cancelEditing: () =>
-    set({
-      isEditing: false,
-      initialDraft: null,
-      draft: null,
-      isDirty: false,
-      isPetVisible: true,
-      selectedCategory: "all",
-      selectedAssetId: null,
-    }),
+  saveEditing: async (saveDraft) => {
+    const draft = get().draft;
+    if (!draft) return;
+
+    await saveDraft(draft);
+    set(closedEditorState);
+  },
+  cancelEditing: () => set(closedEditorState),
 }));

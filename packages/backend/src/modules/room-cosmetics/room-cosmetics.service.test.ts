@@ -67,6 +67,49 @@ describe("RoomCosmeticsService", () => {
     ).rejects.toMatchObject({ statusCode: 403 });
   });
 
+  it("saves a non-default cosmetic that the user owns", async () => {
+    const user = await createUser();
+    await createDefaultSurfaces();
+    const asset = await createAsset({ isDefault: false });
+    await prisma.userCosmetic.create({
+      data: {
+        userId: user.id,
+        cosmeticAssetId: asset.id,
+      },
+    });
+    const service = new RoomCosmeticsService();
+
+    const result = await service.saveLoadout(user.id, {
+      environmentId: "violet-brick",
+      floorId: "plum-boards",
+      placements: [{ cosmeticAssetId: asset.id, position: 10 }],
+    });
+
+    expect(result.loadout.placements).toEqual([
+      { cosmeticAssetId: asset.id, position: 10 },
+    ]);
+  });
+
+  it("rejects an unknown cosmetic without creating a loadout", async () => {
+    const user = await createUser();
+    await createDefaultSurfaces();
+    const service = new RoomCosmeticsService();
+
+    await expect(
+      service.saveLoadout(user.id, {
+        environmentId: "violet-brick",
+        floorId: "plum-boards",
+        placements: [
+          { cosmeticAssetId: "missing-room-cosmetic", position: 10 },
+        ],
+      }),
+    ).rejects.toMatchObject({ statusCode: 404 });
+
+    await expect(service.getCurrentLoadout(user.id)).resolves.toEqual({
+      loadout: null,
+    });
+  });
+
   it("returns only active default and user-owned assets for editor inventory", async () => {
     const user = await createUser();
     const defaultAsset = await createAsset({ isDefault: true });
@@ -124,6 +167,49 @@ describe("RoomCosmeticsService", () => {
       }),
     ).rejects.toMatchObject({ statusCode: 400 });
   });
+
+  it.each([
+    { slot: "window", allowedPosition: 6, rejectedPosition: 7 },
+    { slot: "curtain", allowedPosition: 7, rejectedPosition: 6 },
+    { slot: "furniture", allowedPosition: 2, rejectedPosition: 1 },
+    { slot: "sofa", allowedPosition: 8, rejectedPosition: 9 },
+    { slot: "rug", allowedPosition: 9, rejectedPosition: 8 },
+    { slot: "wallArt", allowedPosition: 1, rejectedPosition: 2 },
+    { slot: "decor", allowedPosition: 10, rejectedPosition: 9 },
+  ] as const)(
+    "validates the allowed positions for $slot cosmetics",
+    async ({ slot, allowedPosition, rejectedPosition }) => {
+      const user = await createUser();
+      await createDefaultSurfaces();
+      const asset = await createAsset({
+        slot,
+        allowedPositions: [allowedPosition],
+      });
+      const service = new RoomCosmeticsService();
+
+      await expect(
+        service.saveLoadout(user.id, {
+          environmentId: "violet-brick",
+          floorId: "plum-boards",
+          placements: [
+            { cosmeticAssetId: asset.id, position: rejectedPosition },
+          ],
+        }),
+      ).rejects.toMatchObject({ statusCode: 400 });
+
+      const result = await service.saveLoadout(user.id, {
+        environmentId: "violet-brick",
+        floorId: "plum-boards",
+        placements: [
+          { cosmeticAssetId: asset.id, position: allowedPosition },
+        ],
+      });
+
+      expect(result.loadout.placements).toEqual([
+        { cosmeticAssetId: asset.id, position: allowedPosition },
+      ]);
+    },
+  );
 
   it("rejects two non-overlapping cosmetics in the same position", async () => {
     const user = await createUser();
@@ -302,6 +388,53 @@ describe("RoomCosmeticsService", () => {
         ],
       }),
     ).rejects.toMatchObject({ statusCode: 409 });
+
+    await expect(service.getCurrentLoadout(user.id)).resolves.toEqual({
+      loadout: null,
+    });
+  });
+
+  it.each([1, 3] as const)(
+    "allows a double-height cosmetic to start at position %i",
+    async (position) => {
+      const user = await createUser();
+      await createDefaultSurfaces();
+      const cabinet = await createAsset({
+        slot: "furniture",
+        allowedPositions: [1, 3],
+        span: 2,
+      });
+      const service = new RoomCosmeticsService();
+
+      const result = await service.saveLoadout(user.id, {
+        environmentId: "violet-brick",
+        floorId: "plum-boards",
+        placements: [{ cosmeticAssetId: cabinet.id, position }],
+      });
+
+      expect(result.loadout.placements).toEqual([
+        { cosmeticAssetId: cabinet.id, position },
+      ]);
+    },
+  );
+
+  it("rejects a double-height cosmetic outside the supported pairs", async () => {
+    const user = await createUser();
+    await createDefaultSurfaces();
+    const cabinet = await createAsset({
+      slot: "furniture",
+      allowedPositions: [2],
+      span: 2,
+    });
+    const service = new RoomCosmeticsService();
+
+    await expect(
+      service.saveLoadout(user.id, {
+        environmentId: "violet-brick",
+        floorId: "plum-boards",
+        placements: [{ cosmeticAssetId: cabinet.id, position: 2 }],
+      }),
+    ).rejects.toMatchObject({ statusCode: 400 });
 
     await expect(service.getCurrentLoadout(user.id)).resolves.toEqual({
       loadout: null,

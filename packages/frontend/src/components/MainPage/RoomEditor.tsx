@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Pixegotchi } from "@pixegotchi/shared";
 import { Eye, EyeOff } from "lucide-react";
 import { viewport } from "@tma.js/sdk";
@@ -48,11 +48,23 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
     setDraft,
     setSelectedAssetId,
     togglePetVisibility,
-    finishEditing,
+    saveEditing,
     cancelEditing,
   } = useRoomEditorStore();
   const saveLoadout = useSaveRoomCosmeticsLoadout();
   const inventoryQuery = useRoomCosmeticsInventory();
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
 
   if (!draft) return null;
 
@@ -96,8 +108,9 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
   const handleSave = async () => {
     setSaveError(null);
     try {
-      await saveLoadout.mutateAsync(draft);
-      finishEditing();
+      await saveEditing((currentDraft) =>
+        saveLoadout.mutateAsync(currentDraft),
+      );
     } catch {
       setSaveError("SAVE FAILED. TRY AGAIN.");
     }
@@ -146,13 +159,12 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
         </button>
       </header>
 
-      {saveError && (
-        <div className="px-3 pb-2 text-center font-pixel text-[8px] text-pixel-red">
-          {saveError}
-        </div>
-      )}
-
       <div className="relative min-h-0 flex-1 p-2.5 pt-0">
+        {saveError && (
+          <div className="pixel-panel-soft absolute left-4 right-14 top-2 z-50 flex h-8 items-center justify-center bg-pixel-bg-deep/95 px-2 text-center font-pixel text-[7px] text-pixel-red">
+            {saveError}
+          </div>
+        )}
         {selectedPositionedAsset && (
           <div className="pixel-panel-soft absolute left-4 right-14 top-2 z-40 flex h-8 items-center justify-between gap-2 bg-pixel-bg-deep/90 px-2 font-pixel text-[7px]">
             <span className="min-w-0 truncate text-pixel-highlight">
