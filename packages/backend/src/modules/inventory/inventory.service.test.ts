@@ -266,4 +266,104 @@ describe("Inventory", () => {
       1,
     );
   });
+
+  it("awards an unowned room cosmetic from an eligible chest", async () => {
+    const user = await createUser();
+    await createChest(user.id, { chestType: ChestType.legendary });
+    await prisma.cosmeticAsset.create({
+      data: {
+        id: "chest-test-blue-sofa",
+        name: "Chest test blue sofa",
+        slot: "sofa",
+        rarity: RarityType.common,
+        assetUrl: "assets/room/furniture/blue-sofa.png",
+        allowedPositions: [8],
+        span: 1,
+        allowOverlap: false,
+        isDefault: false,
+        isLimited: false,
+        isTradable: true,
+        isPurchasable: true,
+        pgcPrice: 400,
+        isChestReward: true,
+        chestDropWeight: 100,
+        isActive: true,
+      },
+    });
+    vi.spyOn(ChestGenerator, "openChest").mockReturnValue({
+      items: [],
+      egg: false,
+      totalValue: 0,
+    });
+    const inventory = new Inventory(() => 0);
+
+    const rewards = await inventory.openChest(user.id, ChestType.legendary);
+
+    expect(rewards.cosmetic).toMatchObject({
+      cosmeticAssetId: "chest-test-blue-sofa",
+      name: "Chest test blue sofa",
+    });
+    await expect(
+      prisma.userCosmetic.findUnique({
+        where: {
+          userId_cosmeticAssetId: {
+            userId: user.id,
+            cosmeticAssetId: "chest-test-blue-sofa",
+          },
+        },
+      }),
+    ).resolves.toMatchObject({ quantity: 1 });
+    await expect(
+      prisma.chest.findFirstOrThrow({ where: { userId: user.id } }),
+    ).resolves.toMatchObject({
+      rewards: {
+        cosmetic: {
+          cosmeticAssetId: "chest-test-blue-sofa",
+        },
+      },
+    });
+  });
+
+  it("does not award a duplicate room cosmetic", async () => {
+    const user = await createUser();
+    await createChest(user.id, { chestType: ChestType.legendary });
+    const asset = await prisma.cosmeticAsset.create({
+      data: {
+        id: "owned-chest-test-sofa",
+        name: "Owned chest test sofa",
+        slot: "sofa",
+        rarity: RarityType.common,
+        assetUrl: "assets/room/furniture/blue-sofa.png",
+        allowedPositions: [8],
+        span: 1,
+        allowOverlap: false,
+        isDefault: false,
+        isLimited: false,
+        isTradable: true,
+        isPurchasable: true,
+        pgcPrice: 400,
+        isChestReward: true,
+        chestDropWeight: 100,
+        isActive: true,
+      },
+    });
+    await prisma.userCosmetic.create({
+      data: { userId: user.id, cosmeticAssetId: asset.id },
+    });
+    vi.spyOn(ChestGenerator, "openChest").mockReturnValue({
+      items: [],
+      egg: false,
+      totalValue: 0,
+    });
+    const inventory = new Inventory(() => 0);
+
+    const rewards = await inventory.openChest(user.id, ChestType.legendary);
+
+    expect(rewards.cosmetic).toBeNull();
+    await expect(
+      prisma.userCosmetic.count({
+        where: { userId: user.id, cosmeticAssetId: asset.id },
+      }),
+    ).resolves.toBe(1);
+  });
 });

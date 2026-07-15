@@ -5,6 +5,7 @@ import { EGG_KEYS } from "./egg.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { CHEST_KEYS } from "./chest.queries";
 import { PIXEGOTCHI_KEYS } from "./pixegotchi.queries";
+import { ROOM_COSMETICS_KEYS } from "./room-cosmetics.queries";
 
 export const INVENTORY_KEYS = {
   all: ["inventory"] as const,
@@ -95,6 +96,17 @@ export const useOpenChest = () => {
       queryClient.invalidateQueries({ queryKey: CHEST_KEYS.sorted });
       if (data.egg) {
         queryClient.invalidateQueries({ queryKey: EGG_KEYS.all });
+      }
+      if (data.cosmetic) {
+        queryClient.invalidateQueries({
+          queryKey: ROOM_COSMETICS_KEYS.ownership,
+        });
+        queryClient.invalidateQueries({
+          queryKey: ROOM_COSMETICS_KEYS.inventory,
+        });
+        queryClient.invalidateQueries({
+          queryKey: ROOM_COSMETICS_KEYS.shop,
+        });
       }
     },
   });

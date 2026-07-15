@@ -4,6 +4,7 @@ import {
   InventoryWithDetails,
   EGG_CONSTANTS,
   ChestType,
+  ChestRewardCosmetic,
   Item,
   ItemBuffsType,
 } from "@pixegotchi/shared";
@@ -17,6 +18,15 @@ import type {
 } from "@/generated/prisma/client";
 
 type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
+
+const COSMETIC_DROP_CHANCE: Record<ChestType, number> = {
+  [ChestType.wooden]: 0,
+  [ChestType.silver]: 0,
+  [ChestType.golden]: 0.02,
+  [ChestType.crystal]: 0.04,
+  [ChestType.mythic]: 0.07,
+  [ChestType.legendary]: 0.1,
+};
 
 function hasReviveEffect(item: Item) {
   return item.effects?.buffs?.some((buff) => buff[ItemBuffsType.REVIVE]);
@@ -34,6 +44,59 @@ function getCooldownRemainingMinutes(lastUsedAt: Date, cooldownMinutes: number) 
 }
 
 export class Inventory {
+  constructor(private readonly rng: () => number = Math.random) {}
+
+  private async awardChestCosmetic(
+    userId: number,
+    chestType: ChestType,
+    transaction: Prisma.TransactionClient,
+  ): Promise<ChestRewardCosmetic | null> {
+    if (this.rng() >= COSMETIC_DROP_CHANCE[chestType]) return null;
+
+    const eligibleAssets = await transaction.cosmeticAsset.findMany({
+      where: {
+        isActive: true,
+        isDefault: false,
+        isLimited: false,
+        isChestReward: true,
+        chestDropWeight: { gt: 0 },
+        ownerships: {
+          none: { userId, quantity: { gt: 0 } },
+        },
+      },
+      orderBy: { id: "asc" },
+    });
+    if (eligibleAssets.length === 0) return null;
+
+    const totalWeight = eligibleAssets.reduce(
+      (total, asset) => total + asset.chestDropWeight,
+      0,
+    );
+    let roll = this.rng() * totalWeight;
+    const selectedAsset =
+      eligibleAssets.find((asset) => {
+        roll -= asset.chestDropWeight;
+        return roll < 0;
+      }) ?? eligibleAssets[eligibleAssets.length - 1]!;
+
+    const ownership = await transaction.userCosmetic.createMany({
+      data: {
+        userId,
+        cosmeticAssetId: selectedAsset.id,
+        quantity: 1,
+      },
+      skipDuplicates: true,
+    });
+    if (ownership.count !== 1) return null;
+
+    return {
+      cosmeticAssetId: selectedAsset.id,
+      name: selectedAsset.name,
+      rarity: selectedAsset.rarity,
+      assetUrl: selectedAsset.assetUrl,
+    };
+  }
+
   private itemService = new ItemsService();
   private chestService = new ChestService();
   private pixegotchiService = new PixegotchiService();
@@ -258,6 +321,11 @@ export class Inventory {
 
     return await prisma.$transaction(async (prisma) => {
       const rewards = ChestGenerator.openChest(chest.chestType);
+      rewards.cosmetic = await this.awardChestCosmetic(
+        userId,
+        chest.chestType,
+        prisma,
+      );
 
       if (rewards.egg) {
         await prisma.egg.create({
@@ -280,7 +348,11 @@ export class Inventory {
         data: {
           isOpened: true,
           openedAt: new Date(),
-          rewards: { items: rewards.items, egg: rewards.egg } as any,
+          rewards: {
+            items: rewards.items,
+            egg: rewards.egg,
+            cosmetic: rewards.cosmetic,
+          } as any,
         },
       });
 

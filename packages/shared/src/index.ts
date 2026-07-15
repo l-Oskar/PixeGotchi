@@ -65,6 +65,7 @@ export type {
   ChestDescription,
   ChestPreview,
   ChestRewardItem,
+  ChestRewardCosmetic,
   ChestRewards,
   ChestConfig,
 } from "./types/chest";

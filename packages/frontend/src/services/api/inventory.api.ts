@@ -1,6 +1,7 @@
 import { apiClient } from "./client";
 import {
   ChestType,
+  ChestRewards,
   InventoryItem,
   InventoryWithDetails,
   Pixegotchi,
@@ -41,7 +42,10 @@ export const inventoryApi = {
     });
     return data;
   },
-  openChest: async (chestType: ChestType, quantity: number = 1) => {
+  openChest: async (
+    chestType: ChestType,
+    quantity: number = 1,
+  ): Promise<ChestRewards> => {
     const { data } = await apiClient.post(INVENTORY_KEYS.openChest, {
       chestType,
       quantity,

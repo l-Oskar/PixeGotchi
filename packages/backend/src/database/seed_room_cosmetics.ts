@@ -188,6 +188,8 @@ export const DEFAULT_ROOM_COSMETICS = [
     isTradable: true,
     isPurchasable: true,
     pgcPrice: 400,
+    isChestReward: true,
+    chestDropWeight: 100,
     isActive: true,
   },
   {

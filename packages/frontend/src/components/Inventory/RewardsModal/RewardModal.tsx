@@ -90,6 +90,35 @@ const RewardModal: React.FC<RewardModalProps> = ({
                     </span>
                   </div>
                 )}
+                {rewards.cosmetic && (
+                  <div className="pixel-panel-soft flex items-center justify-between gap-2 p-2">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-sm bg-pixel-bg-deep/40 p-1">
+                        {rewards.cosmetic.assetUrl ? (
+                          <img
+                            className="h-full w-full object-contain pixelated"
+                            src={`${import.meta.env.BASE_URL}${rewards.cosmetic.assetUrl}`}
+                            alt={rewards.cosmetic.name}
+                          />
+                        ) : (
+                          <span className="text-lg">🏠</span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="truncate font-pixel text-[8px] leading-4 text-pixel-ink">
+                          {rewards.cosmetic.name}
+                        </div>
+                        <div className="font-pixel text-[7px] leading-3 text-pixel-green">
+                          ROOM COSMETIC
+                        </div>
+                      </div>
+                    </div>
+                    <span
+                      className={`font-pixel text-[7px] leading-3 ${RARITY_COLORS[rewards.cosmetic.rarity]}`}>
+                      {rewards.cosmetic.rarity}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Кнопка закриття (опціонально) */}

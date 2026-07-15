@@ -42,9 +42,17 @@ export interface ChestRewardItem {
   rarity: RarityType;
 }
 
+export interface ChestRewardCosmetic {
+  cosmeticAssetId: string;
+  name: string;
+  rarity: RarityType;
+  assetUrl: string | null;
+}
+
 export interface ChestRewards {
   items: ChestRewardItem[];
   egg: boolean;
+  cosmetic?: ChestRewardCosmetic | null;
   totalValue: number;
 }
 
