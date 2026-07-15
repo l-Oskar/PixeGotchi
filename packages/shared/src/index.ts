@@ -98,10 +98,12 @@ export type {
   EquippedRoomCosmetic,
   RoomLoadout,
   RoomCosmeticsCatalogResponse,
+  RoomCosmeticsInventoryResponse,
   UserRoomCosmeticsResponse,
   UserRoomLoadoutResponse,
   EquipRoomCosmeticInput,
   UnequipRoomCosmeticInput,
+  SaveRoomLoadoutInput,
   UpdateRoomCosmeticResponse,
 } from "./types/room_cosmetics";
 export { isApiError } from "./types/api";

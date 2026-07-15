@@ -10,6 +10,7 @@ interface VisualProps {
   pet: Pixegotchi | Egg;
   status: EggHatchingStatus | null;
   centerPet?: boolean;
+  hidePet?: boolean;
   wallId?: RoomWallId;
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
@@ -40,6 +41,7 @@ const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
 const PixegotchiDisplay: React.FC<{
   pixe: Pixegotchi;
   centered?: boolean;
+  hidePet?: boolean;
   wallId?: RoomWallId;
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
@@ -47,6 +49,7 @@ const PixegotchiDisplay: React.FC<{
 }> = ({
   pixe,
   centered = false,
+  hidePet = false,
   wallId,
   floorId,
   assets,
@@ -73,23 +76,25 @@ const PixegotchiDisplay: React.FC<{
       floorId={floorId}
       assets={assets}
       showSlotGuides={showSlotGuides}>
-      <div
-        className={`translate-y-[clamp(2.5rem,12vw,3.25rem)] text-9xl transition-transform duration-300 ${centered ? "translate-x-0" : "translate-x-[clamp(3rem,18vw,4.75rem)]"}`}>
+      {!hidePet && (
         <div
-          className={
-            isAnimating ? "animate-egg-wobble" : "animate-pet-idle"
-          }>
-          <img
-            className="h-[clamp(9rem,38vw,10rem)] w-[clamp(9rem,38vw,10rem)] cursor-pointer transition-transform hover:scale-105 pixelated"
-            src={`./${getImage(pixe)}`}
-            alt={`Pixegotchi-${pixe.id}`}
-            onClick={handleClick}
-          />
+          className={`translate-y-[clamp(2.5rem,12vw,3.25rem)] text-9xl transition-transform duration-300 ${centered ? "translate-x-0" : "translate-x-[clamp(3rem,18vw,4.75rem)]"}`}>
+          <div
+            className={
+              isAnimating ? "animate-egg-wobble" : "animate-pet-idle"
+            }>
+            <img
+              className="h-[clamp(9rem,38vw,10rem)] w-[clamp(9rem,38vw,10rem)] cursor-pointer transition-transform hover:scale-105 pixelated"
+              src={`./${getImage(pixe)}`}
+              alt={`Pixegotchi-${pixe.id}`}
+              onClick={handleClick}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Сердечко */}
-      {showHeart && (
+      {!hidePet && showHeart && (
         <div className="absolute inset-0 flex mb-20 ml-68 items-center justify-center pointer-events-none">
           <MessageCircleHeart size={30} className="animate-ping text-red-500" />
         </div>
@@ -102,6 +107,7 @@ export const Visual: React.FC<VisualProps> = ({
   pet,
   status,
   centerPet = false,
+  hidePet = false,
   wallId,
   floorId,
   assets,
@@ -129,6 +135,7 @@ export const Visual: React.FC<VisualProps> = ({
       <PixegotchiDisplay
         pixe={pet}
         centered={centerPet}
+        hidePet={hidePet}
         wallId={wallId}
         floorId={floorId}
         assets={assets}

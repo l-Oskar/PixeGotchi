@@ -70,22 +70,22 @@ describe("room slot placements", () => {
     expect(resolveRoomAssetPlacements(placements)).toHaveLength(2);
   });
 
-  it("allows overlay cosmetics to share an occupied slot", () => {
+  it("keeps window and curtains in independent slots", () => {
     const placements: RoomAssetPlacement[] = [
       {
         id: "window",
-        slot: 7,
+        slot: 6,
         node: "window",
       },
       {
         id: "curtains",
         slot: 7,
-        allowOverlap: true,
         node: "curtains",
       },
     ];
 
     expect(resolveRoomAssetPlacements(placements)).toHaveLength(2);
+    expect(placements.map(({ slot }) => slot)).toEqual([6, 7]);
   });
 
   it("keeps mirrored side slots vertically synchronized", () => {

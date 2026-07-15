@@ -19,6 +19,8 @@ export type RoomSceneSlot =
   | "environment"
   | "wall"
   | "floor"
+  | "window"
+  | "curtain"
   | "rug"
   | "wallArt"
   | "furniture"
@@ -84,8 +86,11 @@ export const RoomScene: React.FC<RoomSceneProps> = ({
       {visibleAssets.map((asset) => (
         <div
           key={asset.id}
-          className="room-asset-slot pointer-events-none absolute z-[5] flex items-end justify-center"
-          style={getRoomAssetBounds(asset)}
+          className="room-asset-slot pointer-events-none absolute flex items-end justify-center"
+          style={{
+            ...getRoomAssetBounds(asset),
+            zIndex: asset.layer ?? 5,
+          }}
           data-room-slots={getOccupiedRoomSlots(asset).join(",")}>
           {asset.node}
         </div>

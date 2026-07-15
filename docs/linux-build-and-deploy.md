@@ -171,6 +171,16 @@ BRANCH=build-config RUN_MIGRATIONS=1 ./scripts/deploy.sh
 
 This runs `prisma migrate deploy` inside Docker. It applies migrations that already exist in git and should not create new migration files.
 
+After the migration step, `deploy.sh` runs the idempotent Room Cosmetics seed by default. The seed uses `upsert`, so repeated deploys synchronize the catalog without creating duplicate assets.
+
+To intentionally skip only this catalog synchronization:
+
+```bash
+SEED_ROOM_COSMETICS=0 ./scripts/deploy.sh
+```
+
+Do not skip it when deploying new or changed Room Cosmetics assets.
+
 ### If migration files appear on the server
 
 If `deploy.sh` stops because the server working tree is dirty, check:

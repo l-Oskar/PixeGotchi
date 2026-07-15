@@ -22,11 +22,13 @@ import Loader from "@/components/Other/Loader";
 import PixegothiData from "@/components/PixegotchiPage/PixegothiData";
 import { viewport } from "@tma.js/sdk";
 import { useSignal } from "@tma.js/sdk-react";
+import { useRoomEditorStore } from "@/store/room-editor.store";
 
 const MainPage: React.FC = () => {
   const user = useUserStore((s) => s.user);
   const egg = useEggStore((s) => s.hatchingEgg);
   const pixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
+  const isRoomEditing = useRoomEditorStore((state) => state.isEditing);
   const safeAreaInsetBottom = useSignal(viewport.safeAreaInsetBottom);
   const contentSafeAreaInsetBottom = useSignal(
     viewport.contentSafeAreaInsetBottom,
@@ -101,6 +103,7 @@ const MainPage: React.FC = () => {
     vault: <VaultPage onNavigate={handleNavigate} />,
   };
   const renderedPage = pages[resolvedPage] ?? pages[derivedPage] ?? pages.start;
+  const isImmersiveMode = isGameActive || isRoomEditing;
   const previousPageRef = useRef<PageType>(resolvedPage);
 
   useLayoutEffect(() => {
@@ -121,19 +124,21 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,var(--color-pixel-bg)_0%,var(--color-pixel-bg-deep)_100%)] text-pixel-ink">
-      {!isGameActive && <Header user={user} />}
+      {!isImmersiveMode && <Header user={user} />}
       {/* Content */}
       <main
         className="mx-auto max-w-md"
         style={{
-          paddingBottom: `calc(6rem + max(${bottomInset}px, env(safe-area-inset-bottom)))`,
+          paddingBottom: isRoomEditing
+            ? 0
+            : `calc(6rem + max(${bottomInset}px, env(safe-area-inset-bottom)))`,
         }}>
         {renderedPage}
       </main>
       {/* Bottom Navigation */}
       <Navigation
         currentPage={resolvedPage}
-        isHidden={isGameActive}
+        isHidden={isImmersiveMode}
         setCurrentPage={setCurrentPage}
       />
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Cooldowns,
   ELEMENT_COLORS,
@@ -12,7 +12,6 @@ import {
   CalendarDays,
   ChevronLeft,
   ChevronRight,
-  Grid2X2,
   Flame,
   Gamepad2,
   Gift,
@@ -28,17 +27,11 @@ import {
   Venus,
   Zap,
   Droplets,
-  Wallpaper,
 } from "lucide-react";
 import CompactStat from "@/components/MainPage/CompactStat";
 import ActionButton from "@/components/MainPage/ActionButton";
 import { Visual } from "../MainPage/Visual";
-import {
-  getRoomFloor,
-  getRoomWall,
-  ROOM_FLOORS,
-  ROOM_WALLS,
-} from "../MainPage/roomSurfaces";
+import { ROOM_FLOORS, ROOM_WALLS } from "../MainPage/roomSurfaces";
 import type {
   RoomFloorId,
   RoomWallId,
@@ -50,10 +43,11 @@ import {
 import type { RoomAssetId } from "../MainPage/roomAssets";
 import { useRoomStore } from "@/store/room.store";
 import {
-  useEquipRoomCosmetic,
+  useRoomCosmeticsInventory,
   useRoomCosmeticsLoadout,
-  useUnequipRoomCosmetic,
 } from "@/services/queries/room-cosmetics.queries";
+import { useRoomEditorStore } from "@/store/room-editor.store";
+import { RoomEditor } from "../MainPage/RoomEditor";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,
@@ -68,22 +62,18 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   });
   const [isStatsOpen, setIsStatsOpen] = useState(true);
   const [isRoomMenuOpen, setIsRoomMenuOpen] = useState(false);
-  const [showRoomSlotGuides, setShowRoomSlotGuides] = useState(false);
-  const [roomSaveError, setRoomSaveError] = useState<string | null>(null);
+  const [isEditorRequested, setIsEditorRequested] = useState(false);
+  const [editorLoadError, setEditorLoadError] = useState<string | null>(null);
   const {
     wallId: localWallId,
     floorId: localFloorId,
     hiddenAssetIds: localHiddenAssetIds,
     cabinetSlot: localCabinetSlot,
-    cycleWall: cycleLocalWall,
-    cycleFloor: cycleLocalFloor,
-    toggleAsset: toggleLocalAsset,
-    toggleCabinetSide: toggleLocalCabinetSide,
-    resetRoom,
   } = useRoomStore();
-  const loadoutQuery = useRoomCosmeticsLoadout(isRoomMenuOpen);
-  const equipRoomCosmetic = useEquipRoomCosmetic();
-  const unequipRoomCosmetic = useUnequipRoomCosmetic();
+  const isRoomEditing = useRoomEditorStore((state) => state.isEditing);
+  const startRoomEditing = useRoomEditorStore((state) => state.startEditing);
+  const loadoutQuery = useRoomCosmeticsLoadout();
+  const inventoryQuery = useRoomCosmeticsInventory(isEditorRequested);
   const serverLoadout = loadoutQuery.data?.loadout ?? null;
   const hasServerLoadout = loadoutQuery.isSuccess && serverLoadout !== null;
   const serverAssetIds = new Set(
@@ -114,132 +104,45 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
     serverCabinetPlacement?.position === 3
       ? serverCabinetPlacement.position
       : localCabinetSlot;
-  const canUseServerRoom = loadoutQuery.isSuccess;
-  const isRoomSaving =
-    equipRoomCosmetic.isPending || unequipRoomCosmetic.isPending;
 
-  const persistRoomChange = async (change: () => Promise<unknown>) => {
-    setRoomSaveError(null);
-    try {
-      await change();
-      return true;
-    } catch {
-      setRoomSaveError("SAVE FAILED");
-      return false;
-    }
-  };
+  useEffect(() => {
+    if (!isEditorRequested) return;
 
-  const handleCycleWall = async () => {
-    const currentIndex = ROOM_WALLS.findIndex((wall) => wall.id === wallId);
-    const nextWall =
-      ROOM_WALLS[(Math.max(0, currentIndex) + 1) % ROOM_WALLS.length];
-
-    if (!canUseServerRoom) {
-      cycleLocalWall();
+    if (loadoutQuery.isError || inventoryQuery.isError) {
+      setEditorLoadError("ROOM DATA FAILED TO LOAD");
+      setIsEditorRequested(false);
       return;
     }
 
-    await persistRoomChange(() =>
-      equipRoomCosmetic.mutateAsync({ cosmeticAssetId: nextWall.id }),
-    );
-  };
+    if (!loadoutQuery.isSuccess || !inventoryQuery.isSuccess) return;
 
-  const handleCycleFloor = async () => {
-    const currentIndex = ROOM_FLOORS.findIndex((floor) => floor.id === floorId);
-    const nextFloor =
-      ROOM_FLOORS[(Math.max(0, currentIndex) + 1) % ROOM_FLOORS.length];
-
-    if (!canUseServerRoom) {
-      cycleLocalFloor();
+    const loadout = loadoutQuery.data.loadout;
+    if (!loadout) {
+      setEditorLoadError("ROOM LOADOUT IS NOT AVAILABLE");
+      setIsEditorRequested(false);
       return;
     }
 
-    await persistRoomChange(() =>
-      equipRoomCosmetic.mutateAsync({ cosmeticAssetId: nextFloor.id }),
-    );
-  };
+    setEditorLoadError(null);
+    setIsEditorRequested(false);
+    setIsRoomMenuOpen(false);
+    startRoomEditing(loadout);
+  }, [
+    inventoryQuery.isError,
+    inventoryQuery.isSuccess,
+    isEditorRequested,
+    loadoutQuery.data,
+    loadoutQuery.isError,
+    loadoutQuery.isSuccess,
+    startRoomEditing,
+  ]);
 
-  const handleToggleAsset = async (assetId: RoomAssetId) => {
-    if (!canUseServerRoom) {
-      toggleLocalAsset(assetId);
-      return;
+  const handleOpenEditor = () => {
+    setEditorLoadError(null);
+    if (loadoutQuery.isError) {
+      void loadoutQuery.refetch();
     }
-
-    const asset = ROOM_ASSETS.find((candidate) => candidate.id === assetId);
-    if (!asset) return;
-
-    const placement = serverLoadout?.placements.find(
-      (candidate) => candidate.cosmeticAssetId === assetId,
-    );
-    const position =
-      assetId === "tall-cabinet-wood"
-        ? cabinetSlot
-        : (placement?.position ?? asset.slot);
-    const isVisible = !hiddenAssetIds.includes(assetId);
-
-    if (isVisible) {
-      await persistRoomChange(() =>
-        unequipRoomCosmetic.mutateAsync({
-          cosmeticAssetId: assetId,
-          position,
-        }),
-      );
-      return;
-    }
-
-    const assetAllowsOverlap =
-      "allowOverlap" in asset && asset.allowOverlap;
-    const competingAssets = ROOM_ASSETS.filter((candidate) => {
-      const candidateAllowsOverlap =
-        "allowOverlap" in candidate && candidate.allowOverlap;
-      return (
-        candidate.id !== asset.id &&
-        candidate.slot === asset.slot &&
-        !hiddenAssetIds.includes(candidate.id) &&
-        !assetAllowsOverlap &&
-        !candidateAllowsOverlap
-      );
-    });
-
-    await persistRoomChange(async () => {
-      for (const competingAsset of competingAssets) {
-        const competingPlacement = serverLoadout?.placements.find(
-          (candidate) =>
-            candidate.cosmeticAssetId === competingAsset.id,
-        );
-        await unequipRoomCosmetic.mutateAsync({
-          cosmeticAssetId: competingAsset.id,
-          position:
-            competingAsset.id === "tall-cabinet-wood"
-              ? cabinetSlot
-              : (competingPlacement?.position ?? competingAsset.slot),
-        });
-      }
-
-      await equipRoomCosmetic.mutateAsync({
-        cosmeticAssetId: assetId,
-        position,
-      });
-    });
-  };
-
-  const handleToggleCabinetSide = async () => {
-    if (!canUseServerRoom || hiddenAssetIds.includes("tall-cabinet-wood")) {
-      toggleLocalCabinetSide();
-      return;
-    }
-
-    const nextPosition = cabinetSlot === 1 ? 3 : 1;
-    await persistRoomChange(async () => {
-      await unequipRoomCosmetic.mutateAsync({
-        cosmeticAssetId: "tall-cabinet-wood",
-        position: cabinetSlot,
-      });
-      await equipRoomCosmetic.mutateAsync({
-        cosmeticAssetId: "tall-cabinet-wood",
-        position: nextPosition,
-      });
-    });
+    setIsEditorRequested(true);
   };
 
   const handleAction = (action: string) => {
@@ -247,6 +150,10 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   };
 
   if (!pixegotchi) return null;
+
+  if (isRoomEditing) {
+    return <RoomEditor pixegotchi={pixegotchi} />;
+  }
 
   const experienceTarget = 1000;
   const experienceProgress = Math.min(
@@ -330,82 +237,18 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               <MoreHorizontal size={18} />
             </button>
             {isRoomMenuOpen && (
-              <div className="pixel-panel-soft absolute right-0 top-11 z-40 max-h-64 w-40 space-y-1 overflow-y-auto bg-pixel-bg-deep/95 p-1.5 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_16px_var(--color-pixel-glow)] backdrop-blur-sm">
-                {roomSaveError && (
+              <div className="pixel-panel-soft absolute right-0 top-11 z-40 w-40 space-y-1 bg-pixel-bg-deep/95 p-1.5 shadow-[0_4px_0_var(--color-pixel-shadow),0_0_16px_var(--color-pixel-glow)] backdrop-blur-sm">
+                {editorLoadError && (
                   <div className="px-2 py-1 font-pixel text-[7px] text-pixel-red">
-                    {roomSaveError}
+                    {editorLoadError}
                   </div>
                 )}
                 <button
                   type="button"
-                  onClick={handleCycleWall}
-                  disabled={loadoutQuery.isLoading || isRoomSaving}
-                  className="pixel-button flex min-h-0 w-full items-center justify-start gap-2 px-2 py-1.5 text-left font-pixel text-[7px] leading-3">
-                  <Wallpaper size={13} />
-                  <span className="truncate">
-                    Wall: {getRoomWall(wallId).label}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCycleFloor}
-                  disabled={loadoutQuery.isLoading || isRoomSaving}
-                  className="pixel-button flex min-h-0 w-full items-center justify-start gap-2 px-2 py-1.5 text-left font-pixel text-[7px] leading-3">
-                  <Grid2X2 size={13} />
-                  <span className="truncate">
-                    Floor: {getRoomFloor(floorId).label}
-                  </span>
-                </button>
-                {ROOM_ASSETS.map((asset) => {
-                  const isVisible = !hiddenAssetIds.includes(asset.id);
-
-                  return (
-                    <button
-                      key={asset.id}
-                      type="button"
-                      onClick={() => handleToggleAsset(asset.id)}
-                      disabled={loadoutQuery.isLoading || isRoomSaving}
-                      className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
-                      <span>{asset.label}</span>
-                      <span
-                        className={
-                          isVisible ? "text-pixel-green" : "text-pixel-muted"
-                        }>
-                        {isVisible ? "ON" : "OFF"}
-                      </span>
-                    </button>
-                  );
-                })}
-                <button
-                  type="button"
-                  onClick={handleToggleCabinetSide}
-                  disabled={loadoutQuery.isLoading || isRoomSaving}
-                  className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
-                  <span>Cabinet side</span>
-                  <span className="text-pixel-highlight">
-                    {cabinetSlot === 1 ? "LEFT" : "RIGHT"}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={resetRoom}
-                  disabled={canUseServerRoom || isRoomSaving}
-                  title={
-                    canUseServerRoom
-                      ? "Server room reset will be added separately"
-                      : undefined
-                  }
-                  className="pixel-button min-h-0 w-full px-2 py-1.5 font-pixel text-[7px] leading-3 text-pixel-red">
-                  RESET ROOM
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowRoomSlotGuides((current) => !current)}
-                  className="pixel-button flex min-h-0 w-full items-center justify-between gap-2 px-2 py-1.5 font-pixel text-[7px] leading-3">
-                  <span>Edit slots</span>
-                  <span className="text-pixel-highlight">
-                    {showRoomSlotGuides ? "ON" : "OFF"}
-                  </span>
+                  onClick={handleOpenEditor}
+                  disabled={isEditorRequested}
+                  className="pixel-button min-h-0 w-full px-2 py-2 font-pixel text-[8px] leading-3 text-pixel-highlight">
+                  {isEditorRequested ? "LOADING..." : "EDIT ROOM"}
                 </button>
               </div>
             )}
@@ -421,7 +264,6 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
               wallId={wallId}
               floorId={floorId}
               assets={roomAssets}
-              showSlotGuides={showRoomSlotGuides}
             />
           </div>
           {isStatsOpen ? (

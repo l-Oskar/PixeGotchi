@@ -5,14 +5,15 @@ export const ROOM_ASSETS = [
     id: "arched-window-day",
     label: "Window",
     src: "assets/room/windows/arched-window-day.png",
-    slot: 7,
+    slot: 6,
+    layer: 4,
   },
   {
     id: "pink-window-curtains",
     label: "Pink curtains",
     src: "assets/room/curtains/pink-window-curtains.png",
     slot: 7,
-    allowOverlap: true,
+    layer: 5,
   },
   {
     id: "tall-cabinet-wood",
@@ -93,6 +94,7 @@ export const buildRoomAssetPlacements = (
         : {
             id: asset.id,
             slot: asset.slot,
+            layer: "layer" in asset ? asset.layer : undefined,
             allowOverlap:
               "allowOverlap" in asset ? asset.allowOverlap : undefined,
             node: (

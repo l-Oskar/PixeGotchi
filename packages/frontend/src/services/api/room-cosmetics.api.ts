@@ -1,6 +1,8 @@
 import type {
   EquipRoomCosmeticInput,
   RoomCosmeticsCatalogResponse,
+  RoomCosmeticsInventoryResponse,
+  SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
   UpdateRoomCosmeticResponse,
   UserRoomCosmeticsResponse,
@@ -25,11 +27,29 @@ export const roomCosmeticsApi = {
     return data;
   },
 
+  getInventory: async (): Promise<RoomCosmeticsInventoryResponse> => {
+    const { data } =
+      await apiClient.get<RoomCosmeticsInventoryResponse>(
+        "/room-cosmetics/inventory",
+      );
+    return data;
+  },
+
   getLoadout: async (): Promise<UserRoomLoadoutResponse> => {
     const { data } =
       await apiClient.get<UserRoomLoadoutResponse>(
         "/room-cosmetics/loadout",
       );
+    return data;
+  },
+
+  saveLoadout: async (
+    input: SaveRoomLoadoutInput,
+  ): Promise<UpdateRoomCosmeticResponse> => {
+    const { data } = await apiClient.put<UpdateRoomCosmeticResponse>(
+      "/room-cosmetics/loadout",
+      input,
+    );
     return data;
   },
 

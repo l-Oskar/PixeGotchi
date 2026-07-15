@@ -3,6 +3,8 @@ import type { RarityType } from "../enums";
 export type RoomCosmeticSlot =
   | "environment"
   | "floor"
+  | "window"
+  | "curtain"
   | "rug"
   | "wallArt"
   | "furniture"
@@ -86,6 +88,10 @@ export interface UserRoomCosmeticsResponse {
   cosmetics: UserRoomCosmetic[];
 }
 
+export interface RoomCosmeticsInventoryResponse {
+  assets: RoomCosmeticAsset[];
+}
+
 export interface UserRoomLoadoutResponse {
   loadout: RoomLoadout | null;
 }
@@ -98,6 +104,12 @@ export interface EquipRoomCosmeticInput {
 export interface UnequipRoomCosmeticInput {
   cosmeticAssetId: string;
   position?: RoomCosmeticPosition;
+}
+
+export interface SaveRoomLoadoutInput {
+  environmentId: string;
+  floorId: string | null;
+  placements: EquippedRoomCosmetic[];
 }
 
 export interface UpdateRoomCosmeticResponse {

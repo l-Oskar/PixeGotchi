@@ -85,6 +85,8 @@ enum CurrencyType {
 enum RoomCosmeticSlot {
   environment
   floor
+  window
+  curtain
   rug
   wallArt
   furniture

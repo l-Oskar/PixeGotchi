@@ -12,6 +12,7 @@ type SingleRoomAssetPlacement = {
   node: ReactNode;
   slot: RoomSlotId;
   span?: 1;
+  layer?: number;
   allowOverlap?: boolean;
 };
 
@@ -20,6 +21,7 @@ type DoubleRoomAssetPlacement = {
   node: ReactNode;
   slot: 1 | 3;
   span: 2;
+  layer?: number;
   allowOverlap?: boolean;
 };
 

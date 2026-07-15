@@ -3,6 +3,8 @@ import type {
   RoomCosmeticAsset,
   RoomCosmeticPosition,
   RoomCosmeticsCatalogResponse,
+  RoomCosmeticsInventoryResponse,
+  SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
   UpdateRoomCosmeticResponse,
   UserRoomCosmeticsResponse,
@@ -15,7 +17,7 @@ import { prisma } from "@/database/prisma";
 const DEFAULT_ENVIRONMENT_ID = "violet-brick";
 const DEFAULT_FLOOR_ID = "plum-boards";
 const DEFAULT_POSITIONED_ASSETS = [
-  { cosmeticAssetId: "arched-window-day", position: 7 },
+  { cosmeticAssetId: "arched-window-day", position: 6 },
   { cosmeticAssetId: "pink-window-curtains", position: 7 },
   { cosmeticAssetId: "tall-cabinet-wood", position: 3 },
   { cosmeticAssetId: "purple-sofa", position: 8 },
@@ -134,6 +136,30 @@ export class RoomCosmeticsService {
     };
   }
 
+  async getEditorInventory(
+    userId: number,
+  ): Promise<RoomCosmeticsInventoryResponse> {
+    const assets = await prisma.cosmeticAsset.findMany({
+      where: {
+        isActive: true,
+        OR: [
+          { isDefault: true },
+          {
+            ownerships: {
+              some: {
+                userId,
+                quantity: { gt: 0 },
+              },
+            },
+          },
+        ],
+      },
+      orderBy: [{ slot: "asc" }, { name: "asc" }, { id: "asc" }],
+    });
+
+    return { assets: assets.map(mapCosmeticAsset) };
+  }
+
   async getCurrentLoadout(
     userId: number,
   ): Promise<UserRoomLoadoutResponse> {
@@ -162,6 +188,162 @@ export class RoomCosmeticsService {
         updatedAt: loadout.updatedAt.toISOString(),
       },
     };
+  }
+
+  async getOrCreateCurrentLoadout(
+    userId: number,
+  ): Promise<UserRoomLoadoutResponse> {
+    await prisma.$transaction(
+      (transaction) => ensureRoomLoadout(transaction, userId),
+      { isolationLevel: "Serializable" },
+    );
+    return this.getCurrentLoadout(userId);
+  }
+
+  async saveLoadout(
+    userId: number,
+    input: SaveRoomLoadoutInput,
+  ): Promise<UpdateRoomCosmeticResponse> {
+    await prisma.$transaction(
+      async (transaction) => {
+        const placementAssetIds = input.placements.map(
+          ({ cosmeticAssetId }) => cosmeticAssetId,
+        );
+        if (new Set(placementAssetIds).size !== placementAssetIds.length) {
+          throw roomCosmeticsError(
+            400,
+            "A room cosmetic can only be equipped once",
+          );
+        }
+
+        const requestedAssetIds = [
+          input.environmentId,
+          ...(input.floorId ? [input.floorId] : []),
+          ...placementAssetIds,
+        ];
+        const uniqueAssetIds = [...new Set(requestedAssetIds)];
+        const assets = await transaction.cosmeticAsset.findMany({
+          where: {
+            id: { in: uniqueAssetIds },
+            isActive: true,
+          },
+        });
+
+        if (assets.length !== uniqueAssetIds.length) {
+          throw roomCosmeticsError(404, "Room cosmetic asset not found");
+        }
+
+        const assetsById = new Map(assets.map((asset) => [asset.id, asset]));
+        const environment = assetsById.get(input.environmentId);
+        if (!environment || environment.slot !== "environment") {
+          throw roomCosmeticsError(400, "Invalid room environment");
+        }
+
+        if (input.floorId) {
+          const floor = assetsById.get(input.floorId);
+          if (!floor || floor.slot !== "floor") {
+            throw roomCosmeticsError(400, "Invalid room floor");
+          }
+        }
+
+        const ownershipRequiredIds = assets
+          .filter((asset) => !asset.isDefault)
+          .map((asset) => asset.id);
+        if (ownershipRequiredIds.length > 0) {
+          const ownerships = await transaction.userCosmetic.findMany({
+            where: {
+              userId,
+              cosmeticAssetId: { in: ownershipRequiredIds },
+              quantity: { gt: 0 },
+            },
+            select: { cosmeticAssetId: true },
+          });
+          const ownedIds = new Set(
+            ownerships.map(({ cosmeticAssetId }) => cosmeticAssetId),
+          );
+          if (ownershipRequiredIds.some((id) => !ownedIds.has(id))) {
+            throw roomCosmeticsError(403, "Room cosmetic is not owned");
+          }
+        }
+
+        const occupiedPositions = new Map<number, boolean[]>();
+        for (const placement of input.placements) {
+          const asset = assetsById.get(placement.cosmeticAssetId);
+          if (!asset || asset.slot === "environment" || asset.slot === "floor") {
+            throw roomCosmeticsError(
+              400,
+              "Surface cosmetics cannot be used as room placements",
+            );
+          }
+          if (!asset.allowedPositions.includes(placement.position)) {
+            throw roomCosmeticsError(
+              400,
+              "Room cosmetic cannot be equipped in this position",
+            );
+          }
+          if (
+            asset.span === 2 &&
+            placement.position !== 1 &&
+            placement.position !== 3
+          ) {
+            throw roomCosmeticsError(
+              400,
+              "Double-height cosmetics must start at position 1 or 3",
+            );
+          }
+
+          const requestedPositions = getOccupiedPositions(
+            asset,
+            placement.position,
+          );
+          const hasCollision = requestedPositions.some((position) => {
+            const occupied = occupiedPositions.get(position) ?? [];
+            return occupied.some(
+              (allowsOverlap) => !asset.allowOverlap && !allowsOverlap,
+            );
+          });
+          if (hasCollision) {
+            throw roomCosmeticsError(409, "Room position is already occupied");
+          }
+          requestedPositions.forEach((position) => {
+            const occupied = occupiedPositions.get(position) ?? [];
+            occupiedPositions.set(position, [
+              ...occupied,
+              asset.allowOverlap,
+            ]);
+          });
+        }
+
+        const loadout = await transaction.userRoomLoadout.upsert({
+          where: { userId },
+          create: {
+            userId,
+            environmentId: input.environmentId,
+            floorId: input.floorId,
+          },
+          update: {
+            environmentId: input.environmentId,
+            floorId: input.floorId,
+          },
+        });
+
+        await transaction.roomCosmeticPlacement.deleteMany({
+          where: { loadoutId: loadout.id },
+        });
+        if (input.placements.length > 0) {
+          await transaction.roomCosmeticPlacement.createMany({
+            data: input.placements.map((placement) => ({
+              loadoutId: loadout.id,
+              cosmeticAssetId: placement.cosmeticAssetId,
+              position: placement.position,
+            })),
+          });
+        }
+      },
+      { isolationLevel: "Serializable" },
+    );
+
+    return this.getRequiredCurrentLoadout(userId);
   }
 
   async equip(

@@ -9,6 +9,7 @@ SERVICE="${SERVICE:-backend}"
 BUILD="${BUILD:-0}"
 RESET_LOCAL_CHANGES="${RESET_LOCAL_CHANGES:-0}"
 RUN_MIGRATIONS="${RUN_MIGRATIONS:-0}"
+SEED_ROOM_COSMETICS="${SEED_ROOM_COSMETICS:-1}"
 RESET_NODE_MODULES="${RESET_NODE_MODULES:-1}"
 HEALTH_URL="${HEALTH_URL:-http://127.0.0.1:3000/health}"
 
@@ -18,6 +19,7 @@ echo "   remote:       ${REMOTE}"
 echo "   compose file: ${COMPOSE_FILE}"
 echo "   service:      ${SERVICE}"
 echo "   build image:  ${BUILD}"
+echo "   room seed:    ${SEED_ROOM_COSMETICS}"
 
 if [[ ! -f "${COMPOSE_FILE}" ]]; then
   echo "❌ Compose file not found: ${COMPOSE_FILE}" >&2
@@ -85,6 +87,14 @@ if [[ "${RUN_MIGRATIONS}" == "1" ]]; then
     sh -c "cd packages/backend && npx prisma migrate deploy"
 else
   echo "⏭ Skipping migrations. Use RUN_MIGRATIONS=1 only when you intentionally want migrate deploy."
+fi
+
+if [[ "${SEED_ROOM_COSMETICS}" == "1" ]]; then
+  echo "🛋 Seeding Room Cosmetics catalog..."
+  docker compose -f "${COMPOSE_FILE}" run --rm "${SERVICE}" \
+    sh -c "cd packages/backend && npm run prisma:room-cosmetics"
+else
+  echo "⏭ Skipping Room Cosmetics seed because SEED_ROOM_COSMETICS=0."
 fi
 
 echo "▶️ Starting dependencies..."

@@ -1,5 +1,6 @@
 import type {
   EquipRoomCosmeticInput,
+  SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
   UserRoomLoadoutResponse,
 } from "@pixegotchi/shared";
@@ -10,6 +11,7 @@ export const ROOM_COSMETICS_KEYS = {
   all: ["room-cosmetics"] as const,
   catalog: ["room-cosmetics", "catalog"] as const,
   ownership: ["room-cosmetics", "ownership"] as const,
+  inventory: ["room-cosmetics", "inventory"] as const,
   loadout: ["room-cosmetics", "loadout"] as const,
 };
 
@@ -25,12 +27,34 @@ export const useRoomCosmeticsOwnership = () =>
     queryFn: roomCosmeticsApi.getOwnership,
   });
 
+export const useRoomCosmeticsInventory = (enabled = true) =>
+  useQuery({
+    queryKey: ROOM_COSMETICS_KEYS.inventory,
+    queryFn: roomCosmeticsApi.getInventory,
+    enabled,
+  });
+
 export const useRoomCosmeticsLoadout = (enabled = true) =>
   useQuery({
     queryKey: ROOM_COSMETICS_KEYS.loadout,
     queryFn: roomCosmeticsApi.getLoadout,
     enabled,
   });
+
+export const useSaveRoomCosmeticsLoadout = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: SaveRoomLoadoutInput) =>
+      roomCosmeticsApi.saveLoadout(input),
+    onSuccess: ({ loadout }) => {
+      queryClient.setQueryData<UserRoomLoadoutResponse>(
+        ROOM_COSMETICS_KEYS.loadout,
+        { loadout },
+      );
+    },
+  });
+};
 
 export const useEquipRoomCosmetic = () => {
   const queryClient = useQueryClient();

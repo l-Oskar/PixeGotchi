@@ -67,6 +67,50 @@ describe("RoomCosmeticsService", () => {
     ).rejects.toMatchObject({ statusCode: 403 });
   });
 
+  it("returns only active default and user-owned assets for editor inventory", async () => {
+    const user = await createUser();
+    const defaultAsset = await createAsset({ isDefault: true });
+    const ownedAsset = await createAsset({ isDefault: false });
+    const lockedAsset = await createAsset({ isDefault: false });
+    const inactiveDefaultAsset = await createAsset({
+      isDefault: true,
+      isActive: false,
+    });
+    await prisma.userCosmetic.create({
+      data: {
+        userId: user.id,
+        cosmeticAssetId: ownedAsset.id,
+      },
+    });
+    const service = new RoomCosmeticsService();
+
+    const result = await service.getEditorInventory(user.id);
+    const assetIds = result.assets.map(({ id }) => id);
+
+    expect(assetIds).toContain(defaultAsset.id);
+    expect(assetIds).toContain(ownedAsset.id);
+    expect(assetIds).not.toContain(lockedAsset.id);
+    expect(assetIds).not.toContain(inactiveDefaultAsset.id);
+  });
+
+  it("creates the default server loadout when a user opens room data", async () => {
+    const user = await createUser();
+    await createDefaultSurfaces();
+    const service = new RoomCosmeticsService();
+
+    const result = await service.getOrCreateCurrentLoadout(user.id);
+
+    expect(result.loadout).toMatchObject({
+      userId: user.id,
+      environmentId: "violet-brick",
+      floorId: "plum-boards",
+      placements: [],
+    });
+    await expect(
+      prisma.userRoomLoadout.count({ where: { userId: user.id } }),
+    ).resolves.toBe(1);
+  });
+
   it("rejects a position outside the cosmetic allowlist", async () => {
     const user = await createUser();
     await createDefaultSurfaces();
@@ -101,23 +145,22 @@ describe("RoomCosmeticsService", () => {
     ).rejects.toMatchObject({ statusCode: 409 });
   });
 
-  it("allows an overlap-enabled cosmetic to share a position", async () => {
+  it("equips window and curtains in their independent positions", async () => {
     const user = await createUser();
     await createDefaultSurfaces();
     const windowAsset = await createAsset({
-      slot: "wallArt",
-      allowedPositions: [7],
+      slot: "window",
+      allowedPositions: [6],
     });
     const curtainsAsset = await createAsset({
-      slot: "wallArt",
+      slot: "curtain",
       allowedPositions: [7],
-      allowOverlap: true,
     });
     const service = new RoomCosmeticsService();
 
     await service.equip(user.id, {
       cosmeticAssetId: windowAsset.id,
-      position: 7,
+      position: 6,
     });
     const result = await service.equip(user.id, {
       cosmeticAssetId: curtainsAsset.id,
@@ -125,7 +168,7 @@ describe("RoomCosmeticsService", () => {
     });
 
     expect(result.loadout.placements).toEqual([
-      { cosmeticAssetId: windowAsset.id, position: 7 },
+      { cosmeticAssetId: windowAsset.id, position: 6 },
       { cosmeticAssetId: curtainsAsset.id, position: 7 },
     ]);
   });
@@ -173,5 +216,95 @@ describe("RoomCosmeticsService", () => {
     });
 
     expect(result.loadout.placements).toEqual([]);
+  });
+
+  it("atomically saves a complete room loadout", async () => {
+    const user = await createUser();
+    await createDefaultSurfaces();
+    const windowAsset = await createAsset({
+      slot: "window",
+      allowedPositions: [6],
+    });
+    const curtainsAsset = await createAsset({
+      slot: "curtain",
+      allowedPositions: [7],
+    });
+    const service = new RoomCosmeticsService();
+
+    const result = await service.saveLoadout(user.id, {
+      environmentId: "violet-brick",
+      floorId: "plum-boards",
+      placements: [
+        { cosmeticAssetId: windowAsset.id, position: 6 },
+        { cosmeticAssetId: curtainsAsset.id, position: 7 },
+      ],
+    });
+
+    expect(result.loadout.environmentId).toBe("violet-brick");
+    expect(result.loadout.floorId).toBe("plum-boards");
+    expect(result.loadout.placements).toEqual([
+      { cosmeticAssetId: windowAsset.id, position: 6 },
+      { cosmeticAssetId: curtainsAsset.id, position: 7 },
+    ]);
+  });
+
+  it("keeps the previous loadout when complete save validation fails", async () => {
+    const user = await createUser();
+    await createDefaultSurfaces();
+    const equippedAsset = await createAsset({ allowedPositions: [10] });
+    const unownedAsset = await createAsset({
+      allowedPositions: [11],
+      isDefault: false,
+    });
+    const service = new RoomCosmeticsService();
+
+    await service.saveLoadout(user.id, {
+      environmentId: "violet-brick",
+      floorId: "plum-boards",
+      placements: [
+        { cosmeticAssetId: equippedAsset.id, position: 10 },
+      ],
+    });
+
+    await expect(
+      service.saveLoadout(user.id, {
+        environmentId: "violet-brick",
+        floorId: "plum-boards",
+        placements: [
+          { cosmeticAssetId: unownedAsset.id, position: 11 },
+        ],
+      }),
+    ).rejects.toMatchObject({ statusCode: 403 });
+
+    await expect(service.getCurrentLoadout(user.id)).resolves.toMatchObject({
+      loadout: {
+        placements: [
+          { cosmeticAssetId: equippedAsset.id, position: 10 },
+        ],
+      },
+    });
+  });
+
+  it("rejects conflicting placements in a complete loadout", async () => {
+    const user = await createUser();
+    await createDefaultSurfaces();
+    const firstAsset = await createAsset({ allowedPositions: [10] });
+    const secondAsset = await createAsset({ allowedPositions: [10] });
+    const service = new RoomCosmeticsService();
+
+    await expect(
+      service.saveLoadout(user.id, {
+        environmentId: "violet-brick",
+        floorId: "plum-boards",
+        placements: [
+          { cosmeticAssetId: firstAsset.id, position: 10 },
+          { cosmeticAssetId: secondAsset.id, position: 10 },
+        ],
+      }),
+    ).rejects.toMatchObject({ statusCode: 409 });
+
+    await expect(service.getCurrentLoadout(user.id)).resolves.toEqual({
+      loadout: null,
+    });
   });
 });
