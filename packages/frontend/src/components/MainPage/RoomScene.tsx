@@ -46,8 +46,10 @@ interface RoomSceneProps {
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
   showSlotGuides?: boolean;
+  selectedGuideSlot?: RoomSlotId | null;
   slotTargets?: RoomSlotTarget[];
   onSlotSelect?: (slot: RoomSlotId) => void;
+  onGuideSlotSelect?: (slot: RoomSlotId) => void;
   onAssetSelect?: (assetId: string) => void;
 }
 
@@ -59,8 +61,10 @@ export const RoomScene: React.FC<RoomSceneProps> = ({
   floorId = DEFAULT_ROOM_FLOOR_ID,
   assets = [],
   showSlotGuides = false,
+  selectedGuideSlot,
   slotTargets = [],
   onSlotSelect,
+  onGuideSlotSelect,
   onAssetSelect,
 }) => {
   const wall = getRoomWall(wallId);
@@ -76,14 +80,14 @@ export const RoomScene: React.FC<RoomSceneProps> = ({
         </div>
       )}
       <div
-        className={`room-wall-surface ${wall.className} pointer-events-none absolute inset-x-0 top-0 z-[1] h-[62%] overflow-hidden`}>
+        className={`room-wall-surface ${wall.className} pointer-events-none absolute inset-x-0 top-0 z-[1] h-[71%] overflow-hidden`}>
         {layers?.wall}
       </div>
       <div
-        className={`room-floor-surface ${floor.className} pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[38%] overflow-hidden`}>
+        className={`room-floor-surface ${floor.className} pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[34%] overflow-hidden`}>
         {layers?.floor}
       </div>
-      <div className="room-surface-seam pointer-events-none absolute inset-x-0 top-[62%] z-[2]" />
+      <div className="room-surface-seam pointer-events-none absolute left-[7%] right-[7%] top-[66%] z-[2]" />
       {layers?.wallArt && (
         <div className="pointer-events-none absolute inset-x-[8%] top-[4%] z-[3]">
           {layers.wallArt}
@@ -123,18 +127,33 @@ export const RoomScene: React.FC<RoomSceneProps> = ({
       {showSlotGuides && (
         <div className="pointer-events-none absolute inset-0 z-30">
           {ROOM_GUIDE_SLOT_IDS.map((slot) => (
-            <div
+            <button
+              type="button"
               key={slot}
-              className="room-slot-guide absolute grid place-items-center"
-              style={getRoomGuideSlotBounds(slot)}
-              data-room-guide-slot={slot}>
+              onClick={() => slot !== 5 && onGuideSlotSelect?.(slot)}
+              disabled={slot === 5 || !onGuideSlotSelect}
+              className={`room-slot-guide absolute grid place-items-center ${
+                selectedGuideSlot === slot ? "room-slot-guide-selected" : ""
+              } ${
+                slot !== 5 && onGuideSlotSelect
+                  ? "pointer-events-auto"
+                  : "pointer-events-none"
+              }`}
+              style={{
+                ...getRoomGuideSlotBounds(slot),
+                zIndex: slot === 6 ? 3 : slot === 7 ? 2 : 1,
+              }}
+              data-room-guide-slot={slot}
+              aria-label={
+                slot === 5 ? "Pet position" : `Browse room position ${slot}`
+              }>
               <span>{slot}</span>
-            </div>
+            </button>
           ))}
         </div>
       )}
       {onSlotSelect && slotTargets.length > 0 && (
-        <div className="absolute inset-0 z-30">
+        <div className="pointer-events-none absolute inset-0 z-30">
           {slotTargets.map(({ slot, span }) => (
             <button
               key={`${slot}-${span}`}

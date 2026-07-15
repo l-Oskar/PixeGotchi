@@ -22,6 +22,7 @@ const resetEditorStore = () => {
     isPetVisible: true,
     selectedCategory: "all",
     selectedAssetId: null,
+    selectedSlot: null,
   });
 };
 
@@ -66,6 +67,7 @@ describe("room editor store", () => {
       draft: null,
       isDirty: false,
       selectedAssetId: null,
+      selectedSlot: null,
     });
   });
 

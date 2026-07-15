@@ -17,8 +17,10 @@ interface VisualProps {
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
   showSlotGuides?: boolean;
+  selectedGuideSlot?: RoomSlotId | null;
   slotTargets?: RoomSlotTarget[];
   onSlotSelect?: (slot: RoomSlotId) => void;
+  onGuideSlotSelect?: (slot: RoomSlotId) => void;
   onAssetSelect?: (assetId: string) => void;
 }
 
@@ -51,8 +53,10 @@ const PixegotchiDisplay: React.FC<{
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
   showSlotGuides?: boolean;
+  selectedGuideSlot?: RoomSlotId | null;
   slotTargets?: RoomSlotTarget[];
   onSlotSelect?: (slot: RoomSlotId) => void;
+  onGuideSlotSelect?: (slot: RoomSlotId) => void;
   onAssetSelect?: (assetId: string) => void;
 }> = ({
   pixe,
@@ -62,8 +66,10 @@ const PixegotchiDisplay: React.FC<{
   floorId,
   assets,
   showSlotGuides = false,
+  selectedGuideSlot,
   slotTargets,
   onSlotSelect,
+  onGuideSlotSelect,
   onAssetSelect,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
@@ -87,16 +93,16 @@ const PixegotchiDisplay: React.FC<{
       floorId={floorId}
       assets={assets}
       showSlotGuides={showSlotGuides}
+      selectedGuideSlot={selectedGuideSlot}
       slotTargets={slotTargets}
       onSlotSelect={onSlotSelect}
+      onGuideSlotSelect={onGuideSlotSelect}
       onAssetSelect={onAssetSelect}>
       {!hidePet && (
         <div
-          className={`translate-y-[clamp(2.5rem,12vw,3.25rem)] text-9xl transition-transform duration-300 ${centered ? "translate-x-0" : "translate-x-[clamp(3rem,18vw,4.75rem)]"}`}>
+          className={`translate-y-[clamp(5rem,20vw,6rem)] text-9xl transition-transform duration-300 ${centered ? "translate-x-0" : "translate-x-[clamp(3rem,18vw,4.75rem)]"}`}>
           <div
-            className={
-              isAnimating ? "animate-egg-wobble" : "animate-pet-idle"
-            }>
+            className={isAnimating ? "animate-egg-wobble" : "animate-pet-idle"}>
             <img
               className="h-[clamp(9rem,38vw,10rem)] w-[clamp(9rem,38vw,10rem)] cursor-pointer transition-transform hover:scale-105 pixelated"
               src={`./${getImage(pixe)}`}
@@ -126,8 +132,10 @@ export const Visual: React.FC<VisualProps> = ({
   floorId,
   assets,
   showSlotGuides = false,
+  selectedGuideSlot,
   slotTargets,
   onSlotSelect,
+  onGuideSlotSelect,
   onAssetSelect,
 }) => {
   if (!pet) {
@@ -157,8 +165,10 @@ export const Visual: React.FC<VisualProps> = ({
         floorId={floorId}
         assets={assets}
         showSlotGuides={showSlotGuides}
+        selectedGuideSlot={selectedGuideSlot}
         slotTargets={slotTargets}
         onSlotSelect={onSlotSelect}
+        onGuideSlotSelect={onGuideSlotSelect}
         onAssetSelect={onAssetSelect}
       />
     );

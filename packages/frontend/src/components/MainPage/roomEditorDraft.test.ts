@@ -4,7 +4,11 @@ import type {
   RoomPositionedCosmeticAsset,
   SaveRoomLoadoutInput,
 } from "@pixegotchi/shared";
-import { placeRoomAsset, removeRoomAsset } from "./roomEditorDraft";
+import {
+  getRoomAssetPlacementPositionForSlot,
+  placeRoomAsset,
+  removeRoomAsset,
+} from "./roomEditorDraft";
 
 const draft: SaveRoomLoadoutInput = {
   environmentId: "violet-brick",
@@ -33,6 +37,21 @@ const asset = (
 });
 
 describe("room editor draft", () => {
+  it("matches single and double-height assets to a selected room slot", () => {
+    const cabinet = asset("cabinet", [1, 3], 2);
+    const picture = {
+      ...asset("picture", [1, 3]),
+      slot: "wallArt" as const,
+    };
+
+    expect(getRoomAssetPlacementPositionForSlot(cabinet, 1)).toBe(1);
+    expect(getRoomAssetPlacementPositionForSlot(cabinet, 2)).toBe(1);
+    expect(getRoomAssetPlacementPositionForSlot(cabinet, 3)).toBe(3);
+    expect(getRoomAssetPlacementPositionForSlot(cabinet, 4)).toBe(3);
+    expect(getRoomAssetPlacementPositionForSlot(picture, 1)).toBe(1);
+    expect(getRoomAssetPlacementPositionForSlot(picture, 2)).toBeNull();
+  });
+
   it("replaces a conflicting asset in the selected position", () => {
     const purpleSofa = asset("purple-sofa", [8]);
     const blueSofa = asset("blue-sofa", [8]);

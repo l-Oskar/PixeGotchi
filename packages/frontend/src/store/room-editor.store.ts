@@ -3,6 +3,7 @@ import type {
   RoomLoadout,
   SaveRoomLoadoutInput,
 } from "@pixegotchi/shared";
+import type { RoomSlotId } from "@/components/MainPage/roomSlots";
 
 const toDraft = (loadout: RoomLoadout): SaveRoomLoadoutInput => ({
   environmentId: loadout.environmentId,
@@ -38,11 +39,13 @@ interface RoomEditorState {
   isPetVisible: boolean;
   selectedCategory: RoomEditorCategory;
   selectedAssetId: string | null;
+  selectedSlot: RoomSlotId | null;
   startEditing: (loadout: RoomLoadout) => void;
   setDraft: (draft: SaveRoomLoadoutInput) => void;
   togglePetVisibility: () => void;
   setSelectedCategory: (category: RoomEditorCategory) => void;
   setSelectedAssetId: (assetId: string | null) => void;
+  setSelectedSlot: (slot: RoomSlotId | null) => void;
   saveEditing: (
     saveDraft: (draft: SaveRoomLoadoutInput) => Promise<unknown>,
   ) => Promise<void>;
@@ -57,6 +60,7 @@ const closedEditorState = {
   isPetVisible: true,
   selectedCategory: "all" as const,
   selectedAssetId: null,
+  selectedSlot: null,
 };
 
 export const useRoomEditorStore = create<RoomEditorState>((set, get) => ({
@@ -67,6 +71,7 @@ export const useRoomEditorStore = create<RoomEditorState>((set, get) => ({
   isPetVisible: true,
   selectedCategory: "all",
   selectedAssetId: null,
+  selectedSlot: null,
   startEditing: (loadout) => {
     const draft = toDraft(loadout);
     set({
@@ -77,6 +82,7 @@ export const useRoomEditorStore = create<RoomEditorState>((set, get) => ({
       isPetVisible: true,
       selectedCategory: "all",
       selectedAssetId: null,
+      selectedSlot: null,
     });
   },
   setDraft: (draft) =>
@@ -89,8 +95,10 @@ export const useRoomEditorStore = create<RoomEditorState>((set, get) => ({
   togglePetVisibility: () =>
     set((state) => ({ isPetVisible: !state.isPetVisible })),
   setSelectedCategory: (selectedCategory) =>
-    set({ selectedCategory, selectedAssetId: null }),
+    set({ selectedCategory, selectedAssetId: null, selectedSlot: null }),
   setSelectedAssetId: (selectedAssetId) => set({ selectedAssetId }),
+  setSelectedSlot: (selectedSlot) =>
+    set({ selectedSlot, selectedAssetId: null, selectedCategory: "all" }),
   saveEditing: async (saveDraft) => {
     const draft = get().draft;
     if (!draft) return;

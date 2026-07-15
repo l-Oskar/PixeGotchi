@@ -4,11 +4,29 @@ import type {
   RoomPositionedCosmeticAsset,
   SaveRoomLoadoutInput,
 } from "@pixegotchi/shared";
+import type { RoomSlotId } from "./roomSlots";
 
 const occupiedPositions = (
   asset: RoomPositionedCosmeticAsset,
   position: RoomCosmeticPosition,
 ): number[] => (asset.span === 2 ? [position, position + 1] : [position]);
+
+export const isRoomPositionedAsset = (
+  asset: RoomCosmeticAsset,
+): asset is RoomPositionedCosmeticAsset =>
+  asset.slot !== "environment" && asset.slot !== "floor";
+
+export const getRoomAssetPlacementPositionForSlot = (
+  asset: RoomCosmeticAsset,
+  slot: RoomSlotId,
+): RoomSlotId | null => {
+  if (!isRoomPositionedAsset(asset)) return null;
+  if (asset.allowedPositions.includes(slot)) return slot;
+  if (asset.span !== 2) return null;
+  if (slot === 2 && asset.allowedPositions.includes(1)) return 1;
+  if (slot === 4 && asset.allowedPositions.includes(3)) return 3;
+  return null;
+};
 
 export const placeRoomAsset = (
   draft: SaveRoomLoadoutInput,
@@ -31,19 +49,12 @@ export const placeRoomAsset = (
     const placedAsset = inventory.find(
       ({ id }) => id === placement.cosmeticAssetId,
     );
-    if (
-      !placedAsset ||
-      placedAsset.slot === "environment" ||
-      placedAsset.slot === "floor"
-    ) {
+    if (!placedAsset || !isRoomPositionedAsset(placedAsset)) {
       return true;
     }
     if (asset.allowOverlap || placedAsset.allowOverlap) return true;
 
-    const placedPositions = occupiedPositions(
-      placedAsset,
-      placement.position,
-    );
+    const placedPositions = occupiedPositions(placedAsset, placement.position);
     return !requestedPositions.some((requestedPosition) =>
       placedPositions.includes(requestedPosition),
     );
@@ -51,10 +62,7 @@ export const placeRoomAsset = (
 
   return {
     ...draft,
-    placements: [
-      ...placements,
-      { cosmeticAssetId: asset.id, position },
-    ],
+    placements: [...placements, { cosmeticAssetId: asset.id, position }],
   };
 };
 
@@ -71,7 +79,7 @@ export const removeRoomAsset = (
 export const normalizeRoomEditorAsset = (
   asset: RoomCosmeticAsset,
 ): RoomCosmeticAsset => {
-  if (asset.slot === "environment" || asset.slot === "floor") return asset;
+  if (!isRoomPositionedAsset(asset)) return asset;
 
   if (asset.id === "arched-window-day") {
     return {

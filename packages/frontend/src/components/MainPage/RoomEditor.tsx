@@ -14,6 +14,7 @@ import {
 } from "@/services/queries/room-cosmetics.queries";
 import { RoomInventorySheet } from "./RoomInventorySheet";
 import {
+  isRoomPositionedAsset,
   normalizeRoomEditorAsset,
   placeRoomAsset,
   removeRoomAsset,
@@ -45,8 +46,10 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
     isDirty,
     isPetVisible,
     selectedAssetId,
+    selectedSlot,
     setDraft,
     setSelectedAssetId,
+    setSelectedSlot,
     togglePetVisibility,
     saveEditing,
     cancelEditing,
@@ -82,9 +85,7 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
     ({ id }) => id === selectedAssetId,
   );
   const selectedPositionedAsset =
-    selectedAsset &&
-    selectedAsset.slot !== "environment" &&
-    selectedAsset.slot !== "floor"
+    selectedAsset && isRoomPositionedAsset(selectedAsset)
       ? selectedAsset
       : null;
   const selectedPlacement = selectedPositionedAsset
@@ -196,8 +197,11 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
             wallId={wallId}
             floorId={floorId}
             assets={buildRoomAssetPlacementsFromLoadout(draft.placements)}
+            showSlotGuides
+            selectedGuideSlot={selectedSlot}
             slotTargets={slotTargets}
             onSlotSelect={handleSlotSelect}
+            onGuideSlotSelect={setSelectedSlot}
             onAssetSelect={setSelectedAssetId}
           />
         </div>
