@@ -10,15 +10,30 @@ const toDraft = (loadout: RoomLoadout): SaveRoomLoadoutInput => ({
   placements: loadout.placements.map((placement) => ({ ...placement })),
 });
 
+export type RoomEditorCategory =
+  | "all"
+  | "environment"
+  | "floor"
+  | "window"
+  | "curtain"
+  | "furniture"
+  | "rug"
+  | "wallArt"
+  | "decor";
+
 interface RoomEditorState {
   isEditing: boolean;
   initialDraft: SaveRoomLoadoutInput | null;
   draft: SaveRoomLoadoutInput | null;
   isDirty: boolean;
   isPetVisible: boolean;
+  selectedCategory: RoomEditorCategory;
+  selectedAssetId: string | null;
   startEditing: (loadout: RoomLoadout) => void;
   setDraft: (draft: SaveRoomLoadoutInput) => void;
   togglePetVisibility: () => void;
+  setSelectedCategory: (category: RoomEditorCategory) => void;
+  setSelectedAssetId: (assetId: string | null) => void;
   finishEditing: () => void;
   cancelEditing: () => void;
 }
@@ -29,6 +44,8 @@ export const useRoomEditorStore = create<RoomEditorState>((set) => ({
   draft: null,
   isDirty: false,
   isPetVisible: true,
+  selectedCategory: "all",
+  selectedAssetId: null,
   startEditing: (loadout) => {
     const draft = toDraft(loadout);
     set({
@@ -37,6 +54,8 @@ export const useRoomEditorStore = create<RoomEditorState>((set) => ({
       draft,
       isDirty: false,
       isPetVisible: true,
+      selectedCategory: "all",
+      selectedAssetId: null,
     });
   },
   setDraft: (draft) =>
@@ -48,6 +67,9 @@ export const useRoomEditorStore = create<RoomEditorState>((set) => ({
     })),
   togglePetVisibility: () =>
     set((state) => ({ isPetVisible: !state.isPetVisible })),
+  setSelectedCategory: (selectedCategory) =>
+    set({ selectedCategory, selectedAssetId: null }),
+  setSelectedAssetId: (selectedAssetId) => set({ selectedAssetId }),
   finishEditing: () =>
     set({
       isEditing: false,
@@ -55,6 +77,8 @@ export const useRoomEditorStore = create<RoomEditorState>((set) => ({
       draft: null,
       isDirty: false,
       isPetVisible: true,
+      selectedCategory: "all",
+      selectedAssetId: null,
     }),
   cancelEditing: () =>
     set({
@@ -63,5 +87,7 @@ export const useRoomEditorStore = create<RoomEditorState>((set) => ({
       draft: null,
       isDirty: false,
       isPetVisible: true,
+      selectedCategory: "all",
+      selectedAssetId: null,
     }),
 }));

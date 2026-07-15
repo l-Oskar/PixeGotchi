@@ -1,4 +1,5 @@
 import type { RoomAssetPlacement } from "./roomSlots";
+import type { EquippedRoomCosmetic } from "@pixegotchi/shared";
 
 export const ROOM_ASSETS = [
   {
@@ -106,3 +107,41 @@ export const buildRoomAssetPlacements = (
           };
     },
   );
+
+export const buildRoomAssetPlacementsFromLoadout = (
+  placements: EquippedRoomCosmetic[],
+): RoomAssetPlacement[] =>
+  placements.flatMap((placement): RoomAssetPlacement[] => {
+    const asset = ROOM_ASSETS.find(
+      ({ id }) => id === placement.cosmeticAssetId,
+    );
+    if (!asset) return [];
+
+    const node = (
+      <img
+        src={`${import.meta.env.BASE_URL}${asset.src}`}
+        alt={asset.label}
+      />
+    );
+
+    if ("span" in asset && asset.span === 2) {
+      if (placement.position !== 1 && placement.position !== 3) return [];
+      return [
+        {
+          id: asset.id,
+          slot: placement.position,
+          span: 2,
+          node,
+        },
+      ];
+    }
+
+    return [
+      {
+        id: asset.id,
+        slot: placement.position,
+        layer: "layer" in asset ? asset.layer : undefined,
+        node,
+      },
+    ];
+  });

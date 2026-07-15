@@ -10,10 +10,19 @@ import {
   getOccupiedRoomSlots,
   getRoomGuideSlotBounds,
   getRoomAssetBounds,
+  getRoomSlotTargetBounds,
   ROOM_GUIDE_SLOT_IDS,
   resolveRoomAssetPlacements,
 } from "./roomSlots";
-import type { RoomAssetPlacement } from "./roomSlots";
+import type {
+  RoomAssetPlacement,
+  RoomSlotId,
+} from "./roomSlots";
+
+export interface RoomSlotTarget {
+  slot: RoomSlotId;
+  span: 1 | 2;
+}
 
 export type RoomSceneSlot =
   | "environment"
@@ -36,6 +45,9 @@ interface RoomSceneProps {
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
   showSlotGuides?: boolean;
+  slotTargets?: RoomSlotTarget[];
+  onSlotSelect?: (slot: RoomSlotId) => void;
+  onAssetSelect?: (assetId: string) => void;
 }
 
 export const RoomScene: React.FC<RoomSceneProps> = ({
@@ -46,6 +58,9 @@ export const RoomScene: React.FC<RoomSceneProps> = ({
   floorId = DEFAULT_ROOM_FLOOR_ID,
   assets = [],
   showSlotGuides = false,
+  slotTargets = [],
+  onSlotSelect,
+  onAssetSelect,
 }) => {
   const wall = getRoomWall(wallId);
   const floor = getRoomFloor(floorId);
@@ -84,16 +99,21 @@ export const RoomScene: React.FC<RoomSceneProps> = ({
         </div>
       )}
       {visibleAssets.map((asset) => (
-        <div
+        <button
+          type="button"
           key={asset.id}
-          className="room-asset-slot pointer-events-none absolute flex items-end justify-center"
+          onClick={() => onAssetSelect?.(asset.id)}
+          disabled={!onAssetSelect}
+          className={`room-asset-slot absolute flex items-end justify-center ${
+            onAssetSelect ? "pointer-events-auto" : "pointer-events-none"
+          }`}
           style={{
             ...getRoomAssetBounds(asset),
             zIndex: asset.layer ?? 5,
           }}
           data-room-slots={getOccupiedRoomSlots(asset).join(",")}>
           {asset.node}
-        </div>
+        </button>
       ))}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-pixel-bg-deep/35 to-transparent" />
       <div className="relative z-10 flex h-full w-full items-center justify-center">
@@ -109,6 +129,21 @@ export const RoomScene: React.FC<RoomSceneProps> = ({
               data-room-guide-slot={slot}>
               <span>{slot}</span>
             </div>
+          ))}
+        </div>
+      )}
+      {onSlotSelect && slotTargets.length > 0 && (
+        <div className="absolute inset-0 z-30">
+          {slotTargets.map(({ slot, span }) => (
+            <button
+              key={`${slot}-${span}`}
+              type="button"
+              onClick={() => onSlotSelect(slot)}
+              className="room-slot-guide absolute grid place-items-center pointer-events-auto"
+              style={getRoomSlotTargetBounds(slot, span)}
+              aria-label={`Place asset in room position ${slot}`}>
+              <span>{span === 2 ? `${slot}+${slot + 1}` : slot}</span>
+            </button>
           ))}
         </div>
       )}

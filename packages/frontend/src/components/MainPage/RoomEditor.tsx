@@ -4,11 +4,17 @@ import { Eye, EyeOff } from "lucide-react";
 import { viewport } from "@tma.js/sdk";
 import { useSignal } from "@tma.js/sdk-react";
 import { Visual } from "./Visual";
-import { ROOM_ASSETS, buildRoomAssetPlacements } from "./roomAssets";
+import { buildRoomAssetPlacementsFromLoadout } from "./roomAssets";
 import { ROOM_FLOORS, ROOM_WALLS } from "./roomSurfaces";
 import type { RoomFloorId, RoomWallId } from "./roomSurfaces";
 import { useRoomEditorStore } from "@/store/room-editor.store";
-import { useSaveRoomCosmeticsLoadout } from "@/services/queries/room-cosmetics.queries";
+import {
+  useRoomCosmeticsInventory,
+  useSaveRoomCosmeticsLoadout,
+} from "@/services/queries/room-cosmetics.queries";
+import { RoomInventorySheet } from "./RoomInventorySheet";
+import { placeRoomAsset, removeRoomAsset } from "./roomEditorDraft";
+import type { RoomSlotId } from "./roomSlots";
 
 interface RoomEditorProps {
   pixegotchi: Pixegotchi;
@@ -34,11 +40,15 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
     draft,
     isDirty,
     isPetVisible,
+    selectedAssetId,
+    setDraft,
+    setSelectedAssetId,
     togglePetVisibility,
     finishEditing,
     cancelEditing,
   } = useRoomEditorStore();
   const saveLoadout = useSaveRoomCosmeticsLoadout();
+  const inventoryQuery = useRoomCosmeticsInventory();
 
   if (!draft) return null;
 
@@ -49,16 +59,28 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
     draft.floorId && ROOM_FLOORS.some(({ id }) => id === draft.floorId)
       ? (draft.floorId as RoomFloorId)
       : ROOM_FLOORS[0].id;
-  const equippedIds = new Set(
-    draft.placements.map(({ cosmeticAssetId }) => cosmeticAssetId),
+  const inventoryAssets = inventoryQuery.data?.assets ?? [];
+  const selectedAsset = inventoryAssets.find(
+    ({ id }) => id === selectedAssetId,
   );
-  const hiddenAssetIds = ROOM_ASSETS.filter(
-    ({ id }) => !equippedIds.has(id),
-  ).map(({ id }) => id);
-  const cabinetPlacement = draft.placements.find(
-    ({ cosmeticAssetId }) => cosmeticAssetId === "tall-cabinet-wood",
-  );
-  const cabinetSlot = cabinetPlacement?.position === 1 ? 1 : 3;
+  const selectedPositionedAsset =
+    selectedAsset &&
+    selectedAsset.slot !== "environment" &&
+    selectedAsset.slot !== "floor"
+      ? selectedAsset
+      : null;
+  const selectedPlacement = selectedPositionedAsset
+    ? draft.placements.find(
+        ({ cosmeticAssetId }) =>
+          cosmeticAssetId === selectedPositionedAsset.id,
+      )
+    : null;
+  const slotTargets = selectedPositionedAsset
+    ? selectedPositionedAsset.allowedPositions.map((slot) => ({
+        slot: slot as RoomSlotId,
+        span: selectedPositionedAsset.span,
+      }))
+    : [];
 
   const handleCancel = () => {
     if (isDirty && !window.confirm("Discard room changes?")) return;
@@ -73,6 +95,25 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
     } catch {
       setSaveError("SAVE FAILED. TRY AGAIN.");
     }
+  };
+
+  const handleSlotSelect = (slot: RoomSlotId) => {
+    if (!selectedPositionedAsset) return;
+    setDraft(
+      placeRoomAsset(
+        draft,
+        selectedPositionedAsset,
+        slot,
+        inventoryAssets,
+      ),
+    );
+    setSelectedAssetId(null);
+  };
+
+  const handleRemoveAsset = () => {
+    if (!selectedPositionedAsset) return;
+    setDraft(removeRoomAsset(draft, selectedPositionedAsset.id));
+    setSelectedAssetId(null);
   };
 
   return (
@@ -105,6 +146,22 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
         </div>
       )}
 
+      {selectedPositionedAsset && (
+        <div className="mx-2.5 mb-2 flex shrink-0 items-center justify-between gap-2 font-pixel text-[7px]">
+          <span className="min-w-0 truncate text-pixel-highlight">
+            {selectedPlacement ? "MOVE" : "PLACE"}: {selectedPositionedAsset.name}
+          </span>
+          {selectedPlacement && (
+            <button
+              type="button"
+              onClick={handleRemoveAsset}
+              className="pixel-button min-h-7 shrink-0 px-2 text-[7px] text-pixel-red">
+              REMOVE
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="relative min-h-0 flex-1 p-2.5 pt-0">
         <button
           type="button"
@@ -121,14 +178,15 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
             hidePet={!isPetVisible}
             wallId={wallId}
             floorId={floorId}
-            assets={buildRoomAssetPlacements(hiddenAssetIds, cabinetSlot)}
+            assets={buildRoomAssetPlacementsFromLoadout(draft.placements)}
+            slotTargets={slotTargets}
+            onSlotSelect={handleSlotSelect}
+            onAssetSelect={setSelectedAssetId}
           />
         </div>
       </div>
 
-      <div className="pixel-panel-soft mx-2.5 mb-2.5 shrink-0 p-3 text-center font-pixel text-[8px] text-pixel-muted">
-        ROOM INVENTORY — NEXT STEP
-      </div>
+      <RoomInventorySheet />
     </section>
   );
 };

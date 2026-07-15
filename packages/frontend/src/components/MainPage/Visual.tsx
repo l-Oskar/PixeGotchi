@@ -5,6 +5,8 @@ import { MessageCircleHeart } from "lucide-react";
 import { RoomScene } from "./RoomScene";
 import type { RoomFloorId, RoomWallId } from "./roomSurfaces";
 import type { RoomAssetPlacement } from "./roomSlots";
+import type { RoomSlotId } from "./roomSlots";
+import type { RoomSlotTarget } from "./RoomScene";
 
 interface VisualProps {
   pet: Pixegotchi | Egg;
@@ -15,6 +17,9 @@ interface VisualProps {
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
   showSlotGuides?: boolean;
+  slotTargets?: RoomSlotTarget[];
+  onSlotSelect?: (slot: RoomSlotId) => void;
+  onAssetSelect?: (assetId: string) => void;
 }
 
 const EggDisplay: React.FC<{ egg: Egg; status: EggHatchingStatus }> = ({
@@ -46,6 +51,9 @@ const PixegotchiDisplay: React.FC<{
   floorId?: RoomFloorId;
   assets?: RoomAssetPlacement[];
   showSlotGuides?: boolean;
+  slotTargets?: RoomSlotTarget[];
+  onSlotSelect?: (slot: RoomSlotId) => void;
+  onAssetSelect?: (assetId: string) => void;
 }> = ({
   pixe,
   centered = false,
@@ -54,6 +62,9 @@ const PixegotchiDisplay: React.FC<{
   floorId,
   assets,
   showSlotGuides = false,
+  slotTargets,
+  onSlotSelect,
+  onAssetSelect,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
@@ -75,7 +86,10 @@ const PixegotchiDisplay: React.FC<{
       wallId={wallId}
       floorId={floorId}
       assets={assets}
-      showSlotGuides={showSlotGuides}>
+      showSlotGuides={showSlotGuides}
+      slotTargets={slotTargets}
+      onSlotSelect={onSlotSelect}
+      onAssetSelect={onAssetSelect}>
       {!hidePet && (
         <div
           className={`translate-y-[clamp(2.5rem,12vw,3.25rem)] text-9xl transition-transform duration-300 ${centered ? "translate-x-0" : "translate-x-[clamp(3rem,18vw,4.75rem)]"}`}>
@@ -112,6 +126,9 @@ export const Visual: React.FC<VisualProps> = ({
   floorId,
   assets,
   showSlotGuides = false,
+  slotTargets,
+  onSlotSelect,
+  onAssetSelect,
 }) => {
   if (!pet) {
     return (
@@ -140,6 +157,9 @@ export const Visual: React.FC<VisualProps> = ({
         floorId={floorId}
         assets={assets}
         showSlotGuides={showSlotGuides}
+        slotTargets={slotTargets}
+        onSlotSelect={onSlotSelect}
+        onAssetSelect={onAssetSelect}
       />
     );
   }

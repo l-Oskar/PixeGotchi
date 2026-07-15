@@ -19,9 +19,7 @@ vault/
 .docs/
 .agents/
 .codex/
-!.docs/
 .docs/*
-!.docs/ADD_LOGS.md
 runtime/
 reports/sim-lab/
 

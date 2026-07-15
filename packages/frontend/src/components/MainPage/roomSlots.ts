@@ -80,6 +80,14 @@ export const getRoomAssetBounds = (
     ? DOUBLE_SLOT_BOUNDS[placement.slot]
     : SLOT_BOUNDS[placement.slot];
 
+export const getRoomSlotTargetBounds = (
+  slot: RoomSlotId,
+  span: 1 | 2,
+): CSSProperties =>
+  span === 2 && (slot === 1 || slot === 3)
+    ? DOUBLE_SLOT_BOUNDS[slot]
+    : SLOT_BOUNDS[slot];
+
 export const getOccupiedRoomSlots = (
   placement: RoomAssetPlacement,
 ): RoomSlotId[] => {
