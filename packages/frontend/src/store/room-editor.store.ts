@@ -7,7 +7,15 @@ import type {
 const toDraft = (loadout: RoomLoadout): SaveRoomLoadoutInput => ({
   environmentId: loadout.environmentId,
   floorId: loadout.floorId,
-  placements: loadout.placements.map((placement) => ({ ...placement })),
+  placements: loadout.placements.map((placement) => ({
+    ...placement,
+    position:
+      placement.cosmeticAssetId === "arched-window-day"
+        ? 6
+        : placement.cosmeticAssetId === "pink-window-curtains"
+          ? 7
+          : placement.position,
+  })),
 });
 
 export type RoomEditorCategory =
@@ -17,6 +25,7 @@ export type RoomEditorCategory =
   | "window"
   | "curtain"
   | "furniture"
+  | "sofa"
   | "rug"
   | "wallArt"
   | "decor";

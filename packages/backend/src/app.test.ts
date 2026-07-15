@@ -53,4 +53,20 @@ describe("app routes", () => {
     expect(response.statusCode, response.body).toBe(400);
     expect(response.json()).toMatchObject({ error: "Validation error" });
   });
+
+  it("allows PUT requests in CORS preflight", async () => {
+    app = await buildApp();
+
+    const response = await app.inject({
+      method: "OPTIONS",
+      url: "/api/room-cosmetics/loadout",
+      headers: {
+        origin: "http://localhost:5173",
+        "access-control-request-method": "PUT",
+      },
+    });
+
+    expect(response.statusCode).toBe(204);
+    expect(response.headers["access-control-allow-methods"]).toContain("PUT");
+  });
 });

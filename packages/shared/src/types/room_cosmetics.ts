@@ -8,6 +8,7 @@ export type RoomCosmeticSlot =
   | "rug"
   | "wallArt"
   | "furniture"
+  | "sofa"
   | "decor";
 
 export type RoomSurfaceCosmeticSlot = Extract<

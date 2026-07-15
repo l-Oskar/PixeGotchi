@@ -60,4 +60,52 @@ describe("room editor draft", () => {
 
     expect(removeRoomAsset(current, sofa.id).placements).toEqual([]);
   });
+
+  it("removes a tall cabinet when wall art takes its top slot", () => {
+    const cabinet = asset("cabinet", [1, 3], 2);
+    const picture = {
+      ...asset("picture", [1, 3]),
+      slot: "wallArt" as const,
+    };
+    const inventory: RoomCosmeticAsset[] = [cabinet, picture];
+    const withCabinet = placeRoomAsset(draft, cabinet, 1, inventory);
+
+    expect(placeRoomAsset(withCabinet, picture, 1, inventory).placements).toEqual([
+      { cosmeticAssetId: "picture", position: 1 },
+    ]);
+  });
+
+  it("clears both side slots when a tall cabinet is placed", () => {
+    const cabinet = asset("cabinet", [1, 3], 2);
+    const picture = {
+      ...asset("picture", [1, 3]),
+      slot: "wallArt" as const,
+    };
+    const nightstand = asset("nightstand", [2, 4]);
+    const inventory: RoomCosmeticAsset[] = [cabinet, picture, nightstand];
+    const withPicture = placeRoomAsset(draft, picture, 1, inventory);
+    const withBothSlots = placeRoomAsset(
+      withPicture,
+      nightstand,
+      2,
+      inventory,
+    );
+
+    expect(
+      placeRoomAsset(withBothSlots, cabinet, 1, inventory).placements,
+    ).toEqual([{ cosmeticAssetId: "cabinet", position: 1 }]);
+  });
+
+  it("moves decor freely between positions 10 and 11", () => {
+    const lantern = {
+      ...asset("lantern", [10, 11]),
+      slot: "decor" as const,
+    };
+    const inventory: RoomCosmeticAsset[] = [lantern];
+    const left = placeRoomAsset(draft, lantern, 10, inventory);
+
+    expect(placeRoomAsset(left, lantern, 11, inventory).placements).toEqual([
+      { cosmeticAssetId: "lantern", position: 11 },
+    ]);
+  });
 });

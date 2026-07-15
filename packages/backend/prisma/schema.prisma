@@ -90,6 +90,7 @@ enum RoomCosmeticSlot {
   rug
   wallArt
   furniture
+  sofa
   decor
 }
 

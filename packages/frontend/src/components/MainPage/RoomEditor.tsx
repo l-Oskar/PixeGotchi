@@ -13,7 +13,11 @@ import {
   useSaveRoomCosmeticsLoadout,
 } from "@/services/queries/room-cosmetics.queries";
 import { RoomInventorySheet } from "./RoomInventorySheet";
-import { placeRoomAsset, removeRoomAsset } from "./roomEditorDraft";
+import {
+  normalizeRoomEditorAsset,
+  placeRoomAsset,
+  removeRoomAsset,
+} from "./roomEditorDraft";
 import type { RoomSlotId } from "./roomSlots";
 
 interface RoomEditorProps {
@@ -59,7 +63,9 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
     draft.floorId && ROOM_FLOORS.some(({ id }) => id === draft.floorId)
       ? (draft.floorId as RoomFloorId)
       : ROOM_FLOORS[0].id;
-  const inventoryAssets = inventoryQuery.data?.assets ?? [];
+  const inventoryAssets = (inventoryQuery.data?.assets ?? []).map(
+    normalizeRoomEditorAsset,
+  );
   const selectedAsset = inventoryAssets.find(
     ({ id }) => id === selectedAssetId,
   );
@@ -146,23 +152,22 @@ export const RoomEditor = ({ pixegotchi }: RoomEditorProps) => {
         </div>
       )}
 
-      {selectedPositionedAsset && (
-        <div className="mx-2.5 mb-2 flex shrink-0 items-center justify-between gap-2 font-pixel text-[7px]">
-          <span className="min-w-0 truncate text-pixel-highlight">
-            {selectedPlacement ? "MOVE" : "PLACE"}: {selectedPositionedAsset.name}
-          </span>
-          {selectedPlacement && (
-            <button
-              type="button"
-              onClick={handleRemoveAsset}
-              className="pixel-button min-h-7 shrink-0 px-2 text-[7px] text-pixel-red">
-              REMOVE
-            </button>
-          )}
-        </div>
-      )}
-
       <div className="relative min-h-0 flex-1 p-2.5 pt-0">
+        {selectedPositionedAsset && (
+          <div className="pixel-panel-soft absolute left-4 right-14 top-2 z-40 flex h-8 items-center justify-between gap-2 bg-pixel-bg-deep/90 px-2 font-pixel text-[7px]">
+            <span className="min-w-0 truncate text-pixel-highlight">
+              {selectedPlacement ? "MOVE" : "PLACE"}: {selectedPositionedAsset.name}
+            </span>
+            {selectedPlacement && (
+              <button
+                type="button"
+                onClick={handleRemoveAsset}
+                className="pixel-button min-h-6 shrink-0 px-2 text-[6px] text-pixel-red">
+                REMOVE
+              </button>
+            )}
+          </div>
+        )}
         <button
           type="button"
           onClick={togglePetVisibility}

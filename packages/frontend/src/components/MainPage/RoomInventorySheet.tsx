@@ -7,6 +7,7 @@ import {
   useRoomEditorStore,
   type RoomEditorCategory,
 } from "@/store/room-editor.store";
+import { normalizeRoomEditorAsset } from "./roomEditorDraft";
 
 const CATEGORIES: Array<{
   id: RoomEditorCategory;
@@ -18,6 +19,7 @@ const CATEGORIES: Array<{
   { id: "window", label: "WINDOWS" },
   { id: "curtain", label: "CURTAINS" },
   { id: "furniture", label: "FURNITURE" },
+  { id: "sofa", label: "SOFAS" },
   { id: "rug", label: "RUGS" },
   { id: "wallArt", label: "WALL ART" },
   { id: "decor", label: "DECOR" },
@@ -47,7 +49,9 @@ export const RoomInventorySheet = () => {
   } = useRoomEditorStore();
 
   const assets = useMemo(() => {
-    const inventoryAssets = inventoryQuery.data?.assets ?? [];
+    const inventoryAssets = (inventoryQuery.data?.assets ?? []).map(
+      normalizeRoomEditorAsset,
+    );
     if (selectedCategory === "all") return inventoryAssets;
     return inventoryAssets.filter(({ slot }) => slot === selectedCategory);
   }, [inventoryQuery.data?.assets, selectedCategory]);

@@ -33,6 +33,7 @@ export type RoomSceneSlot =
   | "rug"
   | "wallArt"
   | "furniture"
+  | "sofa"
   | "decor";
 
 export type RoomSceneLayers = Partial<Record<RoomSceneSlot, React.ReactNode>>;

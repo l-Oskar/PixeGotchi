@@ -104,6 +104,7 @@ export async function buildApp() {
       "https://pixegotchi.run.place",
       "http://localhost:5173",
     ],
+    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: false,
   });
 
