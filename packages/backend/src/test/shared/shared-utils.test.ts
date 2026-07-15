@@ -188,9 +188,21 @@ describe("shared pure logic", () => {
     expect(valueToPercent(25, 100)).toBe(25);
     expect(percentToValue(12.5, 200)).toBe(25);
     expect(calculateDelta(10, 1_800_000)).toBe(5);
-    expect(getFinalExp(90, 10, 0, 100, 2)).toBe(0);
-    expect(getFinalExp(90, 10, 100, 100, 2)).toBe(132);
-    expect(getFinalPgc(80, RarityType.legendary, ["optimist"])).toBe(69);
+    expect(getFinalExp(90, 10, 0, 150, 100, 2)).toBe(0);
+    expect(getFinalExp(90, 10, 30, 150, 100, 2)).toBe(66);
+    expect(getFinalExp(90, 10, 75, 150, 100, 2)).toBe(115);
+    expect(getFinalExp(90, 10, 120, 150, 100, 2)).toBe(165);
+    expect(getFinalExp(90, 10, 150, 150, 100, 2)).toBe(198);
+    expect(getFinalExp(90, 10, 999, 150, 100, 2)).toBe(198);
+    expect(getFinalPgc(0, 150, RarityType.legendary, ["optimist"])).toBe(0);
+    expect(getFinalPgc(30, 150, RarityType.common)).toBe(7.5);
+    expect(getFinalPgc(75, 150, RarityType.common)).toBe(32);
+    expect(getFinalPgc(120, 150, RarityType.common)).toBe(75);
+    expect(getFinalPgc(150, 150, RarityType.common)).toBe(112);
+    expect(getFinalPgc(999, 150, RarityType.common)).toBe(112);
+    expect(getFinalPgc(80, 150, RarityType.legendary, ["optimist"])).toBe(
+      63,
+    );
   });
 
   it("reduces health decay when hunger and cleanliness are high", () => {

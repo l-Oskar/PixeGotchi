@@ -163,6 +163,7 @@ export class GamesService {
     const pgcEarned = new Prisma.Decimal(
       getFinalPgc(
         safeScore,
+        config.maxScore ?? maxPossibleScore,
         pixegotchiSnapshot.rarity,
         pixegotchiSnapshot.traits,
         config.difficultyMultiplier,
@@ -172,6 +173,7 @@ export class GamesService {
       pixegotchiSnapshot.happiness,
       pixegotchiSnapshot.level,
       safeScore,
+      config.maxScore ?? maxPossibleScore,
       RARITY_STATS[pixegotchiSnapshot.rarity].maxStat,
       config.difficultyMultiplier,
     );

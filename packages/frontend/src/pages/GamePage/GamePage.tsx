@@ -61,6 +61,7 @@ const GamesPage: React.FC<GamePageProps> = ({
       Math.round(
         getFinalPgc(
           score,
+          game.maxScore ?? scoreRange[1],
           pixegotchi.rarity,
           pixegotchi.traits,
           game.difficultyMultiplier,
@@ -72,6 +73,7 @@ const GamesPage: React.FC<GamePageProps> = ({
         Number(pixegotchi.happiness),
         pixegotchi.level,
         score,
+        game.maxScore ?? scoreRange[1],
         maxStat,
         game.difficultyMultiplier,
       ),

@@ -75,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
               {(user?.pgcBalance
                 ? +user.pgcBalance > 99999
                   ? "99999+"
-                  : user.pgcBalance
+                  : Math.floor(+user.pgcBalance)
                 : "0") || "0"}
             </span>
             <button

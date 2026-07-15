@@ -125,8 +125,8 @@ describe("games routes", () => {
       id: startedSession.id,
       score: 150,
       duration: 60,
-      pgcEarned: "75",
-      experienceGained: 56,
+      pgcEarned: "112",
+      experienceGained: 75,
       completed: true,
     });
 
@@ -137,8 +137,8 @@ describe("games routes", () => {
       where: { id: pixegotchi.id },
     });
 
-    expect(updatedUser.pgcBalance.toString()).toBe("175");
-    expect(updatedPixegotchi.experience).toBe(56);
+    expect(updatedUser.pgcBalance.toString()).toBe("212");
+    expect(updatedPixegotchi.experience).toBe(75);
   });
 
   it("applies score, rarity, traits, happiness, and level to rewards", async () => {
@@ -187,8 +187,8 @@ describe("games routes", () => {
 
     expect(response.statusCode, response.body).toBe(200);
     expect(response.json()).toMatchObject({
-      pgcEarned: "69",
-      experienceGained: 59,
+      pgcEarned: "63",
+      experienceGained: 60,
       chestDropped: true,
       itemsDropped: { chestType: "golden" },
     });
@@ -206,8 +206,8 @@ describe("games routes", () => {
       where: { userId: user.id, isOpened: false },
     });
 
-    expect(updatedUser.pgcBalance.toString()).toBe("169");
-    expect(updatedPixegotchi.experience).toBe(59);
+    expect(updatedUser.pgcBalance.toString()).toBe("163");
+    expect(updatedPixegotchi.experience).toBe(60);
     expect(unchangedReplacement.experience).toBe(0);
     expect(droppedChests).toHaveLength(1);
     expect(droppedChests[0]?.chestType).toBe("golden");
@@ -253,8 +253,8 @@ describe("games routes", () => {
       where: { id: pixegotchi.id },
     });
 
-    expect(updatedUser.pgcBalance.toString()).toBe("140");
-    expect(updatedPixegotchi.experience).toBe(45);
+    expect(updatedUser.pgcBalance.toString()).toBe("136");
+    expect(updatedPixegotchi.experience).toBe(46);
   });
 
   it("rejects an early scored completion but allows abandoning with zero rewards", async () => {
