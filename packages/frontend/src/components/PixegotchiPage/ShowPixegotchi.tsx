@@ -286,11 +286,11 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 variant="row"
               />
               <CompactStat
-                icon={Zap}
-                label="Energy"
-                value={Number(pixegotchi.energy)}
-                bgColor="bg-pixel-yellow/15"
-                strokeColor={`${ITEM_COLORS.boost}`}
+                icon={Droplets}
+                label="Cleanliness"
+                value={Number(pixegotchi.cleanliness)}
+                bgColor="bg-pixel-blue/15"
+                strokeColor={`${ITEM_COLORS.cleaning}`}
                 rarity={pixegotchi.rarity}
                 variant="row"
               />
@@ -304,11 +304,11 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
                 variant="row"
               />
               <CompactStat
-                icon={Droplets}
-                label="Cleanliness"
-                value={Number(pixegotchi.cleanliness)}
-                bgColor="bg-pixel-blue/15"
-                strokeColor={`${ITEM_COLORS.cleaning}`}
+                icon={Zap}
+                label="Energy"
+                value={Number(pixegotchi.energy)}
+                bgColor="bg-pixel-yellow/15"
+                strokeColor={`${ITEM_COLORS.boost}`}
                 rarity={pixegotchi.rarity}
                 variant="row"
               />

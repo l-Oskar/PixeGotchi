@@ -25,14 +25,14 @@ export interface ItemModalProps {
 
 const STAT_PREVIEW = [
   {
-    key: "hunger",
-    label: "Hunger",
-    icon: <Apple size={10} className={`${ITEM_COLORS.food}`} />,
-  },
-  {
     key: "health",
     label: "Health",
     icon: <Heart size={10} className={`${ITEM_COLORS.medicine}`} />,
+  },
+  {
+    key: "hunger",
+    label: "Hunger",
+    icon: <Apple size={10} className={`${ITEM_COLORS.food}`} />,
   },
   {
     key: "cleanliness",

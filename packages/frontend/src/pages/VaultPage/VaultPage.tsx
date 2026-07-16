@@ -1,5 +1,7 @@
 import { Sparkles, SquareArrowRight } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import {
+  ElementType,
   PageType,
   PixegotchiStatus,
   RARITY_COLORS,
@@ -8,10 +10,14 @@ import Loader from "@/components/Other/Loader";
 import { useConfirmationModal } from "@/hooks/useConfirmationModal";
 import { useFeedbackModal } from "@/hooks/useFeedbackModal";
 import { useToast } from "@/hooks/useToast";
-import { useStatsVault } from "@/services/queries/vault.queries";
+import {
+  useAllVault,
+  useStatsVault,
+} from "@/services/queries/vault.queries";
 import { getPixegotchiImg } from "@/utils/getImage";
 import { usePixegotchiToVault } from "@/services/queries/pixegotchi.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
+import VaultPetModal from "@/components/Modals/VaultPetModal";
 
 interface VaultPageProps {
   onNavigate: (page: PageType) => void;
@@ -22,11 +28,46 @@ const VAULT_ERROR_TITLE = "Cannot send to Vault";
 const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   const { isLoading, data } = useStatsVault();
   const vaultStats = data ?? [];
+  const allVaultQuery = useAllVault();
+  const [selectedElement, setSelectedElement] = useState<ElementType | null>(
+    null,
+  );
+  const [selectedPetId, setSelectedPetId] = useState<number | null>(null);
   const setPixegotchiToVault = usePixegotchiToVault();
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
   const { confirm } = useConfirmationModal();
   const { showError, showApiError } = useFeedbackModal();
   const { showSuccessToast } = useToast();
+  const selectedElementPets = useMemo(
+    () =>
+      selectedElement
+        ? (allVaultQuery.data ?? []).filter(
+            (pet) => pet.element === selectedElement,
+          )
+        : [],
+    [allVaultQuery.data, selectedElement],
+  );
+
+  useEffect(() => {
+    if (!selectedElement || selectedElementPets.length === 0) return;
+    if (selectedElementPets.some((pet) => pet.id === selectedPetId)) return;
+
+    setSelectedPetId(selectedElementPets[0].id);
+  }, [selectedElement, selectedElementPets, selectedPetId]);
+
+  const handleOpenElement = (element: ElementType) => {
+    const firstPet = (allVaultQuery.data ?? []).find(
+      (pet) => pet.element === element,
+    );
+
+    setSelectedElement(element);
+    setSelectedPetId(firstPet?.id ?? null);
+  };
+
+  const handleCloseElement = () => {
+    setSelectedElement(null);
+    setSelectedPetId(null);
+  };
 
   const sendToVault = async (): Promise<void> => {
     try {
@@ -146,63 +187,76 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
         </div>
 
         <div className="mt-2 grid grid-cols-2 gap-2">
-          {vaultStats.map((item) => (
-            <div
-              key={item.element}
-              className={`pixel-panel-soft relative min-h-36 overflow-hidden p-2 transition max-[380px]:min-h-32 max-[380px]:p-1.5 ${
-                item.isEmpty
-                  ? "border-dashed bg-pixel-bg-deep/35 opacity-70"
-                  : `cursor-pointer bg-linear-to-b from-pixel-surface-soft to-pixel-bg-deep/60 hover:border-pixel-highlight/70 ${RARITY_COLORS[item.bestRarity]?.replace("text", "border") || ""}`
-              }`}>
-              {!item.isEmpty && item.count > 1 && (
-                <div className="absolute right-1.5 top-1.5 rounded-sm border border-pixel-ink/20 bg-pixel-bg-deep/80 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-ink">
-                  x{item.count}
-                </div>
-              )}
+          {vaultStats.map((item) => {
+            const cardContent = (
+              <>
+                {!item.isEmpty && item.count > 1 && (
+                  <div className="absolute right-1.5 top-1.5 rounded-sm border border-pixel-ink/20 bg-pixel-bg-deep/80 px-1.5 py-1 font-pixel text-[7px] leading-3 text-pixel-ink">
+                    x{item.count}
+                  </div>
+                )}
 
-              <div className="grid h-20 place-items-center max-[380px]:h-16">
-                {item.isEmpty ? (
-                  <div className="grid h-16 w-16 place-items-center rounded-sm border border-dashed border-pixel-border/70 bg-pixel-surface/40 max-[380px]:h-14 max-[380px]:w-14">
-                    <span className="font-pixel text-lg leading-none text-pixel-muted">
-                      ?
-                    </span>
+                <div className="grid h-20 place-items-center max-[380px]:h-16">
+                  {item.isEmpty ? (
+                    <div className="grid h-16 w-16 place-items-center rounded-sm border border-dashed border-pixel-border/70 bg-pixel-surface/40 max-[380px]:h-14 max-[380px]:w-14">
+                      <span className="font-pixel text-lg leading-none text-pixel-muted">
+                        ?
+                      </span>
+                    </div>
+                  ) : (
+                    <img
+                      className="pixelated h-24 w-24 object-contain max-[380px]:h-20 max-[380px]:w-20"
+                      src={`./${getPixegotchiImg(item)}`}
+                      alt={`Pixegotchi-${item.element}`}
+                    />
+                  )}
+                </div>
+
+                {!item.isEmpty ? (
+                  <div className="mt-1">
+                    <h3 className="truncate font-pixel text-[9px] leading-3 capitalize text-pixel-ink max-[380px]:text-[8px]">
+                      {item.element}
+                    </h3>
+                    <div className="mt-1 flex items-center justify-between gap-1">
+                      <div className="theme-readable-muted font-pixel text-[8px] leading-3">
+                        Lv {item.highestLevel}
+                      </div>
+                      <div
+                        className={`rounded-sm border px-1.5 py-1 font-pixel text-[7px] leading-3 max-[380px]:px-1 max-[380px]:py-0.5 ${RARITY_COLORS[item.bestRarity] || "text-pixel-ink"}`}>
+                        {item.bestRarity.toUpperCase()}
+                      </div>
+                    </div>
                   </div>
                 ) : (
-                  <img
-                    className="pixelated h-24 w-24 object-contain max-[380px]:h-20 max-[380px]:w-20"
-                    src={`./${getPixegotchiImg(item)}`}
-                    alt={`Pixegotchi-${item.element}`}
-                  />
+                  <div className="mt-1 text-center">
+                    <h3 className="font-pixel text-[9px] leading-3 text-pixel-muted max-[380px]:text-[8px]">
+                      Empty
+                    </h3>
+                    <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
+                      Not collected
+                    </div>
+                  </div>
                 )}
-              </div>
+              </>
+            );
 
-              {!item.isEmpty ? (
-                <div className="mt-1">
-                  <h3 className="truncate font-pixel text-[9px] leading-3 capitalize text-pixel-ink max-[380px]:text-[8px]">
-                    {item.element}
-                  </h3>
-                  <div className="mt-1 flex items-center justify-between gap-1">
-                    <div className="theme-readable-muted font-pixel text-[8px] leading-3">
-                      Lv {item.highestLevel}
-                    </div>
-                    <div
-                      className={`rounded-sm border px-1.5 py-1 font-pixel text-[7px] leading-3 max-[380px]:px-1 max-[380px]:py-0.5 ${RARITY_COLORS[item.bestRarity] || "text-pixel-ink"}`}>
-                      {item.bestRarity.toUpperCase()}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-1 text-center">
-                  <h3 className="font-pixel text-[9px] leading-3 text-pixel-muted max-[380px]:text-[8px]">
-                    Empty
-                  </h3>
-                  <div className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
-                    Not collected
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            return item.isEmpty ? (
+              <div
+                key={item.element}
+                className="pixel-panel-soft relative min-h-36 overflow-hidden border-dashed bg-pixel-bg-deep/35 p-2 opacity-70 max-[380px]:min-h-32 max-[380px]:p-1.5">
+                {cardContent}
+              </div>
+            ) : (
+              <button
+                aria-label={`View ${item.element} Pixegotchi collection`}
+                className={`pixel-panel-soft relative min-h-36 overflow-hidden bg-linear-to-b from-pixel-surface-soft to-pixel-bg-deep/60 p-2 text-left transition hover:border-pixel-highlight/70 focus-visible:border-pixel-highlight max-[380px]:min-h-32 max-[380px]:p-1.5 ${RARITY_COLORS[item.bestRarity]?.replace("text", "border") || ""}`}
+                key={item.element}
+                onClick={() => handleOpenElement(item.element as ElementType)}
+                type="button">
+                {cardContent}
+              </button>
+            );
+          })}
         </div>
 
         {currentPixegotchi && (
@@ -254,6 +308,20 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
           </div>
         )}
       </div>
+
+      <VaultPetModal
+        element={selectedElement}
+        isError={allVaultQuery.isError}
+        isLoading={allVaultQuery.isLoading}
+        isOpen={selectedElement !== null}
+        onClose={handleCloseElement}
+        onRetry={() => {
+          void allVaultQuery.refetch();
+        }}
+        onSelectPet={setSelectedPetId}
+        pets={selectedElementPets}
+        selectedPetId={selectedPetId}
+      />
     </div>
   );
 };

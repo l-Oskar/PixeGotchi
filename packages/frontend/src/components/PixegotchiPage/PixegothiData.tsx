@@ -157,8 +157,8 @@ const HOURLY_STAT_CONFIG: Array<{
 }> = [
   { key: "health", label: "Health", icon: Heart },
   { key: "hunger", label: "Hunger", icon: Apple },
-  { key: "happiness", label: "Happiness", icon: Smile },
   { key: "cleanliness", label: "Cleanliness", icon: Droplets },
+  { key: "happiness", label: "Happiness", icon: Smile },
   { key: "energy", label: "Energy", icon: Zap },
 ];
 
@@ -319,19 +319,19 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           rarity={pixegotchi.rarity}
         />
         <StatBar
-          icon={Smile}
-          label="Happiness"
-          value={pixegotchi.happiness}
-          color="bg-fuchsia-500"
-          strokeColor="text-fuchsia-500"
-          rarity={pixegotchi.rarity}
-        />
-        <StatBar
           icon={Droplets}
           label="Cleanliness"
           value={pixegotchi.cleanliness}
           color="bg-sky-500"
           strokeColor="text-sky-500"
+          rarity={pixegotchi.rarity}
+        />
+        <StatBar
+          icon={Smile}
+          label="Happiness"
+          value={pixegotchi.happiness}
+          color="bg-fuchsia-500"
+          strokeColor="text-fuchsia-500"
           rarity={pixegotchi.rarity}
         />
         <StatBar
