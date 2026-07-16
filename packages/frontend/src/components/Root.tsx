@@ -16,7 +16,7 @@ const TON_TESTNET_CHAIN_ID = "-3";
 
 function ErrorBoundaryError({ error }: { error: unknown }) {
   return (
-    <div className="min-h-screen bg-pixel-bg p-3 text-pixel-ink">
+    <div className="min-h-full bg-pixel-bg p-3 text-pixel-ink">
       <div className="pixel-panel mx-auto mt-8 max-w-md p-4 text-center">
         <h2 className="font-pixel text-sm leading-5 text-pixel-red">
           Сталась помилка
