@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import type { Pixegotchi } from "@pixegotchi/shared";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { viewport } from "@tma.js/sdk";
 import { useSignal } from "@tma.js/sdk-react";

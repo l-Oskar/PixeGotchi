@@ -3,9 +3,9 @@ import type { CSSProperties, ReactNode } from "react";
 export type RoomSlotId = 1 | 2 | 3 | 4 | 6 | 7 | 8 | 9 | 10 | 11;
 export type RoomGuideSlotId = RoomSlotId | 5;
 
-export const ROOM_GUIDE_SLOT_IDS: RoomGuideSlotId[] = [
+export const ROOM_GUIDE_SLOT_IDS = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-];
+] as const satisfies readonly RoomGuideSlotId[];
 
 type SingleRoomAssetPlacement = {
   id: string;

@@ -6,7 +6,7 @@ import type {
 } from "@pixegotchi/shared";
 import type { RoomSlotId } from "./roomSlots";
 
-const occupiedPositions = (
+const getOccupiedPositions = (
   asset: RoomPositionedCosmeticAsset,
   position: RoomCosmeticPosition,
 ): number[] => (asset.span === 2 ? [position, position + 1] : [position]);
@@ -42,7 +42,7 @@ export const placeRoomAsset = (
   );
   if (currentPlacement?.position === position) return draft;
 
-  const requestedPositions = occupiedPositions(asset, position);
+  const requestedPositions = getOccupiedPositions(asset, position);
   const placements = draft.placements.filter((placement) => {
     if (placement.cosmeticAssetId === asset.id) return false;
 
@@ -54,7 +54,10 @@ export const placeRoomAsset = (
     }
     if (asset.allowOverlap || placedAsset.allowOverlap) return true;
 
-    const placedPositions = occupiedPositions(placedAsset, placement.position);
+    const placedPositions = getOccupiedPositions(
+      placedAsset,
+      placement.position,
+    );
     return !requestedPositions.some((requestedPosition) =>
       placedPositions.includes(requestedPosition),
     );

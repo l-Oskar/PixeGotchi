@@ -3,7 +3,7 @@ import type {
   RoomLoadout,
   SaveRoomLoadoutInput,
 } from "@pixegotchi/shared";
-import type { RoomSlotId } from "@/components/MainPage/roomSlots";
+import type { RoomSlotId } from "@/components/MainPage/room/roomSlots";
 
 const toDraft = (loadout: RoomLoadout): SaveRoomLoadoutInput => ({
   environmentId: loadout.environmentId,

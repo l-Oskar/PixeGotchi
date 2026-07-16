@@ -8,8 +8,8 @@ import {
   useCancelHatchingEgg,
 } from "@/services/queries/egg.queries";
 import { useEggStore } from "@/store/egg.store";
-import ActionButton from "@/components/MainPage/ActionButton";
-import { Visual } from "../MainPage/Visual";
+import ActionButton from "@/components/MainPage/actions/ActionButton";
+import { Visual } from "../MainPage/room/Visual";
 import Loader from "../Other/Loader";
 import QuickInfo from "../Other/QuickInfo";
 import { getEggImg } from "@/utils/getImage";

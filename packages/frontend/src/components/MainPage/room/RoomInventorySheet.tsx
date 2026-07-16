@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import type { RoomCosmeticAsset } from "@pixegotchi/shared";
-import { RARITY_COLORS } from "@pixegotchi/shared";
+import { RARITY_COLORS, type RoomCosmeticAsset } from "@pixegotchi/shared";
 import { ChevronDown, Grid2X2, X } from "lucide-react";
 import { useRoomCosmeticsInventory } from "@/services/queries/room-cosmetics.queries";
 import {

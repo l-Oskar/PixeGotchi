@@ -36,10 +36,11 @@ export const useRoomCosmeticsCatalog = () =>
     queryFn: roomCosmeticsApi.getCatalog,
   });
 
-export const useRoomCosmeticsOwnership = () =>
+export const useRoomCosmeticsOwnership = (enabled = true) =>
   useQuery({
     queryKey: ROOM_COSMETICS_KEYS.ownership,
     queryFn: roomCosmeticsApi.getOwnership,
+    enabled,
   });
 
 export const useRoomCosmeticsInventory = (enabled = true) =>

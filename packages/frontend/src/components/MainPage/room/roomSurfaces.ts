@@ -1,6 +1,10 @@
 export const ROOM_WALLS = [
   { id: "violet-brick", label: "Violet brick", className: "room-wall-violet" },
-  { id: "midnight-brick", label: "Midnight brick", className: "room-wall-midnight" },
+  {
+    id: "midnight-brick",
+    label: "Midnight brick",
+    className: "room-wall-midnight",
+  },
   { id: "warm-plaster", label: "Warm plaster", className: "room-wall-warm" },
 ] as const;
 

@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import {
   DEFAULT_ROOM_FLOOR_ID,
   DEFAULT_ROOM_WALL_ID,

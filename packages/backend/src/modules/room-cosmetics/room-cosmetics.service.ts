@@ -168,6 +168,7 @@ export class RoomCosmeticsService {
       where: {
         isActive: true,
         isDefault: false,
+        isLimited: false,
         isPurchasable: true,
         pgcPrice: { not: null },
       },
@@ -201,6 +202,7 @@ export class RoomCosmeticsService {
             id: input.cosmeticAssetId,
             isActive: true,
             isDefault: false,
+            isLimited: false,
             isPurchasable: true,
             pgcPrice: { not: null },
           },

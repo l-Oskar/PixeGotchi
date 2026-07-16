@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import { User } from "@pixegotchi/shared";
+import type { User } from "@pixegotchi/shared";
 import { UserRound, Crown } from "lucide-react";
 import { useSignal } from "@tma.js/sdk-react";
 import { viewport } from "@tma.js/sdk";
 import { publicUrl } from "@/helpers/publicUrl";
-import HeaderDropdown from "../Dropdown/HeaderDropdown";
+import HeaderDropdown from "../../Dropdown/HeaderDropdown";
 import { useUpdateUserPgc } from "@/services/queries/users.queries";
 
 export interface HeaderProps {

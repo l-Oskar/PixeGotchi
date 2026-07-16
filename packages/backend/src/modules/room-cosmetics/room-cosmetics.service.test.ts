@@ -148,6 +148,12 @@ describe("RoomCosmeticsService", () => {
       isPurchasable: false,
       pgcPrice: null,
     });
+    await createAsset({
+      isDefault: false,
+      isLimited: true,
+      isPurchasable: true,
+      pgcPrice: 400,
+    });
     const service = new RoomCosmeticsService();
 
     await expect(service.getShop(user.id)).resolves.toMatchObject({
@@ -223,6 +229,31 @@ describe("RoomCosmeticsService", () => {
           userId_cosmeticAssetId: {
             userId: user.id,
             cosmeticAssetId: offer.id,
+          },
+        },
+      }),
+    ).resolves.toBeNull();
+  });
+
+  it("does not sell limited cosmetics through the unlimited company shop", async () => {
+    const user = await createUser({ pgcBalance: 1_000 });
+    const limitedAsset = await createAsset({
+      isDefault: false,
+      isLimited: true,
+      isPurchasable: true,
+      pgcPrice: 400,
+    });
+    const service = new RoomCosmeticsService();
+
+    await expect(
+      service.purchase(user.id, { cosmeticAssetId: limitedAsset.id }),
+    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(
+      prisma.userCosmetic.findUnique({
+        where: {
+          userId_cosmeticAssetId: {
+            userId: user.id,
+            cosmeticAssetId: limitedAsset.id,
           },
         },
       }),

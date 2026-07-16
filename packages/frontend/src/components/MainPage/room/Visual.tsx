@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pixegotchi, Egg, EggHatchingStatus } from "@pixegotchi/shared";
+import type { Egg, EggHatchingStatus, Pixegotchi } from "@pixegotchi/shared";
 import { isEgg, isPixegotchi, getImage } from "@/utils/getImage";
 import { MessageCircleHeart } from "lucide-react";
 import { RoomScene } from "./RoomScene";

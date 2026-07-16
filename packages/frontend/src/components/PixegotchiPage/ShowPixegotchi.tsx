@@ -28,26 +28,26 @@ import {
   Zap,
   Droplets,
 } from "lucide-react";
-import CompactStat from "@/components/MainPage/CompactStat";
-import ActionButton from "@/components/MainPage/ActionButton";
-import { Visual } from "../MainPage/Visual";
+import CompactStat from "@/components/MainPage/stats/CompactStat";
+import ActionButton from "@/components/MainPage/actions/ActionButton";
+import { Visual } from "../MainPage/room/Visual";
 import {
   DEFAULT_ROOM_FLOOR_ID,
   DEFAULT_ROOM_WALL_ID,
   ROOM_FLOORS,
   ROOM_WALLS,
-} from "../MainPage/roomSurfaces";
+} from "../MainPage/room/roomSurfaces";
 import type {
   RoomFloorId,
   RoomWallId,
-} from "../MainPage/roomSurfaces";
-import { buildRoomAssetPlacementsFromLoadout } from "../MainPage/roomAssets";
+} from "../MainPage/room/roomSurfaces";
+import { buildRoomAssetPlacementsFromLoadout } from "../MainPage/room/roomAssets";
 import {
   useRoomCosmeticsInventory,
   useRoomCosmeticsLoadout,
 } from "@/services/queries/room-cosmetics.queries";
 import { useRoomEditorStore } from "@/store/room-editor.store";
-import { RoomEditor } from "../MainPage/RoomEditor";
+import { RoomEditor } from "../MainPage/room/RoomEditor";
 
 export const ShowPixeGotchi: React.FC<HomePageProps> = ({
   pixegotchi,

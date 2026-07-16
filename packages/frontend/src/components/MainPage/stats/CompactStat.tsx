@@ -1,5 +1,6 @@
-import { RARITY_STATS, RarityType } from "@pixegotchi/shared";
-import { LucideIcon } from "lucide-react";
+import { RARITY_STATS } from "@pixegotchi/shared";
+import type { RarityType } from "@pixegotchi/shared";
+import type { LucideIcon } from "lucide-react";
 import { formatWholeStatValue, toFiniteStatNumber } from "@/utils/formatStats";
 
 export interface CompactStatProps {

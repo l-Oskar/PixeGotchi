@@ -26,14 +26,21 @@ export interface MarketplacePageProps {
   onNavigate?: (page: PageType) => void;
 }
 
+const COSMETIC_MARKETPLACE_ENABLED =
+  import.meta.env.VITE_ENABLE_COSMETIC_MARKETPLACE === "true";
+
 const MarketplacePage: React.FC<MarketplacePageProps> = () => {
   const createEgg = useCreateEgg();
   const addItem = useAddItem();
   const getRandomChest = useGetRandomChest();
   const roomCosmeticsShop = useRoomCosmeticsShop();
-  const roomCosmeticsOwnership = useRoomCosmeticsOwnership();
+  const roomCosmeticsOwnership = useRoomCosmeticsOwnership(
+    COSMETIC_MARKETPLACE_ENABLED,
+  );
   const purchaseRoomCosmetic = usePurchaseRoomCosmetic();
-  const marketplaceListings = useMarketplaceListings();
+  const marketplaceListings = useMarketplaceListings(
+    COSMETIC_MARKETPLACE_ENABLED,
+  );
   const createMarketplaceListing = useCreateMarketplaceListing();
   const buyMarketplaceListing = useBuyMarketplaceListing();
   const cancelMarketplaceListing = useCancelMarketplaceListing();
@@ -395,7 +402,20 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
           </>
         )}
 
-        <div className="mt-4 flex items-center justify-between gap-2">
+        {!COSMETIC_MARKETPLACE_ENABLED && (
+          <div className="pixel-panel-soft mt-4 border-pixel-highlight/40 p-4 text-center">
+            <div className="font-pixel text-[9px] leading-4 text-pixel-ink">
+              PLAYER MARKETPLACE
+            </div>
+            <div className="theme-readable-muted mt-2 font-pixel text-[7px] leading-3">
+              COMING SOON
+            </div>
+          </div>
+        )}
+
+        {COSMETIC_MARKETPLACE_ENABLED && (
+          <>
+            <div className="mt-4 flex items-center justify-between gap-2">
           <div>
             <h2 className="font-pixel text-[10px] leading-4 text-pixel-ink">
               Player Listings
@@ -546,11 +566,13 @@ const MarketplacePage: React.FC<MarketplacePageProps> = () => {
           </div>
         )}
 
-        {(buyMarketplaceListing.isError ||
-          cancelMarketplaceListing.isError) && (
-          <div className="pixel-panel-soft mt-2 border-pixel-red/60 p-2 text-center font-pixel text-[7px] text-pixel-red">
-            MARKETPLACE ACTION FAILED
-          </div>
+            {(buyMarketplaceListing.isError ||
+              cancelMarketplaceListing.isError) && (
+              <div className="pixel-panel-soft mt-2 border-pixel-red/60 p-2 text-center font-pixel text-[7px] text-pixel-red">
+                MARKETPLACE ACTION FAILED
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

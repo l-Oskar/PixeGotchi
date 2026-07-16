@@ -1,9 +1,9 @@
-import { describe, expect, it } from "vitest";
 import type {
   RoomCosmeticAsset,
   RoomPositionedCosmeticAsset,
   SaveRoomLoadoutInput,
 } from "@pixegotchi/shared";
+import { describe, expect, it } from "vitest";
 import {
   getRoomAssetPlacementPositionForSlot,
   placeRoomAsset,

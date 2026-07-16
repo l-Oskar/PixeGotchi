@@ -20,10 +20,11 @@ const invalidateCosmeticMarketplaceState = (queryClient: QueryClient) => {
   queryClient.invalidateQueries({ queryKey: ROOM_COSMETICS_KEYS.shop });
 };
 
-export const useMarketplaceListings = () =>
+export const useMarketplaceListings = (enabled = true) =>
   useQuery({
     queryKey: MARKETPLACE_KEYS.listings,
     queryFn: marketApi.getListings,
+    enabled,
   });
 
 export const useCreateMarketplaceListing = () => {

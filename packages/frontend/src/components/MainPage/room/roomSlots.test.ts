@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
+import type { RoomAssetPlacement } from "./roomSlots";
 import {
   getOccupiedRoomSlots,
   getRoomGuideSlotBounds,
   resolveRoomAssetPlacements,
 } from "./roomSlots";
-import type { RoomAssetPlacement } from "./roomSlots";
 
 const asset = (
   id: string,

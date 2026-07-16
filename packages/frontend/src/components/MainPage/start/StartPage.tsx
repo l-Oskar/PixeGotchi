@@ -4,7 +4,7 @@ import {
 } from "@/services/queries/egg.queries";
 import { Egg, PageType } from "@pixegotchi/shared";
 import React, { useMemo } from "react";
-import Loader from "../Other/Loader";
+import Loader from "../../Other/Loader";
 import { getEggImg } from "@/utils/getImage";
 import { Sparkles } from "lucide-react";
 
