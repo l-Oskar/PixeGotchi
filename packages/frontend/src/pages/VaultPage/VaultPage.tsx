@@ -1,6 +1,13 @@
 import { Sparkles, SquareArrowRight } from "lucide-react";
-import { PageType, RARITY_COLORS } from "@pixegotchi/shared";
+import {
+  PageType,
+  PixegotchiStatus,
+  RARITY_COLORS,
+} from "@pixegotchi/shared";
 import Loader from "@/components/Other/Loader";
+import { useConfirmationModal } from "@/hooks/useConfirmationModal";
+import { useFeedbackModal } from "@/hooks/useFeedbackModal";
+import { useToast } from "@/hooks/useToast";
 import { useStatsVault } from "@/services/queries/vault.queries";
 import { getPixegotchiImg } from "@/utils/getImage";
 import { usePixegotchiToVault } from "@/services/queries/pixegotchi.queries";
@@ -10,19 +17,71 @@ interface VaultPageProps {
   onNavigate: (page: PageType) => void;
 }
 
+const VAULT_ERROR_TITLE = "Cannot send to Vault";
+
 const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   const { isLoading, data } = useStatsVault();
   const vaultStats = data ?? [];
   const setPixegotchiToVault = usePixegotchiToVault();
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
+  const { confirm } = useConfirmationModal();
+  const { showError, showApiError } = useFeedbackModal();
+  const { showSuccessToast } = useToast();
 
-  const handleSetToVault = async () => {
+  const sendToVault = async (): Promise<void> => {
     try {
       await setPixegotchiToVault.mutateAsync();
+      showSuccessToast({
+        title: "Stored in Vault",
+        message:
+          `${currentPixegotchi?.name ?? "Pixegotchi"} was sent to Vault successfully.`,
+      });
       onNavigate("start");
     } catch (error) {
-      console.error("Failed to send Pixegotchi to vault:", error);
+      showApiError(error, {
+        title: VAULT_ERROR_TITLE,
+        retry: () => {
+          void sendToVault();
+        },
+      });
     }
+  };
+
+  const handleSetToVault = async () => {
+    if (!currentPixegotchi) {
+      showError({
+        title: VAULT_ERROR_TITLE,
+        message: "There is no current Pixegotchi to send.",
+      });
+      return;
+    }
+
+    if (currentPixegotchi.status !== PixegotchiStatus.active) {
+      showError({
+        title: VAULT_ERROR_TITLE,
+        message: "Only an active Pixegotchi can be sent to Vault.",
+      });
+      return;
+    }
+
+    if (currentPixegotchi.level % 10 !== 0) {
+      showError({
+        title: VAULT_ERROR_TITLE,
+        message:
+          "Pixegotchi can only be stored at levels 10, 20, 30, and so on.",
+      });
+      return;
+    }
+
+    const confirmed = await confirm({
+      title: "Send to Vault?",
+      message: `${currentPixegotchi.name} will become inactive and stop stat degradation. Continue?`,
+      tone: "warning",
+      confirmLabel: "Send to Vault",
+    });
+
+    if (!confirmed) return;
+    await sendToVault();
   };
 
   const collectedCount = vaultStats

@@ -13,6 +13,9 @@ import { Visual } from "../MainPage/room/Visual";
 import Loader from "../Other/Loader";
 import QuickInfo from "../Other/QuickInfo";
 import { getEggImg } from "@/utils/getImage";
+import { useFeedbackModal } from "@/hooks/useFeedbackModal";
+import { useTextInputModal } from "@/hooks/useTextInputModal";
+import { useToast } from "@/hooks/useToast";
 
 export interface EggPageProps {
   onNavigate?: (page: PageType) => void;
@@ -25,6 +28,9 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
   const hatchEgg = useHatchEgg();
   const cancelHatching = useCancelHatchingEgg();
   const batchTapMutation = useBatchTap();
+  const { showApiError } = useFeedbackModal();
+  const { requestText } = useTextInputModal();
+  const { showSuccessToast } = useToast();
 
   // Реф для доступу до мутації без перевизначення інтервалу
   const batchTapRef = useRef(batchTapMutation.mutate);
@@ -109,15 +115,40 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
     );
   }
 
-  const handleHatch = async () => {
-    if (isReady) {
-      try {
-        await hatchEgg.mutateAsync(egg.id);
-        onNavigate?.("home");
-      } catch (error) {
-        console.error("Failed to hatch egg:", error);
-      }
+  const hatchWithName = async (name?: string): Promise<void> => {
+    try {
+      const pixegotchi = await hatchEgg.mutateAsync({ eggId: egg.id, name });
+      showSuccessToast({
+        title: "Egg hatched",
+        message: `Welcome, ${pixegotchi.name}!`,
+      });
+      onNavigate?.("home");
+    } catch (error) {
+      showApiError(error, {
+        title: "Could not hatch egg",
+        retry: () => {
+          void hatchWithName(name);
+        },
+      });
     }
+  };
+
+  const handleHatch = async () => {
+    if (!isReady || hatchEgg.isPending) return;
+
+    const enteredName = await requestText({
+      title: "Name your Pixegotchi",
+      message: "Leave the field empty to use Unnamed.",
+      label: "Pixegotchi name",
+      placeholder: "Unnamed",
+      confirmLabel: "Hatch",
+      minLength: 3,
+      maxLength: 30,
+      allowEmpty: true,
+    });
+
+    if (enteredName === null) return;
+    await hatchWithName(enteredName || undefined);
   };
 
   const handleCancelHatching = async () => {
@@ -183,9 +214,15 @@ const EggComponent: React.FC<EggPageProps> = ({ onNavigate }) => {
         <div className="mt-2.5 grid grid-cols-3 gap-2">
           <ActionButton
             icon={EggIcon}
-            label={isReady ? "Hatch Now!" : "Hatch"}
+            label={
+              hatchEgg.isPending
+                ? "Hatching..."
+                : isReady
+                  ? "Hatch Now!"
+                  : "Hatch"
+            }
             onClick={handleHatch}
-            disabled={!isReady}
+            disabled={!isReady || hatchEgg.isPending}
             gradient="from-orange-500 to-red-500"
           />
           <ActionButton

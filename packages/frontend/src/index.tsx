@@ -7,6 +7,10 @@ import { retrieveLaunchParams } from "@tma.js/sdk-react";
 
 import { Root } from "@/components/Root.tsx";
 import { EnvUnsupported } from "@/components/EnvUnsupported.tsx";
+import ConfirmationModal from "@/components/Modals/ConfirmationModal.tsx";
+import FeedbackModal from "@/components/Modals/FeedbackModal.tsx";
+import TextInputModal from "@/components/Modals/TextInputModal.tsx";
+import ToastViewport from "@/components/Toasts/ToastViewport.tsx";
 import { init } from "@/init.ts";
 
 import "./index.css";
@@ -46,6 +50,10 @@ try {
       <StrictMode>
         <ThemeProvider>
           <QueryProvider>
+            <ToastViewport />
+            <FeedbackModal />
+            <ConfirmationModal />
+            <TextInputModal />
             <AutoLoginProvider>
               <GameBootstrap>
                 <Root />

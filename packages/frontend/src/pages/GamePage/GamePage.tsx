@@ -11,6 +11,8 @@ import {
 } from "@pixegotchi/shared";
 import { AlertCircle, Coins, StarPlus, Zap } from "lucide-react";
 import { CatchGame } from "@/components/GamesComponents/CatchGame";
+import { useFeedbackModal } from "@/hooks/useFeedbackModal";
+
 export interface GamePageProps {
   onNavigate?: (page: PageType) => void;
   onGameActiveChange?: (isActive: boolean) => void;
@@ -27,6 +29,7 @@ const GamesPage: React.FC<GamePageProps> = ({
   const activePetMessage = pixegotchi
     ? "Потрібен активний пет, щоб запускати міні-ігри."
     : "You need active pixegotchi to play minigames. Hatch or activate one!";
+  const { showError } = useFeedbackModal();
   const games = Object.entries(GAME_CONFIGS).map(([id, config]) => ({
     id,
     ...config,
@@ -170,7 +173,10 @@ const GamesPage: React.FC<GamePageProps> = ({
                   if (game.id === "catch_fruits") {
                     openGame(game.id, finalCost);
                   } else {
-                    alert(`${game.name} is coming soon`);
+                    showError({
+                      title: "Game not ready.",
+                      message: `${game.name} is coming soon`,
+                    });
                   }
                 }}
                 className={`pixel-panel-soft grid w-full grid-cols-[3rem_1fr] items-center gap-2 p-2 text-left transition hover:border-pixel-highlight/70 disabled:cursor-not-allowed disabled:hover:border-pixel-border ${

@@ -84,10 +84,7 @@ export const CatchGame: React.FC<CatchGameProps> = ({
   const [state, send] = useMachine(gameMachine);
   const isGameOver = state.matches("gameOver");
   const shouldDisableSwipes = state.matches("playing");
-  const pgcTraitModifier = getTraitModifier(
-    pixegotchi.traits,
-    "game_pgc_gain",
-  );
+  const pgcTraitModifier = getTraitModifier(pixegotchi.traits, "game_pgc_gain");
   const chestTraitModifier = getTraitModifier(
     pixegotchi.traits,
     "game_chest_chance",
@@ -355,7 +352,6 @@ export const CatchGame: React.FC<CatchGameProps> = ({
           isSpecial: true, // Позначаємо як спеціальний
         });
         specialFruitSpawnedRef.current = true;
-        console.log("🫐 Special fruit spawned!"); // Для дебагу
       }
     }, 100); // Перевіряємо кожні 100ms
 
@@ -416,17 +412,16 @@ export const CatchGame: React.FC<CatchGameProps> = ({
       send({ type: "START" });
       rafRef.current = requestAnimationFrame(gameLoop);
     } catch {
-      setStartError("Could not start the game. Check your energy and try again.");
+      setStartError(
+        "Could not start the game. Check your energy and try again.",
+      );
     }
   }, [completeGameSession, gameLoop, pixegotchi.id, send, startGameSession]);
 
   const finishGame = async () => {
     const score = finalScore ?? displayScore;
 
-    if (
-      !completeGameSession.isSuccess &&
-      sessionIdRef.current !== null
-    ) {
+    if (!completeGameSession.isSuccess && sessionIdRef.current !== null) {
       try {
         await completeGameSession.mutateAsync({
           sessionId: sessionIdRef.current,
@@ -521,7 +516,9 @@ export const CatchGame: React.FC<CatchGameProps> = ({
           )}
           <div className="mb-4 flex flex-wrap justify-center gap-2 text-[7px] leading-3 text-pixel-blue">
             {pgcTraitModifier !== 1 && (
-              <span>PGC trait +{Math.round((pgcTraitModifier - 1) * 100)}%</span>
+              <span>
+                PGC trait +{Math.round((pgcTraitModifier - 1) * 100)}%
+              </span>
             )}
             {chestTraitModifier !== 1 && (
               <span>

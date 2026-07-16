@@ -37,10 +37,7 @@ import {
   ROOM_FLOORS,
   ROOM_WALLS,
 } from "../MainPage/room/roomSurfaces";
-import type {
-  RoomFloorId,
-  RoomWallId,
-} from "../MainPage/room/roomSurfaces";
+import type { RoomFloorId, RoomWallId } from "../MainPage/room/roomSurfaces";
 import { buildRoomAssetPlacementsFromLoadout } from "../MainPage/room/roomAssets";
 import {
   useRoomCosmeticsInventory,
@@ -118,10 +115,6 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
       void loadoutQuery.refetch();
     }
     setIsEditorRequested(true);
-  };
-
-  const handleAction = (action: string) => {
-    console.log(action);
   };
 
   if (!pixegotchi) return null;
@@ -388,7 +381,7 @@ export const ShowPixeGotchi: React.FC<HomePageProps> = ({
         <ActionButton
           icon={Moon}
           label="Sleep"
-          onClick={() => handleAction("sleep")}
+          onClick={() => {}}
           disabled={true}
           gradient="from-indigo-600 to-slate-800"
         />

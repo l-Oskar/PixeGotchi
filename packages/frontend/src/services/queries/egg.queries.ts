@@ -104,8 +104,8 @@ export const useHatchEgg = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (eggId: number) => {
-      return eggApi.hatchEgg(eggId);
+    mutationFn: ({ eggId, name }: { eggId: number; name?: string }) => {
+      return eggApi.hatchEgg(eggId, name);
     },
     onSuccess: (data) => {
       clearEgg();
