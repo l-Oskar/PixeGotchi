@@ -130,14 +130,17 @@ describe("pixegotchi routes", () => {
     expect(response.json()).toMatchObject({ error: "Validation error" });
   });
 
-  it("sets active pixegotchi inactive", async () => {
+  it("sends the current pixegotchi to Vault transactionally", async () => {
     app = await buildApp();
     const user = await createUser();
-    await createPixegotchi(user.id, { name: "VaultMe" });
+    const pixegotchi = await createPixegotchi(user.id, {
+      name: "VaultMe",
+      level: 10,
+    });
 
     const response = await app.inject({
       method: "POST",
-      url: "/api/pixegotchi/inactive",
+      url: "/api/pixegotchi/current/vault",
       headers: authHeaders(app, user.id),
     });
 
@@ -155,5 +158,189 @@ describe("pixegotchi routes", () => {
 
     expect(activeResponse.statusCode, activeResponse.body).toBe(200);
     expect(activeResponse.body).toBe("null");
+
+    const [storedUser, vaultEntry] = await Promise.all([
+      prisma.user.findUniqueOrThrow({ where: { id: user.id } }),
+      prisma.vault.findUniqueOrThrow({
+        where: {
+          userId_pixegotchiId: {
+            userId: user.id,
+            pixegotchiId: pixegotchi.id,
+          },
+        },
+      }),
+    ]);
+
+    expect(storedUser.currentPixegotchiId).toBeNull();
+    expect(vaultEntry.finalLevel).toBe(10);
+  });
+
+  it("keeps the inactive route as a compatibility alias", async () => {
+    app = await buildApp();
+    const user = await createUser();
+    await createPixegotchi(user.id, { level: 20 });
+
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/pixegotchi/inactive",
+      headers: authHeaders(app, user.id),
+    });
+
+    expect(response.statusCode, response.body).toBe(200);
+    expect(response.json()).toMatchObject({ status: "vault", level: 20 });
+    expect(await prisma.vault.count({ where: { userId: user.id } })).toBe(1);
+  });
+
+  it("refreshes an existing Vault row instead of creating a duplicate", async () => {
+    app = await buildApp();
+    const user = await createUser();
+    const pixegotchi = await createPixegotchi(user.id, { level: 30 });
+    const oldStoredAt = new Date("2025-01-01T00:00:00.000Z");
+    await prisma.vault.create({
+      data: {
+        userId: user.id,
+        pixegotchiId: pixegotchi.id,
+        finalLevel: 10,
+        storedAt: oldStoredAt,
+      },
+    });
+
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/pixegotchi/current/vault",
+      headers: authHeaders(app, user.id),
+    });
+
+    expect(response.statusCode, response.body).toBe(200);
+    const entries = await prisma.vault.findMany({
+      where: { userId: user.id },
+    });
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({ finalLevel: 30 });
+    expect(entries[0]!.storedAt.getTime()).toBeGreaterThan(
+      oldStoredAt.getTime(),
+    );
+  });
+
+  it("returns 409 without changing state at an invalid Vault level", async () => {
+    app = await buildApp();
+    const user = await createUser();
+    const pixegotchi = await createPixegotchi(user.id, { level: 9 });
+
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/pixegotchi/current/vault",
+      headers: authHeaders(app, user.id),
+    });
+
+    expect(response.statusCode, response.body).toBe(409);
+    expect(response.json()).toMatchObject({
+      error: "Pixegotchi can only be stored at levels 10, 20, 30, and so on",
+    });
+
+    const [storedUser, storedPixegotchi, vaultCount] = await Promise.all([
+      prisma.user.findUniqueOrThrow({ where: { id: user.id } }),
+      prisma.pixegotchi.findUniqueOrThrow({ where: { id: pixegotchi.id } }),
+      prisma.vault.count({ where: { userId: user.id } }),
+    ]);
+
+    expect(storedUser.currentPixegotchiId).toBe(pixegotchi.id);
+    expect(storedPixegotchi.status).toBe("active");
+    expect(vaultCount).toBe(0);
+  });
+
+  it.each(["critical", "dead"] as const)(
+    "returns 409 for a %s current pixegotchi",
+    async (status) => {
+      app = await buildApp();
+      const user = await createUser();
+      const pixegotchi = await createPixegotchi(user.id, {
+        level: 10,
+        status,
+        ...(status === "critical"
+          ? { health: 0, criticalSince: new Date() }
+          : {}),
+      });
+
+      const response = await app.inject({
+        method: "POST",
+        url: "/api/pixegotchi/current/vault",
+        headers: authHeaders(app, user.id),
+      });
+
+      expect(response.statusCode, response.body).toBe(409);
+      expect(response.json()).toMatchObject({
+        error: `Pixegotchi with status ${status} cannot be stored in Vault`,
+      });
+      expect(
+        await prisma.user.findUniqueOrThrow({ where: { id: user.id } }),
+      ).toMatchObject({ currentPixegotchiId: pixegotchi.id });
+      expect(await prisma.vault.count({ where: { userId: user.id } })).toBe(0);
+    },
+  );
+
+  it("returns 404 when the user has no current pixegotchi", async () => {
+    app = await buildApp();
+    const user = await createUser();
+
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/pixegotchi/current/vault",
+      headers: authHeaders(app, user.id),
+    });
+
+    expect(response.statusCode, response.body).toBe(404);
+    expect(response.json()).toEqual({ error: "No current Pixegotchi" });
+  });
+
+  it("does not duplicate a Vault entry on a repeated request", async () => {
+    app = await buildApp();
+    const user = await createUser();
+    await createPixegotchi(user.id, { level: 10 });
+    const request = {
+      method: "POST" as const,
+      url: "/api/pixegotchi/current/vault",
+      headers: authHeaders(app, user.id),
+    };
+
+    const firstResponse = await app.inject(request);
+    const repeatedResponse = await app.inject(request);
+
+    expect(firstResponse.statusCode, firstResponse.body).toBe(200);
+    expect(repeatedResponse.statusCode, repeatedResponse.body).toBe(409);
+    expect(repeatedResponse.json()).toEqual({
+      error: "No current Pixegotchi; the request may already be completed",
+    });
+    expect(await prisma.vault.count({ where: { userId: user.id } })).toBe(1);
+  });
+
+  it("keeps Vault membership consistent during concurrent requests", async () => {
+    app = await buildApp();
+    const user = await createUser();
+    const pixegotchi = await createPixegotchi(user.id, { level: 10 });
+    const request = {
+      method: "POST" as const,
+      url: "/api/pixegotchi/current/vault",
+      headers: authHeaders(app, user.id),
+    };
+
+    const responses = await Promise.all([
+      app.inject(request),
+      app.inject(request),
+    ]);
+
+    expect(responses.map((response) => response.statusCode).sort()).toEqual([
+      200, 409,
+    ]);
+
+    const [storedUser, storedPixegotchi, vaultCount] = await Promise.all([
+      prisma.user.findUniqueOrThrow({ where: { id: user.id } }),
+      prisma.pixegotchi.findUniqueOrThrow({ where: { id: pixegotchi.id } }),
+      prisma.vault.count({ where: { userId: user.id } }),
+    ]);
+
+    expect(storedUser.currentPixegotchiId).toBeNull();
+    expect(storedPixegotchi.status).toBe("vault");
+    expect(vaultCount).toBe(1);
   });
 });

@@ -25,10 +25,15 @@ export class PixegotchiController {
   }
 
   async setInActive(request: FastifyRequest, reply: FastifyReply) {
-    const userId = (request.user as any).userId;
-    const inActivePixegotchi = await this.pixegotchiService.setInActive(userId);
+    return this.sendCurrentToVault(request, reply);
+  }
 
-    return reply.send(inActivePixegotchi);
+  async sendCurrentToVault(request: FastifyRequest, reply: FastifyReply) {
+    const userId = (request.user as any).userId;
+    const vaultedPixegotchi =
+      await this.pixegotchiService.sendCurrentToVault(userId);
+
+    return reply.send(vaultedPixegotchi);
   }
 
   async getById(

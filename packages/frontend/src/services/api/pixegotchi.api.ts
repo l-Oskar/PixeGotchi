@@ -5,7 +5,7 @@ export const PIXEGOTCHI_URL = "/pixegotchi";
 export const PIXEGOTCHI_URL_KEYS = {
   all: `${PIXEGOTCHI_URL}` as const,
   current: `${PIXEGOTCHI_URL}/current` as const,
-  inActive: `${PIXEGOTCHI_URL}/inactive` as const,
+  currentVault: `${PIXEGOTCHI_URL}/current/vault` as const,
   id: (id: number | null) => `${PIXEGOTCHI_URL}/${id}` as const,
 };
 
@@ -20,8 +20,8 @@ export const pixegotchiApi = {
     return data;
   },
 
-  setInActive: async (): Promise<Pixegotchi | null> => {
-    const { data } = await apiClient.post(PIXEGOTCHI_URL_KEYS.inActive);
+  sendCurrentToVault: async (): Promise<Pixegotchi> => {
+    const { data } = await apiClient.post(PIXEGOTCHI_URL_KEYS.currentVault);
     return data;
   },
 

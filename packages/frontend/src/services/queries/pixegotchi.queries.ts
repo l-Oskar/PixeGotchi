@@ -42,7 +42,7 @@ export const usePixegotchiToVault = () => {
   const clearPixegotchi = usePixegotchiStore((s) => s.clearCurrent);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: pixegotchiApi.setInActive,
+    mutationFn: pixegotchiApi.sendCurrentToVault,
     onSuccess: async (data) => {
       clearPixegotchi();
       queryClient.setQueryData(PIXEGOTCHI_KEYS.current, null);

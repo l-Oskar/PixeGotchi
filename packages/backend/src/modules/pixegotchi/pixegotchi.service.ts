@@ -32,6 +32,12 @@ type HealthTimerSource = {
 const OCCUPIED_SLOT_STATUSES = ["active", "critical", "dead"] as const;
 const MAX_LEVEL = 100;
 
+const httpError = (statusCode: number, message: string) => {
+  const error = new Error(message) as Error & { statusCode: number };
+  error.statusCode = statusCode;
+  return error;
+};
+
 const toPersistedStat = (value: number) => Math.round(value);
 const toDate = (value: Date | string | null) =>
   value instanceof Date ? value : value ? new Date(value) : null;
@@ -141,20 +147,49 @@ export class PixegotchiService {
     return (await this.findCurrent(userId, db)) !== null;
   }
 
-  async setInActive(userId: number) {
-    const active = await this.findCurrent(userId);
-
-    if (!active) {
-      throw new Error("No active pixegotchi");
-    }
-
-    if (active.status === "dead" || active.status === "critical") {
-      throw new Error("Dead pixegotchi cannot be stored in vault");
-    }
-
+  async sendCurrentToVault(userId: number) {
     return await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`
+        SELECT "id"
+        FROM "users"
+        WHERE "id" = ${userId}
+        FOR UPDATE
+      `;
+
+      const current = await this.findCurrent(userId, tx);
+
+      if (!current) {
+        const vaultEntryCount = await tx.vault.count({
+          where: { userId },
+        });
+
+        if (vaultEntryCount > 0) {
+          throw httpError(
+            409,
+            "No current Pixegotchi; the request may already be completed",
+          );
+        }
+
+        throw httpError(404, "No current Pixegotchi");
+      }
+
+      if (current.status !== "active") {
+        throw httpError(
+          409,
+          `Pixegotchi with status ${current.status} cannot be stored in Vault`,
+        );
+      }
+
+      if (current.level % 10 !== 0) {
+        throw httpError(
+          409,
+          "Pixegotchi can only be stored at levels 10, 20, 30, and so on",
+        );
+      }
+
+      const storedAt = new Date();
       const updatedPixegotchi = await tx.pixegotchi.update({
-        where: { id: active.id },
+        where: { id: current.id },
         data: {
           status: "vault",
         },
@@ -164,6 +199,25 @@ export class PixegotchiService {
         where: { id: userId },
         data: {
           currentPixegotchiId: null,
+        },
+      });
+
+      await tx.vault.upsert({
+        where: {
+          userId_pixegotchiId: {
+            userId,
+            pixegotchiId: current.id,
+          },
+        },
+        create: {
+          userId,
+          pixegotchiId: current.id,
+          finalLevel: current.level,
+          storedAt,
+        },
+        update: {
+          finalLevel: current.level,
+          storedAt,
         },
       });
 
@@ -184,31 +238,6 @@ export class PixegotchiService {
     });
 
     return pixegotchi ? await this.toSnapshot(pixegotchi) : null;
-  }
-
-  async storedInVault(id: number, userId: number) {
-    const pixegotchi = await this.findById(id, userId);
-    if (!pixegotchi) throw new Error("Pixegotchi not found");
-
-    if (pixegotchi.level % 10 !== 0)
-      throw new Error("Can only store at levels 10, 20, 30...");
-
-    return await prisma.$transaction(async (tx) => {
-      await tx.pixegotchi.update({
-        where: { id },
-        data: {
-          status: "vault",
-        },
-      });
-
-      return await tx.vault.create({
-        data: {
-          userId,
-          pixegotchiId: id,
-          finalLevel: pixegotchi.level,
-        },
-      });
-    });
   }
 
   async applyStats(

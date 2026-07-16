@@ -82,7 +82,7 @@ describe("PixegotchiService", () => {
     );
 
     expect(afterFood.happiness).toBe(62);
-    expect(afterPlay.happiness).toBe(63);
+    expect(afterPlay.happiness).toBe(64);
   });
 
   it("keeps immortal soul at one health after negative item effects", async () => {

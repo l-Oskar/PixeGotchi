@@ -11,6 +11,8 @@ node_modules/
 dist/
 build/
 vault/
+!packages/backend/src/modules/vault/
+!packages/backend/src/modules/vault/**
 .next/
 .cache/
 .cursor/
