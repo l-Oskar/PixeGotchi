@@ -19,6 +19,7 @@ interface ModalShellProps {
   initialFocusRef?: RefObject<HTMLElement>;
   actions?: ReactNode;
   closeLabel?: string;
+  layer?: "default" | "overlay";
 }
 
 const ModalShell = ({
@@ -31,6 +32,7 @@ const ModalShell = ({
   initialFocusRef,
   actions,
   closeLabel = "Close dialog",
+  layer = "default",
 }: ModalShellProps) => {
   const titleId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -64,13 +66,17 @@ const ModalShell = ({
 
   if (typeof document === "undefined") return null;
 
+  const backdropClassName =
+    layer === "overlay" ? "z-[130]" : "z-[120]";
+  const dialogClassName = layer === "overlay" ? "z-[131]" : "z-[121]";
+
   return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
           <motion.button
             aria-label={closeLabel}
-            className="theme-modal-backdrop fixed inset-0 z-[120] cursor-default bg-black/70 backdrop-blur-sm"
+            className={`theme-modal-backdrop fixed inset-0 cursor-default bg-black/70 backdrop-blur-sm ${backdropClassName}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -78,7 +84,8 @@ const ModalShell = ({
             type="button"
           />
 
-          <div className="pointer-events-none fixed inset-0 z-[121] flex items-center justify-center p-4">
+          <div
+            className={`pointer-events-none fixed inset-0 flex items-center justify-center p-4 ${dialogClassName}`}>
             <motion.div
               aria-labelledby={titleId}
               aria-modal="true"

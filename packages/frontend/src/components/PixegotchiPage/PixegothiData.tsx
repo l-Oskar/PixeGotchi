@@ -278,7 +278,7 @@ const PixegothiData: React.FC<PixegothiDataProps> = ({ pixegotchi }) => {
           label="Gender"
           value={
             pixegotchi.gender === "male" ? (
-              <div className="flex gap-1 justify-center">
+              <div className="flex gap-1 justify-center ">
                 <Mars size={12} />
                 <span>MALE</span>
               </div>

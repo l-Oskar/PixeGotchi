@@ -90,6 +90,7 @@ const FeedbackModal = () => {
       icon={<Icon size={18} />}
       iconClassName={presentation.iconClassName}
       isOpen={feedback !== null}
+      layer="overlay"
       onClose={closeFeedback}
       title={feedback?.title ?? "Something went wrong"}>
       <div

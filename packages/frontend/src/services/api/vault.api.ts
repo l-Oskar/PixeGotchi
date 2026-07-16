@@ -11,4 +11,11 @@ export const vaultApi = {
     const { data } = await apiClient.get("/vault/stats");
     return data;
   },
+
+  activateFromVault: async (pixegotchiId: number): Promise<Pixegotchi> => {
+    const { data } = await apiClient.post(
+      `/vault/${pixegotchiId}/activate`,
+    );
+    return data;
+  },
 };

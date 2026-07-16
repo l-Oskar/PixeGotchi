@@ -3,6 +3,7 @@ import { pixegotchiApi } from "@/services/api/pixegotchi.api";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import { Pixegotchi } from "@pixegotchi/shared";
 import { VAULT_KEYS } from "./vault.queries";
+import { vaultApi } from "@/services/api/vault.api";
 
 export const PIXEGOTCHI_KEYS = {
   all: ["allPixegotchi"] as const,
@@ -60,6 +61,44 @@ export const usePixegotchiToVault = () => {
         queryClient.invalidateQueries({ queryKey: VAULT_KEYS.all }),
         queryClient.invalidateQueries({ queryKey: VAULT_KEYS.stats }),
       ]);
+    },
+  });
+};
+
+export const usePixegotchiFromVault = () => {
+  const setCurrent = usePixegotchiStore((state) => state.setCurrent);
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: vaultApi.activateFromVault,
+    onSuccess: async (activatedPixegotchi) => {
+      setCurrent(activatedPixegotchi);
+      queryClient.setQueryData(
+        PIXEGOTCHI_KEYS.current,
+        activatedPixegotchi,
+      );
+      queryClient.setQueryData(
+        PIXEGOTCHI_KEYS.details(activatedPixegotchi.id),
+        activatedPixegotchi,
+      );
+      queryClient.setQueryData<Pixegotchi[] | undefined>(
+        PIXEGOTCHI_KEYS.all,
+        (current) =>
+          current?.map((pixegotchi) =>
+            pixegotchi.id === activatedPixegotchi.id
+              ? activatedPixegotchi
+              : pixegotchi,
+          ),
+      );
+      queryClient.setQueryData<Pixegotchi[] | undefined>(
+        VAULT_KEYS.all,
+        (current) =>
+          current?.filter(
+            (pixegotchi) => pixegotchi.id !== activatedPixegotchi.id,
+          ),
+      );
+
+      await queryClient.invalidateQueries({ queryKey: VAULT_KEYS.stats });
     },
   });
 };

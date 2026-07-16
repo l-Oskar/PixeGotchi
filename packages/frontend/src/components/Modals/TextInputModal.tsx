@@ -70,6 +70,7 @@ const TextInputModal = () => {
       iconClassName="text-pixel-highlight"
       initialFocusRef={inputRef}
       isOpen={inputRequest !== null}
+      layer="overlay"
       onClose={cancel}
       title={inputRequest?.title ?? "Enter text"}>
       {inputRequest?.message && (

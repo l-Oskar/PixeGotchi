@@ -81,6 +81,7 @@ const ConfirmationModal = () => {
       icon={<Icon size={18} />}
       iconClassName={presentation.iconClassName}
       isOpen={confirmation !== null}
+      layer="overlay"
       onClose={cancel}
       title={confirmation?.title ?? "Confirm action"}>
       <div

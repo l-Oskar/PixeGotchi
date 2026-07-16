@@ -20,10 +20,7 @@ import {
 } from "lucide-react";
 import ModalShell from "@/components/Modals/ModalShell";
 import { getPixegotchiImg } from "@/utils/getImage";
-import {
-  formatWholeStatValue,
-  toFiniteStatNumber,
-} from "@/utils/formatStats";
+import { formatWholeStatValue, toFiniteStatNumber } from "@/utils/formatStats";
 
 interface VaultPetModalProps {
   isOpen: boolean;
@@ -201,7 +198,12 @@ const VaultPetModal = ({
                     className={`pixel-pill px-2 py-1 font-pixel text-[7px] capitalize ${ELEMENT_COLORS[selectedPet.element]}`}>
                     {selectedPet.element}
                   </span>
-                  <span className="pixel-pill flex items-center gap-1 px-2 py-1 font-pixel text-[7px] capitalize text-pixel-ink">
+                  <span
+                    className={`pixel-pill flex items-center gap-1 px-2 py-1 font-pixel text-[7px] capitalize ${
+                      selectedPet.gender === "male"
+                        ? "border-[var(--color-pixel-male)]/80 bg-[var(--color-pixel-male)]/15 text-[var(--color-pixel-male)]"
+                        : "border-[var(--color-pixel-female)]/70 bg-[var(--color-pixel-female)]/15 text-[var(--color-pixel-female)]"
+                    }`}>
                     {selectedPet.gender === "male" ? (
                       <Mars size={10} />
                     ) : (
@@ -254,34 +256,32 @@ const VaultPetModal = ({
             <div className="font-pixel text-[9px] leading-4 text-pixel-ink">
               Stats
             </div>
-            {STAT_CONFIG.map(
-              ({ key, label, icon: Icon, color, iconColor }) => {
-                const value = Math.min(
-                  maxStat,
-                  Math.max(0, toFiniteStatNumber(selectedPet[key])),
-                );
+            {STAT_CONFIG.map(({ key, label, icon: Icon, color, iconColor }) => {
+              const value = Math.min(
+                maxStat,
+                Math.max(0, toFiniteStatNumber(selectedPet[key])),
+              );
 
-                return (
-                  <div className="flex items-center gap-2" key={key}>
-                    <Icon className={`shrink-0 ${iconColor}`} size={15} />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex justify-between gap-2 font-pixel text-[7px] leading-3">
-                        <span className="text-pixel-muted">{label}</span>
-                        <span className="text-pixel-ink">
-                          {formatWholeStatValue(value)} / {maxStat}
-                        </span>
-                      </div>
-                      <div className="pixel-progress mt-1">
-                        <div
-                          className={`h-full ${color}`}
-                          style={{ width: `${(value / maxStat) * 100}%` }}
-                        />
-                      </div>
+              return (
+                <div className="flex items-center gap-2" key={key}>
+                  <Icon className={`shrink-0 ${iconColor}`} size={15} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex justify-between gap-2 font-pixel text-[7px] leading-3">
+                      <span className="text-pixel-muted">{label}</span>
+                      <span className="text-pixel-ink">
+                        {formatWholeStatValue(value)} / {maxStat}
+                      </span>
+                    </div>
+                    <div className="pixel-progress mt-1">
+                      <div
+                        className={`h-full ${color}`}
+                        style={{ width: `${(value / maxStat) * 100}%` }}
+                      />
                     </div>
                   </div>
-                );
-              },
-            )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

@@ -8,4 +8,8 @@ export async function vaultRoutes(app: FastifyInstance) {
 
   app.get("/stats", controller.getStatsVault.bind(controller));
   app.get("/", controller.getAllVault.bind(controller));
+  app.post(
+    "/:pixegotchiId/activate",
+    controller.activateFromVault.bind(controller),
+  );
 }

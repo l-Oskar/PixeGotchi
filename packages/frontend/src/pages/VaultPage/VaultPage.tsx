@@ -1,4 +1,4 @@
-import { Sparkles, SquareArrowRight } from "lucide-react";
+import { Sparkles, SquareArrowLeft, SquareArrowRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   ElementType,
@@ -15,7 +15,10 @@ import {
   useStatsVault,
 } from "@/services/queries/vault.queries";
 import { getPixegotchiImg } from "@/utils/getImage";
-import { usePixegotchiToVault } from "@/services/queries/pixegotchi.queries";
+import {
+  usePixegotchiFromVault,
+  usePixegotchiToVault,
+} from "@/services/queries/pixegotchi.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import VaultPetModal from "@/components/Modals/VaultPetModal";
 
@@ -24,6 +27,7 @@ interface VaultPageProps {
 }
 
 const VAULT_ERROR_TITLE = "Cannot send to Vault";
+const ACTIVATE_ERROR_TITLE = "Cannot activate Pixegotchi";
 
 const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   const { isLoading, data } = useStatsVault();
@@ -34,6 +38,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   );
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null);
   const setPixegotchiToVault = usePixegotchiToVault();
+  const activateFromVault = usePixegotchiFromVault();
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
   const { confirm } = useConfirmationModal();
   const { showError, showApiError } = useFeedbackModal();
@@ -47,6 +52,10 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
         : [],
     [allVaultQuery.data, selectedElement],
   );
+  const selectedVaultPet =
+    selectedElementPets.find((pet) => pet.id === selectedPetId) ??
+    selectedElementPets[0] ??
+    null;
 
   useEffect(() => {
     if (!selectedElement || selectedElementPets.length === 0) return;
@@ -123,6 +132,53 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
 
     if (!confirmed) return;
     await sendToVault();
+  };
+
+  const activatePet = async (pixegotchiId: number, name: string) => {
+    try {
+      await activateFromVault.mutateAsync(pixegotchiId);
+      handleCloseElement();
+      showSuccessToast({
+        title: "Pixegotchi activated",
+        message: `${name} is now your active Pixegotchi.`,
+      });
+      onNavigate("start");
+    } catch (error) {
+      showApiError(error, {
+        title: ACTIVATE_ERROR_TITLE,
+        retry: () => {
+          void activatePet(pixegotchiId, name);
+        },
+      });
+    }
+  };
+
+  const handleActivateFromVault = async () => {
+    if (!selectedVaultPet) {
+      showError({
+        title: ACTIVATE_ERROR_TITLE,
+        message: "Select a Pixegotchi from the Vault first.",
+      });
+      return;
+    }
+
+    if (currentPixegotchi) {
+      showError({
+        title: ACTIVATE_ERROR_TITLE,
+        message:
+          "Send your current Pixegotchi to the Vault before activating another one.",
+      });
+      return;
+    }
+
+    const confirmed = await confirm({
+      title: "Activate Pixegotchi?",
+      message: `${selectedVaultPet.name} will leave the Vault and become your active Pixegotchi. Continue?`,
+      confirmLabel: "Activate",
+    });
+
+    if (!confirmed) return;
+    await activatePet(selectedVaultPet.id, selectedVaultPet.name);
   };
 
   const collectedCount = vaultStats
@@ -310,6 +366,20 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
       </div>
 
       <VaultPetModal
+        actions={
+          selectedVaultPet ? (
+            <button
+              className="pixel-button flex w-full min-h-0 items-center justify-center gap-2 px-3 py-3 font-pixel text-[9px] leading-3 text-pixel-highlight hover:scale-105 disabled:hover:scale-100"
+              disabled={activateFromVault.isPending}
+              onClick={handleActivateFromVault}
+              type="button">
+              <SquareArrowLeft size={14} />
+              <span>
+                {activateFromVault.isPending ? "Activating..." : "Activate"}
+              </span>
+            </button>
+          ) : undefined
+        }
         element={selectedElement}
         isError={allVaultQuery.isError}
         isLoading={allVaultQuery.isLoading}
