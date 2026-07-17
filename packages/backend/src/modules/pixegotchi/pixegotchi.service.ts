@@ -18,7 +18,6 @@ import type {
   Pixegotchi as PrismaPixegotchi,
   Prisma,
 } from "@/generated/prisma/client";
-import { env } from "node:process";
 
 type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
 type StatEffectKey = Extract<
@@ -181,7 +180,10 @@ export class PixegotchiService {
         );
       }
 
-      if (current.level % 10 !== 0 && process.env.NODE_ENV === "production") {
+      if (
+        current.level % 10 !== 0 &&
+        process.env.NODE_ENV !== "development"
+      ) {
         throw httpError(
           409,
           "Pixegotchi can only be stored at levels 10, 20, 30, and so on",
