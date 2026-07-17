@@ -37,6 +37,11 @@ const ModalShell = ({
 }: ModalShellProps) => {
   const titleId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -52,7 +57,7 @@ const ModalShell = ({
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
       }
     };
 
@@ -63,7 +68,7 @@ const ModalShell = ({
       document.body.style.overflow = previousBodyOverflow;
       previouslyFocusedElement?.focus();
     };
-  }, [initialFocusRef, isOpen, onClose]);
+  }, [initialFocusRef, isOpen]);
 
   if (typeof document === "undefined") return null;
 
