@@ -18,6 +18,7 @@ import type {
   Pixegotchi as PrismaPixegotchi,
   Prisma,
 } from "@/generated/prisma/client";
+import { env } from "node:process";
 
 type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
 type StatEffectKey = Extract<
@@ -180,7 +181,7 @@ export class PixegotchiService {
         );
       }
 
-      if (current.level % 10 !== 0) {
+      if (current.level % 10 !== 0 && process.env.NODE_ENV === "production") {
         throw httpError(
           409,
           "Pixegotchi can only be stored at levels 10, 20, 30, and so on",
@@ -359,12 +360,7 @@ export class PixegotchiService {
     const pixegotchi = await this.findCurrent(userId, db);
 
     if (!pixegotchi) throw new Error("Not active pixegotchi");
-    return await this.addExpToPixegotchi(
-      userId,
-      pixegotchi.id,
-      exp,
-      db,
-    );
+    return await this.addExpToPixegotchi(userId, pixegotchi.id, exp, db);
   }
 
   async addExpToPixegotchi(
