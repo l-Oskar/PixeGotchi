@@ -13,7 +13,6 @@ import MarketplacePage from "../MarketplacePage/MarketplacePage";
 import Header from "@/components/MainPage/layout/Header";
 import Navigation from "@/components/MainPage/layout/Navigation";
 import { ShowPixeGotchi } from "@/components/PixegotchiPage/ShowPixegotchi";
-import { useUserStore } from "@/store/user.store";
 import EggComponent from "@/components/EggComponent/EggComponent";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import Empty from "@/components/MainPage/start/StartPage";
@@ -25,7 +24,6 @@ import { useSignal } from "@tma.js/sdk-react";
 import { useRoomEditorStore } from "@/store/room-editor.store";
 
 const MainPage: React.FC = () => {
-  const user = useUserStore((s) => s.user);
   const egg = useEggStore((s) => s.hatchingEgg);
   const pixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
   const isRoomEditing = useRoomEditorStore((state) => state.isEditing);
@@ -124,7 +122,7 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,var(--color-pixel-bg)_0%,var(--color-pixel-bg-deep)_100%)] text-pixel-ink">
-      {!isImmersiveMode && <Header user={user} />}
+      {!isImmersiveMode && <Header />}
       {/* Content */}
       <main
         className="mx-auto max-w-md"

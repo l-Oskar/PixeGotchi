@@ -4,12 +4,14 @@ import type {
   RoomLoadout,
   SaveRoomLoadoutInput,
   UnequipRoomCosmeticInput,
+  UserProfile,
   UserRoomLoadoutResponse,
 } from "@pixegotchi/shared";
 import { useUserStore } from "@/store/user.store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { QueryClient } from "@tanstack/react-query";
 import { roomCosmeticsApi } from "../api/room-cosmetics.api";
+import { USER_KEYS } from "./users.queries";
 
 export const ROOM_COSMETICS_KEYS = {
   all: ["room-cosmetics"] as const,
@@ -84,6 +86,10 @@ export const usePurchaseRoomCosmetic = () => {
       roomCosmeticsApi.purchase(input),
     onSuccess: ({ pgcBalance }) => {
       updateBalance(pgcBalance);
+      queryClient.setQueryData<UserProfile | undefined>(
+        USER_KEYS.profile,
+        (current) => (current ? { ...current, pgcBalance } : current),
+      );
       queryClient.invalidateQueries({
         queryKey: ROOM_COSMETICS_KEYS.shop,
       });
