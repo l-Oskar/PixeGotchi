@@ -123,7 +123,7 @@ export const CHEST_TYPE_TO_RARITY: Record<ChestType, RarityType> = {
 } as const;
 
 export const MARKETPLACE_CONFIG = {
-  SELLABLE_CHESTS: ["mythic", "legendary"] as ChestType[],
+  SELLABLE_CHESTS: ["crystal", "mythic", "legendary"] as ChestType[],
 } as const;
 
 export const GUARANTEED_ITEM_TYPES: ItemType[] = [
