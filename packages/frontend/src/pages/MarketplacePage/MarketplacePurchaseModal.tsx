@@ -1,60 +1,106 @@
-import type { PlayerMarketplaceListing } from "@pixegotchi/shared";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import ModalShell from "@/components/Modals/ModalShell";
 import { multiplyMarketplaceMoney } from "./marketplace-money";
 
-interface MarketplacePurchaseModalProps {
-  listing: PlayerMarketplaceListing | null;
-  isPending: boolean;
-  onClose: () => void;
-  onBuy: (quantity: number) => void;
+export interface MarketplacePurchaseOffer {
+  id: string;
+  title: string;
+  subtitle: string;
+  source: "official" | "player" | "test";
+  seller: string;
+  unitPrice: string;
+  remainingQuantity: number;
+  isStack: boolean;
+  rarity?: string;
+  imageUrl?: string | null;
+  fallbackIcon: string;
 }
 
-const isStackListing = (listing: PlayerMarketplaceListing) =>
-  listing.listingType === "item" || listing.listingType === "chest";
+interface MarketplacePurchaseModalProps {
+  offer: MarketplacePurchaseOffer | null;
+  isPending: boolean;
+  action: "buy" | "cancel" | "owned";
+  onClose: () => void;
+  onAction: (quantity: number) => void;
+}
 
 const MarketplacePurchaseModal = ({
-  listing,
+  offer,
   isPending,
+  action,
   onClose,
-  onBuy,
+  onAction,
 }: MarketplacePurchaseModalProps) => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     setQuantity(1);
-  }, [listing?.id]);
+  }, [offer?.id]);
 
-  if (!listing) return null;
+  if (!offer) return null;
 
-  const stackListing = isStackListing(listing);
+  const canChooseQuantity = offer.isStack && action === "buy";
   const subtotal =
-    multiplyMarketplaceMoney(listing.unitPrice, quantity) ?? "0";
+    multiplyMarketplaceMoney(offer.unitPrice, quantity) ?? "0";
 
   return (
     <ModalShell
       icon={<ShoppingCart size={18} />}
       isOpen
       onClose={onClose}
-      title={stackListing ? "Choose quantity" : "Confirm purchase"}>
+      title={offer.title}>
       <div className="space-y-3">
-        <div className="pixel-panel-soft p-3">
+        <div className="pixel-panel-soft grid min-h-32 place-items-center overflow-hidden bg-pixel-bg-deep/45 p-3">
+          {offer.imageUrl ? (
+            <img
+              alt={offer.title}
+              className="pixelated h-28 w-28 object-contain"
+              src={offer.imageUrl}
+            />
+          ) : (
+            <span className="text-5xl">{offer.fallbackIcon}</span>
+          )}
+        </div>
+
+        <div className="pixel-panel-soft space-y-2 p-3">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span
+              className={`rounded-sm border px-2 py-1 font-pixel text-[7px] uppercase ${
+                offer.source === "official"
+                  ? "border-pixel-green/60 text-pixel-green"
+                  : offer.source === "test"
+                    ? "border-pixel-orange/60 text-pixel-orange"
+                    : "border-pixel-highlight/60 text-pixel-highlight"
+              }`}>
+              {offer.source}
+            </span>
+            {offer.rarity && (
+              <span className="pixel-pill px-2 py-1 font-pixel text-[7px] capitalize text-pixel-muted">
+                {offer.rarity}
+              </span>
+            )}
+          </div>
+          <p className="font-pixel text-[8px] leading-4 text-pixel-muted">
+            {offer.subtitle}
+          </p>
+          <div className="flex items-center justify-between gap-2 font-pixel text-[8px] leading-4">
+            <span className="text-pixel-muted">Seller</span>
+            <span className="truncate text-pixel-ink">{offer.seller}</span>
+          </div>
           <div className="flex items-center justify-between gap-2 font-pixel text-[8px] leading-4">
             <span className="text-pixel-muted">Unit price</span>
             <span className="text-pixel-highlight">
-              {listing.unitPrice} PGC
+              {offer.unitPrice === "0" ? "FREE" : `${offer.unitPrice} PGC`}
             </span>
           </div>
-          <div className="mt-1 flex items-center justify-between gap-2 font-pixel text-[8px] leading-4">
+          <div className="flex items-center justify-between gap-2 font-pixel text-[8px] leading-4">
             <span className="text-pixel-muted">Available</span>
-            <span className="text-pixel-ink">
-              {listing.remainingQuantity}
-            </span>
+            <span className="text-pixel-ink">{offer.remainingQuantity}</span>
           </div>
         </div>
 
-        {stackListing && (
+        {canChooseQuantity && (
           <div>
             <label
               className="font-pixel text-[7px] leading-4 text-pixel-muted"
@@ -73,12 +119,12 @@ const MarketplacePurchaseModal = ({
                 className="pixel-panel-soft min-w-0 text-center font-pixel text-[9px] text-pixel-ink"
                 id="marketplace-buy-quantity"
                 inputMode="numeric"
-                max={listing.remainingQuantity}
+                max={offer.remainingQuantity}
                 min={1}
                 onChange={(event) =>
                   setQuantity(
                     Math.min(
-                      listing.remainingQuantity,
+                      offer.remainingQuantity,
                       Math.max(1, Number(event.target.value) || 1),
                     ),
                   )
@@ -89,7 +135,7 @@ const MarketplacePurchaseModal = ({
               <button
                 className="pixel-button min-h-9 font-pixel text-[11px]"
                 disabled={
-                  quantity >= listing.remainingQuantity || isPending
+                  quantity >= offer.remainingQuantity || isPending
                 }
                 onClick={() => setQuantity((current) => current + 1)}
                 type="button">
@@ -99,31 +145,52 @@ const MarketplacePurchaseModal = ({
           </div>
         )}
 
-        <div className="pixel-panel-soft flex items-center justify-between gap-2 border-pixel-highlight/60 p-3 font-pixel">
-          <span className="text-[8px] text-pixel-muted">Subtotal</span>
-          <span className="text-[10px] text-pixel-highlight">
-            {subtotal} PGC
-          </span>
-        </div>
+        {action === "buy" && (
+          <div className="pixel-panel-soft flex items-center justify-between gap-2 border-pixel-highlight/60 p-3 font-pixel">
+            <span className="text-[8px] text-pixel-muted">Subtotal</span>
+            <span className="text-[10px] text-pixel-highlight">
+              {subtotal === "0" ? "FREE" : `${subtotal} PGC`}
+            </span>
+          </div>
+        )}
 
-        <div className={`grid gap-2 ${stackListing ? "grid-cols-2" : ""}`}>
-          <button
-            className="pixel-button min-h-10 px-2 font-pixel text-[8px] disabled:opacity-60"
-            disabled={isPending}
-            onClick={() => onBuy(quantity)}
-            type="button">
-            {isPending ? "BUYING..." : stackListing ? "BUY SOME" : "BUY"}
-          </button>
-          {stackListing && (
+        {action === "owned" ? (
+          <div className="pixel-panel-soft p-3 text-center font-pixel text-[8px] text-pixel-muted">
+            YOU ALREADY OWN THIS ASSET
+          </div>
+        ) : (
+          <div
+            className={`grid gap-2 ${
+              canChooseQuantity ? "grid-cols-2" : ""
+            }`}>
             <button
-              className="pixel-button min-h-10 px-2 font-pixel text-[8px] text-pixel-highlight disabled:opacity-60"
+              className={`pixel-button min-h-10 px-2 font-pixel text-[8px] disabled:opacity-60 ${
+                action === "cancel" ? "text-pixel-red" : ""
+              }`}
               disabled={isPending}
-              onClick={() => onBuy(listing.remainingQuantity)}
+              onClick={() => onAction(quantity)}
               type="button">
-              BUY ALL
+              {isPending
+                ? action === "cancel"
+                  ? "CANCELLING..."
+                  : "BUYING..."
+                : action === "cancel"
+                  ? "CANCEL LISTING"
+                  : canChooseQuantity
+                    ? "BUY SOME"
+                    : "BUY"}
             </button>
-          )}
-        </div>
+            {canChooseQuantity && (
+              <button
+                className="pixel-button min-h-10 px-2 font-pixel text-[8px] text-pixel-highlight disabled:opacity-60"
+                disabled={isPending}
+                onClick={() => onAction(offer.remainingQuantity)}
+                type="button">
+                BUY ALL
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </ModalShell>
   );

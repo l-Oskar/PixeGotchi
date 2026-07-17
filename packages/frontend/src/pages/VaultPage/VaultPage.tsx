@@ -1,7 +1,13 @@
-import { Sparkles, SquareArrowLeft, SquareArrowRight } from "lucide-react";
+import {
+  BadgeDollarSign,
+  Sparkles,
+  SquareArrowLeft,
+  SquareArrowRight,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   ElementType,
+  ListingType,
   PageType,
   PixegotchiStatus,
   RARITY_COLORS,
@@ -21,6 +27,8 @@ import {
 } from "@/services/queries/pixegotchi.queries";
 import { usePixegotchiStore } from "@/store/pixegotchi.store";
 import VaultPetModal from "@/components/Modals/VaultPetModal";
+import MarketplaceSellModal from "@/pages/MarketplacePage/MarketplaceSellModal";
+import { useMarketplaceListings } from "@/services/queries/marketplace.queries";
 
 interface VaultPageProps {
   onNavigate: (page: PageType) => void;
@@ -37,8 +45,14 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
     null,
   );
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null);
+  const [sellPetId, setSellPetId] = useState<number | null>(null);
   const setPixegotchiToVault = usePixegotchiToVault();
   const activateFromVault = usePixegotchiFromVault();
+  const myMarketplaceListings = useMarketplaceListings(
+    undefined,
+    true,
+    selectedElement !== null,
+  );
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
   const { confirm } = useConfirmationModal();
   const { showError, showApiError } = useFeedbackModal();
@@ -56,6 +70,15 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
     selectedElementPets.find((pet) => pet.id === selectedPetId) ??
     selectedElementPets[0] ??
     null;
+  const selectedVaultPetListing =
+    selectedVaultPet === null
+      ? null
+      : (myMarketplaceListings.data?.listings.find(
+          (listing) =>
+            listing.listingType === ListingType.pixegotchi &&
+            listing.asset.id === selectedVaultPet.id,
+        ) ?? null);
+  const isSelectedVaultPetListed = selectedVaultPetListing !== null;
 
   useEffect(() => {
     if (!selectedElement || selectedElementPets.length === 0) return;
@@ -74,6 +97,7 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
   };
 
   const handleCloseElement = () => {
+    setSellPetId(null);
     setSelectedElement(null);
     setSelectedPetId(null);
   };
@@ -368,16 +392,47 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
       <VaultPetModal
         actions={
           selectedVaultPet ? (
-            <button
-              className="pixel-button flex w-full min-h-0 items-center justify-center gap-2 px-3 py-3 font-pixel text-[9px] leading-3 text-pixel-highlight hover:scale-105 disabled:hover:scale-100"
-              disabled={activateFromVault.isPending}
-              onClick={handleActivateFromVault}
-              type="button">
-              <SquareArrowLeft size={14} />
-              <span>
-                {activateFromVault.isPending ? "Activating..." : "Activate"}
-              </span>
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                className="pixel-button flex min-h-0 items-center justify-center gap-2 px-2 py-3 font-pixel text-[8px] leading-3 text-pixel-highlight hover:scale-105 disabled:hover:scale-100"
+                disabled={
+                  activateFromVault.isPending || isSelectedVaultPetListed
+                }
+                onClick={handleActivateFromVault}
+                title={
+                  isSelectedVaultPetListed
+                    ? "Cancel the marketplace listing before activation"
+                    : undefined
+                }
+                type="button">
+                <SquareArrowLeft size={14} />
+                <span>
+                  {activateFromVault.isPending
+                    ? "Activating..."
+                    : "Activate"}
+                </span>
+              </button>
+              <button
+                className="pixel-button flex min-h-0 items-center justify-center gap-2 px-2 py-3 font-pixel text-[8px] leading-3 text-pixel-orange hover:scale-105 disabled:hover:scale-100"
+                disabled={
+                  selectedVaultPet.level !== 100 ||
+                  isSelectedVaultPetListed
+                }
+                onClick={() => setSellPetId(selectedVaultPet.id)}
+                title={
+                  selectedVaultPet.level !== 100
+                    ? "Pixegotchi must reach level 100"
+                    : isSelectedVaultPetListed
+                      ? "Already listed in Marketplace"
+                      : "Sell this Pixegotchi"
+                }
+                type="button">
+                <BadgeDollarSign size={14} />
+                <span>
+                  {isSelectedVaultPetListed ? "Listed" : "Sell"}
+                </span>
+              </button>
+            </div>
           ) : undefined
         }
         element={selectedElement}
@@ -391,6 +446,15 @@ const VaultPage: React.FC<VaultPageProps> = ({ onNavigate }) => {
         onSelectPet={setSelectedPetId}
         pets={selectedElementPets}
         selectedPetId={selectedPetId}
+      />
+
+      <MarketplaceSellModal
+        initialAssetKey={
+          sellPetId === null ? undefined : `pixegotchi-${sellPetId}`
+        }
+        initialListingType={ListingType.pixegotchi}
+        isOpen={sellPetId !== null}
+        onClose={() => setSellPetId(null)}
       />
     </div>
   );

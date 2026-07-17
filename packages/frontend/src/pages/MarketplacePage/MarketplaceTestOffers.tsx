@@ -4,10 +4,14 @@ import {
   type TestMarketplaceListing,
 } from "@pixegotchi/shared";
 import { Package } from "lucide-react";
+import { useState } from "react";
 import { useFeedbackModal } from "@/hooks/useFeedbackModal";
 import { useGetRandomChest } from "@/services/queries/chest.queries";
 import { useCreateEgg } from "@/services/queries/egg.queries";
 import { useAddItem } from "@/services/queries/inventory.queries";
+import MarketplacePurchaseModal, {
+  type MarketplacePurchaseOffer,
+} from "./MarketplacePurchaseModal";
 
 const TEST_LISTINGS: TestMarketplaceListing[] = [
   {
@@ -93,7 +97,23 @@ const TEST_LISTINGS: TestMarketplaceListing[] = [
   },
 ];
 
+const toDisplayOffer = (
+  listing: TestMarketplaceListing,
+): MarketplacePurchaseOffer => ({
+  id: `test-${listing.id}`,
+  title: listing.item,
+  subtitle: "Temporary debug offer for development and testing.",
+  source: "test",
+  seller: listing.seller,
+  unitPrice: String(listing.price),
+  remainingQuantity: 1,
+  isStack: false,
+  fallbackIcon: listing.icon,
+});
+
 const MarketplaceTestOffers = () => {
+  const [selectedListing, setSelectedListing] =
+    useState<TestMarketplaceListing | null>(null);
   const createEgg = useCreateEgg();
   const addItem = useAddItem();
   const getRandomChest = useGetRandomChest();
@@ -102,7 +122,10 @@ const MarketplaceTestOffers = () => {
   const handleBuy = (listing: TestMarketplaceListing) => {
     if (listing.itemId === "egg") {
       createEgg.mutate(undefined, {
-        onSuccess: () => showSuccess({ message: "You bought an egg!" }),
+        onSuccess: () => {
+          setSelectedListing(null);
+          showSuccess({ message: "You bought an egg!" });
+        },
         onError: (error) => showApiError(error, { title: "Egg fail" }),
       });
       return;
@@ -110,10 +133,12 @@ const MarketplaceTestOffers = () => {
 
     if (listing.itemId === "chest") {
       getRandomChest.mutate(undefined, {
-        onSuccess: (data) =>
+        onSuccess: (data) => {
+          setSelectedListing(null);
           showSuccess({
             message: `You received ${data.chestType} chest`,
-          }),
+          });
+        },
         onError: (error) => showApiError(error, { title: "Chest fail" }),
       });
       return;
@@ -122,14 +147,17 @@ const MarketplaceTestOffers = () => {
     addItem.mutate(
       { itemId: listing.itemId, quantity: 1 },
       {
-        onSuccess: () =>
-          showSuccess({ message: `Item ${listing.itemId} purchased!` }),
+        onSuccess: () => {
+          setSelectedListing(null);
+          showSuccess({ message: `Item ${listing.itemId} purchased!` });
+        },
         onError: (error) => showApiError(error, { title: "Item fail" }),
       },
     );
   };
 
-  const isPending = (listing: TestMarketplaceListing) => {
+  const isPending = (listing: TestMarketplaceListing | null) => {
+    if (!listing) return false;
     if (listing.itemId === "egg") return createEgg.isPending;
     if (listing.itemId === "chest") return getRandomChest.isPending;
     return addItem.isPending;
@@ -144,41 +172,44 @@ const MarketplaceTestOffers = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="space-y-2">
         {TEST_LISTINGS.map((listing) => (
-          <article
-            className="pixel-panel-soft flex min-h-36 flex-col p-2"
-            key={listing.id}>
-            <div className="grid h-16 place-items-center">
-              <div className="pixel-icon-box h-13 w-13 text-2xl">
-                {listing.icon}
-              </div>
+          <button
+            className="pixel-panel-soft flex w-full items-center gap-3 p-2 text-left transition hover:border-pixel-orange"
+            key={listing.id}
+            onClick={() => setSelectedListing(listing)}
+            type="button">
+            <div className="pixel-icon-box grid h-14 w-14 shrink-0 place-items-center text-2xl">
+              {listing.icon}
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-pixel text-[9px] leading-3 text-pixel-ink">
+              <h3 className="truncate font-pixel text-[9px] leading-4 text-pixel-ink">
                 {listing.item}
               </h3>
-              <p className="mt-1 truncate font-pixel text-[7px] leading-3 text-pixel-muted">
+              <p className="mt-1 font-pixel text-[7px] leading-3 text-pixel-muted">
                 debug offer
               </p>
             </div>
-            <div className="mt-2 flex items-center justify-between gap-1">
-              <span className="font-pixel text-[7px] text-pixel-highlight">
-                {listing.price === 0
-                  ? "FREE"
-                  : `${listing.price} ${listing.currency.toUpperCase()}`}
-              </span>
-              <button
-                className="pixel-button min-h-0 px-2 py-1.5 font-pixel text-[8px] disabled:opacity-60"
-                disabled={isPending(listing)}
-                onClick={() => handleBuy(listing)}
-                type="button">
-                {isPending(listing) ? "..." : "BUY"}
-              </button>
+            <div className="shrink-0 text-right font-pixel text-[8px] text-pixel-highlight">
+              {listing.price === 0
+                ? "FREE"
+                : `${listing.price} ${listing.currency.toUpperCase()}`}
             </div>
-          </article>
+          </button>
         ))}
       </div>
+
+      <MarketplacePurchaseModal
+        action="buy"
+        isPending={isPending(selectedListing)}
+        offer={selectedListing ? toDisplayOffer(selectedListing) : null}
+        onAction={() => {
+          if (selectedListing) handleBuy(selectedListing);
+        }}
+        onClose={() => {
+          if (!isPending(selectedListing)) setSelectedListing(null);
+        }}
+      />
     </section>
   );
 };
