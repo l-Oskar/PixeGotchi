@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import SafeAreaFrame from "@/components/Other/SafeAreaFrame";
 
 interface ModalShellProps {
   isOpen: boolean;
@@ -84,12 +85,12 @@ const ModalShell = ({
             type="button"
           />
 
-          <div
-            className={`pointer-events-none fixed inset-0 flex items-center justify-center p-4 ${dialogClassName}`}>
+          <SafeAreaFrame
+            className={`pointer-events-none fixed inset-0 flex items-center justify-center ${dialogClassName}`}>
             <motion.div
               aria-labelledby={titleId}
               aria-modal="true"
-              className="pixel-panel pointer-events-auto max-h-[calc(100dvh-2rem)] w-full max-w-sm overflow-y-auto p-4"
+              className="pixel-panel pointer-events-auto max-h-full w-full max-w-sm overflow-y-auto p-4"
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -124,7 +125,7 @@ const ModalShell = ({
 
               {actions && <div className="mt-4">{actions}</div>}
             </motion.div>
-          </div>
+          </SafeAreaFrame>
         </>
       )}
     </AnimatePresence>,

@@ -4,14 +4,9 @@
 
 ## Next
 
-- [ ] Run the Room Cosmetics integration tests with the test PostgreSQL/Redis stack and current Prisma schema.
-
 ## Backlog
 
 - [ ] Run interactive Home QA for Telegram safe areas and Inventory action filters when the local backend is available.
-- [ ] Add backend route test for stale `lastUpdateAt` on `GET /pixegotchi/current`.
-- [ ] Add frontend tests for inventory modal action flow.
-- [ ] Review stricter frontend ESLint rules and enable them gradually.
 - [ ] Add more frontend tests around blocked Pixegotchi UI states.
 - [ ] Add manual QA checklist for degradation, revive, and item usage flows.
 - [ ] Review large frontend bundle warnings and decide if code splitting is needed.
@@ -25,9 +20,13 @@
 - [x] Refactor frontend Pixegotchi action flow to XState UI machine.
 - [x] Show frontend stat values as rounded integers without mutating real stats.
 - [x] Add frontend tests for Pixegotchi UI machine.
+- [x] Add backend route test for stale `lastUpdateAt` on `GET /pixegotchi/current`.
+- [x] Add frontend tests for inventory modal action flow.
+- [x] Enable React Hooks ESLint rules and fix the initial dependency violations.
 
 ### Room Cosmetics
 
+- [x] Run the Room Cosmetics integration tests with the test PostgreSQL/Redis stack and current Prisma schema.
 - [x] Build the responsive full-width RoomScene with separate wall and floor surfaces and bounded side walls.
 - [x] Add the collapsible stats panel and recenter the pet while stats are hidden.
 - [x] Define the final room position model: wall items `1/3`, floor furniture `2/4`, window `6`, curtains `7`, sofa `8`, rug `9`, and decor `10/11`.

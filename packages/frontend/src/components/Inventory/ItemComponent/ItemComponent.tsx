@@ -33,7 +33,10 @@ const ItemComponent: React.FC<ItemComponentProps> = ({
   const currentPixegotchi = usePixegotchiStore((s) => s.currentPixegotchi);
   const actionFlow = usePixegotchiActionFlow(currentPixegotchi?.status ?? null);
   const currentStatus = currentPixegotchi?.status ?? null;
-  const inventory = getInventory.data ?? [];
+  const inventory = useMemo(
+    () => getInventory.data ?? [],
+    [getInventory.data],
+  );
   const [sortedList, setSortedList] = useState<string>(sorted || "rarity");
 
   const currentInventoryItem = useMemo(

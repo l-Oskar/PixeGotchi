@@ -45,6 +45,49 @@ describe("pixegotchi routes", () => {
     expect(currentResponse.json()).toMatchObject({ name: "Mine" });
   });
 
+  it(
+    "returns lazy-degraded stats for a stale current pixegotchi",
+    async () => {
+      app = await buildApp();
+      const user = await createUser();
+      const staleLastUpdateAt = new Date(Date.now() - 2 * 60 * 60 * 1_000);
+      const pixegotchi = await createPixegotchi(user.id, {
+        health: 100,
+        hunger: 100,
+        energy: 100,
+        happiness: 100,
+        cleanliness: 100,
+        lastUpdateAt: staleLastUpdateAt,
+      });
+
+      const response = await app.inject({
+        method: "GET",
+        url: "/api/pixegotchi/current",
+        headers: authHeaders(app, user.id),
+      });
+
+      expect(response.statusCode, response.body).toBe(200);
+      expect(response.json()).toMatchObject({
+        id: pixegotchi.id,
+        lastUpdateAt: staleLastUpdateAt.toISOString(),
+      });
+      expect(response.json().elapsedMs).toBeGreaterThanOrEqual(
+        2 * 60 * 60 * 1_000,
+      );
+      expect(response.json().hunger).toBeLessThan(100);
+
+      const persisted = await prisma.pixegotchi.findUniqueOrThrow({
+        where: { id: pixegotchi.id },
+      });
+
+      expect(Number(persisted.hunger)).toBe(100);
+      expect(persisted.lastUpdateAt.getTime()).toBe(
+        staleLastUpdateAt.getTime(),
+      );
+    },
+    15_000,
+  );
+
   it("returns current dead pixegotchi but ignores historical dead without current pointer", async () => {
     app = await buildApp();
     const currentDeadUser = await createUser();
