@@ -17,8 +17,8 @@ import type { CosmeticAsset } from "@/generated/prisma/client";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/database/prisma";
 
-const DEFAULT_ENVIRONMENT_ID = "violet-brick";
-const DEFAULT_FLOOR_ID = "plum-boards";
+export const DEFAULT_ENVIRONMENT_ID = "violet-brick";
+export const DEFAULT_FLOOR_ID = "plum-boards";
 const DEFAULT_POSITIONED_ASSETS = [
   { cosmeticAssetId: "arched-window-day", position: 6 },
   { cosmeticAssetId: "pink-window-curtains", position: 7 },

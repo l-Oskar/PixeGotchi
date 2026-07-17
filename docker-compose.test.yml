@@ -48,7 +48,7 @@ services:
     command:
       - sh
       - -c
-      - npm run build:dev --workspace=@pixegotchi/shared && npm run prisma:generate --workspace=@pixegotchi/backend && cd packages/backend && npx prisma db push && npx vitest run
+      - npm run build:dev --workspace=@pixegotchi/shared && npm run test --workspace=@pixegotchi/backend
     volumes:
       - ./packages/backend:/app/packages/backend
       - ./packages/shared:/app/packages/shared

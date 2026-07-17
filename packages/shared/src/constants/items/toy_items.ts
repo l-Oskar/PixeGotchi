@@ -21,6 +21,7 @@ export const SMALL_TOY: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.toy.small_toy,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -43,6 +44,7 @@ export const RUBBER_BALL: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.toy.rubber_ball,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -65,6 +67,7 @@ export const PUZZLE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.toy.puzzle,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -87,6 +90,7 @@ export const PLUSH: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.toy.plush,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -109,6 +113,7 @@ export const MAGIC_WAND: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.toy.magic_wand,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -131,6 +136,7 @@ export const GAMEPAD: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.toy.gamepad,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 

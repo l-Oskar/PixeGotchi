@@ -311,6 +311,7 @@ export class Inventory {
         userId,
         chestType: chestType,
         isOpened: false,
+        marketplaceListingId: null,
       },
       orderBy: {
         createdAt: "asc",
@@ -341,9 +342,12 @@ export class Inventory {
         await this.addItem(userId, item.itemId, item.quantity, prisma);
       }
 
-      await prisma.chest.update({
+      const opened = await prisma.chest.updateMany({
         where: {
           id: chest.id,
+          userId,
+          isOpened: false,
+          marketplaceListingId: null,
         },
         data: {
           isOpened: true,
@@ -355,6 +359,9 @@ export class Inventory {
           } as any,
         },
       });
+      if (opened.count !== 1) {
+        throw new Error("Chest is no longer available");
+      }
 
       return rewards;
     });

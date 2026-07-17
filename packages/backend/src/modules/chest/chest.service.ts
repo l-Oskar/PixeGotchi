@@ -9,6 +9,7 @@ export class ChestService {
       where: {
         userId,
         isOpened: false,
+        marketplaceListingId: null,
       },
     });
   }

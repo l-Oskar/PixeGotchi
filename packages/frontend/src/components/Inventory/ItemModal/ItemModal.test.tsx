@@ -35,6 +35,7 @@ const item: Item = {
   iconUrl: "🍎",
   isStackable: true,
   maxStack: 99,
+  isTradable: false,
 };
 
 const currentPixegotchi: Pixegotchi = {

@@ -23,6 +23,8 @@ import { ChestGenerator } from "./utils/chest-generator";
 import { logger } from "@/config/logger";
 import { clientLogsRoutes } from "@/modules/client-logs/client-logs.routes";
 import { roomCosmeticsRoutes } from "@/modules/room-cosmetics/room-cosmetics.routes";
+import { prisma } from "@/database/prisma";
+import { marketplaceTreasuryRoutes } from "@/modules/admin/marketplace-treasury.routes";
 
 function isZodValidationError(error: unknown): error is Error {
   if (!error || typeof error !== "object") {
@@ -126,6 +128,19 @@ export async function buildApp() {
     }
   });
 
+  app.decorate("requireAdmin", async function (request: any, reply: any) {
+    const user = await prisma.user.findUnique({
+      where: { id: request.user.userId },
+      select: { telegramId: true },
+    });
+    if (
+      !user ||
+      !config.adminTelegramIds.has(user.telegramId.toString())
+    ) {
+      return reply.code(403).send({ error: "Forbidden" });
+    }
+  });
+
   app.setErrorHandler((error: any, request: any, reply: any) => {
     request.log.error(
       {
@@ -193,6 +208,9 @@ export async function buildApp() {
       await apiInstance.register(gamesRoutes, { prefix: "/games" });
       await apiInstance.register(marketplaceRoutes, {
         prefix: "/marketplace",
+      });
+      await apiInstance.register(marketplaceTreasuryRoutes, {
+        prefix: "/admin/marketplace",
       });
       await apiInstance.register(vaultRoutes, { prefix: "/vault" });
       await apiInstance.register(chestRoutes, { prefix: "/chest" });

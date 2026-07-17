@@ -39,6 +39,7 @@ export * from "./constants/items/items_img";
 export * from "./constants/items/item_pool";
 export * from "./constants/traits_const";
 export * from "./constants/chest_const";
+export * from "./constants/marketplace_const";
 export * from "./constants/colors_const";
 
 // Domain types
@@ -84,9 +85,29 @@ export type {
   CompleteGameSessionInput,
 } from "./types/game";
 export { GAME_CONFIGS } from "./constants/games/games_const ";
-export type { MarketplaceListing } from "./types/marketplace";
 export type {
+  MarketplaceListing,
+  TestMarketplaceListing,
   MarketplaceSeller,
+  MarketplaceConfigResponse,
+  MarketplaceEggPreview,
+  MarketplaceItemPreview,
+  MarketplaceChestPreview,
+  MarketplacePixegotchiPreview,
+  SellableMarketplaceAsset,
+  MarketplaceSellableResponse,
+  PlayerMarketplaceListing,
+  MarketplaceListingsResponse,
+  CreateMarketplaceListingInput,
+  BuyMarketplaceListingInput,
+  MarketplacePurchase,
+  BuyMarketplaceListingResponse,
+  MarketplaceTreasuryBalance,
+  MarketplaceTreasuryTransaction,
+  MarketplaceTreasuryBalancesResponse,
+  MarketplaceTreasuryTransactionsResponse,
+  DistributeMarketplaceTreasuryInput,
+  DistributeMarketplaceTreasuryResponse,
   CosmeticMarketplaceListing,
   CosmeticMarketplaceListingsResponse,
   CreateCosmeticMarketplaceListingInput,

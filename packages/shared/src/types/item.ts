@@ -30,6 +30,7 @@ export interface Item {
   minLevel: number | null;
   iconUrl: string | null;
   isStackable: boolean;
+  isTradable: boolean;
   maxStack: number | null;
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -67,6 +68,7 @@ export function parseItem(prismaItem: {
   minLevel: number | null;
   iconUrl: string | null;
   isStackable: boolean;
+  isTradable: boolean;
   maxStack: number | null;
   createdAt: Date;
   updatedAt: Date;

@@ -553,28 +553,22 @@ chestDropWeight: 100,
 
 Owned, default, inactive та limited assets виключаються з pool.
 
-## 11. Player marketplace зараз вимкнений
+## 11. Room assets у Marketplace
 
-Cosmetic marketplace foundation існує, але вимкнений до спільного marketplace/commission redesign.
+Room є однією з категорій generic Marketplace. Активний non-default
+`isTradable=true` asset можна виставити за PGC. Backend списує ownership в
+escrow і автоматично знімає equipped asset: environment/floor замінюється
+default surface, positioned placement видаляється.
 
-За замовчуванням:
-
-- frontend показує `PLAYER MARKETPLACE — COMING SOON`;
-- frontend не завантажує listings/ownership для SELL UI;
-- backend повертає порожній список listings;
-- create/buy/cancel endpoints повертають `503`.
-
-Для майбутнього ввімкнення потрібні обидва flags:
+Marketplace вимкнений за замовчуванням. Його можна ввімкнути лише після
+застосування marketplace migration:
 
 ```env
 # packages/backend/.env
-ENABLE_COSMETIC_MARKETPLACE=true
-
-# packages/frontend/.env
-VITE_ENABLE_COSMETIC_MARKETPLACE=true
+ENABLE_MARKETPLACE=true
 ```
 
-Не вмикай тільки один flag. Перед production enable потрібно завершити спільну commission policy, listing validation і marketplace QA.
+Окремого frontend або cosmetic-only flag більше немає.
 
 ## 12. Коли потрібна Prisma migration
 
@@ -642,7 +636,6 @@ cp packages/frontend/.env.example packages/frontend/.env
 
 ```env
 VITE_API_URL=http://localhost:3000/api
-VITE_ENABLE_COSMETIC_MARKETPLACE=false
 ```
 
 Заповни root `.env` і `packages/backend/.env` реальними database, Redis, JWT і Telegram values.
@@ -818,7 +811,7 @@ npm run frontend:deploy
 
 Ця команда виконує frontend build і публікує `dist` через `gh-pages`.
 
-Переконайся, що production `VITE_API_URL` вказує на правильний `/api`, а `VITE_ENABLE_COSMETIC_MARKETPLACE` не ввімкнений випадково.
+Переконайся, що production `VITE_API_URL` вказує на правильний `/api`.
 
 ## 17. API endpoints
 

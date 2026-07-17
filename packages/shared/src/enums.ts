@@ -121,9 +121,28 @@ export type ListingType = (typeof ListingType)[keyof typeof ListingType];
 export const CurrencyType = {
   pgc: "pgc",
   ton: "ton",
+  stars: "stars",
 } as const;
 
 export type CurrencyType = (typeof CurrencyType)[keyof typeof CurrencyType];
+
+export const MarketplaceListingStatus = {
+  active: "active",
+  sold: "sold",
+  cancelled: "cancelled",
+  expired: "expired",
+} as const;
+
+export type MarketplaceListingStatus =
+  (typeof MarketplaceListingStatus)[keyof typeof MarketplaceListingStatus];
+
+export const MarketplaceTreasuryTransactionType = {
+  commission: "commission",
+  distribution: "distribution",
+} as const;
+
+export type MarketplaceTreasuryTransactionType =
+  (typeof MarketplaceTreasuryTransactionType)[keyof typeof MarketplaceTreasuryTransactionType];
 
 export const PageType = {
   home: "home",

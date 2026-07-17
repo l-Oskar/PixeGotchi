@@ -22,6 +22,7 @@ export const THERMOMETER: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.medicine.thermometer,
   isStackable: true,
+  isTradable: false,
   maxStack: 99,
 };
 
@@ -45,6 +46,7 @@ export const BANDAGE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.medicine.bandage,
   isStackable: true,
+  isTradable: false,
   maxStack: 50,
 };
 
@@ -68,6 +70,7 @@ export const PILL: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.medicine.pill,
   isStackable: true,
+  isTradable: false,
   maxStack: 30,
 };
 
@@ -91,6 +94,7 @@ export const SMALL_MEDICINE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.medicine.small_medicine,
   isStackable: true,
+  isTradable: false,
   maxStack: 10,
 };
 
@@ -114,6 +118,7 @@ export const CURE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.medicine.cure,
   isStackable: true,
+  isTradable: false,
   maxStack: 5,
 };
 
@@ -137,6 +142,7 @@ export const ANTIDOTE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.medicine.antidote,
   isStackable: false,
+  isTradable: false,
   maxStack: 1,
 };
 

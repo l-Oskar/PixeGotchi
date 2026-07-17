@@ -3,6 +3,19 @@ import { z } from "zod";
 
 dotenvConfig();
 
+const adminTelegramIdsSchema = z
+  .string()
+  .default("")
+  .transform((value) =>
+    value
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean),
+  )
+  .refine((ids) => ids.every((id) => /^\d+$/.test(id)), {
+    message: "ADMIN_TELEGRAM_IDS must contain comma-separated numeric IDs",
+  });
+
 const envShema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
@@ -19,6 +32,9 @@ const envShema = z.object({
 
   TON_NETWORK: z.enum(["mainnet", "testnet"]).default("testnet"),
   TON_API_KEY: z.string().optional(),
+
+  ENABLE_MARKETPLACE: z.enum(["true", "false"]).default("false"),
+  ADMIN_TELEGRAM_IDS: adminTelegramIdsSchema,
 
   LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
@@ -46,6 +62,8 @@ export const config = {
   telegramBotToken: parsedEnv.data.TELEGRAM_BOT_TOKEN,
   tonNetwork: parsedEnv.data.TON_NETWORK,
   tonApiKey: parsedEnv.data.TON_API_KEY,
+  marketplaceEnabled: parsedEnv.data.ENABLE_MARKETPLACE === "true",
+  adminTelegramIds: new Set(parsedEnv.data.ADMIN_TELEGRAM_IDS),
   logLevel: parsedEnv.data.LOG_LEVEL,
   logToFile: parsedEnv.data.LOG_TO_FILE === "true",
   logFilePath: parsedEnv.data.LOG_FILE_PATH,

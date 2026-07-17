@@ -21,6 +21,7 @@ export const COFFEE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.boost.coffee,
   isStackable: true,
+  isTradable: false,
   maxStack: 10,
 };
 
@@ -43,6 +44,7 @@ export const ENERGY_DRINK: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.boost.energy_drink,
   isStackable: true,
+  isTradable: false,
   maxStack: 10,
 };
 
@@ -65,6 +67,7 @@ export const POWER_BAR: Item = {
   minLevel: 5,
   iconUrl: ITEMS_IMG.boost.power_bar,
   isStackable: true,
+  isTradable: false,
   maxStack: 5,
 };
 
@@ -87,6 +90,7 @@ export const LIGHTNING_FLASK: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.boost.lightning_flask,
   isStackable: false,
+  isTradable: false,
   maxStack: 3,
 };
 
@@ -109,6 +113,7 @@ export const DIVINE_SPARK: Item = {
   minLevel: 12,
   iconUrl: ITEMS_IMG.boost.divine_spark,
   isStackable: false,
+  isTradable: false,
   maxStack: 1,
 };
 
@@ -131,6 +136,7 @@ export const MEGA_BOOST: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.boost.mega_boost,
   isStackable: false,
+  isTradable: false,
   maxStack: 1,
 };
 

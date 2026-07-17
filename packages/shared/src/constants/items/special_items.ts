@@ -22,6 +22,7 @@ export const RENAME_TAG: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.special.rename_tag,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -49,6 +50,7 @@ export const REVIVE_STONE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.special.revive_stone,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -76,6 +78,7 @@ export const LUCKY_CHARM: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.special.lucky_charm,
   isStackable: false,
+  isTradable: false,
   maxStack: null,
 };
 
@@ -102,6 +105,7 @@ export const RARE_CANDY: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.special.rare_candy,
   isStackable: true,
+  isTradable: false,
   maxStack: null,
 };
 

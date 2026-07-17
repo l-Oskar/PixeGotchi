@@ -68,6 +68,9 @@ beforeEach(async (context) => {
       TRUNCATE TABLE
         "active_effects",
         "chests",
+        "marketplace_treasury_transactions",
+        "marketplace_purchases",
+        "marketplace_treasury_balances",
         "room_cosmetic_placements",
         "user_room_loadouts",
         "user_cosmetics",
@@ -85,9 +88,12 @@ beforeEach(async (context) => {
         "vault"
       RESTART IDENTITY CASCADE
     `);
+    await prisma.marketplaceTreasuryBalance.create({
+      data: { currency: "pgc", balance: 0 },
+    });
   } catch (error) {
     throw new Error(
-      "Failed to clean the test PostgreSQL database. Make sure PostgreSQL is running and run `npm run test:db:push --workspace=packages/backend` before the test suite.",
+      "Failed to clean the test PostgreSQL database after automatic preparation. Make sure the test PostgreSQL service is running and DATABASE_URL points to it.",
       { cause: error },
     );
   }

@@ -7,7 +7,8 @@ This project starts testing with backend core behavior first. The goal is to cat
 - Shared pure logic tests cover deterministic helpers from `@pixegotchi/shared`, such as genome validation, item parsing, stat math, and exp math.
 - Backend service tests run against a real test PostgreSQL database through Prisma. Use these for transactions, constraints, inventory changes, egg hatching, and Pixegotchi stat logic.
 - Backend route tests use Fastify `app.inject()`. Do not start a real HTTP server for route tests.
-- Frontend and E2E tests are intentionally out of scope for the first testing pass.
+- Frontend focused component/pure-logic tests покривають критичні UI flows,
+  зокрема Marketplace navigation і fixed-point money preview.
 
 ## Test Environment
 
@@ -22,13 +23,20 @@ The test setup refuses to run unless `DATABASE_URL` clearly looks like a test da
 
 ## Test Database
 
-The repository currently has a Prisma schema but no real migration history. Because of that, initialize or refresh the test database with:
+`npm run test`, `test:watch` і `test:coverage` автоматично запускають
+`test:prepare` перед Vitest. Підготовка:
+
+- завантажує `packages/backend/.env.test`, а за відсутності значень використовує `.env.test.example`;
+- відмовляється працювати, якщо назва database у `DATABASE_URL` не містить `test`;
+- виконує `prisma db push`;
+- оновлює Prisma Client через `prisma generate`.
+
+Окремо запускати `test:db:push` перед кожним test run більше не потрібно.
+Команда залишається alias для ручної підготовки:
 
 ```sh
 npm run test:db:push --workspace=packages/backend
 ```
-
-Use `prisma db push` for the test database. Do not use `prisma migrate deploy` until real migrations exist.
 
 PostgreSQL and Redis can be local services or the existing Docker Compose services. The route tests build the Fastify app, so Redis should be available when running the full backend test suite.
 
@@ -163,5 +171,5 @@ Example checks:
 ## Safety Rules
 
 - Do not run integration tests against non-test data.
-- Do not include Games or Marketplace as required behavior until those features are considered shipped.
+- Marketplace v1 входить у regression scope після застосування його Prisma schema до test database.
 - Do not run `scripts/test.js` as part of unit or integration testing. It is a manual production health stress script.

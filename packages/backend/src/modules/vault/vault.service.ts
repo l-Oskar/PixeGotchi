@@ -79,6 +79,12 @@ export class VaultService {
           `Pixegotchi with status ${vaultEntry.pixegotchi.status} cannot be activated from Vault`,
         );
       }
+      if (vaultEntry.pixegotchi.isListed) {
+        throw httpError(
+          409,
+          "Listed Pixegotchi cannot be activated from Vault",
+        );
+      }
 
       const activatedPixegotchi = await tx.pixegotchi.update({
         where: { id: pixegotchiId },

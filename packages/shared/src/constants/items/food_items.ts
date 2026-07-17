@@ -21,6 +21,7 @@ export const APPLE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.food.apple,
   isStackable: true,
+  isTradable: false,
   maxStack: 99,
 };
 
@@ -44,6 +45,7 @@ export const PEACH: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.food.peach,
   isStackable: true,
+  isTradable: false,
   maxStack: 99,
 };
 
@@ -67,6 +69,7 @@ export const CHICKEN: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.food.chicken,
   isStackable: true,
+  isTradable: false,
   maxStack: 50,
 };
 
@@ -90,6 +93,7 @@ export const BACON: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.food.bacon,
   isStackable: true,
+  isTradable: false,
   maxStack: 20,
 };
 
@@ -113,6 +117,7 @@ export const BURGER: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.food.burger,
   isStackable: true,
+  isTradable: false,
   maxStack: 10,
 };
 
@@ -136,6 +141,7 @@ export const LOBSTER: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.food.lobster,
   isStackable: false,
+  isTradable: false,
   maxStack: 1,
 };
 

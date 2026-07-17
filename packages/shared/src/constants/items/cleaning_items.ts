@@ -22,6 +22,7 @@ export const WATER: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.cleaning.water,
   isStackable: true,
+  isTradable: false,
   maxStack: 50,
 };
 
@@ -45,6 +46,7 @@ export const TOOTH_BRUSH: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.cleaning.tooth_brush,
   isStackable: true,
+  isTradable: false,
   maxStack: 30,
 };
 
@@ -68,6 +70,7 @@ export const SPONCHE: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.cleaning.sponche,
   isStackable: true,
+  isTradable: false,
   maxStack: 20,
 };
 
@@ -91,6 +94,7 @@ export const SOAP: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.cleaning.soap,
   isStackable: true,
+  isTradable: false,
   maxStack: 10,
 };
 
@@ -114,6 +118,7 @@ export const SHOWER: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.cleaning.shower,
   isStackable: false,
+  isTradable: false,
   maxStack: 1,
 };
 
@@ -137,6 +142,7 @@ export const BATH: Item = {
   minLevel: 1,
   iconUrl: ITEMS_IMG.cleaning.bath,
   isStackable: false,
+  isTradable: false,
   maxStack: 1,
 };
 

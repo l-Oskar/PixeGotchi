@@ -110,22 +110,30 @@ export class EggService {
     if (hasOccupiedPixegotchiSlot)
       throw new Error("You already have an active Pixegotchi");
 
-    const egg = await this.getEggById(userId, id);
-    if (egg.isListed)
-      throw new Error("You can't hatch egg listed in the market");
-    if (egg.isHatching) throw new Error("Your egg is hatching");
-    if (egg.isHatched) throw new Error("Egg is hatched");
-
-    const updatedEgg = await prisma.egg.update({
-      where: { id },
+    const updated = await prisma.egg.updateMany({
+      where: {
+        id,
+        userId,
+        isListed: false,
+        isHatching: false,
+        isHatched: false,
+      },
       data: {
         isHatching: true,
         hatchStartedAt: new Date(),
         tapCount: 0,
       },
     });
+    if (updated.count !== 1) {
+      const egg = await this.getEggById(userId, id);
+      if (egg.isListed)
+        throw new Error("You can't hatch egg listed in the market");
+      if (egg.isHatching) throw new Error("Your egg is hatching");
+      if (egg.isHatched) throw new Error("Egg is hatched");
+      throw new Error("Egg cannot start hatching");
+    }
 
-    return updatedEgg;
+    return prisma.egg.findUniqueOrThrow({ where: { id } });
   }
 
   async cancelHatching(userId: number, id: number) {
