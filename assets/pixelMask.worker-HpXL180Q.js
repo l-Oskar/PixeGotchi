@@ -1,0 +1,1 @@
+!function(){"use strict";self.onmessage=t=>{const{bitmap:e,width:a,height:s,threshold:n}=t.data,o=new OffscreenCanvas(a,s).getContext("2d");o.drawImage(e,0,0);const{data:f}=o.getImageData(0,0,a,s),g=new Uint8Array(a*s);for(let h=0;h<a*s;h++){const t=f[4*h],e=f[4*h+1],a=f[4*h+2];g[h]=t>n||e>n||a>n?1:0}self.postMessage({mask:g,width:a,height:s},[g.buffer])}}();
