@@ -107,27 +107,31 @@ describe("PixegotchiService", () => {
     expect(updated.status).toBe("active");
   });
 
-  it("adds exp and increments level when exp crosses max", async () => {
+  it("adds one level of exp per rare candy when using multiple", async () => {
     const user = await createUser();
     await createPixegotchi(user.id, { experience: 950, level: 1 });
     const service = new PixegotchiService();
 
-    const updated = await service.addItemExp(user.id, {
-      itemId: "rare_candy",
-      name: "Rare Candy",
-      description: null,
-      itemType: ItemType.special,
-      rarity: RarityType.common,
-      effects: null,
-      cooldownMinutes: null,
-      maxPerDay: null,
-      minLevel: 1,
-      iconUrl: null,
-      isStackable: true,
-      maxStack: 99,
-    });
+    const updated = await service.addItemExp(
+      user.id,
+      {
+        itemId: "rare_candy",
+        name: "Rare Candy",
+        description: null,
+        itemType: ItemType.special,
+        rarity: RarityType.common,
+        effects: null,
+        cooldownMinutes: null,
+        maxPerDay: null,
+        minLevel: 1,
+        iconUrl: null,
+        isStackable: true,
+        maxStack: 99,
+      },
+      3,
+    );
 
-    expect(updated.level).toBe(11);
+    expect(updated.level).toBe(4);
     expect(updated.experience).toBe(950);
   });
 

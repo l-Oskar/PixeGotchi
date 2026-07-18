@@ -33,7 +33,7 @@ export const useTelegramSwipes = (disabled: boolean) => {
     }
 
     return () => {
-      if (tg && !disabled && typeof tg.enableVerticalSwipes === "function") {
+      if (tg && disabled && typeof tg.enableVerticalSwipes === "function") {
         tg.enableVerticalSwipes();
       }
     };

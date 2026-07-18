@@ -10,6 +10,30 @@ import {
 import { createPortal } from "react-dom";
 import SafeAreaFrame from "@/components/Other/SafeAreaFrame";
 
+let bodyScrollLockCount = 0;
+let bodyOverflowBeforeFirstLock = "";
+
+const lockBodyScroll = () => {
+  if (bodyScrollLockCount === 0) {
+    bodyOverflowBeforeFirstLock = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+  }
+
+  bodyScrollLockCount += 1;
+  let isReleased = false;
+
+  return () => {
+    if (isReleased) return;
+
+    isReleased = true;
+    bodyScrollLockCount = Math.max(0, bodyScrollLockCount - 1);
+
+    if (bodyScrollLockCount === 0) {
+      document.body.style.overflow = bodyOverflowBeforeFirstLock;
+    }
+  };
+};
+
 interface ModalShellProps {
   isOpen: boolean;
   title: string;
@@ -50,9 +74,8 @@ const ModalShell = ({
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
-    const previousBodyOverflow = document.body.style.overflow;
+    const unlockBodyScroll = lockBodyScroll();
 
-    document.body.style.overflow = "hidden";
     (initialFocusRef?.current ?? closeButtonRef.current)?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -65,7 +88,7 @@ const ModalShell = ({
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = previousBodyOverflow;
+      unlockBodyScroll();
       previouslyFocusedElement?.focus();
     };
   }, [initialFocusRef, isOpen]);

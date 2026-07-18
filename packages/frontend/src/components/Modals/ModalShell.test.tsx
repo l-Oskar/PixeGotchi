@@ -27,3 +27,44 @@ describe("ModalShell focus", () => {
     );
   });
 });
+
+describe("ModalShell body scroll lock", () => {
+  it("keeps the body locked until the last overlapping modal closes", () => {
+    document.body.style.overflow = "scroll";
+
+    const Modals = ({
+      firstOpen,
+      secondOpen,
+    }: {
+      firstOpen: boolean;
+      secondOpen: boolean;
+    }) => (
+      <>
+        <ModalShell
+          isOpen={firstOpen}
+          onClose={() => undefined}
+          title="First modal">
+          First
+        </ModalShell>
+        <ModalShell
+          isOpen={secondOpen}
+          onClose={() => undefined}
+          title="Second modal">
+          Second
+        </ModalShell>
+      </>
+    );
+
+    const { rerender } = render(<Modals firstOpen secondOpen />);
+
+    expect(document.body.style.overflow).toBe("hidden");
+
+    rerender(<Modals firstOpen={false} secondOpen />);
+
+    expect(document.body.style.overflow).toBe("hidden");
+
+    rerender(<Modals firstOpen={false} secondOpen={false} />);
+
+    expect(document.body.style.overflow).toBe("scroll");
+  });
+});

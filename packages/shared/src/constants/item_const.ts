@@ -17,7 +17,7 @@ export const ITEM_EXP: Record<RarityType, number> = {
   legendary: 200,
 };
 
-export const RARE_CANDY_EXP: number = 10000;
+export const RARE_CANDY_EXP: number = 1000;
 
 export const ALL_ITEMS: Item[] = [
   ...FOOD_ITEMS,
